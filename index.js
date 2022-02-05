@@ -2,9 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const routerApi = require('./routes');
 
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
-
 const { logErrors, errorHandler, boomErrorHandler, ormErrorHandler } = require('./middlewares/error.handler');
 
 const app = express();
@@ -17,12 +14,6 @@ app.use(cors());
 app.get('/', (req, res) => {
   res.send('Hola mi server en express');
 });
-
-app.use(
-  '/api-docs',
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerDocument)
-);
 
 routerApi(app);
 
