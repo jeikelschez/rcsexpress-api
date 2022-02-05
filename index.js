@@ -10,8 +10,6 @@ const { logErrors, errorHandler, boomErrorHandler, ormErrorHandler } = require('
 const app = express();
 const port = process.env.PORT || 3000;
 
-
-
 app.use(express.json());
 
 app.use(cors());
@@ -20,18 +18,18 @@ app.get('/', (req, res) => {
   res.send('Hola mi server en express');
 });
 
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument)
+);
+
 routerApi(app);
 
 app.use(logErrors);
 app.use(ormErrorHandler);
 app.use(boomErrorHandler);
 app.use(errorHandler);
-
-app.use(
-  '/api-docs',
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerDocument)
-);
 
 app.listen(port, () => {
   console.log('Mi port: ' +  port);
