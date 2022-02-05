@@ -1,0 +1,329 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "API Rest RCS Express",
+    "description": "API Rest RCS Express",
+    "contact": {
+      "name": "rcsxpress",
+      "email": "operaciones@rcsexpress.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api/v1",
+      "description": "Ambiente de Desarrollo"
+    },
+    {
+      "url": "https://scen.rcsexpress.com/api/v1/",
+      "description": "Ambiente de Producción"
+    }
+  ],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "tags": [
+    {
+      "name": "Bancos",
+      "description": "API para Manejar los Bancos de la Organizacion"
+    }
+  ],
+  "paths": {
+    "/bancos": {
+      "get": {
+        "tags": ["Bancos"],
+        "summary": "Obtener todos los bancos",
+        "description": "API para Obtener todos los bancos del sistema",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bancos"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Bancos"],
+        "summary": "Crear Bancos",
+        "description": "API para Crear un nuevo Banco",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Bancos"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bancos"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bancos/{id}": {
+      "get": {
+        "tags": ["Bancos"],
+        "summary": "Obtener Banco por su Id",
+        "description": "API para Retornar un Banco por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Banco",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bancos"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Bancos"],
+        "summary": "Actualizar Bancos",
+        "description": "API para Actualizar un Banco por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Banco",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Bancos"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bancos"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Bancos"],
+        "summary": "Borrar Bancos",
+        "description": "API para Borrar un Banco por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Banco",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "cod_banco": {
+                      "$ref": "#/components/schemas/Bancos/properties/cod_banco"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Bancos": {
+        "description": "Modelo de Bancos",
+        "required": ["cod_banco", "nb_banco"],
+        "properties": {
+          "cod_banco": {
+            "type": "number",
+            "readOnly": true
+          },
+          "nb_banco": {
+            "type": "string"
+          },
+          "direccion_banco": {
+            "type": "string"
+          },
+          "tlf_banco": {
+            "type": "string"
+          },
+          "fax_banco": {
+            "type": "string"
+          },
+          "cod_postal": {
+            "type": "string"
+          },
+          "email_banco": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "standarResponses": {
+    "400": {
+      "description": "Response entity, response result uses this structure uniformly.",
+      "properties": {
+        "statusCode": {
+          "description": "Código de respuesta HTTP",
+          "type": "string",
+          "format": "string"
+        },
+        "error": {
+          "description": "Descripción del error HTTP",
+          "type": "string",
+          "format": "string"
+        },
+        "message": {
+          "description": "Descripción del error detallado",
+          "type": "string",
+          "format": "string"
+        }
+      },
+      "type": "object"
+    },
+    "500": {
+      "description": "Response entity, response result uses this structure uniformly.",
+      "properties": {
+        "message": {
+          "description": "Descripción del error detallado",
+          "type": "string",
+          "format": "string"
+        },
+        "stack": {
+          "description": "Stack del error",
+          "type": "string",
+          "format": "string"
+        }
+      },
+      "type": "object"
+    }
+  }
+}
