@@ -10,21 +10,21 @@ const email_banco = Joi.string().email();
 
 const createBancoSchema = Joi.object({
   nb_banco: nb_banco.required(),
-  direccion_banco: direccion_banco.allow(null),
-  tlf_banco: tlf_banco.allow(null),
-  fax_banco: fax_banco.allow(null),
-  cod_postal: cod_postal.allow(null),
-  email_banco: email_banco.allow(null)
+  direccion_banco: direccion_banco.allow(null, ''),
+  tlf_banco: tlf_banco.allow(null, ''),
+  fax_banco: fax_banco.allow(null, ''),
+  cod_postal: cod_postal.allow(null, ''),
+  email_banco: email_banco.allow(null, '')
 });
 
 const updateBancoSchema = Joi.object({
   cod_banco: cod_banco,
   nb_banco: nb_banco,
-  direccion_banco: direccion_banco.allow(null),
-  tlf_banco: tlf_banco.allow(null),
-  fax_banco: fax_banco.allow(null),
-  cod_postal: cod_postal.allow(null),
-  email_banco: email_banco.allow(null)
+  direccion_banco: direccion_banco.allow(null, ''),
+  tlf_banco: tlf_banco.allow(null, ''),
+  fax_banco: fax_banco.allow(null, ''),
+  cod_postal: cod_postal.allow(null, ''),
+  email_banco: email_banco.allow(null, '')
 });
 
 const getBancoSchema = Joi.object({
