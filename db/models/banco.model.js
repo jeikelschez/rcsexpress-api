@@ -3,7 +3,7 @@ const { Model, DataTypes, Sequelize } = require('sequelize');
 const BANCO_TABLE = 'bancos';
 
 const BancoSchema = {
-  cod_banco: {
+  id: {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,

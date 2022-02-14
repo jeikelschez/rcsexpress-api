@@ -1,28 +1,28 @@
 const express = require('express');
 
-const BancoService = require('./../services/banco.service');
+const PaisService = require('./../services/pais.service');
 const validatorHandler = require('./../middlewares/validator.handler');
-const { createBancoSchema, updateBancoSchema, getBancoSchema } = require('./../schemas/banco.schema');
+const { createPaisSchema, updatePaisSchema, getPaisSchema } = require('./../schemas/pais.schema');
 
 const router = express.Router();
-const service = new BancoService();
+const service = new PaisService();
 
 router.get('/', async (req, res, next) => {
   try {
-    const bancos = await service.find();
-    res.json(bancos);
+    const paises = await service.find();
+    res.json(paises);
   } catch (error) {
     next(error);
   }
 });
 
 router.get('/:id',
-  validatorHandler(getBancoSchema, 'params'),
+  validatorHandler(getPaisSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const banco = await service.findOne(id);
-      res.json(banco);
+      const pais = await service.findOne(id);
+      res.json(pais);
     } catch (error) {
       next(error);
     }
@@ -30,12 +30,12 @@ router.get('/:id',
 );
 
 router.post('/',
-  validatorHandler(createBancoSchema, 'body'),
+  validatorHandler(createPaisSchema, 'body'),
   async (req, res, next) => {
     try {
       const body = req.body;
-      const newBanco = await service.create(body);
-      res.status(201).json(newBanco);
+      const newPais = await service.create(body);
+      res.status(201).json(newPais);
     } catch (error) {
       next(error);
     }
@@ -43,14 +43,14 @@ router.post('/',
 );
 
 router.put('/:id',
-  validatorHandler(getBancoSchema, 'params'),
-  validatorHandler(updateBancoSchema, 'body'),
+  validatorHandler(getPaisSchema, 'params'),
+  validatorHandler(updatePaisSchema, 'body'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
       const body = req.body;
-      const banco = await service.update(id, body);
-      res.json(banco);
+      const pais = await service.update(id, body);
+      res.json(pais);
     } catch (error) {
       next(error);
     }
@@ -58,7 +58,7 @@ router.put('/:id',
 );
 
 router.delete('/:id',
-  validatorHandler(getBancoSchema, 'params'),
+  validatorHandler(getPaisSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;

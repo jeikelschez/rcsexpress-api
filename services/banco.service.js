@@ -16,16 +16,16 @@ class BancoService {
     return bancos;
   }
 
-  async findOne(cod_banco) {
-    const banco = await models.Banco.findByPk(cod_banco);
+  async findOne(id) {
+    const banco = await models.Banco.findByPk(id);
     if (!banco) {
       throw boom.notFound('Banco no existe');
     }
     return banco;
   }
 
-  async update(cod_banco, changes) {
-    const banco = await models.Banco.findByPk(cod_banco);
+  async update(id, changes) {
+    const banco = await models.Banco.findByPk(id);
     if (!banco) {
       throw boom.notFound('Banco no existe');
     }
@@ -33,13 +33,13 @@ class BancoService {
     return rta;
   }
 
-  async delete(cod_banco) {
-    const banco = await models.Banco.findByPk(cod_banco);
+  async delete(id) {
+    const banco = await models.Banco.findByPk(id);
     if (!banco) {
       throw boom.notFound('Banco no existe');
     }
     await banco.destroy();
-    return { cod_banco };
+    return { id };
   }
 }
 

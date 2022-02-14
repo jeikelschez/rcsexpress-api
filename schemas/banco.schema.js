@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const cod_banco = Joi.number().integer();
+const id = Joi.number().integer();
 const nb_banco = Joi.string().min(3).max(50);
 const direccion_banco = Joi.string().min(3).max(50);
 const tlf_banco = Joi.string().min(3).max(25);
@@ -18,7 +18,7 @@ const createBancoSchema = Joi.object({
 });
 
 const updateBancoSchema = Joi.object({
-  cod_banco: cod_banco,
+  id: id,
   nb_banco: nb_banco,
   direccion_banco: direccion_banco.allow(null, ''),
   tlf_banco: tlf_banco.allow(null, ''),
@@ -28,7 +28,7 @@ const updateBancoSchema = Joi.object({
 });
 
 const getBancoSchema = Joi.object({
-  cod_banco: cod_banco.required(),
+  id: id.required(),
 });
 
 module.exports = { createBancoSchema, updateBancoSchema, getBancoSchema }

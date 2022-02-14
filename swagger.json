@@ -7,8 +7,7 @@
     "contact": {
       "name": "rcsxpress",
       "email": "operaciones@rcsexpress.com"
-    },
-    "version": "1.0.0"
+    }
   },
   "servers": [
     {
@@ -26,6 +25,18 @@
     {
       "name": "Bancos",
       "description": "API para Manejar los Bancos de la Organizacion"
+    },
+    {
+      "name": "Paises",
+      "description": "API para Manejar los Paises de la Organizacion"
+    },
+    {
+      "name": "Estados",
+      "description": "API para Manejar los Estados de la Organizacion"
+    },
+    {
+      "name": "Ciudades",
+      "description": "API para Manejar los Ciudades de la Organizacion"
     }
   ],
   "paths": {
@@ -219,8 +230,7 @@
             "name": "id",
             "in": "path",
             "description": "Codigo del Banco",
-            "required": true,
-            "schema": {
+            "required": true, "schema": {
               "type": "integer"
             }
           }
@@ -232,8 +242,710 @@
               "application/json": {
                 "schema": {
                   "properties": {
-                    "cod_banco": {
-                      "$ref": "#/components/schemas/Bancos/properties/cod_banco"
+                    "id": {
+                      "$ref": "#/components/schemas/Bancos/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/paises": {
+      "get": {
+        "tags": ["Paises"],
+        "summary": "Obtener todos los paises",
+        "description": "API para Obtener todos los paises del sistema",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Paises"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Paises"],
+        "summary": "Crear Paises",
+        "description": "API para Crear un nuevo Pais",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Paises"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Paises"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/paises/{id}": {
+      "get": {
+        "tags": ["Paises"],
+        "summary": "Obtener Pais por su Id",
+        "description": "API para Retornar un Pais por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Pais",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Paises"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Paises"],
+        "summary": "Actualizar Pais",
+        "description": "API para Actualizar un Pais por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Pais",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Paises"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Paises"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Paises"],
+        "summary": "Borrar Pais",
+        "description": "API para Borrar un Pais por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Pais",
+            "required": true, "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Paises/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/estados": {
+      "get": {
+        "tags": ["Estados"],
+        "summary": "Obtener todos los estados",
+        "description": "API para Obtener todos los estados del sistema",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Estados",
+                  "properties": {
+                    "pais": {
+                      "$ref": "#/components/schemas/Paises"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Estados"],
+        "summary": "Crear Estados",
+        "description": "API para Crear un nuevo Estado",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Estados"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Estados"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/estados/{id}": {
+      "get": {
+        "tags": ["Estados"],
+        "summary": "Obtener Estado por su Id",
+        "description": "API para Retornar un Estado por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Estado",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Estados",
+                  "properties": {
+                    "pais": {
+                      "$ref": "#/components/schemas/Paises"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Estados"],
+        "summary": "Actualizar Estado",
+        "description": "API para Actualizar un Estado por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Estado",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Estados"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Estados"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Estados"],
+        "summary": "Borrar Estado",
+        "description": "API para Borrar un Estado por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Estado",
+            "required": true, "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Estados/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ciudades": {
+      "get": {
+        "tags": ["Ciudades"],
+        "summary": "Obtener todos las ciudades",
+        "description": "API para Obtener todos las ciudades del sistema",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ciudades",
+                  "properties": {
+                    "estado": {
+                      "$ref": "#/components/schemas/Estados",
+                      "properties": {
+                        "pais": {
+                          "$ref": "#/components/schemas/Paises"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Ciudades"],
+        "summary": "Crear Ciudades",
+        "description": "API para Crear una nueva Ciudades",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Ciudades"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ciudades"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ciudades/{id}": {
+      "get": {
+        "tags": ["Ciudades"],
+        "summary": "Obtener Ciudad por su Id",
+        "description": "API para Retornar una Ciudad por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Ciudad",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ciudades",
+                  "properties": {
+                    "estado": {
+                      "$ref": "#/components/schemas/Estados",
+                      "properties": {
+                        "pais": {
+                          "$ref": "#/components/schemas/Paises"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Ciudades"],
+        "summary": "Actualizar Ciudad",
+        "description": "API para Actualizar una Ciudad por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Ciudad",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Ciudades"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ciudades"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Ciudades"],
+        "summary": "Borrar Ciudad",
+        "description": "API para Borrar un Ciudad por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Ciudad",
+            "required": true, "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Ciudades/properties/id"
                     }
                   },
                   "type": "object"
@@ -259,9 +971,9 @@
     "schemas": {
       "Bancos": {
         "description": "Modelo de Bancos",
-        "required": ["cod_banco", "nb_banco"],
+        "required": ["id", "nb_banco"],
         "properties": {
-          "cod_banco": {
+          "id": {
             "type": "number",
             "readOnly": true
           },
@@ -282,6 +994,69 @@
           },
           "email_banco": {
             "type": "string"
+          }
+        }
+      },
+      "Paises": {
+        "description": "Modelo de Paises",
+        "required": ["id", "desc_pais", "tipo_pais"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "desc_pais": {
+            "type": "string"
+          },
+          "tipo_pais": {
+            "type": "string"
+          }
+        }
+      },
+      "Estados": {
+        "description": "Modelo de Estados",
+        "required": ["id", "desc_estado", "siglas", "iso_3166", "cod_pais"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "desc_estado": {
+            "type": "string"
+          },
+          "siglas": {
+            "type": "string"
+          },
+          "iso_3166": {
+            "type": "string"
+          },
+          "cod_pais": {
+            "type": "number"
+          }
+        }
+      },
+      "Ciudades": {
+        "description": "Modelo de Ciudades",
+        "required": ["id", "desc_ciudad", "siglas", "check_urbano", "cod_region", "cod_estado"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "desc_ciudad": {
+            "type": "string"
+          },
+          "siglas": {
+            "type": "string"
+          },
+          "check_urbano": {
+            "type": "string"
+          },
+          "cod_region": {
+            "type": "string"
+          },
+          "cod_estado": {
+            "type": "number"
           }
         }
       }
