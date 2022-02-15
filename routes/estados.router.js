@@ -29,6 +29,19 @@ router.get('/:id',
   }
 );
 
+router.get('/:id/ciudades',
+  validatorHandler(getEstadoSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const estado = await service.findOneCiudades(id);
+      res.json(estado);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 router.post('/',
   validatorHandler(createEstadoSchema, 'body'),
   async (req, res, next) => {

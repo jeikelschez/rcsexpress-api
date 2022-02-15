@@ -29,6 +29,19 @@ router.get('/:id',
   }
 );
 
+router.get('/:id/estados',
+  validatorHandler(getPaisSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const estado = await service.findOneEstados(id);
+      res.json(estado);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 router.post('/',
   validatorHandler(createPaisSchema, 'body'),
   async (req, res, next) => {

@@ -28,6 +28,16 @@ class EstadoService {
     return estado;
   }
 
+  async findOneCiudades(id) {
+    const estado = await models.Estado.findByPk(id, {
+      include: ['ciudades']
+    });
+    if (!estado) {
+      throw boom.notFound('Estado no existe');
+    }
+    return estado;
+  }
+
   async update(id, changes) {
     const estado = await models.Estado.findByPk(id);
     if (!estado) {

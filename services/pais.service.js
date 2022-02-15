@@ -24,6 +24,16 @@ class PaisService {
     return pais;
   }
 
+  async findOneEstados(id) {
+    const pais = await models.Pais.findByPk(id, {
+      include: ['estados']
+    });
+    if (!pais) {
+      throw boom.notFound('Pais no existe');
+    }
+    return pais;
+  }
+
   async update(id, changes) {
     const pais = await models.Pais.findByPk(id);
     if (!pais) {

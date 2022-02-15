@@ -488,6 +488,51 @@
         }
       }
     },
+    "/paises/{id}/estados": {
+      "get": {
+        "tags": ["Paises"],
+        "summary": "Obtener Pais con sus Estados por su Id",
+        "description": "API para Retornar un Pais con sus Estados por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Pais",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Paises",
+                  "properties": {
+                    "estados": {
+                      "$ref": "#/components/schemas/Estados"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/estados": {
       "get": {
         "tags": ["Estados"],
@@ -705,6 +750,51 @@
                     }
                   },
                   "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/estados/{id}/ciudades": {
+      "get": {
+        "tags": ["Estados"],
+        "summary": "Obtener Estado con sus Ciudades por su Id",
+        "description": "API para Retornar un Estado con sus Ciudades por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Estado",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Estados",
+                  "properties": {
+                    "ciudades": {
+                      "$ref": "#/components/schemas/Ciudades"
+                    }
+                  }
                 }
               }
             }
