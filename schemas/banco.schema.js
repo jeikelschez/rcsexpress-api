@@ -18,6 +18,7 @@ const createBancoSchema = Joi.object({
 });
 
 const updateBancoSchema = Joi.object({
+  id: id,
   nb_banco: nb_banco,
   direccion_banco: direccion_banco.allow(null, ''),
   tlf_banco: tlf_banco.allow(null, ''),

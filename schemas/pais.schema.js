@@ -10,6 +10,7 @@ const createPaisSchema = Joi.object({
 });
 
 const updatePaisSchema = Joi.object({
+  id: id,
   desc_pais: desc_pais.required(),
   tipo_pais: tipo_pais.required()
 });
