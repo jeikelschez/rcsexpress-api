@@ -16,7 +16,6 @@ const createCiudadSchema = Joi.object({
 });
 
 const updateCiudadSchema = Joi.object({
-  id: id,
   cod_estado: cod_estado,
   desc_ciudad: desc_ciudad,
   siglas: siglas.allow(null, ''),

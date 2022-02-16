@@ -14,7 +14,6 @@ const createEstadoSchema = Joi.object({
 });
 
 const updateEstadoSchema = Joi.object({
-  id: id,
   cod_pais: cod_pais,
   desc_estado: desc_estado,
   siglas: siglas.allow(null, ''),
