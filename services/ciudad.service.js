@@ -1,6 +1,9 @@
 const boom = require('@hapi/boom');
 
-const { models }= require('./../libs/sequelize');
+const { models, Sequelize } = require('./../libs/sequelize');
+
+const caseUrbano = '(CASE check_urbano WHEN "u" THEN "URBANO" ELSE "EXTRAURBANO" END)';
+const caseRegion = '(CASE cod_region WHEN "CE" THEN "CENTRAL" WHEN "OC" THEN "OCCIDENTAL" ELSE "ORIENTAL" END)';
 
 class CiudadService {
 
@@ -13,6 +16,12 @@ class CiudadService {
 
   async find() {
     const ciudades = await models.Ciudad.findAll({
+      attributes: {
+        include: [
+          [Sequelize.literal(caseUrbano), 'chech_urbano_desc'],
+          [Sequelize.literal(caseRegion), 'cod_region_desc']
+        ]
+      },
       include: [
         {
           association: 'estado',
@@ -25,6 +34,12 @@ class CiudadService {
 
   async findOne(id) {
     const ciudad = await models.Ciudad.findByPk(id, {
+      attributes: {
+        include: [
+          [Sequelize.literal(caseUrbano), 'chech_urbano_desc'],
+          [Sequelize.literal(caseRegion), 'cod_region_desc']
+        ]
+      },
       include: [
         {
           association: 'estado',

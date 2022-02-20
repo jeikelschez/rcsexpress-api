@@ -1147,6 +1147,14 @@
           },
           "cod_estado": {
             "type": "number"
+          },
+          "check_urbano_desc": {
+            "type": "string",
+            "readOnly": true
+          },
+          "cod_region_desc": {
+            "type": "string",
+            "readOnly": true
           }
         }
       }
