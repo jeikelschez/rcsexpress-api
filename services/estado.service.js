@@ -1,6 +1,9 @@
 const boom = require('@hapi/boom');
 
-const { models }= require('./../libs/sequelize');
+const { models, Sequelize } = require('./../libs/sequelize');
+
+const caseUrbano = '(CASE check_urbano WHEN "u" THEN "URBANO" ELSE "EXTRAURBANO" END)';
+const caseRegion = '(CASE cod_region WHEN "CE" THEN "CENTRAL" WHEN "OC" THEN "OCCIDENTAL" ELSE "ORIENTAL" END)';
 
 class EstadoService {
 
@@ -30,7 +33,17 @@ class EstadoService {
 
   async findOneCiudades(id) {
     const estado = await models.Estado.findByPk(id, {
-      include: ['ciudades']
+      include: [
+        {
+          association: 'ciudades',
+          attributes: {
+            include: [
+              [Sequelize.literal(caseUrbano), 'chech_urbano_desc'],
+              [Sequelize.literal(caseRegion), 'cod_region_desc']
+            ]
+          }
+        }
+      ]
     });
     if (!estado) {
       throw boom.notFound('Estado no existe');
