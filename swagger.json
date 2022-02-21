@@ -544,12 +544,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Estados",
-                  "properties": {
-                    "pais": {
-                      "$ref": "#/components/schemas/Paises"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Estados"
                 }
               }
             }
@@ -630,12 +625,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Estados",
-                  "properties": {
-                    "pais": {
-                      "$ref": "#/components/schemas/Paises"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Estados"
                 }
               }
             }
@@ -823,17 +813,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Ciudades",
-                  "properties": {
-                    "estado": {
-                      "$ref": "#/components/schemas/Estados",
-                      "properties": {
-                        "pais": {
-                          "$ref": "#/components/schemas/Paises"
-                        }
-                      }
-                    }
-                  }
+                  "$ref": "#/components/schemas/Ciudades"
                 }
               }
             }
@@ -914,17 +894,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Ciudades",
-                  "properties": {
-                    "estado": {
-                      "$ref": "#/components/schemas/Estados",
-                      "properties": {
-                        "pais": {
-                          "$ref": "#/components/schemas/Paises"
-                        }
-                      }
-                    }
-                  }
+                  "$ref": "#/components/schemas/Ciudades"
                 }
               }
             }
@@ -1100,6 +1070,10 @@
           },
           "tipo_pais": {
             "type": "string"
+          },
+          "tipo_pais_desc": {
+            "type": "string",
+            "readOnly": true
           }
         }
       },

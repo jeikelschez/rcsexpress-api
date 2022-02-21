@@ -18,16 +18,10 @@ class CiudadService {
     const ciudades = await models.Ciudad.findAll({
       attributes: {
         include: [
-          [Sequelize.literal(caseUrbano), 'chech_urbano_desc'],
+          [Sequelize.literal(caseUrbano), 'check_urbano_desc'],
           [Sequelize.literal(caseRegion), 'cod_region_desc']
         ]
-      },
-      include: [
-        {
-          association: 'estado',
-          include: ['pais']
-        }
-      ]
+      }
     });
     return ciudades;
   }
@@ -36,16 +30,10 @@ class CiudadService {
     const ciudad = await models.Ciudad.findByPk(id, {
       attributes: {
         include: [
-          [Sequelize.literal(caseUrbano), 'chech_urbano_desc'],
+          [Sequelize.literal(caseUrbano), 'check_urbano_desc'],
           [Sequelize.literal(caseRegion), 'cod_region_desc']
         ]
-      },
-      include: [
-        {
-          association: 'estado',
-          include: ['pais']
-        }
-      ]
+      }
     });
     if (!ciudad) {
       throw boom.notFound('Ciudad no existe');

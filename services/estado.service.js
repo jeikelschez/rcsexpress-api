@@ -15,9 +15,7 @@ class EstadoService {
   }
 
   async find() {
-    const estados = await models.Estado.findAll({
-      include: ['pais']
-    });
+    const estados = await models.Estado.findAll();
     return estados;
   }
 
@@ -38,7 +36,7 @@ class EstadoService {
           association: 'ciudades',
           attributes: {
             include: [
-              [Sequelize.literal(caseUrbano), 'chech_urbano_desc'],
+              [Sequelize.literal(caseUrbano), 'check_urbano_desc'],
               [Sequelize.literal(caseRegion), 'cod_region_desc']
             ]
           }

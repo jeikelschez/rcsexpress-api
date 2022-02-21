@@ -1,6 +1,8 @@
 const boom = require('@hapi/boom');
 
-const { models }= require('./../libs/sequelize');
+const { models, Sequelize }= require('./../libs/sequelize');
+
+const caseTipo = '(CASE tipo_pais WHEN "N" THEN "NACIONAL" ELSE "INTERNACIONAL" END)';
 
 class PaisService {
 
@@ -12,12 +14,24 @@ class PaisService {
   }
 
   async find() {
-    const paises = await models.Pais.findAll();
+    const paises = await models.Pais.findAll({
+      attributes: {
+        include: [
+          [Sequelize.literal(caseTipo), 'tipo_pais_desc']
+        ]
+      }
+    });
     return paises;
   }
 
   async findOne(id) {
-    const pais = await models.Pais.findByPk(id);
+    const pais = await models.Pais.findByPk(id, {
+      attributes: {
+        include: [
+          [Sequelize.literal(caseTipo), 'tipo_pais_desc']
+        ]
+      }
+    });
     if (!pais) {
       throw boom.notFound('Pais no existe');
     }
