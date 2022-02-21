@@ -1,11 +1,11 @@
 const express = require('express');
 
-const PaisService = require('./../services/pais.service');
+const PaisesService = require('./../services/paises.service');
 const validatorHandler = require('./../middlewares/validator.handler');
-const { createPaisSchema, updatePaisSchema, getPaisSchema } = require('./../schemas/pais.schema');
+const { createPaisesSchema, updatePaisesSchema, getPaisesSchema } = require('./../schemas/paises.schema');
 
 const router = express.Router();
-const service = new PaisService();
+const service = new PaisesService();
 
 router.get('/', async (req, res, next) => {
   try {
@@ -17,7 +17,7 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:id',
-  validatorHandler(getPaisSchema, 'params'),
+  validatorHandler(getPaisesSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -30,7 +30,7 @@ router.get('/:id',
 );
 
 router.get('/:id/estados',
-  validatorHandler(getPaisSchema, 'params'),
+  validatorHandler(getPaisesSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -43,7 +43,7 @@ router.get('/:id/estados',
 );
 
 router.post('/',
-  validatorHandler(createPaisSchema, 'body'),
+  validatorHandler(createPaisesSchema, 'body'),
   async (req, res, next) => {
     try {
       const body = req.body;
@@ -56,8 +56,8 @@ router.post('/',
 );
 
 router.put('/:id',
-  validatorHandler(getPaisSchema, 'params'),
-  validatorHandler(updatePaisSchema, 'body'),
+  validatorHandler(getPaisesSchema, 'params'),
+  validatorHandler(updatePaisesSchema, 'body'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -71,7 +71,7 @@ router.put('/:id',
 );
 
 router.delete('/:id',
-  validatorHandler(getPaisSchema, 'params'),
+  validatorHandler(getPaisesSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;

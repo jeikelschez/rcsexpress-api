@@ -7,7 +7,7 @@ const siglas = Joi.string().min(1).max(4);
 const check_urbano = Joi.string().max(1);
 const cod_region = Joi.string().min(1).max(2);
 
-const createCiudadSchema = Joi.object({
+const createCiudadesSchema = Joi.object({
   cod_estado: cod_estado.required(),
   desc_ciudad: desc_ciudad.required(),
   siglas: siglas.allow(null, ''),
@@ -15,7 +15,7 @@ const createCiudadSchema = Joi.object({
   cod_region: cod_region.allow(null, '')
 });
 
-const updateCiudadSchema = Joi.object({
+const updateCiudadesSchema = Joi.object({
   id: id,
   cod_estado: cod_estado,
   desc_ciudad: desc_ciudad,
@@ -24,8 +24,8 @@ const updateCiudadSchema = Joi.object({
   cod_region: cod_region.allow(null, '')
 });
 
-const getCiudadSchema = Joi.object({
+const getCiudadesSchema = Joi.object({
   id: id.required(),
 });
 
-module.exports = { createCiudadSchema, updateCiudadSchema, getCiudadSchema }
+module.exports = { createCiudadesSchema, updateCiudadesSchema, getCiudadesSchema }

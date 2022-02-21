@@ -1,17 +1,20 @@
-const { Banco, BancoSchema } = require('./banco.model');
-const { Pais, PaisSchema } = require('./pais.model');
-const { Estado, EstadoSchema } = require('./estado.model');
-const { Ciudad, CiudadSchema } = require('./ciudad.model');
+const { Bancos, BancosSchema } = require('./bancos.model');
+const { Paises, PaisesSchema } = require('./paises.model');
+const { Estados, EstadosSchema } = require('./estados.model');
+const { Ciudades, CiudadesSchema } = require('./ciudades.model');
+const { Agencias, AgenciasSchema } = require('./agencias.model');
 
 function setupModels(sequelize) {
-  Banco.init(BancoSchema, Banco.config(sequelize));
-  Pais.init(PaisSchema, Pais.config(sequelize));
-  Estado.init(EstadoSchema, Estado.config(sequelize));
-  Ciudad.init(CiudadSchema, Ciudad.config(sequelize));
+  Bancos.init(BancosSchema, Bancos.config(sequelize));
+  Paises.init(PaisesSchema, Paises.config(sequelize));
+  Estados.init(EstadosSchema, Estados.config(sequelize));
+  Ciudades.init(CiudadesSchema, Ciudades.config(sequelize));
+  Agencias.init(AgenciasSchema, Agencias.config(sequelize));
 
-  Pais.associate(sequelize.models);
-  Estado.associate(sequelize.models);
-  Ciudad.associate(sequelize.models);
+  Paises.associate(sequelize.models);
+  Estados.associate(sequelize.models);
+  Ciudades.associate(sequelize.models);
+  Agencias.associate(sequelize.models);
 }
 
 module.exports = setupModels;

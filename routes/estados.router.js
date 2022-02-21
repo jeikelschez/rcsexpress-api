@@ -1,11 +1,11 @@
 const express = require('express');
 
-const EstadoService = require('./../services/estado.service');
+const EstadosService = require('./../services/estados.service');
 const validatorHandler = require('./../middlewares/validator.handler');
-const { createEstadoSchema, updateEstadoSchema, getEstadoSchema } = require('./../schemas/estado.schema');
+const { createEstadosSchema, updateEstadosSchema, getEstadosSchema } = require('./../schemas/estados.schema');
 
 const router = express.Router();
-const service = new EstadoService();
+const service = new EstadosService();
 
 router.get('/', async (req, res, next) => {
   try {
@@ -17,7 +17,7 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:id',
-  validatorHandler(getEstadoSchema, 'params'),
+  validatorHandler(getEstadosSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -30,7 +30,7 @@ router.get('/:id',
 );
 
 router.get('/:id/ciudades',
-  validatorHandler(getEstadoSchema, 'params'),
+  validatorHandler(getEstadosSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -43,7 +43,7 @@ router.get('/:id/ciudades',
 );
 
 router.post('/',
-  validatorHandler(createEstadoSchema, 'body'),
+  validatorHandler(createEstadosSchema, 'body'),
   async (req, res, next) => {
     try {
       const body = req.body;
@@ -56,8 +56,8 @@ router.post('/',
 );
 
 router.put('/:id',
-  validatorHandler(getEstadoSchema, 'params'),
-  validatorHandler(updateEstadoSchema, 'body'),
+  validatorHandler(getEstadosSchema, 'params'),
+  validatorHandler(updateEstadosSchema, 'body'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -71,7 +71,7 @@ router.put('/:id',
 );
 
 router.delete('/:id',
-  validatorHandler(getEstadoSchema, 'params'),
+  validatorHandler(getEstadosSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;

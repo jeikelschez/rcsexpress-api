@@ -1,8 +1,8 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 
-const BANCO_TABLE = 'bancos';
+const BANCOS_TABLE = 'bancos';
 
-const BancoSchema = {
+const BancosSchema = {
   id: {
     allowNull: false,
     autoIncrement: true,
@@ -30,7 +30,7 @@ const BancoSchema = {
   }
 }
 
-class Banco extends Model {
+class Bancos extends Model {
 
   static associate(models) {
   }
@@ -38,11 +38,11 @@ class Banco extends Model {
   static config(sequelize) {
     return {
       sequelize,
-      tableName: BANCO_TABLE,
-      modelName: 'Banco',
+      tableName: BANCOS_TABLE,
+      modelName: 'Bancos',
       timestamps: false
     }
   }
 }
 
-module.exports = { Banco, BancoSchema, BANCO_TABLE };
+module.exports = { Bancos, BancosSchema, BANCOS_TABLE };

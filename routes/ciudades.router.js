@@ -1,11 +1,11 @@
 const express = require('express');
 
-const CiudadService = require('./../services/ciudad.service');
+const CiudadesService = require('./../services/ciudades.service');
 const validatorHandler = require('./../middlewares/validator.handler');
-const { createCiudadSchema, updateCiudadSchema, getCiudadSchema } = require('./../schemas/ciudad.schema');
+const { createCiudadesSchema, updateCiudadesSchema, getCiudadesSchema } = require('./../schemas/ciudades.schema');
 
 const router = express.Router();
-const service = new CiudadService();
+const service = new CiudadesService();
 
 router.get('/', async (req, res, next) => {
   try {
@@ -17,7 +17,7 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:id',
-  validatorHandler(getCiudadSchema, 'params'),
+  validatorHandler(getCiudadesSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -29,8 +29,21 @@ router.get('/:id',
   }
 );
 
+router.get('/:id/agencias',
+  validatorHandler(getCiudadesSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const ciudad = await service.findOneAgencias(id);
+      res.json(ciudad);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 router.post('/',
-  validatorHandler(createCiudadSchema, 'body'),
+  validatorHandler(createCiudadesSchema, 'body'),
   async (req, res, next) => {
     try {
       const body = req.body;
@@ -43,8 +56,8 @@ router.post('/',
 );
 
 router.put('/:id',
-  validatorHandler(getCiudadSchema, 'params'),
-  validatorHandler(updateCiudadSchema, 'body'),
+  validatorHandler(getCiudadesSchema, 'params'),
+  validatorHandler(updateCiudadesSchema, 'body'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -58,7 +71,7 @@ router.put('/:id',
 );
 
 router.delete('/:id',
-  validatorHandler(getCiudadSchema, 'params'),
+  validatorHandler(getCiudadesSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;

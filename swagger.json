@@ -37,6 +37,10 @@
     {
       "name": "Ciudades",
       "description": "API para Manejar los Ciudades de la Organizacion"
+    },
+    {
+      "name": "Agencias",
+      "description": "API para Manejar los Agencias de la Organizacion"
     }
   ],
   "paths": {
@@ -1025,6 +1029,275 @@
           }
         }
       }
+    },
+    "/ciudades/{id}/agencias": {
+      "get": {
+        "tags": ["Ciudades"],
+        "summary": "Obtener Ciudad con sus Agencias por su Id",
+        "description": "API para Retornar una Ciudad con sus Agencias por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Ciudad",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ciudades",
+                  "properties": {
+                    "agencias": {
+                      "$ref": "#/components/schemas/Agencias"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agencias": {
+      "get": {
+        "tags": ["Agencias"],
+        "summary": "Obtener todas las agencias",
+        "description": "API para Obtener todas las agencias del sistema",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agencias"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Agencias"],
+        "summary": "Crear Agencias",
+        "description": "API para Crear una nueva Agencia",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Agencias"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agencias"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agencias/{id}": {
+      "get": {
+        "tags": ["Bancos"],
+        "summary": "Obtener Agencia por su Id",
+        "description": "API para Retornar una Agencia por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Agencia",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agencias"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Agencias"],
+        "summary": "Actualizar Agencias",
+        "description": "API para Actualizar una Agencia por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Agencia",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Agencias"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agencias"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Agencias"],
+        "summary": "Borrar Agencias",
+        "description": "API para Borrar una Agencia por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Agencia",
+            "required": true, "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Agencias/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1101,7 +1374,7 @@
       },
       "Ciudades": {
         "description": "Modelo de Ciudades",
-        "required": ["id", "desc_ciudad", "siglas", "check_urbano", "cod_region", "cod_estado"],
+        "required": ["id", "desc_ciudad", "cod_estado"],
         "properties": {
           "id": {
             "type": "number",
@@ -1129,6 +1402,49 @@
           "cod_region_desc": {
             "type": "string",
             "readOnly": true
+          }
+        }
+      },
+      "Agencias": {
+        "description": "Modelo de Agencias",
+        "required": ["id", "nb_agencia", "cod_ciudad"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "nb_agencia": {
+            "type": "string"
+          },
+          "persona_contacto": {
+            "type": "string"
+          },
+          "dir_agencia": {
+            "type": "string"
+          },
+          "fax_agencia": {
+            "type": "string"
+          },
+          "email_agencia": {
+            "type": "string"
+          },
+          "tlf_agencia": {
+            "type": "string"
+          },
+          "rif_agencia": {
+            "type": "string"
+          },
+          "nit_agencia": {
+            "type": "string"
+          },
+          "estatus": {
+            "type": "string"
+          },
+          "tlf_agencia": {
+            "type": "string"
+          },
+          "cod_ciudad": {
+            "type": "number"
           }
         }
       }

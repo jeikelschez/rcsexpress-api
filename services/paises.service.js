@@ -4,17 +4,17 @@ const { models, Sequelize }= require('./../libs/sequelize');
 
 const caseTipo = '(CASE tipo_pais WHEN "N" THEN "NACIONAL" ELSE "INTERNACIONAL" END)';
 
-class PaisService {
+class PaisesService {
 
   constructor() {}
 
   async create(data) {
-    const newPais = await models.Pais.create(data);
+    const newPais = await models.Paises.create(data);
     return newPais;
   }
 
   async find() {
-    const paises = await models.Pais.findAll({
+    const paises = await models.Paises.findAll({
       attributes: {
         include: [
           [Sequelize.literal(caseTipo), 'tipo_pais_desc']
@@ -25,7 +25,7 @@ class PaisService {
   }
 
   async findOne(id) {
-    const pais = await models.Pais.findByPk(id, {
+    const pais = await models.Paises.findByPk(id, {
       attributes: {
         include: [
           [Sequelize.literal(caseTipo), 'tipo_pais_desc']
@@ -39,7 +39,7 @@ class PaisService {
   }
 
   async findOneEstados(id) {
-    const pais = await models.Pais.findByPk(id, {
+    const pais = await models.Paises.findByPk(id, {
       include: ['estados']
     });
     if (!pais) {
@@ -49,7 +49,7 @@ class PaisService {
   }
 
   async update(id, changes) {
-    const pais = await models.Pais.findByPk(id);
+    const pais = await models.Paises.findByPk(id);
     if (!pais) {
       throw boom.notFound('Pais no existe');
     }
@@ -58,7 +58,7 @@ class PaisService {
   }
 
   async delete(id) {
-    const pais = await models.Pais.findByPk(id);
+    const pais = await models.Paises.findByPk(id);
     if (!pais) {
       throw boom.notFound('Pais no existe');
     }
@@ -67,4 +67,4 @@ class PaisService {
   }
 }
 
-module.exports = PaisService;
+module.exports = PaisesService;

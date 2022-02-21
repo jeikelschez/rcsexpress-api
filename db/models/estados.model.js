@@ -1,17 +1,17 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 
-const { ESTADO_TABLE } = require('./estado.model');
+const { PAISES_TABLE } = require('./paises.model');
 
-const CIUDAD_TABLE = 'ciudad';
+const ESTADOS_TABLE = 'estados';
 
-const CiudadSchema = {
+const EstadosSchema = {
   id: {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
     type: DataTypes.INTEGER,
   },
-  desc_ciudad: {
+  desc_estado: {
     allowNull: false,
     type: DataTypes.STRING,
     allowNull: false,
@@ -19,17 +19,14 @@ const CiudadSchema = {
   siglas: {
     type: DataTypes.STRING,
   },
-  check_urbano: {
+  iso_3166: {
     type: DataTypes.STRING,
   },
-  cod_region: {
-    type: DataTypes.STRING,
-  },
-  cod_estado: {
+  cod_pais: {
     allowNull: false,
     type: DataTypes.INTEGER,
     references: {
-      model: ESTADO_TABLE,
+      model: PAISES_TABLE,
       key: 'id'
     },
     onUpdate: 'CASCADE',
@@ -37,20 +34,21 @@ const CiudadSchema = {
   }
 }
 
-class Ciudad extends Model {
+class Estados extends Model {
 
   static associate(models) {
-    this.belongsTo(models.Estado, { foreignKey: 'cod_estado', as: 'estado' });
+    this.belongsTo(models.Paises, { foreignKey: 'cod_pais', as: 'pais' });
+    this.hasMany(models.Ciudades, { foreignKey: 'cod_estado', as: 'ciudades' });
   }
 
   static config(sequelize) {
     return {
       sequelize,
-      tableName: CIUDAD_TABLE,
-      modelName: 'Ciudad',
+      tableName: ESTADOS_TABLE,
+      modelName: 'Estados',
       timestamps: false
     }
   }
 }
 
-module.exports = { Ciudad, CiudadSchema, CIUDAD_TABLE };
+module.exports = { Estados, EstadosSchema, ESTADOS_TABLE };

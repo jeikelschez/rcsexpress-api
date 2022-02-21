@@ -1,8 +1,8 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 
-const PAIS_TABLE = 'pais';
+const PAISES_TABLE = 'paises';
 
-const PaisSchema = {
+const PaisesSchema = {
   id: {
     allowNull: false,
     autoIncrement: true,
@@ -19,20 +19,20 @@ const PaisSchema = {
   }
 }
 
-class Pais extends Model {
+class Paises extends Model {
 
   static associate(models) {
-    this.hasMany(models.Estado, { foreignKey: 'cod_pais', as: 'estados' });
+    this.hasMany(models.Estados, { foreignKey: 'cod_pais', as: 'estados' });
   }
 
   static config(sequelize) {
     return {
       sequelize,
-      tableName: PAIS_TABLE,
-      modelName: 'Pais',
+      tableName: PAISES_TABLE,
+      modelName: 'Paises',
       timestamps: false
     }
   }
 }
 
-module.exports = { Pais, PaisSchema, PAIS_TABLE };
+module.exports = { Paises, PaisesSchema, PAISES_TABLE };

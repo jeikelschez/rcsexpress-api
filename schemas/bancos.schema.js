@@ -8,7 +8,7 @@ const fax_banco = Joi.string().min(3).max(25);
 const cod_postal = Joi.string().min(1).max(10);
 const email_banco = Joi.string().email();
 
-const createBancoSchema = Joi.object({
+const createBancosSchema = Joi.object({
   nb_banco: nb_banco.required(),
   direccion_banco: direccion_banco.allow(null, ''),
   tlf_banco: tlf_banco.allow(null, ''),
@@ -17,7 +17,7 @@ const createBancoSchema = Joi.object({
   email_banco: email_banco.allow(null, '')
 });
 
-const updateBancoSchema = Joi.object({
+const updateBancosSchema = Joi.object({
   id: id,
   nb_banco: nb_banco,
   direccion_banco: direccion_banco.allow(null, ''),
@@ -27,8 +27,8 @@ const updateBancoSchema = Joi.object({
   email_banco: email_banco.allow(null, '')
 });
 
-const getBancoSchema = Joi.object({
+const getBancosSchema = Joi.object({
   id: id.required(),
 });
 
-module.exports = { createBancoSchema, updateBancoSchema, getBancoSchema }
+module.exports = { createBancosSchema, updateBancosSchema, getBancosSchema }

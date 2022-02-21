@@ -4,18 +4,19 @@ const { models, Sequelize } = require('./../libs/sequelize');
 
 const caseUrbano = '(CASE check_urbano WHEN "u" THEN "URBANO" ELSE "EXTRAURBANO" END)';
 const caseRegion = '(CASE cod_region WHEN "CE" THEN "CENTRAL" WHEN "OC" THEN "OCCIDENTAL" ELSE "ORIENTAL" END)';
+const caseStatus = '(CASE estatus WHEN "A" THEN "ACTIVO" ELSE "INACTIVO" END)';
 
-class CiudadService {
+class CiudadesService {
 
   constructor() {}
 
   async create(data) {
-    const newCiudad = await models.Ciudad.create(data);
+    const newCiudad = await models.Ciudades.create(data);
     return newCiudad;
   }
 
   async find() {
-    const ciudades = await models.Ciudad.findAll({
+    const ciudades = await models.Ciudades.findAll({
       attributes: {
         include: [
           [Sequelize.literal(caseUrbano), 'check_urbano_desc'],
@@ -27,7 +28,7 @@ class CiudadService {
   }
 
   async findOne(id) {
-    const ciudad = await models.Ciudad.findByPk(id, {
+    const ciudad = await models.Ciudades.findByPk(id, {
       attributes: {
         include: [
           [Sequelize.literal(caseUrbano), 'check_urbano_desc'],
@@ -41,8 +42,27 @@ class CiudadService {
     return ciudad;
   }
 
+  async findOneAgencias(id) {
+    const ciudad = await models.Ciudades.findByPk(id, {
+      include: [
+        {
+          association: 'agencias',
+          attributes: {
+            include: [
+              [Sequelize.literal(caseStatus), 'estatus_desc']
+            ]
+          }
+        }
+      ]
+    });
+    if (!ciudad) {
+      throw boom.notFound('Ciudad no existe');
+    }
+    return ciudad;
+  }
+
   async update(id, changes) {
-    const ciudad = await models.Ciudad.findByPk(id);
+    const ciudad = await models.Ciudades.findByPk(id);
     if (!ciudad) {
       throw boom.notFound('Ciudad no existe');
     }
@@ -51,7 +71,7 @@ class CiudadService {
   }
 
   async delete(id) {
-    const ciudad = await models.Ciudad.findByPk(id);
+    const ciudad = await models.Ciudades.findByPk(id);
     if (!ciudad) {
       throw boom.notFound('Ciudad no existe');
     }
@@ -60,4 +80,4 @@ class CiudadService {
   }
 }
 
-module.exports = CiudadService;
+module.exports = CiudadesService;
