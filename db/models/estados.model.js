@@ -37,7 +37,7 @@ const EstadosSchema = {
 class Estados extends Model {
 
   static associate(models) {
-    this.belongsTo(models.Paises, { foreignKey: 'cod_pais', as: 'pais' });
+    this.belongsTo(models.Paises, { foreignKey: 'cod_pais', as: 'paises' });
     this.hasMany(models.Ciudades, { foreignKey: 'cod_estado', as: 'ciudades' });
   }
 

@@ -40,7 +40,7 @@ const CiudadesSchema = {
 class Ciudades extends Model {
 
   static associate(models) {
-    this.belongsTo(models.Estados, { foreignKey: 'cod_estado', as: 'estado' });
+    this.belongsTo(models.Estados, { foreignKey: 'cod_estado', as: 'estados' });
     this.hasMany(models.Agencias, { foreignKey: 'cod_ciudad', as: 'agencias' });
   }
 

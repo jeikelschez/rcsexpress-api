@@ -56,7 +56,7 @@ const AgenciasSchema = {
 class Agencias extends Model {
 
   static associate(models) {
-    this.belongsTo(models.Ciudades, { foreignKey: 'cod_ciudad', as: 'ciudad' });
+    this.belongsTo(models.Ciudades, { foreignKey: 'cod_ciudad', as: 'ciudades' });
   }
 
   static config(sequelize) {

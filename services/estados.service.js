@@ -20,9 +20,7 @@ class EstadosService {
   }
 
   async findOne(id) {
-    const estado = await models.Estados.findByPk(id, {
-      include: ['paises']
-    });
+    const estado = await models.Estados.findByPk(id);
     if (!estado) {
       throw boom.notFound('Estado no existe');
     }
