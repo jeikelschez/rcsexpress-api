@@ -1086,7 +1086,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Agencias"
+                  "$ref": "#/components/schemas/Agencias",
+                  "properties": {
+                    "ciudades": {
+                      "$ref": "#/components/schemas/Ciudades"
+                    }
+                  }
                 }
               }
             }
@@ -1167,7 +1172,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Agencias"
+                  "$ref": "#/components/schemas/Agencias",
+                  "properties": {
+                    "ciudades": {
+                      "$ref": "#/components/schemas/Ciudades"
+                    }
+                  }
                 }
               }
             }
