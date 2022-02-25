@@ -16,9 +16,7 @@ class AgenciasService {
   async find() {
     const agencias = await models.Agencias.findAll(
     {
-      include: ['ciudades']
-    },
-    {
+      include: ['ciudades'],
       attributes: {
         include: [
           [Sequelize.literal(caseStatus), 'estatus_desc']
@@ -31,9 +29,7 @@ class AgenciasService {
   async findOne(id) {
     const agencia = await models.Agencias.findByPk(id,
     {
-      include: ['ciudades']
-    },
-    {
+      include: ['ciudades'],
       attributes: {
         include: [
           [Sequelize.literal(caseStatus), 'estatus_desc']
