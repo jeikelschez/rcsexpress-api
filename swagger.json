@@ -23,27 +23,265 @@
   "produces": ["application/json"],
   "tags": [
     {
+      "name": "Agencias",
+      "description": "API para Manejar los Agencias de la Organizacion"
+    },
+    {
       "name": "Bancos",
       "description": "API para Manejar los Bancos de la Organizacion"
-    },
-    {
-      "name": "Paises",
-      "description": "API para Manejar los Paises de la Organizacion"
-    },
-    {
-      "name": "Estados",
-      "description": "API para Manejar los Estados de la Organizacion"
     },
     {
       "name": "Ciudades",
       "description": "API para Manejar los Ciudades de la Organizacion"
     },
     {
-      "name": "Agencias",
-      "description": "API para Manejar los Agencias de la Organizacion"
+      "name": "Estados",
+      "description": "API para Manejar los Estados de la Organizacion"
+    },
+    {
+      "name": "Paises",
+      "description": "API para Manejar los Paises de la Organizacion"
+    },
+    {
+      "name": "Roles",
+      "description": "API para Manejar los Roles de la Organizacion"
     }
   ],
   "paths": {
+    "/agencias": {
+      "get": {
+        "tags": ["Agencias"],
+        "summary": "Obtener todas las agencias",
+        "description": "API para Obtener todas las agencias del sistema",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agencias",
+                  "properties": {
+                    "ciudades": {
+                      "$ref": "#/components/schemas/Ciudades"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Agencias"],
+        "summary": "Crear Agencias",
+        "description": "API para Crear una nueva Agencia",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Agencias"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agencias"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agencias/{id}": {
+      "get": {
+        "tags": ["Bancos"],
+        "summary": "Obtener Agencia por su Id",
+        "description": "API para Retornar una Agencia por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Agencia",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agencias",
+                  "properties": {
+                    "ciudades": {
+                      "$ref": "#/components/schemas/Ciudades"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Agencias"],
+        "summary": "Actualizar Agencias",
+        "description": "API para Actualizar una Agencia por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Agencia",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Agencias"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agencias"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Agencias"],
+        "summary": "Borrar Agencias",
+        "description": "API para Borrar una Agencia por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Agencia",
+            "required": true, "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Agencias/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/bancos": {
       "get": {
         "tags": ["Bancos"],
@@ -268,18 +506,18 @@
         }
       }
     },
-    "/paises": {
+    "/ciudades": {
       "get": {
-        "tags": ["Paises"],
-        "summary": "Obtener todos los paises",
-        "description": "API para Obtener todos los paises del sistema",
+        "tags": ["Ciudades"],
+        "summary": "Obtener todos las ciudades",
+        "description": "API para Obtener todos las ciudades del sistema",
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Paises"
+                  "$ref": "#/components/schemas/Ciudades"
                 }
               }
             }
@@ -287,16 +525,16 @@
         }
       },
       "post": {
-        "tags": ["Paises"],
-        "summary": "Crear Paises",
-        "description": "API para Crear un nuevo Pais",
+        "tags": ["Ciudades"],
+        "summary": "Crear Ciudades",
+        "description": "API para Crear una nueva Ciudades",
         "requestBody": {
           "description": "Post object",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Paises"
+                "$ref": "#/components/schemas/Ciudades"
               }
             }
           }
@@ -307,7 +545,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Paises"
+                  "$ref": "#/components/schemas/Ciudades"
                 }
               }
             }
@@ -338,16 +576,16 @@
         }
       }
     },
-    "/paises/{id}": {
+    "/ciudades/{id}": {
       "get": {
-        "tags": ["Paises"],
-        "summary": "Obtener Pais por su Id",
-        "description": "API para Retornar un Pais por su ID específico",
+        "tags": ["Ciudades"],
+        "summary": "Obtener Ciudad por su Id",
+        "description": "API para Retornar una Ciudad por su ID específico",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Codigo del Pais",
+            "description": "Codigo de la Ciudad",
             "required": true,
             "schema": {
               "type": "integer"
@@ -360,7 +598,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Paises"
+                  "$ref": "#/components/schemas/Ciudades"
                 }
               }
             }
@@ -378,14 +616,14 @@
         }
       },
       "put": {
-        "tags": ["Paises"],
-        "summary": "Actualizar Pais",
-        "description": "API para Actualizar un Pais por su ID específico",
+        "tags": ["Ciudades"],
+        "summary": "Actualizar Ciudad",
+        "description": "API para Actualizar una Ciudad por su ID específico",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Codigo del Pais",
+            "description": "Codigo de la Ciudad",
             "required": true,
             "schema": {
               "type": "integer"
@@ -398,7 +636,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Paises"
+                "$ref": "#/components/schemas/Ciudades"
               }
             }
           }
@@ -409,7 +647,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Paises"
+                  "$ref": "#/components/schemas/Ciudades"
                 }
               }
             }
@@ -450,14 +688,14 @@
         }
       },
       "delete": {
-        "tags": ["Paises"],
-        "summary": "Borrar Pais",
-        "description": "API para Borrar un Pais por su ID específico",
+        "tags": ["Ciudades"],
+        "summary": "Borrar Ciudad",
+        "description": "API para Borrar un Ciudad por su ID específico",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Codigo del Pais",
+            "description": "Codigo de la Ciudad",
             "required": true, "schema": {
               "type": "integer"
             }
@@ -471,7 +709,7 @@
                 "schema": {
                   "properties": {
                     "id": {
-                      "$ref": "#/components/schemas/Paises/properties/id"
+                      "$ref": "#/components/schemas/Ciudades/properties/id"
                     }
                   },
                   "type": "object"
@@ -492,16 +730,16 @@
         }
       }
     },
-    "/paises/{id}/estados": {
+    "/ciudades/{id}/agencias": {
       "get": {
-        "tags": ["Paises"],
-        "summary": "Obtener Pais con sus Estados por su Id",
-        "description": "API para Retornar un Pais con sus Estados por su ID específico",
+        "tags": ["Ciudades"],
+        "summary": "Obtener Ciudad con sus Agencias por su Id",
+        "description": "API para Retornar una Ciudad con sus Agencias por su ID específico",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Codigo del Pais",
+            "description": "Codigo de la Ciudad",
             "required": true,
             "schema": {
               "type": "integer"
@@ -514,10 +752,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Paises",
+                  "$ref": "#/components/schemas/Ciudades",
                   "properties": {
-                    "estados": {
-                      "$ref": "#/components/schemas/Estados"
+                    "agencias": {
+                      "$ref": "#/components/schemas/Agencias"
                     }
                   }
                 }
@@ -806,18 +1044,18 @@
         }
       }
     },
-    "/ciudades": {
+    "/paises": {
       "get": {
-        "tags": ["Ciudades"],
-        "summary": "Obtener todos las ciudades",
-        "description": "API para Obtener todos las ciudades del sistema",
+        "tags": ["Paises"],
+        "summary": "Obtener todos los paises",
+        "description": "API para Obtener todos los paises del sistema",
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Ciudades"
+                  "$ref": "#/components/schemas/Paises"
                 }
               }
             }
@@ -825,16 +1063,16 @@
         }
       },
       "post": {
-        "tags": ["Ciudades"],
-        "summary": "Crear Ciudades",
-        "description": "API para Crear una nueva Ciudades",
+        "tags": ["Paises"],
+        "summary": "Crear Paises",
+        "description": "API para Crear un nuevo Pais",
         "requestBody": {
           "description": "Post object",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Ciudades"
+                "$ref": "#/components/schemas/Paises"
               }
             }
           }
@@ -845,7 +1083,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Ciudades"
+                  "$ref": "#/components/schemas/Paises"
                 }
               }
             }
@@ -876,16 +1114,16 @@
         }
       }
     },
-    "/ciudades/{id}": {
+    "/paises/{id}": {
       "get": {
-        "tags": ["Ciudades"],
-        "summary": "Obtener Ciudad por su Id",
-        "description": "API para Retornar una Ciudad por su ID específico",
+        "tags": ["Paises"],
+        "summary": "Obtener Pais por su Id",
+        "description": "API para Retornar un Pais por su ID específico",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Codigo de la Ciudad",
+            "description": "Codigo del Pais",
             "required": true,
             "schema": {
               "type": "integer"
@@ -898,7 +1136,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Ciudades"
+                  "$ref": "#/components/schemas/Paises"
                 }
               }
             }
@@ -916,14 +1154,14 @@
         }
       },
       "put": {
-        "tags": ["Ciudades"],
-        "summary": "Actualizar Ciudad",
-        "description": "API para Actualizar una Ciudad por su ID específico",
+        "tags": ["Paises"],
+        "summary": "Actualizar Pais",
+        "description": "API para Actualizar un Pais por su ID específico",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Codigo de la Ciudad",
+            "description": "Codigo del Pais",
             "required": true,
             "schema": {
               "type": "integer"
@@ -936,7 +1174,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Ciudades"
+                "$ref": "#/components/schemas/Paises"
               }
             }
           }
@@ -947,7 +1185,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Ciudades"
+                  "$ref": "#/components/schemas/Paises"
                 }
               }
             }
@@ -988,14 +1226,14 @@
         }
       },
       "delete": {
-        "tags": ["Ciudades"],
-        "summary": "Borrar Ciudad",
-        "description": "API para Borrar un Ciudad por su ID específico",
+        "tags": ["Paises"],
+        "summary": "Borrar Pais",
+        "description": "API para Borrar un Pais por su ID específico",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Codigo de la Ciudad",
+            "description": "Codigo del Pais",
             "required": true, "schema": {
               "type": "integer"
             }
@@ -1009,7 +1247,7 @@
                 "schema": {
                   "properties": {
                     "id": {
-                      "$ref": "#/components/schemas/Ciudades/properties/id"
+                      "$ref": "#/components/schemas/Paises/properties/id"
                     }
                   },
                   "type": "object"
@@ -1030,16 +1268,16 @@
         }
       }
     },
-    "/ciudades/{id}/agencias": {
+    "/paises/{id}/estados": {
       "get": {
-        "tags": ["Ciudades"],
-        "summary": "Obtener Ciudad con sus Agencias por su Id",
-        "description": "API para Retornar una Ciudad con sus Agencias por su ID específico",
+        "tags": ["Paises"],
+        "summary": "Obtener Pais con sus Estados por su Id",
+        "description": "API para Retornar un Pais con sus Estados por su ID específico",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Codigo de la Ciudad",
+            "description": "Codigo del Pais",
             "required": true,
             "schema": {
               "type": "integer"
@@ -1052,10 +1290,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Ciudades",
+                  "$ref": "#/components/schemas/Paises",
                   "properties": {
-                    "agencias": {
-                      "$ref": "#/components/schemas/Agencias"
+                    "estados": {
+                      "$ref": "#/components/schemas/Estados"
                     }
                   }
                 }
@@ -1075,23 +1313,18 @@
         }
       }
     },
-    "/agencias": {
+    "/roles": {
       "get": {
-        "tags": ["Agencias"],
-        "summary": "Obtener todas las agencias",
-        "description": "API para Obtener todas las agencias del sistema",
+        "tags": ["Roles"],
+        "summary": "Obtener todos los roles",
+        "description": "API para Obtener todos los roles del sistema",
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Agencias",
-                  "properties": {
-                    "ciudades": {
-                      "$ref": "#/components/schemas/Ciudades"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Roles"
                 }
               }
             }
@@ -1099,16 +1332,16 @@
         }
       },
       "post": {
-        "tags": ["Agencias"],
-        "summary": "Crear Agencias",
-        "description": "API para Crear una nueva Agencia",
+        "tags": ["Roles"],
+        "summary": "Crear Roles",
+        "description": "API para Crear un nuevo Rol",
         "requestBody": {
           "description": "Post object",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Agencias"
+                "$ref": "#/components/schemas/Roles"
               }
             }
           }
@@ -1119,7 +1352,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Agencias"
+                  "$ref": "#/components/schemas/Roles"
                 }
               }
             }
@@ -1150,16 +1383,16 @@
         }
       }
     },
-    "/agencias/{id}": {
+    "/roles/{id}": {
       "get": {
-        "tags": ["Bancos"],
-        "summary": "Obtener Agencia por su Id",
-        "description": "API para Retornar una Agencia por su ID específico",
+        "tags": ["Roles"],
+        "summary": "Obtener Rol por su Id",
+        "description": "API para Retornar un Rol por su ID específico",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Codigo de la Agencia",
+            "description": "Codigo del Rol",
             "required": true,
             "schema": {
               "type": "integer"
@@ -1172,12 +1405,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Agencias",
-                  "properties": {
-                    "ciudades": {
-                      "$ref": "#/components/schemas/Ciudades"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Roles"
                 }
               }
             }
@@ -1195,14 +1423,14 @@
         }
       },
       "put": {
-        "tags": ["Agencias"],
-        "summary": "Actualizar Agencias",
-        "description": "API para Actualizar una Agencia por su ID específico",
+        "tags": ["Roles"],
+        "summary": "Actualizar Rol",
+        "description": "API para Actualizar un Rol por su ID específico",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Codigo de la Agencia",
+            "description": "Codigo del Rol",
             "required": true,
             "schema": {
               "type": "integer"
@@ -1215,7 +1443,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Agencias"
+                "$ref": "#/components/schemas/Roles"
               }
             }
           }
@@ -1226,7 +1454,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Agencias"
+                  "$ref": "#/components/schemas/Roles"
                 }
               }
             }
@@ -1267,14 +1495,14 @@
         }
       },
       "delete": {
-        "tags": ["Agencias"],
-        "summary": "Borrar Agencias",
-        "description": "API para Borrar una Agencia por su ID específico",
+        "tags": ["Roles"],
+        "summary": "Borrar Rol",
+        "description": "API para Borrar un Rol por su ID específico",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Codigo de la Agencia",
+            "description": "Codigo del Rol",
             "required": true, "schema": {
               "type": "integer"
             }
@@ -1288,7 +1516,7 @@
                 "schema": {
                   "properties": {
                     "id": {
-                      "$ref": "#/components/schemas/Agencias/properties/id"
+                      "$ref": "#/components/schemas/Roles/properties/id"
                     }
                   },
                   "type": "object"
@@ -1312,109 +1540,6 @@
   },
   "components": {
     "schemas": {
-      "Bancos": {
-        "description": "Modelo de Bancos",
-        "required": ["id", "nb_banco"],
-        "properties": {
-          "id": {
-            "type": "number",
-            "readOnly": true
-          },
-          "nb_banco": {
-            "type": "string"
-          },
-          "direccion_banco": {
-            "type": "string"
-          },
-          "tlf_banco": {
-            "type": "string"
-          },
-          "fax_banco": {
-            "type": "string"
-          },
-          "cod_postal": {
-            "type": "string"
-          },
-          "email_banco": {
-            "type": "string"
-          }
-        }
-      },
-      "Paises": {
-        "description": "Modelo de Paises",
-        "required": ["id", "desc_pais", "tipo_pais"],
-        "properties": {
-          "id": {
-            "type": "number",
-            "readOnly": true
-          },
-          "desc_pais": {
-            "type": "string"
-          },
-          "tipo_pais": {
-            "type": "string"
-          },
-          "tipo_pais_desc": {
-            "type": "string",
-            "readOnly": true
-          }
-        }
-      },
-      "Estados": {
-        "description": "Modelo de Estados",
-        "required": ["id", "desc_estado", "siglas", "iso_3166", "cod_pais"],
-        "properties": {
-          "id": {
-            "type": "number",
-            "readOnly": true
-          },
-          "desc_estado": {
-            "type": "string"
-          },
-          "siglas": {
-            "type": "string"
-          },
-          "iso_3166": {
-            "type": "string"
-          },
-          "cod_pais": {
-            "type": "number"
-          }
-        }
-      },
-      "Ciudades": {
-        "description": "Modelo de Ciudades",
-        "required": ["id", "desc_ciudad", "cod_estado"],
-        "properties": {
-          "id": {
-            "type": "number",
-            "readOnly": true
-          },
-          "desc_ciudad": {
-            "type": "string"
-          },
-          "siglas": {
-            "type": "string"
-          },
-          "check_urbano": {
-            "type": "string"
-          },
-          "cod_region": {
-            "type": "string"
-          },
-          "cod_estado": {
-            "type": "number"
-          },
-          "check_urbano_desc": {
-            "type": "string",
-            "readOnly": true
-          },
-          "cod_region_desc": {
-            "type": "string",
-            "readOnly": true
-          }
-        }
-      },
       "Agencias": {
         "description": "Modelo de Agencias",
         "required": ["id", "nb_agencia", "cod_ciudad"],
@@ -1454,6 +1579,125 @@
             "type": "string"
           },
           "cod_ciudad": {
+            "type": "number"
+          }
+        }
+      },
+      "Bancos": {
+        "description": "Modelo de Bancos",
+        "required": ["id", "nb_banco"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "nb_banco": {
+            "type": "string"
+          },
+          "direccion_banco": {
+            "type": "string"
+          },
+          "tlf_banco": {
+            "type": "string"
+          },
+          "fax_banco": {
+            "type": "string"
+          },
+          "cod_postal": {
+            "type": "string"
+          },
+          "email_banco": {
+            "type": "string"
+          }
+        }
+      },
+      "Ciudades": {
+        "description": "Modelo de Ciudades",
+        "required": ["id", "desc_ciudad", "cod_estado"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "desc_ciudad": {
+            "type": "string"
+          },
+          "siglas": {
+            "type": "string"
+          },
+          "check_urbano": {
+            "type": "string"
+          },
+          "cod_region": {
+            "type": "string"
+          },
+          "cod_estado": {
+            "type": "number"
+          },
+          "check_urbano_desc": {
+            "type": "string",
+            "readOnly": true
+          },
+          "cod_region_desc": {
+            "type": "string",
+            "readOnly": true
+          }
+        }
+      },
+      "Estados": {
+        "description": "Modelo de Estados",
+        "required": ["id", "desc_estado", "siglas", "iso_3166", "cod_pais"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "desc_estado": {
+            "type": "string"
+          },
+          "siglas": {
+            "type": "string"
+          },
+          "iso_3166": {
+            "type": "string"
+          },
+          "cod_pais": {
+            "type": "number"
+          }
+        }
+      },
+      "Paises": {
+        "description": "Modelo de Paises",
+        "required": ["id", "desc_pais", "tipo_pais"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "desc_pais": {
+            "type": "string"
+          },
+          "tipo_pais": {
+            "type": "string"
+          },
+          "tipo_pais_desc": {
+            "type": "string",
+            "readOnly": true
+          }
+        }
+      },
+      "Roles": {
+        "description": "Modelo de Roles",
+        "required": ["id", "descripcion", "cod_agencia"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "descripcion": {
+            "type": "string"
+          },
+          "cod_agencia": {
             "type": "number"
           }
         }
