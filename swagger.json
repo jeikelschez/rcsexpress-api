@@ -39,8 +39,16 @@
       "description": "API para Manejar los Estados de la Organizacion"
     },
     {
+      "name": "Objetos",
+      "description": "API para Manejar los Objetos de la Organizacion"
+    },
+    {
       "name": "Paises",
       "description": "API para Manejar los Paises de la Organizacion"
+    },
+    {
+      "name": "Permisos",
+      "description": "API para Manejar los Permisos de la Organizacion"
     },
     {
       "name": "Roles",
@@ -1044,6 +1052,230 @@
         }
       }
     },
+    "/objetos": {
+      "get": {
+        "tags": ["Objetos"],
+        "summary": "Obtener todos los objetos",
+        "description": "API para Obtener todos los objetos del sistema",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Objetos"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Objetos"],
+        "summary": "Crear Objetos",
+        "description": "API para Crear un nuevo Objeto",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Objetos"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Objetos"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/objetos/{codigo}": {
+      "get": {
+        "tags": ["Objetos"],
+        "summary": "Obtener Objeto por su Id",
+        "description": "API para Retornar un Objeto por su ID específico",
+        "parameters": [
+          {
+            "name": "codigo",
+            "in": "path",
+            "description": "Codigo del Objeto",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Objetos"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Objetos"],
+        "summary": "Actualizar Pais",
+        "description": "API para Actualizar un Objeto por su ID específico",
+        "parameters": [
+          {
+            "name": "codigo",
+            "in": "path",
+            "description": "Codigo del Objeto",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Objetos"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Objetos"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Objetos"],
+        "summary": "Borrar Objeto",
+        "description": "API para Borrar un Objeto por su ID específico",
+        "parameters": [
+          {
+            "name": "codigo",
+            "in": "path",
+            "description": "Codigo del Pais",
+            "required": true, "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Objetos/properties/codigo"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/paises": {
       "get": {
         "tags": ["Paises"],
@@ -1296,6 +1528,230 @@
                       "$ref": "#/components/schemas/Estados"
                     }
                   }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/permisos": {
+      "get": {
+        "tags": ["Permisos"],
+        "summary": "Obtener todos los permisos",
+        "description": "API para Obtener todos los permisos del sistema",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Permisos"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Permisos"],
+        "summary": "Crear Permiso",
+        "description": "API para Crear un nuevo Permiso",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Permisos"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Permisos"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/permisos/{id}": {
+      "get": {
+        "tags": ["Permisos"],
+        "summary": "Obtener Permiso por su Id",
+        "description": "API para Retornar un Permiso por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Permiso",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Permisos"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Permisos"],
+        "summary": "Actualizar Permiso",
+        "description": "API para Actualizar un Permiso por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Permiso",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Permisos"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Permisos"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Permisos"],
+        "summary": "Borrar Permiso",
+        "description": "API para Borrar un Permiso por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Permiso",
+            "required": true, "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Permisos/properties/id"
+                    }
+                  },
+                  "type": "object"
                 }
               }
             }
@@ -1666,6 +2122,18 @@
           }
         }
       },
+      "Objetos": {
+        "description": "Modelo de Objetos",
+        "required": ["codigo", "descripcion"],
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "descripcion": {
+            "type": "string"
+          }
+        }
+      },
       "Paises": {
         "description": "Modelo de Paises",
         "required": ["id", "desc_pais", "tipo_pais"],
@@ -1683,6 +2151,22 @@
           "tipo_pais_desc": {
             "type": "string",
             "readOnly": true
+          }
+        }
+      },
+      "Permisos": {
+        "description": "Modelo de Permisos",
+        "required": ["id", "codigo", "cod_rol"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "codigo": {
+            "type": "string"
+          },
+          "cod_rol": {
+            "type": "number"
           }
         }
       },
