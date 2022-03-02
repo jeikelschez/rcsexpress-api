@@ -58,6 +58,7 @@ class Agencias extends Model {
   static associate(models) {
     this.belongsTo(models.Ciudades, { foreignKey: 'cod_ciudad', as: 'ciudades' });
     this.hasMany(models.Roles, { foreignKey: 'cod_agencia', as: 'roles' });
+    this.hasMany(models.Usuarios, { foreignKey: 'cod_agencia', as: 'usuarios' });
   }
 
   static config(sequelize) {

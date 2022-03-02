@@ -10,6 +10,7 @@ const AgenciasRouter = require('./agencias.router');
 const RolesRouter = require('./roles.router');
 const ObjetosRouter = require('./objetos.router');
 const PermisosRouter = require('./permisos.router');
+const UsuariosRouter = require('./usuarios.router');
 
 function routerApi(app) {
   const router = express.Router();
@@ -23,6 +24,7 @@ function routerApi(app) {
   router.use('/roles', RolesRouter);
   router.use('/objetos', ObjetosRouter);
   router.use('/permisos', PermisosRouter);
+  router.use('/usuarios', UsuariosRouter);
   router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 

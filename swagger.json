@@ -53,6 +53,10 @@
     {
       "name": "Roles",
       "description": "API para Manejar los Roles de la Organizacion"
+    },
+    {
+      "name": "Usuarios",
+      "description": "API para Manejar los Usuarios de la Organizacion"
     }
   ],
   "paths": {
@@ -1125,8 +1129,8 @@
     "/objetos/{codigo}": {
       "get": {
         "tags": ["Objetos"],
-        "summary": "Obtener Objeto por su Id",
-        "description": "API para Retornar un Objeto por su ID específico",
+        "summary": "Obtener Objeto por su Codigo",
+        "description": "API para Retornar un Objeto por su Codigo específico",
         "parameters": [
           {
             "name": "codigo",
@@ -1164,7 +1168,7 @@
       "put": {
         "tags": ["Objetos"],
         "summary": "Actualizar Pais",
-        "description": "API para Actualizar un Objeto por su ID específico",
+        "description": "API para Actualizar un Objeto por su Codigo específico",
         "parameters": [
           {
             "name": "codigo",
@@ -1236,7 +1240,7 @@
       "delete": {
         "tags": ["Objetos"],
         "summary": "Borrar Objeto",
-        "description": "API para Borrar un Objeto por su ID específico",
+        "description": "API para Borrar un Objeto por su Codigo específico",
         "parameters": [
           {
             "name": "codigo",
@@ -1992,6 +1996,230 @@
           }
         }
       }
+    },
+    "/usuarios": {
+      "get": {
+        "tags": ["Usuarios"],
+        "summary": "Obtener todos los usuarios",
+        "description": "API para Obtener todos los usuarios del sistema",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Usuarios"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Usuarios"],
+        "summary": "Crear Usuarios",
+        "description": "API para Crear un nuevo Usuario",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Usuarios"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Usuarios"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usuarios/{login}": {
+      "get": {
+        "tags": ["Usuarios"],
+        "summary": "Obtener Usuario por su Login",
+        "description": "API para Retornar un Usuario por su Login específico",
+        "parameters": [
+          {
+            "name": "login",
+            "in": "path",
+            "description": "Login del Usuario",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Usuarios"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Usuarios"],
+        "summary": "Actualizar Usuario",
+        "description": "API para Actualizar un Usuario por su Login específico",
+        "parameters": [
+          {
+            "name": "login",
+            "in": "path",
+            "description": "Login del Usuario",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Usuarios"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Usuarios"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Usuarios"],
+        "summary": "Borrar Usuario",
+        "description": "API para Borrar un Usuario por su Login específico",
+        "parameters": [
+          {
+            "name": "login",
+            "in": "path",
+            "description": "Login del Usuario",
+            "required": true, "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Usuarios/properties/login"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2182,6 +2410,30 @@
             "type": "string"
           },
           "cod_agencia": {
+            "type": "number"
+          }
+        }
+      },
+      "Usuarios": {
+        "description": "Modelo de Usuarios",
+        "required": ["login", "password", "nombre","activo","cod_agencia","cod_rol"],
+        "properties": {
+          "login": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "activo": {
+            "type": "string"
+          },
+          "cod_agencia": {
+            "type": "number"
+          },
+          "cod_rol": {
             "type": "number"
           }
         }
