@@ -24,6 +24,16 @@ class RolesService {
     return rol;
   }
 
+  async findOnePermisos(id) {
+    const rol = await models.Roles.findByPk(id, {
+      include: ['permisos']
+    });
+    if (!rol) {
+      throw boom.notFound('Rol no existe');
+    }
+    return rol;
+  }
+
   async update(id, changes) {
     const rol = await models.Roles.findByPk(id);
     if (!rol) {

@@ -1,6 +1,8 @@
 const boom = require('@hapi/boom');
 
-const { models }= require('./../libs/sequelize');
+const { models, Sequelize }= require('./../libs/sequelize');
+
+const caseActivo = '(CASE activo WHEN "1" THEN "ACTIVO" ELSE "INACTIVO" END)';
 
 class UsuariosService {
 
@@ -12,12 +14,28 @@ class UsuariosService {
   }
 
   async find() {
-    const usuarios = await models.Usuarios.findAll();
+    const usuarios = await models.Usuarios.findAll({
+      include: ['roles'],
+      attributes: {
+        include: [
+          [Sequelize.literal(caseActivo), 'activo_desc']
+        ]
+      }
+    });
     return usuarios;
   }
 
   async findOne(login) {
-    const usuario = await models.Usuarios.findByPk(login);
+    const usuario = await models.Usuarios.findByPk(login,
+      {
+        include: ['roles'],
+        attributes: {
+          include: [
+            [Sequelize.literal(caseActivo), 'activo_desc']
+          ]
+        }
+      }
+    );
     if (!usuario) {
       throw boom.notFound('Usuario no existe');
     }

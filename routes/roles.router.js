@@ -29,6 +29,19 @@ router.get('/:id',
   }
 );
 
+router.get('/:id/permisos',
+  validatorHandler(getRolesSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const rol = await service.findOnePermisos(id);
+      res.json(rol);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 router.post('/',
   validatorHandler(createRolesSchema, 'body'),
   async (req, res, next) => {

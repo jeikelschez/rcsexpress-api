@@ -137,7 +137,7 @@
     },
     "/agencias/{id}": {
       "get": {
-        "tags": ["Bancos"],
+        "tags": ["Agencias"],
         "summary": "Obtener Agencia por su Id",
         "description": "API para Retornar una Agencia por su ID específico",
         "parameters": [
@@ -277,6 +277,96 @@
                     }
                   },
                   "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agencias/{id}/usuarios": {
+      "get": {
+        "tags": ["Agencias"],
+        "summary": "Obtener Agencia con sus Usuarios por su Id",
+        "description": "API para Retornar una Agencia con sus Usuarios por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Agencia",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agencias",
+                  "properties": {
+                    "usuarios": {
+                      "$ref": "#/components/schemas/Usuarios"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agencias/{id}/roles": {
+      "get": {
+        "tags": ["Agencias"],
+        "summary": "Obtener Agencia con sus Roles por su Id",
+        "description": "API para Retornar una Agencia con sus Roles por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Agencia",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agencias",
+                  "properties": {
+                    "roles": {
+                      "$ref": "#/components/schemas/Roles"
+                    }
+                  }
                 }
               }
             }
@@ -1997,6 +2087,51 @@
         }
       }
     },
+    "/roles/{id}/permisos": {
+      "get": {
+        "tags": ["Roles"],
+        "summary": "Obtener Rol con sus Permisos por su Id",
+        "description": "API para Retornar un Rol con sus Permisos por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Rol",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Roles",
+                  "properties": {
+                    "permisos": {
+                      "$ref": "#/components/schemas/Permisos"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/usuarios": {
       "get": {
         "tags": ["Usuarios"],
@@ -2008,7 +2143,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Usuarios"
+                  "$ref": "#/components/schemas/Usuarios",
+                  "properties": {
+                    "roles": {
+                      "$ref": "#/components/schemas/Roles"
+                    }
+                  }
                 }
               }
             }
@@ -2089,7 +2229,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Usuarios"
+                  "$ref": "#/components/schemas/Usuarios",
+                  "properties": {
+                    "roles": {
+                      "$ref": "#/components/schemas/Roles"
+                    }
+                  }
                 }
               }
             }
@@ -2435,6 +2580,10 @@
           },
           "cod_rol": {
             "type": "number"
+          },
+          "activo_desc": {
+            "type": "string",
+            "readOnly": true
           }
         }
       }

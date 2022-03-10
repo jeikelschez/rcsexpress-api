@@ -42,6 +42,36 @@ class AgenciasService {
     return agencia;
   }
 
+  async findOneUsuarios(id) {
+    const agencia = await models.Agencias.findByPk(id, {
+      include: ['usuarios'],
+      attributes: {
+        include: [
+          [Sequelize.literal(caseStatus), 'estatus_desc']
+        ]
+      }
+    });
+    if (!agencia) {
+      throw boom.notFound('Agencia no existe');
+    }
+    return agencia;
+  }
+
+  async findOneRoles(id) {
+    const agencia = await models.Agencias.findByPk(id, {
+      include: ['roles'],
+      attributes: {
+        include: [
+          [Sequelize.literal(caseStatus), 'estatus_desc']
+        ]
+      }
+    });
+    if (!agencia) {
+      throw boom.notFound('Agencia no existe');
+    }
+    return agencia;
+  }
+
   async update(id, changes) {
     const agencia = await models.Agencias.findByPk(id);
     if (!agencia) {
