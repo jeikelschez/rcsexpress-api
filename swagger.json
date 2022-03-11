@@ -319,7 +319,12 @@
                   "$ref": "#/components/schemas/Agencias",
                   "properties": {
                     "usuarios": {
-                      "$ref": "#/components/schemas/Usuarios"
+                      "$ref": "#/components/schemas/Usuarios",
+                      "properties": {
+                        "roles": {
+                          "$ref": "#/components/schemas/Roles"
+                        }
+                      }
                     }
                   }
                 }
