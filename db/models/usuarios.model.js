@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt');
+
 const { Model, DataTypes, Sequelize } = require('sequelize');
 
 const { AGENCIAS_TABLE } = require('./agencias.model');
@@ -52,6 +54,21 @@ class Usuarios extends Model {
   static associate(models) {
     this.belongsTo(models.Agencias, { foreignKey: 'cod_agencia', as: 'agencias' });
     this.belongsTo(models.Roles, { foreignKey: 'cod_rol', as: 'roles' });
+  }
+
+  static hooks(models) {
+    this.beforeCreate(async (usuarios) => {
+      if (usuarios.password) {
+        const salt = await bcrypt.genSaltSync(10, 'a');
+        usuarios.password = bcrypt.hashSync(usuarios.password, salt);
+      }
+    });
+    this.beforeUpdate(async (usuarios) => {
+      if (usuarios.password) {
+        const salt = await bcrypt.genSaltSync(10, 'a');
+        usuarios.password = bcrypt.hashSync(usuarios.password, salt);
+      }
+    });
   }
 
   static config(sequelize) {

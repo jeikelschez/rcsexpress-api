@@ -3,11 +3,14 @@ const express = require('express');
 const PaisesService = require('./../services/paises.service');
 const validatorHandler = require('./../middlewares/validator.handler');
 const { createPaisesSchema, updatePaisesSchema, getPaisesSchema } = require('./../schemas/paises.schema');
+const authenticateJWT  = require('./../middlewares/authenticate.handler');
 
 const router = express.Router();
 const service = new PaisesService();
 
-router.get('/', async (req, res, next) => {
+router.get('/',
+  authenticateJWT,
+  async (req, res, next) => {
   try {
     const paises = await service.find();
     res.json(paises);
@@ -17,6 +20,7 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:id',
+  authenticateJWT,
   validatorHandler(getPaisesSchema, 'params'),
   async (req, res, next) => {
     try {
@@ -30,6 +34,7 @@ router.get('/:id',
 );
 
 router.get('/:id/estados',
+  authenticateJWT,
   validatorHandler(getPaisesSchema, 'params'),
   async (req, res, next) => {
     try {
@@ -43,6 +48,7 @@ router.get('/:id/estados',
 );
 
 router.post('/',
+  authenticateJWT,
   validatorHandler(createPaisesSchema, 'body'),
   async (req, res, next) => {
     try {
@@ -56,6 +62,7 @@ router.post('/',
 );
 
 router.put('/:id',
+  authenticateJWT,
   validatorHandler(getPaisesSchema, 'params'),
   validatorHandler(updatePaisesSchema, 'body'),
   async (req, res, next) => {
@@ -71,6 +78,7 @@ router.put('/:id',
 );
 
 router.delete('/:id',
+  authenticateJWT,
   validatorHandler(getPaisesSchema, 'params'),
   async (req, res, next) => {
     try {

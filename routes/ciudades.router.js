@@ -3,11 +3,14 @@ const express = require('express');
 const CiudadesService = require('./../services/ciudades.service');
 const validatorHandler = require('./../middlewares/validator.handler');
 const { createCiudadesSchema, updateCiudadesSchema, getCiudadesSchema } = require('./../schemas/ciudades.schema');
+const authenticateJWT  = require('./../middlewares/authenticate.handler');
 
 const router = express.Router();
 const service = new CiudadesService();
 
-router.get('/', async (req, res, next) => {
+router.get('/',
+  authenticateJWT,
+  async (req, res, next) => {
   try {
     const ciudades = await service.find();
     res.json(ciudades);
@@ -17,6 +20,7 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:id',
+  authenticateJWT,
   validatorHandler(getCiudadesSchema, 'params'),
   async (req, res, next) => {
     try {
@@ -30,6 +34,7 @@ router.get('/:id',
 );
 
 router.get('/:id/agencias',
+  authenticateJWT,
   validatorHandler(getCiudadesSchema, 'params'),
   async (req, res, next) => {
     try {
@@ -43,6 +48,7 @@ router.get('/:id/agencias',
 );
 
 router.post('/',
+  authenticateJWT,
   validatorHandler(createCiudadesSchema, 'body'),
   async (req, res, next) => {
     try {
@@ -56,6 +62,7 @@ router.post('/',
 );
 
 router.put('/:id',
+  authenticateJWT,
   validatorHandler(getCiudadesSchema, 'params'),
   validatorHandler(updateCiudadesSchema, 'body'),
   async (req, res, next) => {
@@ -71,6 +78,7 @@ router.put('/:id',
 );
 
 router.delete('/:id',
+  authenticateJWT,
   validatorHandler(getCiudadesSchema, 'params'),
   async (req, res, next) => {
     try {

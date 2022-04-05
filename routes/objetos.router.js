@@ -3,11 +3,14 @@ const express = require('express');
 const ObjetosService = require('./../services/objetos.service');
 const validatorHandler = require('./../middlewares/validator.handler');
 const { createObjetosSchema, updateObjetosSchema, getObjetosSchema } = require('./../schemas/objetos.schema');
+const authenticateJWT  = require('./../middlewares/authenticate.handler');
 
 const router = express.Router();
 const service = new ObjetosService();
 
-router.get('/', async (req, res, next) => {
+router.get('/',
+  authenticateJWT,
+  async (req, res, next) => {
   try {
     const objetos = await service.find();
     res.json(objetos);
@@ -17,6 +20,7 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:codigo',
+  authenticateJWT,
   validatorHandler(getObjetosSchema, 'params'),
   async (req, res, next) => {
     try {
@@ -30,6 +34,7 @@ router.get('/:codigo',
 );
 
 router.post('/',
+  authenticateJWT,
   validatorHandler(createObjetosSchema, 'body'),
   async (req, res, next) => {
     try {
@@ -43,6 +48,7 @@ router.post('/',
 );
 
 router.put('/:codigo',
+  authenticateJWT,
   validatorHandler(getObjetosSchema, 'params'),
   validatorHandler(updateObjetosSchema, 'body'),
   async (req, res, next) => {
@@ -58,6 +64,7 @@ router.put('/:codigo',
 );
 
 router.delete('/:codigo',
+  authenticateJWT,
   validatorHandler(getObjetosSchema, 'params'),
   async (req, res, next) => {
     try {

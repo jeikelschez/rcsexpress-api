@@ -8,7 +8,9 @@ const authenticateJWT  = require('./../middlewares/authenticate.handler');
 const router = express.Router();
 const service = new UsuariosService();
 
-router.get('/', async (req, res, next) => {
+router.get('/',
+  authenticateJWT,
+  async (req, res, next) => {
   try {
     const usuarios = await service.find();
     res.json(usuarios);
@@ -18,8 +20,8 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:login',
-  validatorHandler(getUsuariosSchema, 'params'),
   authenticateJWT,
+  validatorHandler(getUsuariosSchema, 'params'),
   async (req, res, next) => {
     try {
       const { login } = req.params;
@@ -32,6 +34,7 @@ router.get('/:login',
 );
 
 router.post('/',
+  authenticateJWT,
   validatorHandler(createUsuariosSchema, 'body'),
   async (req, res, next) => {
     try {
@@ -45,6 +48,7 @@ router.post('/',
 );
 
 router.put('/:login',
+  authenticateJWT,
   validatorHandler(getUsuariosSchema, 'params'),
   validatorHandler(updateUsuariosSchema, 'body'),
   async (req, res, next) => {
@@ -60,6 +64,7 @@ router.put('/:login',
 );
 
 router.delete('/:login',
+  authenticateJWT,
   validatorHandler(getUsuariosSchema, 'params'),
   async (req, res, next) => {
     try {
@@ -75,8 +80,8 @@ router.delete('/:login',
 router.post('/login', async (req, res, next) => {
   try {
     const { username, password } = req.body;
-    const rta = await service.login(username, password);
-    res.json({rta});
+    const data = await service.login(username, password);
+    res.json({data});
   } catch (error) {
     next(error);
   }
@@ -85,8 +90,8 @@ router.post('/login', async (req, res, next) => {
 router.post('/refresh', async (req, res, next) => {
   try {
     const { username, token } = req.body;
-    const rta = await service.refresh(username, token);
-    res.json({rta});
+    const data = await service.refresh(username, token);
+    res.json({data});
   } catch (error) {
     next(error);
   }
@@ -94,8 +99,8 @@ router.post('/refresh', async (req, res, next) => {
 
 router.post('/logout', async (req, res, next) => {
    const { token } = req.body;
-   const message = await service.logout(token);
-   res.json({message});
+   const data = await service.logout(token);
+   res.json({data});
 });
 
 module.exports = router;

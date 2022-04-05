@@ -80,6 +80,16 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
           }
         }
       },
@@ -111,6 +121,16 @@
           },
           "400": {
             "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -163,6 +183,16 @@
                       "$ref": "#/components/schemas/Ciudades"
                     }
                   }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
                 }
               }
             }
@@ -226,6 +256,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Error",
             "content": {
@@ -281,6 +321,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Error",
             "content": {
@@ -331,6 +381,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Error",
             "content": {
@@ -376,6 +436,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Error",
             "content": {
@@ -401,6 +471,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Bancos"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
                 }
               }
             }
@@ -435,6 +515,16 @@
           },
           "400": {
             "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -482,6 +572,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Bancos"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
                 }
               }
             }
@@ -545,6 +645,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Error",
             "content": {
@@ -600,6 +710,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Error",
             "content": {
@@ -625,6 +745,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Ciudades"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
                 }
               }
             }
@@ -659,6 +789,16 @@
           },
           "400": {
             "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -706,6 +846,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Ciudades"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
                 }
               }
             }
@@ -769,6 +919,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Error",
             "content": {
@@ -824,6 +984,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Error",
             "content": {
@@ -869,6 +1039,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Error",
             "content": {
@@ -894,6 +1074,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Estados"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
                 }
               }
             }
@@ -928,6 +1118,16 @@
           },
           "400": {
             "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -975,6 +1175,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Estados"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
                 }
               }
             }
@@ -1038,6 +1248,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Error",
             "content": {
@@ -1093,6 +1313,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Error",
             "content": {
@@ -1138,6 +1368,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Error",
             "content": {
@@ -1163,6 +1403,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Objetos"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
                 }
               }
             }
@@ -1197,6 +1447,16 @@
           },
           "400": {
             "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -1244,6 +1504,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Objetos"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
                 }
               }
             }
@@ -1307,6 +1577,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Error",
             "content": {
@@ -1362,6 +1642,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Error",
             "content": {
@@ -1387,6 +1677,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Paises"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
                 }
               }
             }
@@ -1421,6 +1721,16 @@
           },
           "400": {
             "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -1468,6 +1778,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Paises"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
                 }
               }
             }
@@ -1531,6 +1851,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Error",
             "content": {
@@ -1586,6 +1916,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Error",
             "content": {
@@ -1631,6 +1971,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Error",
             "content": {
@@ -1659,6 +2009,16 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
           }
         }
       },
@@ -1684,6 +2044,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Permisos"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
                 }
               }
             }
@@ -1737,6 +2107,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Permisos"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
                 }
               }
             }
@@ -1800,6 +2180,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Error",
             "content": {
@@ -1855,6 +2245,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Error",
             "content": {
@@ -1880,6 +2280,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Roles"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
                 }
               }
             }
@@ -1914,6 +2324,16 @@
           },
           "400": {
             "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -1961,6 +2381,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Roles"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
                 }
               }
             }
@@ -2024,6 +2454,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Error",
             "content": {
@@ -2079,6 +2519,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Error",
             "content": {
@@ -2124,6 +2574,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Error",
             "content": {
@@ -2154,6 +2614,16 @@
                       "$ref": "#/components/schemas/Roles"
                     }
                   }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
                 }
               }
             }
@@ -2188,6 +2658,16 @@
           },
           "400": {
             "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -2240,6 +2720,16 @@
                       "$ref": "#/components/schemas/Roles"
                     }
                   }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
                 }
               }
             }
@@ -2303,6 +2793,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Error",
             "content": {
@@ -2358,12 +2858,180 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Error",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usuarios/login": {
+      "post": {
+        "tags": ["Usuarios"],
+        "summary": "Autenticacion del usuario para obtener Token",
+        "description": "API para Autenticacion del Usuario",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/extraSchemes/Login"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "$ref": "#/authResponses/200-login"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usuarios/refresh": {
+      "post": {
+        "tags": ["Usuarios"],
+        "summary": "Refrescar Token del usuario",
+        "description": "API para Refrescar Token del Usuario",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/extraSchemes/Refresh"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "$ref": "#/authResponses/200-refresh"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usuarios/logout": {
+      "post": {
+        "tags": ["Usuarios"],
+        "summary": "Eliminar Token del usuario",
+        "description": "API para Eliminar Token del Usuario",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/extraSchemes/Logout"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/authResponses/200-logout"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
                 }
               }
             }
@@ -2592,8 +3260,20 @@
           }
         }
       }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
     }
   },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
   "standarResponses": {
     "400": {
       "description": "Response entity, response result uses this structure uniformly.",
@@ -2626,6 +3306,78 @@
         },
         "stack": {
           "description": "Stack del error",
+          "type": "string",
+          "format": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "extraSchemes": {
+    "Login": {
+      "required": ["username", "password"],
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Refresh": {
+      "required": ["username", "token"],
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Logout": {
+      "required": ["token"],
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "authResponses": {
+    "200-login": {
+      "properties": {
+        "accessToken": {
+          "description": "Token de Autenticacion",
+          "type": "string",
+          "format": "string"
+        },
+        "refreshToken": {
+          "description": "Token de refrescamiento",
+          "type": "string",
+          "format": "string"
+        }
+      },
+      "type": "object"
+    },
+    "200-refresh": {
+      "properties": {
+        "accessToken": {
+          "description": "Token de Autenticacion",
+          "type": "string",
+          "format": "string"
+        }
+      },
+      "type": "object"
+    },
+    "200-logout": {
+      "properties": {
+        "data": {
+          "description": "Resultado del logout",
           "type": "string",
           "format": "string"
         }

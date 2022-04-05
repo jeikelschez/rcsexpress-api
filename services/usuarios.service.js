@@ -1,6 +1,8 @@
 const boom = require('@hapi/boom');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+
 const { config } = require('./../config/config');
 
 const accessTokenSecret = config.accessToken;
@@ -70,8 +72,7 @@ class UsuariosService {
   async login(username, password) {
     const usuario = await models.Usuarios.findOne({
       where: {
-        login: username,
-        password: password
+        login: username
       },
       include: [
         {
@@ -82,13 +83,16 @@ class UsuariosService {
     });
 
     if (usuario) {
-      const accessToken = jwt.sign({ "usuario": usuario }, accessTokenSecret, { expiresIn: '20m' });
-      const refreshToken = jwt.sign({ }, refreshTokenSecret);
-      refreshTokens.push(refreshToken);
-
-      return { accessToken, refreshToken };
+      if(bcrypt.compareSync(password, usuario.password)) {
+        const accessToken = jwt.sign({ "usuario": usuario }, accessTokenSecret, { expiresIn: '20m' });
+        const refreshToken = jwt.sign({ }, refreshTokenSecret);
+        refreshTokens.push(refreshToken);
+        return { accessToken, refreshToken };
+      } else {
+        throw boom.notFound('Password Incorrecto');
+      }
     } else {
-      throw boom.notFound('Usuario y Password Incorrecto');
+      throw boom.notFound('Usuario No existe');
     }
   }
 
@@ -119,9 +123,12 @@ class UsuariosService {
       ]
     });
 
-    const accessToken = jwt.sign({ "usuario": usuario }, accessTokenSecret, { expiresIn: '20m' });
-
-    return { accessToken };
+    if (usuario) {
+      const accessToken = jwt.sign({ "usuario": usuario }, accessTokenSecret, { expiresIn: '20m' });
+      return { accessToken };
+    } else {
+      throw boom.notFound('Usuario No existe');
+    }
   }
 
   async logout(token) {

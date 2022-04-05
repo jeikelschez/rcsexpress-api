@@ -3,11 +3,14 @@ const express = require('express');
 const AgenciasService = require('./../services/agencias.service');
 const validatorHandler = require('./../middlewares/validator.handler');
 const { createAgenciasSchema, updateAgenciasSchema, getAgenciasSchema } = require('./../schemas/agencias.schema');
+const authenticateJWT  = require('./../middlewares/authenticate.handler');
 
 const router = express.Router();
 const service = new AgenciasService();
 
-router.get('/', async (req, res, next) => {
+router.get('/',
+  authenticateJWT,
+  async (req, res, next) => {
   try {
     const agencias = await service.find();
     res.json(agencias);
@@ -17,6 +20,7 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:id',
+  authenticateJWT,
   validatorHandler(getAgenciasSchema, 'params'),
   async (req, res, next) => {
     try {
@@ -30,6 +34,7 @@ router.get('/:id',
 );
 
 router.get('/:id/usuarios',
+  authenticateJWT,
   validatorHandler(getAgenciasSchema, 'params'),
   async (req, res, next) => {
     try {
@@ -43,6 +48,7 @@ router.get('/:id/usuarios',
 );
 
 router.get('/:id/roles',
+  authenticateJWT,
   validatorHandler(getAgenciasSchema, 'params'),
   async (req, res, next) => {
     try {
@@ -56,6 +62,7 @@ router.get('/:id/roles',
 );
 
 router.post('/',
+  authenticateJWT,
   validatorHandler(createAgenciasSchema, 'body'),
   async (req, res, next) => {
     try {
@@ -69,6 +76,7 @@ router.post('/',
 );
 
 router.put('/:id',
+  authenticateJWT,
   validatorHandler(getAgenciasSchema, 'params'),
   validatorHandler(updateAgenciasSchema, 'body'),
   async (req, res, next) => {
@@ -84,6 +92,7 @@ router.put('/:id',
 );
 
 router.delete('/:id',
+  authenticateJWT,
   validatorHandler(getAgenciasSchema, 'params'),
   async (req, res, next) => {
     try {

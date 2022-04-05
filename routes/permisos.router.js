@@ -3,11 +3,14 @@ const express = require('express');
 const PermisosService = require('./../services/permisos.service');
 const validatorHandler = require('./../middlewares/validator.handler');
 const { createPermisosSchema, updatePermisosSchema, getPermisosSchema } = require('./../schemas/permisos.schema');
+const authenticateJWT  = require('./../middlewares/authenticate.handler');
 
 const router = express.Router();
 const service = new PermisosService();
 
-router.get('/', async (req, res, next) => {
+router.get('/',
+  authenticateJWT,
+  async (req, res, next) => {
   try {
     const permisos = await service.find();
     res.json(permisos);
@@ -17,6 +20,7 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:id',
+  authenticateJWT,
   validatorHandler(getPermisosSchema, 'params'),
   async (req, res, next) => {
     try {
@@ -30,6 +34,7 @@ router.get('/:id',
 );
 
 router.post('/',
+  authenticateJWT,
   validatorHandler(createPermisosSchema, 'body'),
   async (req, res, next) => {
     try {
@@ -43,6 +48,7 @@ router.post('/',
 );
 
 router.put('/:id',
+  authenticateJWT,
   validatorHandler(getPermisosSchema, 'params'),
   validatorHandler(updatePermisosSchema, 'body'),
   async (req, res, next) => {
@@ -58,6 +64,7 @@ router.put('/:id',
 );
 
 router.delete('/:id',
+  authenticateJWT,
   validatorHandler(getPermisosSchema, 'params'),
   async (req, res, next) => {
     try {

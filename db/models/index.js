@@ -26,6 +26,7 @@ function setupModels(sequelize) {
   Roles.associate(sequelize.models);
   Permisos.associate(sequelize.models);
   Usuarios.associate(sequelize.models);
+  Usuarios.hooks(sequelize.models);
 }
 
 module.exports = setupModels;
