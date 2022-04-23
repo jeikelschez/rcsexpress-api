@@ -63,12 +63,12 @@ class Usuarios extends Model {
         usuarios.password = bcrypt.hashSync(usuarios.password, salt);
       }
     });
-    this.beforeUpdate(async (usuarios) => {
-      if (usuarios.password) {
+    /*this.beforeUpdate(async (usuarios) => {
+      if (usuarios.password != null) {
         const salt = await bcrypt.genSaltSync(10, 'a');
         usuarios.password = bcrypt.hashSync(usuarios.password, salt);
       }
-    });
+    });*/
   }
 
   static config(sequelize) {
