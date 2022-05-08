@@ -737,6 +737,61 @@
         }
       }
     },
+    "/bancos/{id}/cuentas": {
+      "get": {
+        "tags": ["Bancos"],
+        "summary": "Obtener Banco con sus Cuentas por su Id",
+        "description": "API para Retornar un Banco con sus Cuentas por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Banco",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bancos",
+                  "properties": {
+                    "cuentas": {
+                      "$ref": "#/components/schemas/Cuentas"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/ciudades": {
       "get": {
         "tags": ["Ciudades"],
@@ -3446,6 +3501,14 @@
           },
           "cod_banco": {
             "type": "number"
+          },
+          "tipo_desc": {
+            "type": "string",
+            "readOnly": true
+          },
+          "activa_desc": {
+            "type": "string",
+            "readOnly": true
           }
         }
       },

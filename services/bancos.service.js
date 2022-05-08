@@ -1,6 +1,9 @@
 const boom = require('@hapi/boom');
 
-const { models }= require('./../libs/sequelize');
+const { models, Sequelize }= require('./../libs/sequelize');
+
+const caseTipo = '(CASE tipo_cuenta WHEN "C" THEN "CORRIENTE" ELSE "AHORRO" END)';
+const caseActiva = '(CASE flag_activa WHEN "1" THEN "ACTIVA" ELSE "INACTIVA" END)';
 
 class BancosService {
 
@@ -18,6 +21,26 @@ class BancosService {
 
   async findOne(id) {
     const banco = await models.Bancos.findByPk(id);
+    if (!banco) {
+      throw boom.notFound('Banco no existe');
+    }
+    return banco;
+  }
+
+  async findOneCuentas(id) {
+    const banco = await models.Bancos.findByPk(id, {
+      include: [
+        {
+          association: 'cuentas',
+          attributes: {
+            include: [
+              [Sequelize.literal(caseTipo), 'tipo_desc'],
+              [Sequelize.literal(caseActiva), 'activa_desc']
+            ]
+          }
+        }
+      ]
+    });
     if (!banco) {
       throw boom.notFound('Banco no existe');
     }

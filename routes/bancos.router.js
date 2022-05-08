@@ -33,6 +33,20 @@ router.get('/:id',
   }
 );
 
+router.get('/:id/cuentas',
+  authenticateJWT,
+  validatorHandler(getBancosSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const banco = await service.findOneCuentas(id);
+      res.json(banco);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 router.post('/',
   authenticateJWT,
   validatorHandler(createBancosSchema, 'body'),
