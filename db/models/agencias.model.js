@@ -12,7 +12,6 @@ const AgenciasSchema = {
     type: DataTypes.INTEGER,
   },
   nb_agencia: {
-    allowNull: false,
     type: DataTypes.STRING,
     allowNull: false,
   },

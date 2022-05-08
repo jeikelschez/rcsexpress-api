@@ -9,7 +9,6 @@ const ObjetosSchema = {
     type: DataTypes.STRING,
   },
   descripcion: {
-    allowNull: false,
     type: DataTypes.STRING,
     allowNull: false,
   }

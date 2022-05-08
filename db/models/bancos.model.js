@@ -33,6 +33,7 @@ const BancosSchema = {
 class Bancos extends Model {
 
   static associate(models) {
+    this.hasMany(models.Cuentas, { foreignKey: 'cod_banco', as: 'cuentas' });
   }
 
   static config(sequelize) {

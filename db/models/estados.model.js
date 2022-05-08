@@ -12,7 +12,6 @@ const EstadosSchema = {
     type: DataTypes.INTEGER,
   },
   desc_estado: {
-    allowNull: false,
     type: DataTypes.STRING,
     allowNull: false,
   },

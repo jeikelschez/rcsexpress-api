@@ -15,7 +15,6 @@ const UsuariosSchema = {
     type: DataTypes.STRING,
   },
   password: {
-    allowNull: false,
     type: DataTypes.STRING,
     allowNull: false,
   },

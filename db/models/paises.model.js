@@ -10,7 +10,6 @@ const PaisesSchema = {
     type: DataTypes.INTEGER,
   },
   desc_pais: {
-    allowNull: false,
     type: DataTypes.STRING,
     allowNull: false,
   },

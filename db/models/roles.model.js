@@ -12,7 +12,6 @@ const RolesSchema = {
     type: DataTypes.INTEGER,
   },
   descripcion: {
-    allowNull: false,
     type: DataTypes.STRING,
     allowNull: false,
   },
