@@ -27,6 +27,10 @@
       "description": "API para Manejar los Agencias de la Organizacion"
     },
     {
+      "name": "Agentes",
+      "description": "API para Manejar los Agentes de la Organizacion"
+    },
+    {
       "name": "Bancos",
       "description": "API para Manejar los Bancos de la Organizacion"
     },
@@ -436,6 +440,280 @@
                       "$ref": "#/components/schemas/Roles"
                     }
                   }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agentes": {
+      "get": {
+        "tags": ["Agentes"],
+        "summary": "Obtener todos los agentes",
+        "description": "API para Obtener todos los agentes del sistema",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agentes"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Agentes"],
+        "summary": "Crear Agentes",
+        "description": "API para Crear un nuevo Agente",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Agentes"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agentes"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agentes/{id}": {
+      "get": {
+        "tags": ["Agentes"],
+        "summary": "Obtener Agente por su Id",
+        "description": "API para Retornar un Agente por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Agente",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agentes"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Agentes"],
+        "summary": "Actualizar Agentes",
+        "description": "API para Actualizar un Agente por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Agente",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Agentes"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agentes"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Agentes"],
+        "summary": "Borrar Agentes",
+        "description": "API para Borrar un Agente por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Agente",
+            "required": true, "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Agentes/properties/id"
+                    }
+                  },
+                  "type": "object"
                 }
               }
             }
@@ -3414,6 +3692,58 @@
             "type": "string"
           },
           "cod_ciudad": {
+            "type": "number"
+          }
+        }
+      },
+      "Agentes": {
+        "description": "Modelo de Agentes",
+        "required": ["id", "nb_agente", "cod_agencia"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "nb_agente": {
+            "type": "string"
+          },
+          "flag_situacion": {
+            "type": "string"
+          },
+          "persona_responsable": {
+            "type": "string"
+          },
+          "dir_agente": {
+            "type": "string"
+          },
+          "tlf_agente": {
+            "type": "string"
+          },
+          "fax_agente": {
+            "type": "string"
+          },
+          "cel_agente": {
+            "type": "string"
+          },
+          "email_web": {
+            "type": "string"
+          },
+          "tipo_agente": {
+            "type": "string"
+          },
+          "porc_comision_venta": {
+            "type": "number"
+          },
+          "porc_comision_entrega": {
+            "type": "number"
+          },
+          "porc_comision_seguro": {
+            "type": "number"
+          },
+          "rif_ci_agente": {
+            "type": "string"
+          },
+          "cod_agencia": {
             "type": "number"
           }
         }

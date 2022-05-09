@@ -7,7 +7,7 @@ const BancosSchema = {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
-    type: DataTypes.DECIMAL(2,0)
+    type: DataTypes.INTEGER
   },
   nb_banco: {
     type: DataTypes.STRING,

@@ -8,6 +8,7 @@ const { Objetos, ObjetosSchema } = require('./objetos.model');
 const { Permisos, PermisosSchema } = require('./permisos.model');
 const { Usuarios, UsuariosSchema } = require('./usuarios.model');
 const { Cuentas, CuentasSchema } = require('./cuentas.model');
+const { Agentes, AgentesSchema } = require('./agentes.model');
 
 function setupModels(sequelize) {
   Bancos.init(BancosSchema, Bancos.config(sequelize));
@@ -20,6 +21,7 @@ function setupModels(sequelize) {
   Permisos.init(PermisosSchema, Permisos.config(sequelize));
   Usuarios.init(UsuariosSchema, Usuarios.config(sequelize));
   Cuentas.init(CuentasSchema, Cuentas.config(sequelize));
+  Agentes.init(AgentesSchema, Agentes.config(sequelize));
 
   Paises.associate(sequelize.models);
   Estados.associate(sequelize.models);
@@ -30,6 +32,7 @@ function setupModels(sequelize) {
   Cuentas.associate(sequelize.models);
   Bancos.associate(sequelize.models);
   Usuarios.associate(sequelize.models);
+  Agentes.associate(sequelize.models);
 
   Usuarios.hooks(sequelize.models);
 }
