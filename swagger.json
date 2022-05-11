@@ -3762,9 +3762,6 @@
           "nb_agente": {
             "type": "string"
           },
-          "flag_situacion": {
-            "type": "string"
-          },
           "persona_responsable": {
             "type": "string"
           },
@@ -3796,6 +3793,9 @@
             "type": "number"
           },
           "rif_ci_agente": {
+            "type": "string"
+          },
+          "flag_activo": {
             "type": "string"
           },
           "cod_agencia": {
