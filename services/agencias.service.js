@@ -2,8 +2,9 @@ const boom = require('@hapi/boom');
 
 const { models, Sequelize }= require('./../libs/sequelize');
 
-const caseStatus = '(CASE estatus WHEN "A" THEN "ACTIVO" ELSE "INACTIVO" END)';
-const caseActivo = '(CASE flag_activo WHEN "1" THEN "ACTIVA" ELSE "INACTIVA" END)';
+const caseStatus = '(CASE estatus WHEN "A" THEN "ACTIVA" ELSE "INACTIVA" END)';
+const caseActivo = '(CASE flag_activo WHEN "1" THEN "ACTIVO" ELSE "INACTIVO" END)';
+const caseTipo = '(CASE tipo_agente WHEN "RP" THEN "RESPONSABLE DE AGENCIA" WHEN "CR" THEN "COURIERS" ELSE "" END)';
 
 class AgenciasService {
 
@@ -85,7 +86,8 @@ class AgenciasService {
           association: 'agentes',
           attributes: {
             include: [
-              [Sequelize.literal(caseActivo), 'activo_desc']
+              [Sequelize.literal(caseActivo), 'activo_desc'],
+              [Sequelize.literal(caseTipo), 'tipo_desc']
             ]
           }
         }

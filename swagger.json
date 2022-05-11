@@ -3804,6 +3804,10 @@
           "activo_desc": {
             "type": "string",
             "readOnly": true
+          },
+          "tipo_desc": {
+            "type": "string",
+            "readOnly": true
           }
         }
       },

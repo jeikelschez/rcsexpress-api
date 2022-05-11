@@ -2,7 +2,8 @@ const boom = require('@hapi/boom');
 
 const { models, Sequelize }= require('./../libs/sequelize');
 
-const caseActivo = '(CASE flag_activo WHEN "1" THEN "ACTIVA" ELSE "INACTIVA" END)';
+const caseActivo = '(CASE flag_activo WHEN "1" THEN "ACTIVO" ELSE "INACTIVO" END)';
+const caseTipo = '(CASE tipo_agente WHEN "RP" THEN "RESPONSABLE DE AGENCIA" WHEN "CR" THEN "COURIERS" ELSE "" END)';
 
 class ObjetosService {
 
@@ -17,7 +18,8 @@ class ObjetosService {
     const agentes = await models.Agentes.findAll({
       attributes: {
         include: [
-          [Sequelize.literal(caseActivo), 'activo_desc']
+          [Sequelize.literal(caseActivo), 'activo_desc'],
+          [Sequelize.literal(caseTipo), 'tipo_desc']
         ]
       }
     });
@@ -29,7 +31,8 @@ class ObjetosService {
       {
         attributes: {
           include: [
-            [Sequelize.literal(caseActivo), 'activo_desc']
+            [Sequelize.literal(caseActivo), 'activo_desc'],
+            [Sequelize.literal(caseTipo), 'tipo_desc']
           ]
         }
       }
