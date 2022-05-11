@@ -352,6 +352,61 @@
         }
       }
     },
+    "/agencias/{id}/agentes": {
+      "get": {
+        "tags": ["Agencias"],
+        "summary": "Obtener Agencia con sus Agentes por su Id",
+        "description": "API para Retornar una Agencia con sus Agentes por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Agencia",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agencias",
+                  "properties": {
+                    "usuarios": {
+                      "$ref": "#/components/schemas/Agentes"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/agencias/{id}/usuarios": {
       "get": {
         "tags": ["Agencias"],
@@ -3745,6 +3800,10 @@
           },
           "cod_agencia": {
             "type": "number"
+          },
+          "activo_desc": {
+            "type": "string",
+            "readOnly": true
           }
         }
       },

@@ -22,8 +22,7 @@ class CuentasService {
           [Sequelize.literal(caseActiva), 'activa_desc']
         ]
       }
-    }
-      );
+    });
     return cuentas;
   }
 

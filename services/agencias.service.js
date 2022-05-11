@@ -3,6 +3,7 @@ const boom = require('@hapi/boom');
 const { models, Sequelize }= require('./../libs/sequelize');
 
 const caseStatus = '(CASE estatus WHEN "A" THEN "ACTIVO" ELSE "INACTIVO" END)';
+const caseActivo = '(CASE flag_activo WHEN "1" THEN "ACTIVA" ELSE "INACTIVA" END)';
 
 class AgenciasService {
 
@@ -19,7 +20,7 @@ class AgenciasService {
       include: ['ciudades'],
       attributes: {
         include: [
-          [Sequelize.literal(caseStatus), 'estatus_desc']
+          [Sequelize.literal(caseStatus), 'activo_desc']
         ]
       }
     });
@@ -32,7 +33,7 @@ class AgenciasService {
       include: ['ciudades'],
       attributes: {
         include: [
-          [Sequelize.literal(caseStatus), 'estatus_desc']
+          [Sequelize.literal(caseStatus), 'activo_desc']
         ]
       }
     });
@@ -70,6 +71,25 @@ class AgenciasService {
           [Sequelize.literal(caseStatus), 'estatus_desc']
         ]
       }
+    });
+    if (!agencia) {
+      throw boom.notFound('Agencia no existe');
+    }
+    return agencia;
+  }
+
+  async findOneAgentes(id) {
+    const agencia = await models.Agencias.findByPk(id, {
+      include: [
+        {
+          association: 'agentes',
+          attributes: {
+            include: [
+              [Sequelize.literal(caseActivo), 'activo_desc']
+            ]
+          }
+        }
+      ]
     });
     if (!agencia) {
       throw boom.notFound('Agencia no existe');
