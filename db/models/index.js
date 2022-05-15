@@ -9,6 +9,12 @@ const { Permisos, PermisosSchema } = require('./permisos.model');
 const { Usuarios, UsuariosSchema } = require('./usuarios.model');
 const { Cuentas, CuentasSchema } = require('./cuentas.model');
 const { Agentes, AgentesSchema } = require('./agentes.model');
+const { Clientes, ClientesSchema } = require('./clientes.model');
+const { Municipios, MunicipiosSchema } = require('./municipios.model');
+const { Parroquias, ParroquiasSchema } = require('./parroquias.model');
+const { Localidades, LocalidadesSchema } = require('./localidades.model');
+const { Ayudantes, AyudantesSchema } = require('./ayudantes.model');
+const { Zonas, ZonasSchema } = require('./zonas.model');
 
 function setupModels(sequelize) {
   Bancos.init(BancosSchema, Bancos.config(sequelize));
@@ -22,6 +28,12 @@ function setupModels(sequelize) {
   Usuarios.init(UsuariosSchema, Usuarios.config(sequelize));
   Cuentas.init(CuentasSchema, Cuentas.config(sequelize));
   Agentes.init(AgentesSchema, Agentes.config(sequelize));
+  Clientes.init(ClientesSchema, Clientes.config(sequelize));
+  Municipios.init(MunicipiosSchema, Municipios.config(sequelize));
+  Parroquias.init(ParroquiasSchema, Parroquias.config(sequelize));
+  Localidades.init(LocalidadesSchema, Localidades.config(sequelize));
+  Ayudantes.init(AyudantesSchema, Ayudantes.config(sequelize));
+  Zonas.init(ZonasSchema, Zonas.config(sequelize));
 
   Paises.associate(sequelize.models);
   Estados.associate(sequelize.models);
@@ -33,6 +45,11 @@ function setupModels(sequelize) {
   Bancos.associate(sequelize.models);
   Usuarios.associate(sequelize.models);
   Agentes.associate(sequelize.models);
+  Clientes.associate(sequelize.models);
+  Municipios.associate(sequelize.models);
+  Parroquias.associate(sequelize.models);
+  Localidades.associate(sequelize.models);
+  Zonas.associate(sequelize.models);
 
   Usuarios.hooks(sequelize.models);
 }

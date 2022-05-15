@@ -47,6 +47,26 @@ class EstadosService {
     return estado;
   }
 
+  async findOneMunicipios(id) {
+    const estado = await models.Estados.findByPk(id, {
+      include: ['municipios']
+    });
+    if (!estado) {
+      throw boom.notFound('Estado no existe');
+    }
+    return estado;
+  }
+
+  async findOneLocalidades(id) {
+    const estado = await models.Estados.findByPk(id, {
+      include: ['localidades']
+    });
+    if (!estado) {
+      throw boom.notFound('Estado no existe');
+    }
+    return estado;
+  }
+
   async update(id, changes) {
     const estado = await models.Estados.findByPk(id);
     if (!estado) {

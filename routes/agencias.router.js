@@ -75,6 +75,20 @@ router.get('/:id/agentes',
   }
 );
 
+router.get('/:id/zonas',
+  authenticateJWT,
+  validatorHandler(getAgenciasSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const agencia = await service.findOneZonas(id);
+      res.json(agencia);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 router.post('/',
   authenticateJWT,
   validatorHandler(createAgenciasSchema, 'body'),

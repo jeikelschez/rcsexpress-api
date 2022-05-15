@@ -32,7 +32,7 @@ class Municipios extends Model {
   static associate(models) {
     this.belongsTo(models.Estados, { foreignKey: 'cod_estado', as: 'estados' });
     this.hasMany(models.Clientes, { foreignKey: 'cod_municipio', as: 'clientes' });
-    this.hasMany(models.Parroquias, { foreignKey: 'cod_parroquias', as: 'parroquias' });
+    this.hasMany(models.Parroquias, { foreignKey: 'cod_municipio', as: 'parroquias' });
   }
 
   static config(sequelize) {

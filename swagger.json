@@ -31,6 +31,10 @@
       "description": "API para Manejar los Agentes de la Organizacion"
     },
     {
+      "name": "Ayudantes",
+      "description": "API para Manejar los Ayudantes de la Organizacion"
+    },
+    {
       "name": "Bancos",
       "description": "API para Manejar los Bancos de la Organizacion"
     },
@@ -39,12 +43,20 @@
       "description": "API para Manejar los Ciudades de la Organizacion"
     },
     {
+      "name": "Clientes",
+      "description": "API para Manejar los Clientes de la Organizacion"
+    },
+    {
       "name": "Cuentas",
       "description": "API para Manejar las Cuentas de la Organizacion"
     },
     {
       "name": "Estados",
       "description": "API para Manejar los Estados de la Organizacion"
+    },
+    {
+      "name": "Municipios",
+      "description": "API para Manejar los Municipios de la Organizacion"
     },
     {
       "name": "Objetos",
@@ -65,6 +77,10 @@
     {
       "name": "Usuarios",
       "description": "API para Manejar los Usuarios de la Organizacion"
+    },
+    {
+      "name": "Zonas",
+      "description": "API para Manejar las Zonas de la Organizacion"
     }
   ],
   "paths": {
@@ -522,6 +538,61 @@
         }
       }
     },
+    "/agencias/{id}/zonas": {
+      "get": {
+        "tags": ["Agencias"],
+        "summary": "Obtener Agencia con sus Zonas por su Id",
+        "description": "API para Retornar una Agencia con sus Zonas por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Agencia",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agencias",
+                  "properties": {
+                    "roles": {
+                      "$ref": "#/components/schemas/Zonas"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/agentes": {
       "get": {
         "tags": ["Agentes"],
@@ -766,6 +837,280 @@
                   "properties": {
                     "id": {
                       "$ref": "#/components/schemas/Agentes/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ayudantes": {
+      "get": {
+        "tags": ["Ayudantes"],
+        "summary": "Obtener todos los ayudantes",
+        "description": "API para Obtener todos los ayudantes del sistema",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ayudantes"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Ayudantes"],
+        "summary": "Crear Ayudantes",
+        "description": "API para Crear un nuevo Ayudante",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Ayudantes"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ayudantes"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ayudantes/{id}": {
+      "get": {
+        "tags": ["Ayudantes"],
+        "summary": "Obtener Ayudante por su Id",
+        "description": "API para Retornar un Ayudante por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Ayudante",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ayudantes"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Ayudantes"],
+        "summary": "Actualizar Ayudantes",
+        "description": "API para Actualizar un Ayudante por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Ayudante",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Ayudantes"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ayudantes"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Ayudantes"],
+        "summary": "Borrar Ayudantes",
+        "description": "API para Borrar un Ayudante por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Ayudante",
+            "required": true, "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Ayudantes/properties/id"
                     }
                   },
                   "type": "object"
@@ -1454,6 +1799,280 @@
         }
       }
     },
+    "/clientes": {
+      "get": {
+        "tags": ["Clientes"],
+        "summary": "Obtener todos los clientes",
+        "description": "API para Obtener todos los clientes del sistema",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Clientes"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Clientes"],
+        "summary": "Crear Clientes",
+        "description": "API para Crear un nuevo Cliente",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Clientes"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Clientes"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clientes/{id}": {
+      "get": {
+        "tags": ["Clientes"],
+        "summary": "Obtener Cliente por su Id",
+        "description": "API para Retornar un Cliente por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Cliente",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Clientes"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Clientes"],
+        "summary": "Actualizar Cliente",
+        "description": "API para Actualizar un Cliente por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Cliente",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Clientes"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Clientes"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Clientes"],
+        "summary": "Borrar Cliente",
+        "description": "API para Borrar un Cliente por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Cliente",
+            "required": true, "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Clientes/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/cuentas": {
       "get": {
         "tags": ["Cuentas"],
@@ -2028,6 +2647,250 @@
                   "properties": {
                     "ciudades": {
                       "$ref": "#/components/schemas/Ciudades"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/estados/{id}/municipios": {
+      "get": {
+        "tags": ["Estados"],
+        "summary": "Obtener Estado con sus Municipios por su Id",
+        "description": "API para Retornar un Estado con sus Municipios por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Estado",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Estados",
+                  "properties": {
+                    "ciudades": {
+                      "$ref": "#/components/schemas/Municipios"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/estados/{id}/localidades": {
+      "get": {
+        "tags": ["Estados"],
+        "summary": "Obtener Estado con sus Localidades por su Id",
+        "description": "API para Retornar un Estado con sus Localidades por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Estado",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Estados",
+                  "properties": {
+                    "ciudades": {
+                      "$ref": "#/components/schemas/Localidades"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/municipios": {
+      "get": {
+        "tags": ["Municipios"],
+        "summary": "Obtener todos los municipios",
+        "description": "API para Obtener todos los municipios del sistema",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Municipios"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/municipios/{id}": {
+      "get": {
+        "tags": ["Municipios"],
+        "summary": "Obtener Municipio por su Id",
+        "description": "API para Retornar un Municipio por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Municipio",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Municipios"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/municipios/{id}/parroquias": {
+      "get": {
+        "tags": ["Municipios"],
+        "summary": "Obtener Municipio con sus Parroquias por su Id",
+        "description": "API para Retornar un Municipio con sus Parroquias por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Municipio",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Municipios",
+                  "properties": {
+                    "estados": {
+                      "$ref": "#/components/schemas/Parroquias"
                     }
                   }
                 }
@@ -3704,6 +4567,280 @@
           }
         }
       }
+    },
+    "/zonas": {
+      "get": {
+        "tags": ["Zonas"],
+        "summary": "Obtener todas las zonas",
+        "description": "API para Obtener todas las zonas del sistema",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Zonas"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Zonas"],
+        "summary": "Crear Zonas",
+        "description": "API para Crear una nueva Zona",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Zonas"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Zonas"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/zonas/{id}": {
+      "get": {
+        "tags": ["Zonas"],
+        "summary": "Obtener Zona por su Id",
+        "description": "API para Retornar una Zona por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Zona",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Zonas"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Zonas"],
+        "summary": "Actualizar Zonas",
+        "description": "API para Actualizar una Zona por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Zona",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Zonas"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Zonas"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Zonas"],
+        "summary": "Borrar Zonas",
+        "description": "API para Borrar una Zona por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Zona",
+            "required": true, "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Zonas/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -3811,6 +4948,31 @@
           }
         }
       },
+      "Ayudantes": {
+        "description": "Modelo de Ayudantes",
+        "required": ["id", "nb_ayudante"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "nb_ayudante": {
+            "type": "string"
+          },
+          "dir_ayudante": {
+            "type": "string"
+          },
+          "tlf_ayudante": {
+            "type": "string"
+          },
+          "cel_ayudante": {
+            "type": "string"
+          },
+          "flag_activo": {
+            "type": "string"
+          }
+        }
+      },
       "Bancos": {
         "description": "Modelo de Bancos",
         "required": ["id", "nb_banco"],
@@ -3836,6 +4998,79 @@
           },
           "email_banco": {
             "type": "string"
+          }
+        }
+      },
+      "Clientes": {
+        "description": "Modelo de Clientes",
+        "required": ["id", "nb_cliente", "rif_cedula", "dir_fiscal", "razon_social", "tipo_persona", "modalidad_pago", "cod_agencia"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "nb_cliente": {
+            "type": "string"
+          },
+          "rif_cedula": {
+            "type": "string"
+          },
+          "nit": {
+            "type": "string"
+          },
+          "dir_correo": {
+            "type": "string"
+          },
+          "dir_fiscal": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "tlf_cliente": {
+            "type": "string"
+          },
+          "fax": {
+            "type": "string"
+          },
+          "razon_social": {
+            "type": "string"
+          },
+          "tipo_persona": {
+            "type": "string"
+          },
+          "modalidad_pago": {
+            "type": "string"
+          },
+          "persona_contacto": {
+            "type": "string"
+          },
+          "observacion": {
+            "type": "string"
+          },
+          "cte_decontado": {
+            "type": "string"
+          },
+          "tipo_persona_new": {
+            "type": "string"
+          },
+          "flag_activo": {
+            "type": "string"
+          },
+          "cod_agencia": {
+            "type": "number"
+          },
+          "cod_agente": {
+            "type": "number"
+          },
+          "cod_municipio": {
+            "type": "number"
+          },
+          "cod_parroquia": {
+            "type": "number"
+          },
+          "cod_localidad": {
+            "type": "number"
           }
         }
       },
@@ -3927,6 +5162,41 @@
           }
         }
       },
+      "Municipios": {
+        "description": "Modelo de Municipios",
+        "required": ["id", "desc_municipio", "cod_estado"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "desc_municipio": {
+            "type": "string"
+          },
+          "cod_estado": {
+            "type": "number"
+          }
+        }
+      },
+      "Localidades": {
+        "description": "Modelo de Localidades",
+        "required": ["id", "desc_localidad", "cod_postal", "cod_estado"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "desc_localidad": {
+            "type": "string"
+          },
+          "cod_postal": {
+            "type": "string"
+          },
+          "cod_estado": {
+            "type": "number"
+          }
+        }
+      },
       "Objetos": {
         "description": "Modelo de Objetos",
         "required": ["codigo", "descripcion"],
@@ -3956,6 +5226,22 @@
           "tipo_pais_desc": {
             "type": "string",
             "readOnly": true
+          }
+        }
+      },
+      "Parroquias": {
+        "description": "Modelo de Parroquias",
+        "required": ["id", "desc_parroquia", "cod_municipio"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "desc_parroquia": {
+            "type": "string"
+          },
+          "cod_municipio": {
+            "type": "number"
           }
         }
       },
@@ -4016,6 +5302,25 @@
           "activo_desc": {
             "type": "string",
             "readOnly": true
+          }
+        }
+      },
+      "Zonas": {
+        "description": "Modelo de Zonas",
+        "required": ["id", "nb_zona", "tipo_zona", "cod_agencia"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "nb_zona": {
+            "type": "string"
+          },
+          "tipo_zona": {
+            "type": "string"
+          },
+          "cod_agencia": {
+            "type": "number"
           }
         }
       }

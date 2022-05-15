@@ -13,6 +13,10 @@ const PermisosRouter = require('./permisos.router');
 const UsuariosRouter = require('./usuarios.router');
 const CuentasRouter = require('./cuentas.router');
 const AgentesRouter = require('./agentes.router');
+const MunicipiosRouter = require('./municipios.router');
+const ClientesRouter = require('./clientes.router');
+const AyudantesRouter = require('./ayudantes.router');
+const ZonasRouter = require('./zonas.router');
 
 function routerApi(app) {
   const router = express.Router();
@@ -29,6 +33,10 @@ function routerApi(app) {
   router.use('/usuarios', UsuariosRouter);
   router.use('/cuentas', CuentasRouter);
   router.use('/agentes', AgentesRouter);
+  router.use('/municipios', MunicipiosRouter);
+  router.use('/clientes', ClientesRouter);
+  router.use('/ayudantes', AyudantesRouter);
+  router.use('/zonas', ZonasRouter);
   router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 

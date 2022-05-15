@@ -47,6 +47,34 @@ router.get('/:id/ciudades',
   }
 );
 
+router.get('/:id/municipios',
+  authenticateJWT,
+  validatorHandler(getEstadosSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const estado = await service.findOneMunicipios(id);
+      res.json(estado);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.get('/:id/localidades',
+  authenticateJWT,
+  validatorHandler(getEstadosSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const estado = await service.findOneLocalidades(id);
+      res.json(estado);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 router.post('/',
   authenticateJWT,
   validatorHandler(createEstadosSchema, 'body'),

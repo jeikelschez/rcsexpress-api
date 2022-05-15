@@ -5,6 +5,7 @@ const { models, Sequelize }= require('./../libs/sequelize');
 const caseStatus = '(CASE estatus WHEN "A" THEN "ACTIVA" ELSE "INACTIVA" END)';
 const caseActivo = '(CASE flag_activo WHEN "1" THEN "ACTIVO" ELSE "INACTIVO" END)';
 const caseTipo = '(CASE tipo_agente WHEN "RP" THEN "RESPONSABLE DE AGENCIA" WHEN "CR" THEN "COURIERS" ELSE "" END)';
+const caseTipoZona = '(CASE tipo_zona WHEN "U" THEN "URBANA" ELSE "EXTRAURBANA" END)';
 
 class AgenciasService {
 
@@ -88,6 +89,25 @@ class AgenciasService {
             include: [
               [Sequelize.literal(caseActivo), 'activo_desc'],
               [Sequelize.literal(caseTipo), 'tipo_desc']
+            ]
+          }
+        }
+      ]
+    });
+    if (!agencia) {
+      throw boom.notFound('Agencia no existe');
+    }
+    return agencia;
+  }
+
+  async findOneZonas(id) {
+    const agencia = await models.Agencias.findByPk(id, {
+      include: [
+        {
+          association: 'zonas',
+          attributes: {
+            include: [
+              [Sequelize.literal(caseTipoZona), 'tipo_desc']
             ]
           }
         }
