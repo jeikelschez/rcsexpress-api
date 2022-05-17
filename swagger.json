@@ -4970,6 +4970,10 @@
           },
           "flag_activo": {
             "type": "string"
+          },
+          "activo_desc": {
+            "type": "string",
+            "readOnly": true
           }
         }
       },
