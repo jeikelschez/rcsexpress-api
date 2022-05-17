@@ -119,6 +119,16 @@ class AgenciasService {
     return agencia;
   }
 
+  async findOneClientes(id) {
+    const agencia = await models.Agencias.findByPk(id, {
+      include: ['clientes']
+    });
+    if (!agencia) {
+      throw boom.notFound('Agencia no existe');
+    }
+    return agencia;
+  }
+
   async update(id, changes) {
     const agencia = await models.Agencias.findByPk(id);
     if (!agencia) {
