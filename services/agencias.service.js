@@ -6,6 +6,8 @@ const caseStatus = '(CASE estatus WHEN "A" THEN "ACTIVA" ELSE "INACTIVA" END)';
 const caseActivo = '(CASE flag_activo WHEN "1" THEN "ACTIVO" ELSE "INACTIVO" END)';
 const caseTipo = '(CASE tipo_agente WHEN "RP" THEN "RESPONSABLE DE AGENCIA" WHEN "CR" THEN "COURIERS" ELSE "" END)';
 const caseTipoZona = '(CASE tipo_zona WHEN "U" THEN "URBANA" ELSE "EXTRAURBANA" END)';
+const caseTipoPersona = '(CASE tipo_persona WHEN "N" THEN "NATURAL" ELSE "JURIDICA" END)';
+const caseModalidad = '(CASE modalidad_pago WHEN "CO" THEN "CONTADO" ELSE "CREDITO" END)';
 
 class AgenciasService {
 
@@ -121,7 +123,18 @@ class AgenciasService {
 
   async findOneClientes(id) {
     const agencia = await models.Agencias.findByPk(id, {
-      include: ['clientes']
+      include: [
+        {
+          association: 'clientes',
+          attributes: {
+            include: [
+              [Sequelize.literal(caseActivo), 'activo_desc'],
+              [Sequelize.literal(caseTipoPersona), 'tipo_desc'],
+              [Sequelize.literal(caseModalidad), 'modalidad_desc']
+            ]
+          }
+        }
+      ]
     });
     if (!agencia) {
       throw boom.notFound('Agencia no existe');
