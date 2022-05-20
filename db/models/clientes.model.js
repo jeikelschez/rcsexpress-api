@@ -2,6 +2,7 @@ const { Model, DataTypes, Sequelize } = require('sequelize');
 
 const { AGENCIAS_TABLE } = require('./agencias.model');
 const { AGENTES_TABLE } = require('./agentes.model');
+const { CIUDADES_TABLE } = require('./ciudades.model');
 const { MUNICIPIOS_TABLE } = require('./municipios.model');
 const { PARROQUIAS_TABLE } = require('./parroquias.model');
 const { LOCALIDADES_TABLE } = require('./localidades.model');
@@ -89,6 +90,16 @@ const ClientesSchema = {
     onUpdate: 'CASCADE',
     onDelete: 'SET NULL'
   },
+  cod_ciudad: {
+    allowNull: false,
+    type: DataTypes.INTEGER,
+    references: {
+      model: CIUDADES_TABLE,
+      key: 'id'
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL'
+  },
   cod_municipio: {
     allowNull: false,
     type: DataTypes.INTEGER,
@@ -126,6 +137,7 @@ class Clientes extends Model {
   static associate(models) {
     this.belongsTo(models.Agencias, { foreignKey: 'cod_agencia', as: 'agencias' });
     this.belongsTo(models.Agentes, { foreignKey: 'cod_agente', as: 'agentes' });
+    this.belongsTo(models.Ciudades, { foreignKey: 'cod_ciudad', as: 'ciudades' });
     this.belongsTo(models.Municipios, { foreignKey: 'cod_municipio', as: 'municipios' });
     this.belongsTo(models.Parroquias, { foreignKey: 'cod_parroquia', as: 'parroquias' });
     this.belongsTo(models.Localidades, { foreignKey: 'cod_localidad', as: 'localidades' });

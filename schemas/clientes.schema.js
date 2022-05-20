@@ -19,12 +19,14 @@ const tipo_persona_new = Joi.string().min(1).max(2);
 const flag_activo = Joi.string().min(1);
 const cod_agencia = Joi.number().integer();
 const cod_agente = Joi.number().integer();
+const cod_ciudad = Joi.number().integer();
 const cod_municipio = Joi.number().integer();
 const cod_parroquia = Joi.number().integer();
 const cod_localidad = Joi.number().integer();
 
 const createClientesSchema = Joi.object({
   cod_agencia: cod_agencia.required(),
+  cod_ciudad: cod_ciudad.required(),
   nb_cliente: nb_cliente.required(),
   rif_cedula: rif_cedula.required(),
   nit: nit.allow(null, ''),
@@ -50,6 +52,7 @@ const createClientesSchema = Joi.object({
 const updateClientesSchema = Joi.object({
   id: id,
   cod_agencia: cod_agencia,
+  cod_ciudad: cod_ciudad,
   nb_cliente: nb_cliente,
   rif_cedula: rif_cedula,
   nit: nit.allow(null, ''),

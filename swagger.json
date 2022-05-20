@@ -55,6 +55,10 @@
       "description": "API para Manejar los Estados de la Organizacion"
     },
     {
+      "name": "Localidades",
+      "description": "API para Manejar las Localidades de la Organizacion"
+    },
+    {
       "name": "Municipios",
       "description": "API para Manejar los Municipios de la Organizacion"
     },
@@ -65,6 +69,10 @@
     {
       "name": "Paises",
       "description": "API para Manejar los Paises de la Organizacion"
+    },
+    {
+      "name": "Parroquias",
+      "description": "API para Manejar las Parroquias de la Organizacion"
     },
     {
       "name": "Permisos",
@@ -2841,6 +2849,85 @@
         }
       }
     },
+    "/localidades": {
+      "get": {
+        "tags": ["Localidades"],
+        "summary": "Obtener todos las localidades",
+        "description": "API para Obtener todos las localidades del sistema",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Localidades"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/localidades/{id}": {
+      "get": {
+        "tags": ["Localidades"],
+        "summary": "Obtener Localidad por su Id",
+        "description": "API para Retornar una Localidad por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Localidad",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Localidades"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/municipios": {
       "get": {
         "tags": ["Municipios"],
@@ -3551,6 +3638,85 @@
                       "$ref": "#/components/schemas/Estados"
                     }
                   }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/parroquias": {
+      "get": {
+        "tags": ["Parroquias"],
+        "summary": "Obtener todos las parroquias",
+        "description": "API para Obtener todos las parroquias del sistema",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Parroquias"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/parroquias/{id}": {
+      "get": {
+        "tags": ["Parroquias"],
+        "summary": "Obtener Parroquia por su Id",
+        "description": "API para Retornar una Parroquia por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Parroquia",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Parroquias"
                 }
               }
             }
@@ -5062,7 +5228,7 @@
       },
       "Clientes": {
         "description": "Modelo de Clientes",
-        "required": ["id", "nb_cliente", "rif_cedula", "dir_fiscal", "razon_social", "tipo_persona", "modalidad_pago", "cod_agencia"],
+        "required": ["id", "nb_cliente", "rif_cedula", "dir_fiscal", "razon_social", "tipo_persona", "modalidad_pago", "cod_agencia", "cod_ciudad"],
         "properties": {
           "id": {
             "type": "number",
@@ -5122,6 +5288,9 @@
           "cod_agente": {
             "type": "number"
           },
+          "cod_ciudad": {
+            "type": "number"
+          },
           "cod_municipio": {
             "type": "number"
           },
@@ -5130,6 +5299,18 @@
           },
           "cod_localidad": {
             "type": "number"
+          },
+          "activo_desc": {
+            "type": "string",
+            "readOnly": true
+          },
+          "tipo_desc": {
+            "type": "string",
+            "readOnly": true
+          },
+          "modalidad_desc": {
+            "type": "string",
+            "readOnly": true
           }
         }
       },
@@ -5221,22 +5402,6 @@
           }
         }
       },
-      "Municipios": {
-        "description": "Modelo de Municipios",
-        "required": ["id", "desc_municipio", "cod_estado"],
-        "properties": {
-          "id": {
-            "type": "number",
-            "readOnly": true
-          },
-          "desc_municipio": {
-            "type": "string"
-          },
-          "cod_estado": {
-            "type": "number"
-          }
-        }
-      },
       "Localidades": {
         "description": "Modelo de Localidades",
         "required": ["id", "desc_localidad", "cod_postal", "cod_estado"],
@@ -5249,6 +5414,22 @@
             "type": "string"
           },
           "cod_postal": {
+            "type": "string"
+          },
+          "cod_estado": {
+            "type": "number"
+          }
+        }
+      },
+      "Municipios": {
+        "description": "Modelo de Municipios",
+        "required": ["id", "desc_municipio", "cod_estado"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "desc_municipio": {
             "type": "string"
           },
           "cod_estado": {

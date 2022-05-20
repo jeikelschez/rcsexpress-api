@@ -2,6 +2,10 @@ const boom = require('@hapi/boom');
 
 const { models, Sequelize }= require('./../libs/sequelize');
 
+const caseActivo = '(CASE flag_activo WHEN "1" THEN "ACTIVO" ELSE "INACTIVO" END)';
+const caseTipo = '(CASE tipo_persona WHEN "N" THEN "NATURAL" ELSE "JURIDICA" END)';
+const caseModalidad = '(CASE modalidad_pago WHEN "CO" THEN "CONTADO" ELSE "CREDITO" END)';
+
 class ClientesService {
 
   constructor() {}
@@ -12,12 +16,30 @@ class ClientesService {
   }
 
   async find() {
-    const clientes = await models.Clientes.findAll();
+    const clientes = await models.Clientes.findAll(
+    {
+      attributes: {
+        include: [
+          [Sequelize.literal(caseActivo), 'activo_desc'],
+          [Sequelize.literal(caseTipo), 'tipo_desc'],
+          [Sequelize.literal(caseModalidad), 'modalidad_desc']
+        ]
+      }
+    });
     return clientes;
   }
 
   async findOne(id) {
-    const cliente = await models.Clientes.findByPk(id);
+    const cliente = await models.Clientes.findByPk(id,
+    {
+      attributes: {
+        include: [
+          [Sequelize.literal(caseActivo), 'activo_desc'],
+          [Sequelize.literal(caseTipo), 'tipo_desc'],
+          [Sequelize.literal(caseModalidad), 'modalidad_desc']
+        ]
+      }
+    });
     if (!cliente) {
       throw boom.notFound('Cliente no existe');
     }

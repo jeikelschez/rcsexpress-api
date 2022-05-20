@@ -14,6 +14,8 @@ const UsuariosRouter = require('./usuarios.router');
 const CuentasRouter = require('./cuentas.router');
 const AgentesRouter = require('./agentes.router');
 const MunicipiosRouter = require('./municipios.router');
+const ParroquiasRouter = require('./parroquias.router');
+const LocalidadesRouter = require('./localidades.router');
 const ClientesRouter = require('./clientes.router');
 const AyudantesRouter = require('./ayudantes.router');
 const ZonasRouter = require('./zonas.router');
@@ -34,6 +36,8 @@ function routerApi(app) {
   router.use('/cuentas', CuentasRouter);
   router.use('/agentes', AgentesRouter);
   router.use('/municipios', MunicipiosRouter);
+  router.use('/parroquias', ParroquiasRouter);
+  router.use('/localidades', LocalidadesRouter);
   router.use('/clientes', ClientesRouter);
   router.use('/ayudantes', AyudantesRouter);
   router.use('/zonas', ZonasRouter);
