@@ -22,6 +22,7 @@ const ZonasRouter = require('./zonas.router');
 const UnidadesRouter = require('./unidades.router');
 const ProveedoresRouter = require('./proveedores.router');
 const ReceptoresRouter = require('./receptores.router');
+const TarifasRouter = require('./tarifas.router');
 
 function routerApi(app) {
   const router = express.Router();
@@ -47,6 +48,7 @@ function routerApi(app) {
   router.use('/unidades', UnidadesRouter);
   router.use('/proveedores', ProveedoresRouter);
   router.use('/receptores', ReceptoresRouter);
+  router.use('/tarifas', TarifasRouter);
   router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 

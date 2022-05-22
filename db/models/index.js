@@ -18,6 +18,7 @@ const { Zonas, ZonasSchema } = require('./zonas.model');
 const { Unidades, UnidadesSchema } = require('./unidades.model');
 const { Proveedores, ProveedoresSchema } = require('./proveedores.model');
 const { Receptores, ReceptoresSchema } = require('./receptores.model');
+const { Tarifas, TarifasSchema } = require('./tarifas.model');
 
 function setupModels(sequelize) {
   Bancos.init(BancosSchema, Bancos.config(sequelize));
@@ -40,6 +41,7 @@ function setupModels(sequelize) {
   Unidades.init(UnidadesSchema, Unidades.config(sequelize));
   Proveedores.init(ProveedoresSchema, Proveedores.config(sequelize));
   Receptores.init(ReceptoresSchema, Receptores.config(sequelize));
+  Tarifas.init(TarifasSchema, Tarifas.config(sequelize));
 
   Paises.associate(sequelize.models);
   Estados.associate(sequelize.models);

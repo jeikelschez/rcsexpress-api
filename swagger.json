@@ -91,6 +91,10 @@
       "description": "API para Manejar los Roles de la Organizacion"
     },
     {
+      "name": "Tarifas",
+      "description": "API para Manejar las Tarifas de la Organizacion"
+    },
+    {
       "name": "Unidades",
       "description": "API para Manejar las Unidades de Transporte de la Organizacion"
     },
@@ -4907,6 +4911,280 @@
         }
       }
     },
+    "/tarifas": {
+      "get": {
+        "tags": ["Tarifas"],
+        "summary": "Obtener todos las tarifas",
+        "description": "API para Obtener todos las tarifas del sistema",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tarifas"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Tarifas"],
+        "summary": "Crear Tarifa",
+        "description": "API para Crear una nueva Tarifas",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tarifas"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tarifas"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tarifas/{id}": {
+      "get": {
+        "tags": ["Tarifas"],
+        "summary": "Obtener Tarifa por su Id",
+        "description": "API para Retornar una Tarifa por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Tarifa",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tarifas"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Tarifas"],
+        "summary": "Actualizar Tarifa",
+        "description": "API para Actualizar una Tarifa por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Tarifa",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tarifas"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tarifas"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Tarifas"],
+        "summary": "Borrar Tarifa",
+        "description": "API para Borrar una Tarifa por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Tarifa",
+            "required": true, "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Tarifas/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/unidades": {
       "get": {
         "tags": ["Unidades"],
@@ -6445,6 +6723,49 @@
             "type": "string"
           },
           "cod_agencia": {
+            "type": "number"
+          }
+        }
+      },
+      "Tarifas": {
+        "description": "Modelo de Tarifas",
+        "required": ["id", "monto_tarifa"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "monto_tarifa": {
+            "type": "number"
+          },
+          "tipo_urgencia": {
+            "type": "string"
+          },
+          "tipo_tarifa": {
+            "type": "string"
+          },
+          "tipo_ubicacion": {
+            "type": "string"
+          },
+          "kgr_hasta": {
+            "type": "number"
+          },
+          "tipo_carga": {
+            "type": "string"
+          },
+          "modalidad_pago": {
+            "type": "string"
+          },
+          "pagado_en": {
+            "type": "string"
+          },
+          "region_origen": {
+            "type": "string"
+          },
+          "region_destino": {
+            "type": "string"
+          },
+          "tiempo_servicio": {
             "type": "number"
           }
         }
