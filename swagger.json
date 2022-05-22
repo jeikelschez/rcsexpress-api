@@ -48,7 +48,7 @@
     },
     {
       "name": "Cuentas",
-      "description": "API para Manejar las Cuentas de la Organizacion"
+      "description": "API para Manejar las Cuentas Bancarias de la Organizacion"
     },
     {
       "name": "Estados",
@@ -81,6 +81,10 @@
     {
       "name": "Roles",
       "description": "API para Manejar los Roles de la Organizacion"
+    },
+    {
+      "name": "Unidades",
+      "description": "API para Manejar las Unidades de Transporte de la Organizacion"
     },
     {
       "name": "Usuarios",
@@ -4347,6 +4351,280 @@
         }
       }
     },
+    "/unidades": {
+      "get": {
+        "tags": ["Unidades"],
+        "summary": "Obtener todas las unidades de transporte",
+        "description": "API para Obtener todas las unidades de transporte del sistema",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unidades"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Unidades"],
+        "summary": "Crear Unidad de Trasporte",
+        "description": "API para Crear una nueva Unidad de Trasporte",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Unidades"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unidades"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/unidades/{id}": {
+      "get": {
+        "tags": ["Unidades"],
+        "summary": "Obtener Unidad de Transporte por su Id",
+        "description": "API para Retornar una  Unidad de Transporte por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Zona",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Zonas"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Unidades"],
+        "summary": "Actualizar Unidad de Transporte",
+        "description": "API para Actualizar una Unidad de Transporte por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Unidad de Trasporte",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Unidades"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unidades"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Unidades"],
+        "summary": "Borrar Unidad de Transporte",
+        "description": "API para Borrar una Unidad de Transporte por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Unidad de Transporte",
+            "required": true, "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Unidades/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/usuarios": {
       "get": {
         "tags": ["Usuarios"],
@@ -5514,6 +5792,25 @@
           },
           "cod_agencia": {
             "type": "number"
+          }
+        }
+      },
+      "Unidades": {
+        "description": "Modelo de Unidades",
+        "required": ["id", "placas", "descripcion"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "placas": {
+            "type": "string"
+          },
+          "descripcion": {
+            "type": "string"
+          },
+          "chofer": {
+            "type": "string"
           }
         }
       },

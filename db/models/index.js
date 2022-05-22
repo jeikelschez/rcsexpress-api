@@ -15,6 +15,7 @@ const { Parroquias, ParroquiasSchema } = require('./parroquias.model');
 const { Localidades, LocalidadesSchema } = require('./localidades.model');
 const { Ayudantes, AyudantesSchema } = require('./ayudantes.model');
 const { Zonas, ZonasSchema } = require('./zonas.model');
+const { Unidades, UnidadesSchema } = require('./unidades.model');
 
 function setupModels(sequelize) {
   Bancos.init(BancosSchema, Bancos.config(sequelize));
@@ -34,6 +35,7 @@ function setupModels(sequelize) {
   Localidades.init(LocalidadesSchema, Localidades.config(sequelize));
   Ayudantes.init(AyudantesSchema, Ayudantes.config(sequelize));
   Zonas.init(ZonasSchema, Zonas.config(sequelize));
+  Unidades.init(UnidadesSchema, Unidades.config(sequelize));
 
   Paises.associate(sequelize.models);
   Estados.associate(sequelize.models);
