@@ -83,6 +83,10 @@
       "description": "API para Manejar los Proveedores de la Organizacion"
     },
     {
+      "name": "Receptores",
+      "description": "API para Manejar los Receptores de la Organizacion"
+    },
+    {
       "name": "Roles",
       "description": "API para Manejar los Roles de la Organizacion"
     },
@@ -4300,6 +4304,280 @@
         }
       }
     },
+    "/receptores": {
+      "get": {
+        "tags": ["Receptores"],
+        "summary": "Obtener todos los receptores",
+        "description": "API para Obtener todos los receptores del sistema",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Receptores"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Receptores"],
+        "summary": "Crear Receptor",
+        "description": "API para Crear un nuevo Receptor",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Receptores"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Receptores"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/receptores/{id}": {
+      "get": {
+        "tags": ["Receptores"],
+        "summary": "Obtener Receptor por su Id",
+        "description": "API para Retornar un Receptor por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Receptor",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Receptores"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Receptores"],
+        "summary": "Actualizar Receptor",
+        "description": "API para Actualizar un Receptor por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Receptor",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Receptores"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Receptores"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Receptores"],
+        "summary": "Borrar Receptor",
+        "description": "API para Borrar un Receptor por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Receptor",
+            "required": true, "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Receptores/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/roles": {
       "get": {
         "tags": ["Roles"],
@@ -6113,6 +6391,41 @@
           "tipo_desc": {
             "type": "string",
             "readOnly": true
+          },
+          "activo_desc": {
+            "type": "string",
+            "readOnly": true
+          }
+        }
+      },
+      "Receptores": {
+        "description": "Modelo de Receptores",
+        "required": ["id", "nb_receptor"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "nb_receptor": {
+            "type": "string"
+          },
+          "dir_receptor": {
+            "type": "string"
+          },
+          "tlf_receptor": {
+            "type": "string"
+          },
+          "cel_receptor": {
+            "type": "string"
+          },
+          "cedula_receptor": {
+            "type": "string"
+          },
+          "placa": {
+            "type": "string"
+          },
+          "flag_activo": {
+            "type": "string"
           },
           "activo_desc": {
             "type": "string",
