@@ -79,6 +79,10 @@
       "description": "API para Manejar los Permisos de la Organizacion"
     },
     {
+      "name": "Proveedores",
+      "description": "API para Manejar los Proveedores de la Organizacion"
+    },
+    {
       "name": "Roles",
       "description": "API para Manejar los Roles de la Organizacion"
     },
@@ -4022,6 +4026,280 @@
         }
       }
     },
+    "/proveedores": {
+      "get": {
+        "tags": ["Proveedores"],
+        "summary": "Obtener todos los proveedores",
+        "description": "API para Obtener todos los proveedores del sistema",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Proveedores"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Proveedores"],
+        "summary": "Crear Proveedor",
+        "description": "API para Crear un nuevo Proveedor",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Proveedores"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Proveedores"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/proveedores/{id}": {
+      "get": {
+        "tags": ["Proveedores"],
+        "summary": "Obtener Proveedor por su Id",
+        "description": "API para Retornar un Proveedor por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Proveedor",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Proveedores"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Proveedores"],
+        "summary": "Actualizar Proveedor",
+        "description": "API para Actualizar un Proveedor por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Proveedor",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Proveedores"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Proveedores"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Proveedores"],
+        "summary": "Borrar Proveedor",
+        "description": "API para Borrar un Proveedor por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Proveedor",
+            "required": true, "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Proveedores/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/roles": {
       "get": {
         "tags": ["Roles"],
@@ -5779,6 +6057,69 @@
           }
         }
       },
+      "Proveedores": {
+        "description": "Modelo de Proveedores",
+        "required": ["id", "nb_proveedor", "rif_proveedor"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "nb_proveedor": {
+            "type": "string"
+          },
+          "nb_beneficiario": {
+            "type": "string"
+          },
+          "rif_proveedor": {
+            "type": "string"
+          },
+          "nit_proveedor": {
+            "type": "string"
+          },
+          "direccion_fiscal": {
+            "type": "string"
+          },
+          "direccion_correo": {
+            "type": "string"
+          },
+          "tlf_proveedor": {
+            "type": "string"
+          },
+          "fax_proveedor": {
+            "type": "string"
+          },
+          "email_proveedor": {
+            "type": "string"
+          },
+          "condicion_pago": {
+            "type": "number"
+          },
+          "observacion": {
+            "type": "string"
+          },
+          "tipo_servicio": {
+            "type": "string"
+          },
+          "cod_tipo_retencion": {
+            "type": "string"
+          },
+          "tipo_persona": {
+            "type": "string"
+          },
+          "flag_activo": {
+            "type": "string"
+          },
+          "tipo_desc": {
+            "type": "string",
+            "readOnly": true
+          },
+          "activo_desc": {
+            "type": "string",
+            "readOnly": true
+          }
+        }
+      },
       "Roles": {
         "description": "Modelo de Roles",
         "required": ["id", "descripcion", "cod_agencia"],
@@ -5796,7 +6137,7 @@
         }
       },
       "Unidades": {
-        "description": "Modelo de Unidades",
+        "description": "Modelo de Unidades de Transporte",
         "required": ["id", "placas", "descripcion"],
         "properties": {
           "id": {
