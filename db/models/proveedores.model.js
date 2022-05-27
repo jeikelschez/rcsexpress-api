@@ -1,5 +1,7 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 
+const { MRETENCIONES_TABLE } = require('./maestroRetenciones.model');
+
 const PROVEEDORES_TABLE = 'proveedores';
 
 const ProveedoresSchema = {
@@ -47,20 +49,28 @@ const ProveedoresSchema = {
   tipo_servicio: {
     type: DataTypes.STRING,
   },
-  cod_tipo_retencion: {
-    type: DataTypes.STRING,
-  },
   tipo_persona: {
     type: DataTypes.STRING,
   },
   flag_activo: {
     type: DataTypes.STRING,
+  },
+  cod_tipo_retencion: {
+    allowNull: false,
+    type: DataTypes.INTEGER,
+    references: {
+      model: MRETENCIONES_TABLE,
+      key: 'id'
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL'
   }
 }
 
 class Proveedores extends Model {
 
   static associate(models) {
+    this.belongsTo(models.MRetenciones, { foreignKey: 'cod_tipo_retencion', as: 'retenciones' });
   }
 
   static config(sequelize) {

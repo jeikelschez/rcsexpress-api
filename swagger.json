@@ -4323,7 +4323,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Proveedores"
+                  "$ref": "#/components/schemas/Proveedores",
+                  "properties": {
+                    "retenciones": {
+                      "$ref": "#/components/schemas/Retenciones"
+                    }
+                  }
                 }
               }
             }
@@ -4424,7 +4429,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Proveedores"
+                  "$ref": "#/components/schemas/Proveedores",
+                  "properties": {
+                    "retenciones": {
+                      "$ref": "#/components/schemas/Retenciones"
+                    }
+                  }
                 }
               }
             }
@@ -6966,20 +6976,24 @@
           "tipo_servicio": {
             "type": "string"
           },
-          "cod_tipo_retencion": {
-            "type": "string"
-          },
           "tipo_persona": {
             "type": "string"
           },
           "flag_activo": {
             "type": "string"
           },
+          "cod_tipo_retencion": {
+            "type": "string"
+          },
+          "activo_desc": {
+            "type": "string",
+            "readOnly": true
+          },
           "tipo_desc": {
             "type": "string",
             "readOnly": true
           },
-          "activo_desc": {
+          "tipo_svc": {
             "type": "string",
             "readOnly": true
           }
@@ -7011,12 +7025,55 @@
           "placa": {
             "type": "string"
           },
+          "vehiculo": {
+            "type": "string"
+          },
           "flag_activo": {
             "type": "string"
           },
           "activo_desc": {
             "type": "string",
             "readOnly": true
+          }
+        }
+      },
+      "Retenciones": {
+        "description": "Modelo de Retenciones",
+        "required": ["id", "cod_tipo_persona", "cod_tipo_retencion", "nb_tipo_retencion", "porc_base", "porc_retencion", "pago_mayor", "sustraendo", "cod_seniat", "fecha_ini_val", "fecha_fin_val"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "cod_tipo_persona": {
+            "type": "string"
+          },
+          "cod_tipo_retencion": {
+            "type": "string"
+          },
+          "nb_tipo_retencion": {
+            "type": "string"
+          },
+          "porc_base": {
+            "type": "number"
+          },
+          "porc_retencion": {
+            "type": "number"
+          },
+          "pago_mayor": {
+            "type": "number"
+          },
+          "sustraendo": {
+            "type": "number"
+          },
+          "cod_seniat": {
+            "type": "string"
+          },
+          "fecha_ini_val": {
+            "type": "string"
+          },
+          "fecha_fin_val": {
+            "type": "string"
           }
         }
       },
@@ -7076,6 +7133,38 @@
           },
           "tiempo_servicio": {
             "type": "number"
+          },
+          "urgencia_desc": {
+            "type": "string",
+            "readOnly": true
+          },
+          "tarifa_desc": {
+            "type": "string",
+            "readOnly": true
+          },
+          "ubicacion_desc": {
+            "type": "string",
+            "readOnly": true
+          },
+          "carga_desc": {
+            "type": "string",
+            "readOnly": true
+          },
+          "modalidad_desc": {
+            "type": "string",
+            "readOnly": true
+          },
+          "pagado_desc": {
+            "type": "string",
+            "readOnly": true
+          },
+          "origen_desc": {
+            "type": "string",
+            "readOnly": true
+          },
+          "destino_desc": {
+            "type": "string",
+            "readOnly": true
           }
         }
       },

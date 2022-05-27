@@ -28,6 +28,9 @@ const ReceptoresSchema = {
   placa: {
     type: DataTypes.STRING,
   },
+  vehiculo: {
+    type: DataTypes.STRING,
+  },
   flag_activo: {
     type: DataTypes.STRING,
   }

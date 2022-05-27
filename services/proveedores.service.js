@@ -4,6 +4,11 @@ const { models, Sequelize }= require('./../libs/sequelize');
 
 const caseActivo = '(CASE flag_activo WHEN "1" THEN "ACTIVO" ELSE "INACTIVO" END)';
 const caseTipo = '(CASE tipo_persona WHEN "N" THEN "NATURAL" ELSE "JURIDICA" END)';
+const caseTipoSvc = '(CASE tipo_servicio WHEN "TP" THEN "TRANSPORTE"' +
+                                       ' WHEN "PP" THEN "PAPELERIA"' +
+                                       ' WHEN "SC" THEN "SUMINISTROS DE COMPUTACION"' +
+                                       ' WHEN "GE" THEN "GENERALES"' +
+                                       ' ELSE "" END)';
 
 class ProveedoresService {
 
@@ -16,10 +21,12 @@ class ProveedoresService {
 
   async find() {
     const proveedores = await models.Proveedores.findAll({
+      include: ['retenciones'],
       attributes: {
         include: [
           [Sequelize.literal(caseActivo), 'activo_desc'],
-          [Sequelize.literal(caseTipo), 'tipo_desc']
+          [Sequelize.literal(caseTipo), 'tipo_desc'],
+          [Sequelize.literal(caseTipoSvc), 'tipo_svc']
         ]
       }
     });
@@ -29,10 +36,12 @@ class ProveedoresService {
   async findOne(id) {
     const proveedor = await models.Proveedores.findByPk(id,
       {
+        include: ['retenciones'],
         attributes: {
           include: [
             [Sequelize.literal(caseActivo), 'activo_desc'],
             [Sequelize.literal(caseTipo), 'tipo_desc'],
+            [Sequelize.literal(caseTipoSvc), 'tipo_svc']
           ]
         }
       }

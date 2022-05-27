@@ -20,6 +20,7 @@ const { Proveedores, ProveedoresSchema } = require('./proveedores.model');
 const { Receptores, ReceptoresSchema } = require('./receptores.model');
 const { Tarifas, TarifasSchema } = require('./tarifas.model');
 const { Fpos, FposSchema } = require('./fpos.model');
+const { MRetenciones, MRetencionesSchema } = require('./maestroRetenciones.model');
 
 function setupModels(sequelize) {
   Bancos.init(BancosSchema, Bancos.config(sequelize));
@@ -44,6 +45,7 @@ function setupModels(sequelize) {
   Receptores.init(ReceptoresSchema, Receptores.config(sequelize));
   Tarifas.init(TarifasSchema, Tarifas.config(sequelize));
   Fpos.init(FposSchema, Fpos.config(sequelize));
+  MRetenciones.init(MRetencionesSchema, MRetenciones.config(sequelize));
 
   Paises.associate(sequelize.models);
   Estados.associate(sequelize.models);
@@ -60,6 +62,8 @@ function setupModels(sequelize) {
   Parroquias.associate(sequelize.models);
   Localidades.associate(sequelize.models);
   Zonas.associate(sequelize.models);
+  Proveedores.associate(sequelize.models);
+  MRetenciones.associate(sequelize.models);
 
   Usuarios.hooks(sequelize.models);
 }
