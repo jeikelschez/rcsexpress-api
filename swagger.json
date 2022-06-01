@@ -63,6 +63,10 @@
       "description": "API para Manejar las Localidades de la Organizacion"
     },
     {
+      "name": "Maestro_Retenciones",
+      "description": "API para Manejar el Maestro de Retenciones de la Organizacion"
+    },
+    {
       "name": "Municipios",
       "description": "API para Manejar los Municipios de la Organizacion"
     },
@@ -3222,6 +3226,300 @@
         }
       }
     },
+    "/mretenciones": {
+      "get": {
+        "tags": ["Maestro_Retenciones"],
+        "summary": "Obtener todo el maestro de Retenciones",
+        "description": "API para Obtener el maestro de Retenciones del sistema",
+        "parameters": [
+          {
+            "name": "tipo_persona",
+            "in": "header",
+            "description": "Tipo de Persona",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "vigente",
+            "in": "header",
+            "description": "Solo matestro de Retenciones Vigentes, Para filtrar escriba 'S'",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Maestro_Retenciones"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Maestro_Retenciones"],
+        "summary": "Crear concepto de Retención",
+        "description": "API para Crear un nuevo concepto de Retención",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Maestro_Retenciones"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Maestro_Retenciones"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mretenciones/{id}": {
+      "get": {
+        "tags": ["Maestro_Retenciones"],
+        "summary": "Obtener concepto de Retención por su Id",
+        "description": "API para Retornar un concepto de Retención por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Ayudante",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Maestro_Retenciones"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Maestro_Retenciones"],
+        "summary": "Actualizar concepto de Retención",
+        "description": "API para Actualizar un concepto de Retención por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Ayudante",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Maestro_Retenciones"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ayudantes"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Maestro_Retenciones"],
+        "summary": "Borrar concepto de Retención",
+        "description": "API para Borrar un concepto de Retención por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Ayudante",
+            "required": true, "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Maestro_Retenciones/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/municipios": {
       "get": {
         "tags": ["Municipios"],
@@ -4326,7 +4624,7 @@
                   "$ref": "#/components/schemas/Proveedores",
                   "properties": {
                     "retenciones": {
-                      "$ref": "#/components/schemas/Retenciones"
+                      "$ref": "#/components/schemas/Maestro_Retenciones"
                     }
                   }
                 }
@@ -4432,7 +4730,7 @@
                   "$ref": "#/components/schemas/Proveedores",
                   "properties": {
                     "retenciones": {
-                      "$ref": "#/components/schemas/Retenciones"
+                      "$ref": "#/components/schemas/Maestro_Retenciones"
                     }
                   }
                 }
@@ -6852,6 +7150,50 @@
           }
         }
       },
+      "Maestro_Retenciones": {
+        "description": "Modelo de Maestro de Retenciones",
+        "required": ["id", "cod_tipo_persona", "cod_tipo_retencion", "nb_tipo_retencion", "porc_base", "porc_retencion", "pago_mayor", "sustraendo", "cod_seniat", "fecha_ini_val", "fecha_fin_val"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "cod_tipo_persona": {
+            "type": "string"
+          },
+          "cod_tipo_retencion": {
+            "type": "string"
+          },
+          "nb_tipo_retencion": {
+            "type": "string"
+          },
+          "porc_base": {
+            "type": "number"
+          },
+          "porc_retencion": {
+            "type": "number"
+          },
+          "pago_mayor": {
+            "type": "number"
+          },
+          "sustraendo": {
+            "type": "number"
+          },
+          "cod_seniat": {
+            "type": "string"
+          },
+          "fecha_ini_val": {
+            "type": "string"
+          },
+          "fecha_fin_val": {
+            "type": "string"
+          },
+          "tipo_persona_desc": {
+            "type": "string",
+            "readOnly": true
+          }
+        }
+      },
       "Municipios": {
         "description": "Modelo de Municipios",
         "required": ["id", "desc_municipio", "cod_estado"],
@@ -7034,46 +7376,6 @@
           "activo_desc": {
             "type": "string",
             "readOnly": true
-          }
-        }
-      },
-      "Retenciones": {
-        "description": "Modelo de Retenciones",
-        "required": ["id", "cod_tipo_persona", "cod_tipo_retencion", "nb_tipo_retencion", "porc_base", "porc_retencion", "pago_mayor", "sustraendo", "cod_seniat", "fecha_ini_val", "fecha_fin_val"],
-        "properties": {
-          "id": {
-            "type": "number",
-            "readOnly": true
-          },
-          "cod_tipo_persona": {
-            "type": "string"
-          },
-          "cod_tipo_retencion": {
-            "type": "string"
-          },
-          "nb_tipo_retencion": {
-            "type": "string"
-          },
-          "porc_base": {
-            "type": "number"
-          },
-          "porc_retencion": {
-            "type": "number"
-          },
-          "pago_mayor": {
-            "type": "number"
-          },
-          "sustraendo": {
-            "type": "number"
-          },
-          "cod_seniat": {
-            "type": "string"
-          },
-          "fecha_ini_val": {
-            "type": "string"
-          },
-          "fecha_fin_val": {
-            "type": "string"
           }
         }
       },

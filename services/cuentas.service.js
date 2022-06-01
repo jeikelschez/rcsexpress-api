@@ -3,7 +3,7 @@ const boom = require('@hapi/boom');
 const { models, Sequelize }= require('./../libs/sequelize');
 
 const caseTipo = '(CASE tipo_cuenta WHEN "C" THEN "CORRIENTE" ELSE "AHORRO" END)';
-const caseActiva = '(CASE flag_activa WHEN "1" THEN "ACTIVA" ELSE "INACTIVA" END)';
+const caseActiva = '(CASE flag_activa WHEN "A" THEN "ACTIVA" ELSE "INACTIVA" END)';
 
 class CuentasService {
 
