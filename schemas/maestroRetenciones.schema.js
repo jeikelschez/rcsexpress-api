@@ -12,7 +12,7 @@ const cod_seniat = Joi.string().max(3);
 const fecha_ini_val = Joi.date();
 const fecha_fin_val = Joi.date();
 
-const createMRetencionesSchema = Joi.object({
+const createMretencionesSchema = Joi.object({
   cod_tipo_persona: cod_tipo_persona.required(),
   cod_tipo_retencion: cod_tipo_retencion.required(),
   nb_tipo_retencion: nb_tipo_retencion.required(),
@@ -25,7 +25,7 @@ const createMRetencionesSchema = Joi.object({
   fecha_fin_val: fecha_fin_val.required()
 });
 
-const updateMRetencionesSchema = Joi.object({
+const updateMretencionesSchema = Joi.object({
   id: id,
   cod_tipo_persona: cod_tipo_persona,
   cod_tipo_retencion: cod_tipo_retencion,
@@ -39,8 +39,8 @@ const updateMRetencionesSchema = Joi.object({
   fecha_fin_val: fecha_fin_val
 });
 
-const getMRetencionesSchema = Joi.object({
+const getMretencionesSchema = Joi.object({
   id: id.required(),
 });
 
-module.exports = { createMRetencionesSchema, updateMRetencionesSchema, getMRetencionesSchema }
+module.exports = { createMretencionesSchema, updateMretencionesSchema, getMretencionesSchema }

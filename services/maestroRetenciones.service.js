@@ -5,12 +5,12 @@ const { models, Sequelize } = require('./../libs/sequelize');
 
 const caseTipo = '(CASE cod_tipo_persona WHEN "N" THEN "NATURAL" ELSE "JURIDICA" END)';
 
-class MRetencionesService {
+class MretencionesService {
 
   constructor() {}
 
   async create(data) {
-    const newMRetencion = await models.MRetenciones.create(data);
+    const newMRetencion = await models.Mretenciones.create(data);
     return newMRetencion;
   }
 
@@ -31,7 +31,7 @@ class MRetencionesService {
 
     if(tipoPersona) params.cod_tipo_persona = tipoPersona;
 
-    const mRetenciones = await models.MRetenciones.findAll({
+    const mRetenciones = await models.Mretenciones.findAll({
       where: params,
       attributes: {
         include: [
@@ -43,7 +43,7 @@ class MRetencionesService {
   }
 
   async findOne(id) {
-    const mRetencion = await models.MRetenciones.findByPk(id,
+    const mRetencion = await models.Mretenciones.findByPk(id,
       {
         attributes: {
           include: [
@@ -59,7 +59,7 @@ class MRetencionesService {
   }
 
   async update(id, changes) {
-    const mRetencion = await models.MRetenciones.findByPk(id);
+    const mRetencion = await models.Mretenciones.findByPk(id);
     if (!mRetencion) {
       throw boom.notFound('Maestro de Retenciones no existe');
     }
@@ -68,7 +68,7 @@ class MRetencionesService {
   }
 
   async delete(id) {
-    const mRetencion = await models.MRetenciones.findByPk(id);
+    const mRetencion = await models.Mretenciones.findByPk(id);
     if (!mRetencion) {
       throw boom.notFound('Maestro de Retenciones no existe');
     }
@@ -77,4 +77,4 @@ class MRetencionesService {
   }
 }
 
-module.exports = MRetencionesService;
+module.exports = MretencionesService;

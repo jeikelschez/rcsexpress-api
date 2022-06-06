@@ -70,7 +70,7 @@ const ProveedoresSchema = {
 class Proveedores extends Model {
 
   static associate(models) {
-    this.belongsTo(models.MRetenciones, { foreignKey: 'cod_tipo_retencion', as: 'retenciones' });
+    this.belongsTo(models.Mretenciones, { foreignKey: 'cod_tipo_retencion', as: 'retenciones' });
   }
 
   static config(sequelize) {

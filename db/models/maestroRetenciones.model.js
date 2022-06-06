@@ -2,7 +2,7 @@ const { Model, DataTypes, Sequelize } = require('sequelize');
 
 const MRETENCIONES_TABLE = 'maestro_retenciones';
 
-const MRetencionesSchema = {
+const MretencionesSchema = {
   id: {
     allowNull: false,
     autoIncrement: true,
@@ -55,7 +55,7 @@ const MRetencionesSchema = {
   }
 }
 
-class MRetenciones extends Model {
+class Mretenciones extends Model {
 
   static associate(models) {
     this.hasMany(models.Proveedores, { foreignKey: 'cod_tipo_retencion', as: 'proveedores' });
@@ -65,10 +65,10 @@ class MRetenciones extends Model {
     return {
       sequelize,
       tableName: MRETENCIONES_TABLE,
-      modelName: 'MRetenciones',
+      modelName: 'Mretenciones',
       timestamps: false
     }
   }
 }
 
-module.exports = { MRetenciones, MRetencionesSchema, MRETENCIONES_TABLE };
+module.exports = { Mretenciones, MretencionesSchema, MRETENCIONES_TABLE };

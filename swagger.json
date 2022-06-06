@@ -47,6 +47,10 @@
       "description": "API para Manejar los Clientes de la Organizacion"
     },
     {
+      "name": "Conceptos_Operacion",
+      "description": "API para Manejar el Maestro de Conceptos de Operacion"
+    },
+    {
       "name": "Cuentas",
       "description": "API para Manejar las Cuentas Bancarias de la Organizacion"
     },
@@ -2130,6 +2134,290 @@
                   "properties": {
                     "id": {
                       "$ref": "#/components/schemas/Clientes/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/coperacion": {
+      "get": {
+        "tags": ["Conceptos_Operacion"],
+        "summary": "Obtener todos los Conceptos de Operacion",
+        "description": "API para Obtener todos los conceptos de operacion del sistema",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Conceptos_Operacion",
+                  "properties": {
+                    "tipos": {
+                      "$ref": "#/components/schemas/Tipos"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Conceptos_Operacion"],
+        "summary": "Crear Concepto de Operacion",
+        "description": "API para Crear un nuevo Concepto de Operacion",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Conceptos_Operacion"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Conceptos_Operacion"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/coperacion/{id}": {
+      "get": {
+        "tags": ["Conceptos_Operacion"],
+        "summary": "Obtener Concepto de Operacion por su Id",
+        "description": "API para Retornar un Concepto de Operacion por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Concepto de Operacion",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Conceptos_Operacion",
+                  "properties": {
+                    "tipos": {
+                      "$ref": "#/components/schemas/Tipos"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Conceptos_Operacion"],
+        "summary": "Actualizar Concepto de Operacion",
+        "description": "API para Actualizar un Concepto de Operacion por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Concepto de Operacion",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Conceptos_Operacion"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Conceptos_Operacion"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Conceptos_Operacion"],
+        "summary": "Borrar Concepto de Operacion",
+        "description": "API para Borrar un Concepto de Operacion por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Concepto de Operacion",
+            "required": true, "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Conceptos_Operacion/properties/id"
                     }
                   },
                   "type": "object"
@@ -7045,6 +7333,29 @@
           }
         }
       },
+      "Conceptos_Operacion": {
+        "description": "Modelo de Conceptos de Operación",
+        "required": ["id", "desc_concepto", "tipo", "afecta_estado"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "desc_concepto": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string"
+          },
+          "afecta_estado": {
+            "type": "string"
+          },
+          "afecta_desc": {
+            "type": "string",
+            "readOnly": true
+          }
+        }
+      },
       "Cuentas": {
         "description": "Modelo de Cuentas",
         "required": ["id", "nro_cuenta", "cod_banco"],
@@ -7467,6 +7778,22 @@
           "destino_desc": {
             "type": "string",
             "readOnly": true
+          }
+        }
+      },
+      "Tipos": {
+        "description": "Maestro de Tipos",
+        "required": ["codigo", "descripcion", "fuente"],
+        "properties": {
+          "codigo": {
+            "type": "string",
+            "readOnly": true
+          },
+          "descripcion": {
+            "type": "string"
+          },
+          "fuente": {
+            "type": "string"
           }
         }
       },

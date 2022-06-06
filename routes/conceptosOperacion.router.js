@@ -1,21 +1,19 @@
 const express = require('express');
 
-const MretencionesService = require('./../services/maestroRetenciones.service');
+const CoperacionService = require('./../services/conceptosOperacion.service');
 const validatorHandler = require('./../middlewares/validator.handler');
-const { createMretencionesSchema, updateMretencionesSchema, getMretencionesSchema } = require('./../schemas/maestroRetenciones.schema');
+const { createCoperacionSchema, updateCoperacionSchema, getCoperacionSchema } = require('./../schemas/conceptosOperacion.schema');
 const authenticateJWT  = require('./../middlewares/authenticate.handler');
 
 const router = express.Router();
-const service = new MretencionesService();
+const service = new CoperacionService();
 
 router.get('/',
   authenticateJWT,
   async (req, res, next) => {
   try {
-    const vigente = req.headers.vigente;
-    const tipoPersona = req.headers.tipo_persona;
-    const mRetenciones = await service.find(vigente, tipoPersona);
-    res.json(mRetenciones);
+    const conceptos = await service.find();
+    res.json(conceptos);
   } catch (error) {
     next(error);
   }
@@ -23,12 +21,12 @@ router.get('/',
 
 router.get('/:id',
   authenticateJWT,
-  validatorHandler(getMretencionesSchema, 'params'),
+  validatorHandler(getCoperacionSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const mRetencion = await service.findOne(id);
-      res.json(mRetencion);
+      const concepto = await service.findOne(id);
+      res.json(concepto);
     } catch (error) {
       next(error);
     }
@@ -37,12 +35,12 @@ router.get('/:id',
 
 router.post('/',
   authenticateJWT,
-  validatorHandler(createMretencionesSchema, 'body'),
+  validatorHandler(createCoperacionSchema, 'body'),
   async (req, res, next) => {
     try {
       const body = req.body;
-      const newMretencion = await service.create(body);
-      res.status(201).json(newMretencion);
+      const newConcepto = await service.create(body);
+      res.status(201).json(newConcepto);
     } catch (error) {
       next(error);
     }
@@ -51,14 +49,14 @@ router.post('/',
 
 router.put('/:id',
   authenticateJWT,
-  validatorHandler(getMretencionesSchema, 'params'),
-  validatorHandler(updateMretencionesSchema, 'body'),
+  validatorHandler(getCoperacionSchema, 'params'),
+  validatorHandler(updateCoperacionSchema, 'body'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
       const body = req.body;
-      const mRetencion = await service.update(id, body);
-      res.json(mRetencion);
+      const concepto = await service.update(id, body);
+      res.json(concepto);
     } catch (error) {
       next(error);
     }
@@ -67,7 +65,7 @@ router.put('/:id',
 
 router.delete('/:id',
   authenticateJWT,
-  validatorHandler(getMretencionesSchema, 'params'),
+  validatorHandler(getCoperacionSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
