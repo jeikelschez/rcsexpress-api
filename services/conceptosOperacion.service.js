@@ -13,8 +13,13 @@ class CoperacionService {
     return newConcepto;
   }
 
-  async find() {
+  async find(tipo) {
+    let params = {};
+
+    if(tipo) params.tipo = tipo;
+
     const conceptos = await models.Coperacion.findAll({
+      where: params,
       include: ['tipos'],
       attributes: {
         include: [

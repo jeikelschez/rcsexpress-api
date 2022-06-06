@@ -2169,6 +2169,17 @@
         "tags": ["Conceptos_Operacion"],
         "summary": "Obtener todos los Conceptos de Operacion",
         "description": "API para Obtener todos los conceptos de operacion del sistema",
+        "parameters": [
+          {
+            "name": "tipo",
+            "in": "header",
+            "description": "Tipo de Concepto",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
