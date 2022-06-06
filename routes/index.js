@@ -27,6 +27,7 @@ const FposRouter = require('./fpos.router');
 const MretencionesRouter = require('./maestroRetenciones.router');
 const CoperacionRouter = require('./conceptosOperacion.router');
 const CfacturacionRouter = require('./conceptosFacturacion.router');
+const EmpleadosRouter = require('./empleados.router');
 
 function routerApi(app) {
   const router = express.Router();
@@ -57,6 +58,7 @@ function routerApi(app) {
   router.use('/mretenciones', MretencionesRouter);
   router.use('/coperacion', CoperacionRouter);
   router.use('/cfacturacion', CfacturacionRouter);
+  router.use('/empleados', EmpleadosRouter);
   router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 

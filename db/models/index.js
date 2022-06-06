@@ -24,6 +24,7 @@ const { Mretenciones, MretencionesSchema } = require('./maestroRetenciones.model
 const { Coperacion, CoperacionSchema } = require('./conceptosOperacion.model');
 const { Cfacturacion, CfacturacionSchema } = require('./conceptosFacturacion.model');
 const { Tipos, TiposSchema } = require('./tipos.model');
+const { Empleados, EmpleadosSchema } = require('./empleados.model');
 
 function setupModels(sequelize) {
   Bancos.init(BancosSchema, Bancos.config(sequelize));
@@ -52,6 +53,7 @@ function setupModels(sequelize) {
   Coperacion.init(CoperacionSchema, Coperacion.config(sequelize));
   Cfacturacion.init(CfacturacionSchema, Cfacturacion.config(sequelize));
   Tipos.init(TiposSchema, Tipos.config(sequelize));
+  Empleados.init(EmpleadosSchema, Empleados.config(sequelize));
 
   Paises.associate(sequelize.models);
   Estados.associate(sequelize.models);
