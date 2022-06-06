@@ -2,7 +2,7 @@ const { Model, DataTypes, Sequelize } = require('sequelize');
 
 const { TIPOS_TABLE } = require('./tipos.model');
 
-const COPERACION_TABLE = 'conceptos_por_operacion';
+const COPERACION_TABLE = 'conceptos_operacion';
 
 const CoperacionSchema = {
   id: {
@@ -35,6 +35,7 @@ class Coperacion extends Model {
 
   static associate(models) {
     this.belongsTo(models.Tipos, { foreignKey: 'tipo', as: 'tipos' });
+    this.hasMany(models.Cfacturacion, { foreignKey: 'cod_concepto', as: 'conceptos' });
   }
 
   static config(sequelize) {
