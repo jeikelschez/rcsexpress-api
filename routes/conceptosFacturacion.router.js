@@ -12,8 +12,8 @@ router.get('/',
   authenticateJWT,
   async (req, res, next) => {
   try {
-    const tipo = req.headers.tipo;
-    const conceptos = await service.find(tipo);
+    const cod_concepto = req.headers.cod_concepto;
+    const conceptos = await service.find(cod_concepto);
     res.json(conceptos);
   } catch (error) {
     next(error);

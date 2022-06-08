@@ -2177,6 +2177,17 @@
         "tags": ["Conceptos_Facturacion"],
         "summary": "Obtener todos los Conceptos de Facturacion",
         "description": "API para Obtener todos los conceptos de facturacion del sistema",
+        "parameters": [
+          {
+            "name": "cod_concepto",
+            "in": "header",
+            "description": "Codigo de Concepto",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",

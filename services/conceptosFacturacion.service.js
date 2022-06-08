@@ -11,8 +11,13 @@ class CfacturacionService {
     return newConcepto;
   }
 
-  async find(tipo) {
+  async find(cod_concepto) {
+    let params = {};
+
+    if(cod_concepto) params.cod_concepto = cod_concepto;
+
     const conceptos = await models.Cfacturacion.findAll({
+      where: params,
       include: ['conceptos']
     });
     return conceptos;
