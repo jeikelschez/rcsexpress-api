@@ -44,17 +44,7 @@ class AgenciasService {
 
   async findOneUsuarios(id) {
     const agencia = await models.Agencias.findByPk(id, {
-      include: [
-        {
-          association: 'usuarios',
-          include: ['roles'],
-          attributes: {
-            include: [
-              [Sequelize.literal(caseStatus), 'estatus_desc']
-            ]
-          }
-        }
-      ]
+      include: ['usuarios']
     });
     if (!agencia) {
       throw boom.notFound('Agencia no existe');
@@ -64,12 +54,7 @@ class AgenciasService {
 
   async findOneRoles(id) {
     const agencia = await models.Agencias.findByPk(id, {
-      include: ['roles'],
-      attributes: {
-        include: [
-          [Sequelize.literal(caseStatus), 'estatus_desc']
-        ]
-      }
+      include: ['roles']
     });
     if (!agencia) {
       throw boom.notFound('Agencia no existe');
@@ -79,12 +64,7 @@ class AgenciasService {
 
   async findOneAgentes(id) {
     const agencia = await models.Agencias.findByPk(id, {
-      include: ['agentes'],
-      attributes: {
-        include: [
-          [Sequelize.literal(caseStatus), 'estatus_desc']
-        ]
-      }
+      include: ['agentes']
     });
     if (!agencia) {
       throw boom.notFound('Agencia no existe');
@@ -94,12 +74,7 @@ class AgenciasService {
 
   async findOneZonas(id) {
     const agencia = await models.Agencias.findByPk(id, {
-      include: ['zonas'],
-      attributes: {
-        include: [
-          [Sequelize.literal(caseStatus), 'estatus_desc']
-        ]
-      }
+      include: ['zonas']
     });
     if (!agencia) {
       throw boom.notFound('Agencia no existe');
@@ -109,12 +84,7 @@ class AgenciasService {
 
   async findOneClientes(id) {
     const agencia = await models.Agencias.findByPk(id, {
-      include: ['clientes'],
-      attributes: {
-        include: [
-          [Sequelize.literal(caseStatus), 'estatus_desc']
-        ]
-      }
+      include: ['clientes']
     });
     if (!agencia) {
       throw boom.notFound('Agencia no existe');
