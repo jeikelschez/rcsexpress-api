@@ -2,7 +2,7 @@ const boom = require('@hapi/boom');
 
 const { models, Sequelize }= require('./../libs/sequelize');
 
-const caseActivo = '(CASE flag_activo WHEN "A" THEN "ACTIVO" ELSE "INACTIVO" END)';
+const caseActivo = '(CASE flag_activo WHEN "1" THEN "ACTIVO" ELSE "INACTIVO" END)';
 
 class AyudantesService {
 
