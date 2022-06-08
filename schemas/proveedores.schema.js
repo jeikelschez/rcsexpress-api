@@ -13,7 +13,7 @@ const email_proveedor = Joi.string().email();
 const condicion_pago = Joi.number().integer();
 const observacion = Joi.string().min(3).max(500);
 const tipo_servicio = Joi.string().max(2);
-const cod_tipo_retencion = Joi.string().max(2);
+const cod_tipo_retencion = Joi.number().integer();
 const tipo_persona = Joi.string().max(1);
 const flag_activo = Joi.string().max(1);
 
