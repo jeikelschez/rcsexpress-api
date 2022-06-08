@@ -79,17 +79,12 @@ class AgenciasService {
 
   async findOneAgentes(id) {
     const agencia = await models.Agencias.findByPk(id, {
-      include: [
-        {
-          association: 'agentes',
-          attributes: {
-            include: [
-              [Sequelize.literal(caseActivo), 'activo_desc'],
-              [Sequelize.literal(caseTipo), 'tipo_desc']
-            ]
-          }
-        }
-      ]
+      include: ['agentes'],
+      attributes: {
+        include: [
+          [Sequelize.literal(caseStatus), 'estatus_desc']
+        ]
+      }
     });
     if (!agencia) {
       throw boom.notFound('Agencia no existe');
@@ -99,16 +94,12 @@ class AgenciasService {
 
   async findOneZonas(id) {
     const agencia = await models.Agencias.findByPk(id, {
-      include: [
-        {
-          association: 'zonas',
-          attributes: {
-            include: [
-              [Sequelize.literal(caseTipoZona), 'tipo_desc']
-            ]
-          }
-        }
-      ]
+      include: ['zonas'],
+      attributes: {
+        include: [
+          [Sequelize.literal(caseStatus), 'estatus_desc']
+        ]
+      }
     });
     if (!agencia) {
       throw boom.notFound('Agencia no existe');
@@ -118,18 +109,12 @@ class AgenciasService {
 
   async findOneClientes(id) {
     const agencia = await models.Agencias.findByPk(id, {
-      include: [
-        {
-          association: 'clientes',
-          attributes: {
-            include: [
-              [Sequelize.literal(caseActivo), 'activo_desc'],
-              [Sequelize.literal(caseTipoPersona), 'tipo_desc'],
-              [Sequelize.literal(caseModalidad), 'modalidad_desc']
-            ]
-          }
-        }
-      ]
+      include: ['clientes'],
+      attributes: {
+        include: [
+          [Sequelize.literal(caseStatus), 'estatus_desc']
+        ]
+      }
     });
     if (!agencia) {
       throw boom.notFound('Agencia no existe');
