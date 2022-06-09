@@ -3,6 +3,14 @@ const boom = require('@hapi/boom');
 const { models, Sequelize }= require('./../libs/sequelize');
 
 const caseStatus = '(CASE estatus WHEN "A" THEN "ACTIVA" ELSE "INACTIVA" END)';
+const caseActivo = '(CASE flag_activo WHEN "1" THEN "ACTIVO" ELSE "INACTIVO" END)';
+const caseTipo = '(CASE tipo_agente WHEN "RP" THEN "RESPONSABLE DE AGENCIA" WHEN "CR" THEN "COURIERS" ELSE "" END)';
+const caseActivoUsuario = '(CASE activo WHEN "1" THEN "ACTIVO" ELSE "INACTIVO" END)';
+const caseTipoZona = '(CASE tipo_zona WHEN "U" THEN "URBANA" ELSE "EXTRAURBANA" END)';
+
+const caseActivoClientes = '(CASE flag_activo WHEN "1" THEN "ACTIVO" ELSE "INACTIVO" END)';
+const caseTipoClientes = '(CASE tipo_persona WHEN "N" THEN "NATURAL" ELSE "JURIDICA" END)';
+const caseModalidad = '(CASE modalidad_pago WHEN "CO" THEN "CONTADO" ELSE "CREDITO" END)';
 
 class AgenciasService {
 
@@ -44,7 +52,17 @@ class AgenciasService {
 
   async findOneUsuarios(id) {
     const agencia = await models.Agencias.findByPk(id, {
-      include: ['usuarios']
+      include: [
+        {
+          association: 'usuarios',
+          include: ['roles'],
+          attributes: {
+            include: [
+              [Sequelize.literal(caseActivoUsuario), 'estatus_desc']
+            ]
+          }
+        }
+      ]
     });
     if (!agencia) {
       throw boom.notFound('Agencia no existe');
@@ -54,7 +72,12 @@ class AgenciasService {
 
   async findOneRoles(id) {
     const agencia = await models.Agencias.findByPk(id, {
-      include: ['roles']
+      include: ['roles'],
+      attributes: {
+        include: [
+          [Sequelize.literal(caseStatus), 'activo_desc']
+        ]
+      }
     });
     if (!agencia) {
       throw boom.notFound('Agencia no existe');
@@ -64,7 +87,17 @@ class AgenciasService {
 
   async findOneAgentes(id) {
     const agencia = await models.Agencias.findByPk(id, {
-      include: ['agentes']
+      include: [
+        {
+          association: 'agentes',
+          attributes: {
+            include: [
+              [Sequelize.literal(caseActivo), 'activo_desc'],
+              [Sequelize.literal(caseTipo), 'tipo_desc']
+            ]
+          }
+        }
+      ]
     });
     if (!agencia) {
       throw boom.notFound('Agencia no existe');
@@ -74,7 +107,16 @@ class AgenciasService {
 
   async findOneZonas(id) {
     const agencia = await models.Agencias.findByPk(id, {
-      include: ['zonas']
+      include: [
+        {
+          association: 'zonas',
+          attributes: {
+            include: [
+              [Sequelize.literal(caseTipoZona), 'tipo_desc']
+            ]
+          }
+        }
+      ]
     });
     if (!agencia) {
       throw boom.notFound('Agencia no existe');
@@ -84,7 +126,18 @@ class AgenciasService {
 
   async findOneClientes(id) {
     const agencia = await models.Agencias.findByPk(id, {
-      include: ['clientes']
+      include: [
+        {
+          association: 'clientes',
+          attributes: {
+            include: [
+              [Sequelize.literal(caseActivoClientes), 'activo_desc'],
+              [Sequelize.literal(caseTipoClientes), 'tipo_desc'],
+              [Sequelize.literal(caseModalidad), 'modalidad_desc']
+            ]
+          }
+        }
+      ]
     });
     if (!agencia) {
       throw boom.notFound('Agencia no existe');
