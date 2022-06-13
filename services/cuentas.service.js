@@ -14,8 +14,11 @@ class CuentasService {
     return newCuenta;
   }
 
-  async find() {
+  async find(banco) {
+    let params = {};
+    if(banco) params.cod_banco = banco;
     const cuentas = await models.Cuentas.findAll({
+      where: params,
       attributes: {
         include: [
           [Sequelize.literal(caseTipo), 'tipo_desc'],

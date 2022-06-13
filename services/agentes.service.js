@@ -14,8 +14,11 @@ class ObjetosService {
     return newAgente;
   }
 
-  async find() {
+  async find(agencia) {
+    let params = {};
+    if(agencia) params.cod_agencia = agencia;
     const agentes = await models.Agentes.findAll({
+      where: params,
       attributes: {
         include: [
           [Sequelize.literal(caseActivo), 'activo_desc'],

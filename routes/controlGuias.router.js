@@ -1,20 +1,21 @@
 const express = require('express');
 
-const CiudadesService = require('./../services/ciudades.service');
+const CguiasService = require('./../services/controlGuias.service');
 const validatorHandler = require('./../middlewares/validator.handler');
-const { createCiudadesSchema, updateCiudadesSchema, getCiudadesSchema } = require('./../schemas/ciudades.schema');
+const { createCguiasSchema, updateCguiasSchema, getCguiasSchema } = require('./../schemas/controlGuias.schema');
 const authenticateJWT  = require('./../middlewares/authenticate.handler');
 
 const router = express.Router();
-const service = new CiudadesService();
+const service = new CguiasService();
 
 router.get('/',
   authenticateJWT,
   async (req, res, next) => {
   try {
-    const estado = req.headers.estado;
-    const ciudades = await service.find(estado);
-    res.json(ciudades);
+    const agencia = req.headers.agencia;
+    const tipo = req.headers.tipo;
+    const cguias = await service.find(agencia, tipo);
+    res.json(cguias);
   } catch (error) {
     next(error);
   }
@@ -22,12 +23,12 @@ router.get('/',
 
 router.get('/:id',
   authenticateJWT,
-  validatorHandler(getCiudadesSchema, 'params'),
+  validatorHandler(getCguiasSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const ciudad = await service.findOne(id);
-      res.json(ciudad);
+      const cguia = await service.findOne(id);
+      res.json(cguia);
     } catch (error) {
       next(error);
     }
@@ -36,12 +37,12 @@ router.get('/:id',
 
 router.post('/',
   authenticateJWT,
-  validatorHandler(createCiudadesSchema, 'body'),
+  validatorHandler(createCguiasSchema, 'body'),
   async (req, res, next) => {
     try {
       const body = req.body;
-      const newCiudad = await service.create(body);
-      res.status(201).json(newCiudad);
+      const newCguia = await service.create(body);
+      res.status(201).json(newCguia);
     } catch (error) {
       next(error);
     }
@@ -50,14 +51,14 @@ router.post('/',
 
 router.put('/:id',
   authenticateJWT,
-  validatorHandler(getCiudadesSchema, 'params'),
-  validatorHandler(updateCiudadesSchema, 'body'),
+  validatorHandler(getCguiasSchema, 'params'),
+  validatorHandler(updateCguiasSchema, 'body'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
       const body = req.body;
-      const ciudad = await service.update(id, body);
-      res.json(ciudad);
+      const cguia = await service.update(id, body);
+      res.json(cguia);
     } catch (error) {
       next(error);
     }
@@ -66,7 +67,7 @@ router.put('/:id',
 
 router.delete('/:id',
   authenticateJWT,
-  validatorHandler(getCiudadesSchema, 'params'),
+  validatorHandler(getCguiasSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;

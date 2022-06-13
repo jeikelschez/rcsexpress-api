@@ -1,20 +1,21 @@
 const express = require('express');
 
-const CiudadesService = require('./../services/ciudades.service');
+const CorrelativoService = require('./../services/controlCorrelativo.service');
 const validatorHandler = require('./../middlewares/validator.handler');
-const { createCiudadesSchema, updateCiudadesSchema, getCiudadesSchema } = require('./../schemas/ciudades.schema');
+const { createCorrelativoSchema, updateCorrelativoSchema, getCorrelativoSchema } = require('./../schemas/controlCorrelativo.schema');
 const authenticateJWT  = require('./../middlewares/authenticate.handler');
 
 const router = express.Router();
-const service = new CiudadesService();
+const service = new CorrelativoService();
 
 router.get('/',
   authenticateJWT,
   async (req, res, next) => {
   try {
-    const estado = req.headers.estado;
-    const ciudades = await service.find(estado);
-    res.json(ciudades);
+    const agencia = req.headers.agencia;
+    const tipo = req.headers.tipo;
+    const correlativos = await service.find(agencia, tipo);
+    res.json(correlativos);
   } catch (error) {
     next(error);
   }
@@ -22,12 +23,12 @@ router.get('/',
 
 router.get('/:id',
   authenticateJWT,
-  validatorHandler(getCiudadesSchema, 'params'),
+  validatorHandler(getCorrelativoSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const ciudad = await service.findOne(id);
-      res.json(ciudad);
+      const correlativo = await service.findOne(id);
+      res.json(correlativo);
     } catch (error) {
       next(error);
     }
@@ -36,12 +37,12 @@ router.get('/:id',
 
 router.post('/',
   authenticateJWT,
-  validatorHandler(createCiudadesSchema, 'body'),
+  validatorHandler(createCorrelativoSchema, 'body'),
   async (req, res, next) => {
     try {
       const body = req.body;
-      const newCiudad = await service.create(body);
-      res.status(201).json(newCiudad);
+      const newCorrelativo = await service.create(body);
+      res.status(201).json(newCorrelativo);
     } catch (error) {
       next(error);
     }
@@ -50,14 +51,14 @@ router.post('/',
 
 router.put('/:id',
   authenticateJWT,
-  validatorHandler(getCiudadesSchema, 'params'),
-  validatorHandler(updateCiudadesSchema, 'body'),
+  validatorHandler(getCorrelativoSchema, 'params'),
+  validatorHandler(updateCorrelativoSchema, 'body'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
       const body = req.body;
-      const ciudad = await service.update(id, body);
-      res.json(ciudad);
+      const correlativo = await service.update(id, body);
+      res.json(correlativo);
     } catch (error) {
       next(error);
     }
@@ -66,7 +67,7 @@ router.put('/:id',
 
 router.delete('/:id',
   authenticateJWT,
-  validatorHandler(getCiudadesSchema, 'params'),
+  validatorHandler(getCorrelativoSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;

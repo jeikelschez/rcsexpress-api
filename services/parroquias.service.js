@@ -6,8 +6,12 @@ class ParroquiasService {
 
   constructor() {}
 
-  async find() {
-    const parroquias = await models.Parroquias.findAll();
+  async find(municipio) {
+    let params = {};
+    if(municipio) params.cod_municipio = municipio;
+    const parroquias = await models.Parroquias.findAll({
+      where: params
+    });
     return parroquias;
   }
 

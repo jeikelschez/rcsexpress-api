@@ -25,6 +25,8 @@ const { Coperacion, CoperacionSchema } = require('./conceptosOperacion.model');
 const { Cfacturacion, CfacturacionSchema } = require('./conceptosFacturacion.model');
 const { Tipos, TiposSchema } = require('./tipos.model');
 const { Empleados, EmpleadosSchema } = require('./empleados.model');
+const { Correlativo, CorrelativoSchema } = require('./controlCorrelativo.model');
+const { Cguias, CguiasSchema } = require('./controlGuias.model');
 
 function setupModels(sequelize) {
   Bancos.init(BancosSchema, Bancos.config(sequelize));
@@ -54,6 +56,8 @@ function setupModels(sequelize) {
   Cfacturacion.init(CfacturacionSchema, Cfacturacion.config(sequelize));
   Tipos.init(TiposSchema, Tipos.config(sequelize));
   Empleados.init(EmpleadosSchema, Empleados.config(sequelize));
+  Correlativo.init(CorrelativoSchema, Correlativo.config(sequelize));
+  Cguias.init(CguiasSchema, Cguias.config(sequelize));
 
   Paises.associate(sequelize.models);
   Estados.associate(sequelize.models);
@@ -75,6 +79,8 @@ function setupModels(sequelize) {
   Coperacion.associate(sequelize.models);
   Cfacturacion.associate(sequelize.models);
   Tipos.associate(sequelize.models);
+  Correlativo.associate(sequelize.models);
+  Cguias.associate(sequelize.models);
 
   Usuarios.hooks(sequelize.models);
 }

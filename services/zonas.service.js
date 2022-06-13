@@ -13,8 +13,11 @@ class ZonasService {
     return newZona;
   }
 
-  async find() {
+  async find(agencia) {
+    let params = {};
+    if(agencia) params.cod_agencia = agencia;
     const zonas = await models.Zonas.findAll({
+      where: params,
       attributes: {
         include: [
           [Sequelize.literal(caseTipo), 'tipo_desc']

@@ -12,7 +12,8 @@ router.get('/',
   authenticateJWT,
   async (req, res, next) => {
   try {
-    const estados = await service.find();
+    const pais = req.headers.pais;
+    const estados = await service.find(pais);
     res.json(estados);
   } catch (error) {
     next(error);
@@ -26,48 +27,6 @@ router.get('/:id',
     try {
       const { id } = req.params;
       const estado = await service.findOne(id);
-      res.json(estado);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-router.get('/:id/ciudades',
-  authenticateJWT,
-  validatorHandler(getEstadosSchema, 'params'),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const estado = await service.findOneCiudades(id);
-      res.json(estado);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-router.get('/:id/municipios',
-  authenticateJWT,
-  validatorHandler(getEstadosSchema, 'params'),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const estado = await service.findOneMunicipios(id);
-      res.json(estado);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-router.get('/:id/localidades',
-  authenticateJWT,
-  validatorHandler(getEstadosSchema, 'params'),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const estado = await service.findOneLocalidades(id);
       res.json(estado);
     } catch (error) {
       next(error);

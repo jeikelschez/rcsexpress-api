@@ -28,6 +28,9 @@ const MretencionesRouter = require('./maestroRetenciones.router');
 const CoperacionRouter = require('./conceptosOperacion.router');
 const CfacturacionRouter = require('./conceptosFacturacion.router');
 const EmpleadosRouter = require('./empleados.router');
+const CorrelativoRouter = require('./controlCorrelativo.router');
+const TiposRouter = require('./tipos.router');
+const CguiasRouter = require('./controlGuias.router');
 
 function routerApi(app) {
   const router = express.Router();
@@ -59,6 +62,9 @@ function routerApi(app) {
   router.use('/coperacion', CoperacionRouter);
   router.use('/cfacturacion', CfacturacionRouter);
   router.use('/empleados', EmpleadosRouter);
+  router.use('/correlativo', CorrelativoRouter);
+  router.use('/tipos', TiposRouter);
+  router.use('/cguias', CguiasRouter);
   router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 

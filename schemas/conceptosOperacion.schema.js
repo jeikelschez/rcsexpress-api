@@ -2,7 +2,7 @@ const Joi = require('joi');
 
 const id = Joi.number().integer();
 const desc_concepto = Joi.string().min(3).max(100);
-const tipo = Joi.string().max(3);
+const tipo = Joi.number().integer();
 const afecta_estado = Joi.string().max(1);
 
 const createCoperacionSchema = Joi.object({

@@ -1,54 +1,32 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 
 const { AGENCIAS_TABLE } = require('./agencias.model');
+const { TIPOS_TABLE } = require('./tipos.model');
 
-const AGENTES_TABLE = 'agentes';
+const CORRELATIVO_TABLE = 'control_correlativo';
 
-const AgentesSchema = {
+const CorrelativoSchema = {
   id: {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
     type: DataTypes.INTEGER,
   },
-  nb_agente: {
-    type: DataTypes.STRING,
+  control_inicio: {
     allowNull: false,
-  },
-  persona_responsable: {
-    type: DataTypes.STRING,
-  },
-  dir_agente: {
-    type: DataTypes.STRING,
-  },
-  tlf_agente: {
-    type: DataTypes.STRING,
-  },
-  fax_agente: {
-    type: DataTypes.STRING,
-  },
-  cel_agente: {
-    type: DataTypes.STRING,
-  },
-  email_web: {
-    type: DataTypes.STRING,
-  },
-  tipo_agente: {
-    type: DataTypes.STRING,
-  },
-  porc_comision_venta: {
     type: DataTypes.DECIMAL,
   },
-  porc_comision_entrega: {
+  control_final: {
+    allowNull: false,
     type: DataTypes.DECIMAL,
   },
-  porc_comision_seguro: {
+  ult_doc_referencia: {
     type: DataTypes.DECIMAL,
   },
-  rif_ci_agente: {
+  estatus_lote: {
     type: DataTypes.STRING,
   },
-  flag_activo: {
+  serie_doc: {
     type: DataTypes.STRING,
   },
   cod_agencia: {
@@ -60,24 +38,34 @@ const AgentesSchema = {
     },
     onUpdate: 'CASCADE',
     onDelete: 'SET NULL'
+  },
+  tipo: {
+    allowNull: false,
+    type: DataTypes.INTEGER,
+    references: {
+      model: TIPOS_TABLE,
+      key: 'id'
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL'
   }
 }
 
-class Agentes extends Model {
+class Correlativo extends Model {
 
   static associate(models) {
     this.belongsTo(models.Agencias, { foreignKey: 'cod_agencia', as: 'agencias' });
-    this.hasMany(models.Cguias, { foreignKey: 'cod_agencia', as: 'control_guias' });
+    this.belongsTo(models.Tipos, { foreignKey: 'tipo', as: 'tipos' });
   }
 
   static config(sequelize) {
     return {
       sequelize,
-      tableName: AGENTES_TABLE,
-      modelName: 'Agentes',
+      tableName: CORRELATIVO_TABLE,
+      modelName: 'Correlativo',
       timestamps: false
     }
   }
 }
 
-module.exports = { Agentes, AgentesSchema, AGENTES_TABLE };
+module.exports = { Correlativo, CorrelativoSchema, CORRELATIVO_TABLE };

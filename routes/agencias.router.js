@@ -12,7 +12,8 @@ router.get('/',
   authenticateJWT,
   async (req, res, next) => {
   try {
-    const agencias = await service.find();
+    const ciudad = req.headers.ciudad;
+    const agencias = await service.find(ciudad);
     res.json(agencias);
   } catch (error) {
     next(error);
@@ -26,76 +27,6 @@ router.get('/:id',
     try {
       const { id } = req.params;
       const agencia = await service.findOne(id);
-      res.json(agencia);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-router.get('/:id/usuarios',
-  authenticateJWT,
-  validatorHandler(getAgenciasSchema, 'params'),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const agencia = await service.findOneUsuarios(id);
-      res.json(agencia);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-router.get('/:id/roles',
-  authenticateJWT,
-  validatorHandler(getAgenciasSchema, 'params'),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const agencia = await service.findOneRoles(id);
-      res.json(agencia);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-router.get('/:id/agentes',
-  authenticateJWT,
-  validatorHandler(getAgenciasSchema, 'params'),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const agencia = await service.findOneAgentes(id);
-      res.json(agencia);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-router.get('/:id/zonas',
-  authenticateJWT,
-  validatorHandler(getAgenciasSchema, 'params'),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const agencia = await service.findOneZonas(id);
-      res.json(agencia);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-router.get('/:id/clientes',
-  authenticateJWT,
-  validatorHandler(getAgenciasSchema, 'params'),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const agencia = await service.findOneClientes(id);
       res.json(agencia);
     } catch (error) {
       next(error);

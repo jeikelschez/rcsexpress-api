@@ -51,8 +51,16 @@
       "description": "API para Manejar el Maestro de Conceptos de Facturacion"
     },
     {
+      "name": "Control_Guias",
+      "description": "API para Manejar el Control de Guias"
+    },
+    {
       "name": "Conceptos_Operacion",
       "description": "API para Manejar el Maestro de Conceptos de Operacion"
+    },
+    {
+      "name": "Control_Correlativo",
+      "description": "API para Manejar el Control Correlativo"
     },
     {
       "name": "Cuentas",
@@ -115,6 +123,10 @@
       "description": "API para Manejar las Tarifas de la Organizacion"
     },
     {
+      "name": "Tipos",
+      "description": "API para Manejar los Topos de la Organizacion"
+    },
+    {
       "name": "Unidades",
       "description": "API para Manejar las Unidades de Transporte de la Organizacion"
     },
@@ -133,6 +145,17 @@
         "tags": ["Agencias"],
         "summary": "Obtener todas las agencias",
         "description": "API para Obtener todas las agencias del sistema",
+        "parameters": [
+          {
+            "name": "ciudad",
+            "in": "header",
+            "description": "Codigo de la Ciudad",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -412,291 +435,22 @@
         }
       }
     },
-    "/agencias/{id}/agentes": {
-      "get": {
-        "tags": ["Agencias"],
-        "summary": "Obtener Agencia con sus Agentes por su Id",
-        "description": "API para Retornar una Agencia con sus Agentes por su ID específico",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Codigo de la Agencia",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Agencias",
-                  "properties": {
-                    "usuarios": {
-                      "$ref": "#/components/schemas/Agentes"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/agencias/{id}/usuarios": {
-      "get": {
-        "tags": ["Agencias"],
-        "summary": "Obtener Agencia con sus Usuarios por su Id",
-        "description": "API para Retornar una Agencia con sus Usuarios por su ID específico",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Codigo de la Agencia",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Agencias",
-                  "properties": {
-                    "usuarios": {
-                      "$ref": "#/components/schemas/Usuarios",
-                      "properties": {
-                        "roles": {
-                          "$ref": "#/components/schemas/Roles"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/agencias/{id}/roles": {
-      "get": {
-        "tags": ["Agencias"],
-        "summary": "Obtener Agencia con sus Roles por su Id",
-        "description": "API para Retornar una Agencia con sus Roles por su ID específico",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Codigo de la Agencia",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Agencias",
-                  "properties": {
-                    "roles": {
-                      "$ref": "#/components/schemas/Roles"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/agencias/{id}/zonas": {
-      "get": {
-        "tags": ["Agencias"],
-        "summary": "Obtener Agencia con sus Zonas por su Id",
-        "description": "API para Retornar una Agencia con sus Zonas por su ID específico",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Codigo de la Agencia",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Agencias",
-                  "properties": {
-                    "roles": {
-                      "$ref": "#/components/schemas/Zonas"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/agencias/{id}/clientes": {
-      "get": {
-        "tags": ["Agencias"],
-        "summary": "Obtener Agencia con sus Clientes por su Id",
-        "description": "API para Retornar una Agencia con sus Clientes por su ID específico",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Codigo de la Agencia",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Agencias",
-                  "properties": {
-                    "roles": {
-                      "$ref": "#/components/schemas/Clientes"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/agentes": {
       "get": {
         "tags": ["Agentes"],
         "summary": "Obtener todos los agentes",
         "description": "API para Obtener todos los agentes del sistema",
+        "parameters": [
+          {
+            "name": "agencia",
+            "in": "header",
+            "description": "Codigo de la Agencia",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -1514,66 +1268,22 @@
         }
       }
     },
-    "/bancos/{id}/cuentas": {
-      "get": {
-        "tags": ["Bancos"],
-        "summary": "Obtener Banco con sus Cuentas por su Id",
-        "description": "API para Retornar un Banco con sus Cuentas por su ID específico",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Codigo del Banco",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Bancos",
-                  "properties": {
-                    "cuentas": {
-                      "$ref": "#/components/schemas/Cuentas"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/ciudades": {
       "get": {
         "tags": ["Ciudades"],
         "summary": "Obtener todos las ciudades",
         "description": "API para Obtener todos las ciudades del sistema",
+        "parameters": [
+          {
+            "name": "estado",
+            "in": "header",
+            "description": "Codigo del Estado",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -1843,66 +1553,22 @@
         }
       }
     },
-    "/ciudades/{id}/agencias": {
-      "get": {
-        "tags": ["Ciudades"],
-        "summary": "Obtener Ciudad con sus Agencias por su Id",
-        "description": "API para Retornar una Ciudad con sus Agencias por su ID específico",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Codigo de la Ciudad",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Ciudades",
-                  "properties": {
-                    "agencias": {
-                      "$ref": "#/components/schemas/Agencias"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/clientes": {
       "get": {
         "tags": ["Clientes"],
         "summary": "Obtener todos los clientes",
         "description": "API para Obtener todos los clientes del sistema",
+        "parameters": [
+          {
+            "name": "agencia",
+            "in": "header",
+            "description": "Codigo de la Agencia",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -2467,6 +2133,300 @@
         }
       }
     },
+    "/cguias": {
+      "get": {
+        "tags": ["Control_Guias"],
+        "summary": "Obtener todo el Control de Guias",
+        "description": "API para Obtener todo el Control de Guias del sistema",
+        "parameters": [
+          {
+            "name": "agencia",
+            "in": "header",
+            "description": "Codigo de la Agencia",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "tipo",
+            "in": "header",
+            "description": "Tipo Guia",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Control_Guias"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Control_Guias"],
+        "summary": "Crear Control de Guias",
+        "description": "API para Crear un nuevo Control de Guias",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Control_Guias"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Control_Guias"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cguias/{id}": {
+      "get": {
+        "tags": ["Control_Guias"],
+        "summary": "Obtener Control de Guias por su Id",
+        "description": "API para Retornar un Control de Guias por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Control de Guias",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Control_Guias"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Control_Guias"],
+        "summary": "Actualizar Control de Guias",
+        "description": "API para Actualizar un Control de Guias por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Control de Guias",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Control_Guias"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Control_Guias"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Control_Guias"],
+        "summary": "Borrar Control de Guias",
+        "description": "API para Borrar un Control de Guias por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Control de Guias",
+            "required": true, "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Control_Guias/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/coperacion": {
       "get": {
         "tags": ["Conceptos_Operacion"],
@@ -2479,7 +2439,7 @@
             "description": "Tipo de Concepto",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           }
         ],
@@ -2762,11 +2722,316 @@
         }
       }
     },
+    "/correlativo": {
+      "get": {
+        "tags": ["Control_Correlativo"],
+        "summary": "Obtener todo el Control Correlativo",
+        "description": "API para Obtener todo el Control Correlativo del sistema",
+        "parameters": [
+          {
+            "name": "agencia",
+            "in": "header",
+            "description": "Codigo de la Agencia",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "tipo",
+            "in": "header",
+            "description": "Tipo Control",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Control_Correlativo"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Control_Correlativo"],
+        "summary": "Crear Control Correlativo",
+        "description": "API para Crear un nuevo Control Correlativo",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Control_Correlativo"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Control_Correlativo"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/correlativo/{id}": {
+      "get": {
+        "tags": ["Control_Correlativo"],
+        "summary": "Obtener Control Correlativo por su Id",
+        "description": "API para Retornar un Control Correlativo por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Control Correlativo",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Control_Correlativo"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Control_Correlativo"],
+        "summary": "Actualizar Control Correlativo",
+        "description": "API para Actualizar un Control Correlativo por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Control Correlativo",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Control_Correlativo"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Control_Correlativo"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Control_Correlativo"],
+        "summary": "Borrar Control Correlativo",
+        "description": "API para Borrar un Control Correlativo por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Control Correlativo",
+            "required": true, "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Control_Correlativo/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/cuentas": {
       "get": {
         "tags": ["Cuentas"],
         "summary": "Obtener todos las cuentas",
         "description": "API para Obtener todos las cuentas del sistema",
+        "parameters": [
+          {
+            "name": "banco",
+            "in": "header",
+            "description": "Codigo del Banco",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -3315,6 +3580,17 @@
         "tags": ["Estados"],
         "summary": "Obtener todos los estados",
         "description": "API para Obtener todos los estados del sistema",
+        "parameters": [
+          {
+            "name": "pais",
+            "in": "header",
+            "description": "Codigo del Pais",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -3557,171 +3833,6 @@
                     }
                   },
                   "type": "object"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/estados/{id}/ciudades": {
-      "get": {
-        "tags": ["Estados"],
-        "summary": "Obtener Estado con sus Ciudades por su Id",
-        "description": "API para Retornar un Estado con sus Ciudades por su ID específico",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Codigo del Estado",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Estados",
-                  "properties": {
-                    "ciudades": {
-                      "$ref": "#/components/schemas/Ciudades"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/estados/{id}/municipios": {
-      "get": {
-        "tags": ["Estados"],
-        "summary": "Obtener Estado con sus Municipios por su Id",
-        "description": "API para Retornar un Estado con sus Municipios por su ID específico",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Codigo del Estado",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Estados",
-                  "properties": {
-                    "ciudades": {
-                      "$ref": "#/components/schemas/Municipios"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/estados/{id}/localidades": {
-      "get": {
-        "tags": ["Estados"],
-        "summary": "Obtener Estado con sus Localidades por su Id",
-        "description": "API para Retornar un Estado con sus Localidades por su ID específico",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Codigo del Estado",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Estados",
-                  "properties": {
-                    "ciudades": {
-                      "$ref": "#/components/schemas/Localidades"
-                    }
-                  }
                 }
               }
             }
@@ -4028,6 +4139,17 @@
         "tags": ["Localidades"],
         "summary": "Obtener todos las localidades",
         "description": "API para Obtener todos las localidades del sistema",
+        "parameters": [
+          {
+            "name": "estado",
+            "in": "header",
+            "description": "Codigo del Estado",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -4401,6 +4523,17 @@
         "tags": ["Municipios"],
         "summary": "Obtener todos los municipios",
         "description": "API para Obtener todos los municipios del sistema",
+        "parameters": [
+          {
+            "name": "estado",
+            "in": "header",
+            "description": "Codigo del Estado",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -4448,61 +4581,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Municipios"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/municipios/{id}/parroquias": {
-      "get": {
-        "tags": ["Municipios"],
-        "summary": "Obtener Municipio con sus Parroquias por su Id",
-        "description": "API para Retornar un Municipio con sus Parroquias por su ID específico",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Codigo del Municipio",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Municipios",
-                  "properties": {
-                    "estados": {
-                      "$ref": "#/components/schemas/Parroquias"
-                    }
-                  }
                 }
               }
             }
@@ -5078,66 +5156,22 @@
         }
       }
     },
-    "/paises/{id}/estados": {
-      "get": {
-        "tags": ["Paises"],
-        "summary": "Obtener Pais con sus Estados por su Id",
-        "description": "API para Retornar un Pais con sus Estados por su ID específico",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Codigo del Pais",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Paises",
-                  "properties": {
-                    "estados": {
-                      "$ref": "#/components/schemas/Estados"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/parroquias": {
       "get": {
         "tags": ["Parroquias"],
         "summary": "Obtener todos las parroquias",
         "description": "API para Obtener todos las parroquias del sistema",
+        "parameters": [
+          {
+            "name": "municipio",
+            "in": "header",
+            "description": "Codigo del Municipio",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -5217,6 +5251,17 @@
         "tags": ["Permisos"],
         "summary": "Obtener todos los permisos",
         "description": "API para Obtener todos los permisos del sistema",
+        "parameters": [
+          {
+            "name": "rol",
+            "in": "header",
+            "description": "Codigo del Rol",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -6049,6 +6094,17 @@
         "tags": ["Roles"],
         "summary": "Obtener todos los roles",
         "description": "API para Obtener todos los roles del sistema",
+        "parameters": [
+          {
+            "name": "agencia",
+            "in": "header",
+            "description": "Codigo de la Agencia",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -6291,61 +6347,6 @@
                     }
                   },
                   "type": "object"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/roles/{id}/permisos": {
-      "get": {
-        "tags": ["Roles"],
-        "summary": "Obtener Rol con sus Permisos por su Id",
-        "description": "API para Retornar un Rol con sus Permisos por su ID específico",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Codigo del Rol",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Roles",
-                  "properties": {
-                    "permisos": {
-                      "$ref": "#/components/schemas/Permisos"
-                    }
-                  }
                 }
               }
             }
@@ -6647,6 +6648,46 @@
         }
       }
     },
+    "/tipos": {
+      "get": {
+        "tags": ["Tipos"],
+        "summary": "Obtener todos los tipos",
+        "description": "API para Obtener todos los tipos del sistema",
+        "parameters": [
+          {
+            "name": "fuente",
+            "in": "header",
+            "description": "Fuente del Tipo",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tipos"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/unidades": {
       "get": {
         "tags": ["Unidades"],
@@ -6926,6 +6967,17 @@
         "tags": ["Usuarios"],
         "summary": "Obtener todos los usuarios",
         "description": "API para Obtener todos los usuarios del sistema",
+        "parameters": [
+          {
+            "name": "agencia",
+            "in": "header",
+            "description": "Codigo de la Agencia",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -7368,6 +7420,17 @@
         "tags": ["Zonas"],
         "summary": "Obtener todas las zonas",
         "description": "API para Obtener todas las zonas del sistema",
+        "parameters": [
+          {
+            "name": "agencia",
+            "in": "header",
+            "description": "Codigo de la Agencia",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -7675,9 +7738,6 @@
           "estatus": {
             "type": "string"
           },
-          "tlf_agencia": {
-            "type": "string"
-          },
           "cod_ciudad": {
             "type": "number"
           }
@@ -7943,6 +8003,43 @@
           }
         }
       },
+      "Control_Guias": {
+        "description": "Modelo de Control de Guias",
+        "required": ["id", "control_inicio", "control_final", "tipo", "cod_agencia", "cod_agente", "cod_cliente"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "control_inicio": {
+            "type": "number"
+          },
+          "control_final": {
+            "type": "number"
+          },
+          "cant_asignada": {
+            "type": "number"
+          },
+          "cant_disponible": {
+            "type": "number"
+          },
+          "fecha_asignacion": {
+            "type": "string"
+          },
+          "cod_agencia": {
+            "type": "number"
+          },
+          "cod_agente": {
+            "type": "number"
+          },
+          "cod_cliente": {
+            "type": "number"
+          },
+          "tipo": {
+            "type": "number"
+          }
+        }
+      },
       "Conceptos_Operacion": {
         "description": "Modelo de Conceptos de Operación",
         "required": ["id", "desc_concepto", "tipo", "afecta_estado"],
@@ -7961,6 +8058,41 @@
             "type": "string"
           },
           "afecta_desc": {
+            "type": "string",
+            "readOnly": true
+          }
+        }
+      },
+      "Control_Correlativo": {
+        "description": "Modelo de Control Correlativo",
+        "required": ["id", "tipo", "control_inicio", "control_final", "cod_agencia"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "tipo": {
+            "type": "number"
+          },
+          "control_inicio": {
+            "type": "number"
+          },
+          "control_final": {
+            "type": "number"
+          },
+          "ult_doc_referencia": {
+            "type": "number"
+          },
+          "estatus_lote": {
+            "type": "string"
+          },
+          "serie_doc": {
+            "type": "string"
+          },
+          "cod_agencia": {
+            "type": "number"
+          },
+          "estatus_desc": {
             "type": "string",
             "readOnly": true
           }
@@ -8424,7 +8556,7 @@
         "required": ["codigo", "descripcion", "fuente"],
         "properties": {
           "codigo": {
-            "type": "string",
+            "type": "number",
             "readOnly": true
           },
           "descripcion": {

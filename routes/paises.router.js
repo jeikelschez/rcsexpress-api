@@ -33,20 +33,6 @@ router.get('/:id',
   }
 );
 
-router.get('/:id/estados',
-  authenticateJWT,
-  validatorHandler(getPaisesSchema, 'params'),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const estado = await service.findOneEstados(id);
-      res.json(estado);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
 router.post('/',
   authenticateJWT,
   validatorHandler(createPaisesSchema, 'body'),

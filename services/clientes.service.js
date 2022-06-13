@@ -15,9 +15,12 @@ class ClientesService {
     return newCliente;
   }
 
-  async find() {
+  async find(agencia) {
+    let params = {};
+    if(agencia) params.cod_agencia = agencia;
     const clientes = await models.Clientes.findAll(
     {
+      where: params,
       attributes: {
         include: [
           [Sequelize.literal(caseActivo), 'activo_desc'],

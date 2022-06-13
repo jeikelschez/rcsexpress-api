@@ -11,23 +11,15 @@ class RolesService {
     return newRol;
   }
 
-  async find() {
-    const roles = await models.Roles.findAll();
+  async find(agencia) {
+    let params = {};
+    if(agencia) params.cod_agencia = agencia;
+    const roles = await models.Roles.findAll({ where: params });
     return roles;
   }
 
   async findOne(id) {
     const rol = await models.Roles.findByPk(id);
-    if (!rol) {
-      throw boom.notFound('Rol no existe');
-    }
-    return rol;
-  }
-
-  async findOnePermisos(id) {
-    const rol = await models.Roles.findByPk(id, {
-      include: ['permisos']
-    });
     if (!rol) {
       throw boom.notFound('Rol no existe');
     }

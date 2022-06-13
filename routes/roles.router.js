@@ -12,7 +12,8 @@ router.get('/',
   authenticateJWT,
   async (req, res, next) => {
   try {
-    const roles = await service.find();
+    const agencia = req.headers.agencia;
+    const roles = await service.find(agencia);
     res.json(roles);
   } catch (error) {
     next(error);
@@ -26,20 +27,6 @@ router.get('/:id',
     try {
       const { id } = req.params;
       const rol = await service.findOne(id);
-      res.json(rol);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-router.get('/:id/permisos',
-  authenticateJWT,
-  validatorHandler(getRolesSchema, 'params'),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const rol = await service.findOnePermisos(id);
       res.json(rol);
     } catch (error) {
       next(error);

@@ -12,7 +12,8 @@ router.get('/',
   authenticateJWT,
   async (req, res, next) => {
   try {
-    const localidades = await service.find();
+    const estado = req.headers.estado;
+    const localidades = await service.find(estado);
     res.json(localidades);
   } catch (error) {
     next(error);

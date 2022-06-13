@@ -12,7 +12,8 @@ router.get('/',
   authenticateJWT,
   async (req, res, next) => {
   try {
-    const permisos = await service.find();
+    const rol = req.headers.rol;
+    const permisos = await service.find(rol);
     res.json(permisos);
   } catch (error) {
     next(error);

@@ -4,7 +4,6 @@ const { models, Sequelize } = require('./../libs/sequelize');
 
 const caseUrbano = '(CASE check_urbano WHEN "u" THEN "URBANO" ELSE "EXTRAURBANO" END)';
 const caseRegion = '(CASE cod_region WHEN "CE" THEN "CENTRAL" WHEN "OC" THEN "OCCIDENTAL" ELSE "ORIENTAL" END)';
-const caseStatus = '(CASE estatus WHEN "A" THEN "ACTIVO" ELSE "INACTIVO" END)';
 
 class CiudadesService {
 
@@ -15,8 +14,11 @@ class CiudadesService {
     return newCiudad;
   }
 
-  async find() {
+  async find(estado) {
+    let params = {};
+    if(estado) params.cod_estado = estado;
     const ciudades = await models.Ciudades.findAll({
+      where: params,
       attributes: {
         include: [
           [Sequelize.literal(caseUrbano), 'check_urbano_desc'],
@@ -35,25 +37,6 @@ class CiudadesService {
           [Sequelize.literal(caseRegion), 'cod_region_desc']
         ]
       }
-    });
-    if (!ciudad) {
-      throw boom.notFound('Ciudad no existe');
-    }
-    return ciudad;
-  }
-
-  async findOneAgencias(id) {
-    const ciudad = await models.Ciudades.findByPk(id, {
-      include: [
-        {
-          association: 'agencias',
-          attributes: {
-            include: [
-              [Sequelize.literal(caseStatus), 'estatus_desc']
-            ]
-          }
-        }
-      ]
     });
     if (!ciudad) {
       throw boom.notFound('Ciudad no existe');

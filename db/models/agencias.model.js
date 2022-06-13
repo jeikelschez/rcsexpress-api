@@ -61,6 +61,8 @@ class Agencias extends Model {
     this.hasMany(models.Agentes, { foreignKey: 'cod_agencia', as: 'agentes' });
     this.hasMany(models.Zonas, { foreignKey: 'cod_agencia', as: 'zonas' });
     this.hasMany(models.Clientes, { foreignKey: 'cod_agencia', as: 'clientes' });
+    this.hasMany(models.Correlativo, { foreignKey: 'cod_agencia', as: 'correlativos' });
+    this.hasMany(models.Cguias, { foreignKey: 'cod_agencia', as: 'control_guias' });
   }
 
   static config(sequelize) {

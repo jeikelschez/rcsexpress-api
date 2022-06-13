@@ -6,8 +6,12 @@ class LocalidadesService {
 
   constructor() {}
 
-  async find() {
-    const localidades = await models.Localidades.findAll();
+  async find(estado) {
+    let params = {};
+    if(estado) params.cod_estado = estado;
+    const localidades = await models.Localidades.findAll({
+      where: params
+    });
     return localidades;
   }
 

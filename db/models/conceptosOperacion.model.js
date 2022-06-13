@@ -24,7 +24,7 @@ const CoperacionSchema = {
     type: DataTypes.INTEGER,
     references: {
       model: TIPOS_TABLE,
-      key: 'codigo'
+      key: 'id'
     },
     onUpdate: 'CASCADE',
     onDelete: 'SET NULL'

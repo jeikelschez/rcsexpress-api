@@ -22,8 +22,11 @@ class UsuariosService {
     return newUsuario;
   }
 
-  async find() {
+  async find(agencia) {
+    let params = {};
+    if(agencia) params.cod_agencia = agencia;
     const usuarios = await models.Usuarios.findAll({
+      where: params,
       include: ['roles'],
       attributes: {
         include: [

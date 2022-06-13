@@ -12,7 +12,8 @@ router.get('/',
   authenticateJWT,
   async (req, res, next) => {
   try {
-    const municipios = await service.find();
+    const estado = req.headers.estado;
+    const municipios = await service.find(estado);
     res.json(municipios);
   } catch (error) {
     next(error);
@@ -26,20 +27,6 @@ router.get('/:id',
     try {
       const { id } = req.params;
       const municipio = await service.findOne(id);
-      res.json(municipio);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-router.get('/:id/parroquias',
-  authenticateJWT,
-  validatorHandler(getMunicipiosSchema, 'params'),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const municipio = await service.findOneParroquias(id);
       res.json(municipio);
     } catch (error) {
       next(error);

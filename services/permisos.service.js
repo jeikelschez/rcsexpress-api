@@ -11,8 +11,12 @@ class PermisosService {
     return newPermiso;
   }
 
-  async find() {
-    const permisos = await models.Permisos.findAll();
+  async find(rol) {
+    let params = {};
+    if(rol) params.cod_rol = rol;
+    const permisos = await models.Permisos.findAll({
+      where: params
+    });
     return permisos;
   }
 
