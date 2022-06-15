@@ -15,13 +15,16 @@ class EstadosService {
     let params = {};
     if(pais) params.cod_pais = pais;
     const estados = await models.Estados.findAll({
-      where: params
+      where: params,
+      include: ['paises']
     });
     return estados;
   }
 
   async findOne(id) {
-    const estado = await models.Estados.findByPk(id);
+    const estado = await models.Estados.findByPk(id, {
+      include: ['paises']
+    });
     if (!estado) {
       throw boom.notFound('Estado no existe');
     }
