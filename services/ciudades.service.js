@@ -19,6 +19,12 @@ class CiudadesService {
     if(estado) params.cod_estado = estado;
     const ciudades = await models.Ciudades.findAll({
       where: params,
+      include: [
+        {
+          association: 'estados',
+          include: ['paises']
+        }
+      ],
       attributes: {
         include: [
           [Sequelize.literal(caseUrbano), 'check_urbano_desc'],
@@ -31,6 +37,12 @@ class CiudadesService {
 
   async findOne(id) {
     const ciudad = await models.Ciudades.findByPk(id, {
+      include: [
+        {
+          association: 'estados',
+          include: ['paises']
+        }
+      ],
       attributes: {
         include: [
           [Sequelize.literal(caseUrbano), 'check_urbano_desc'],

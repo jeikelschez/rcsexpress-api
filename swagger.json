@@ -1290,7 +1290,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Ciudades"
+                  "$ref": "#/components/schemas/Ciudades",
+                  "properties": {
+                    "estados": {
+                      "$ref": "#/components/schemas/Estados",
+                      "properties": {
+                        "paises": {
+                          "$ref": "#/components/schemas/Paises"
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -1391,7 +1401,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Ciudades"
+                  "$ref": "#/components/schemas/Ciudades",
+                  "properties": {
+                    "estados": {
+                      "$ref": "#/components/schemas/Estados",
+                      "properties": {
+                        "paises": {
+                          "$ref": "#/components/schemas/Paises"
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
