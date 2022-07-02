@@ -2159,6 +2159,51 @@
             }
           },
           {
+            "name": "agente",
+            "in": "header",
+            "description": "Codigo del Agente",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "cliente",
+            "in": "header",
+            "description": "Codigo del Cliente",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "desde",
+            "in": "header",
+            "description": "Guía Desde",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "hasta",
+            "in": "header",
+            "description": "Guía Hasta",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "disp",
+            "in": "header",
+            "description": "Cantidad Disponible",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
             "name": "tipo",
             "in": "header",
             "description": "Tipo Guia",
@@ -2174,7 +2219,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Control_Guias"
+                  "$ref": "#/components/schemas/Control_Guias",
+                  "properties": {
+                    "tipos": {
+                      "$ref": "#/components/schemas/Tipos"
+                    }
+                  }
                 }
               }
             }
@@ -8025,7 +8075,7 @@
       },
       "Control_Guias": {
         "description": "Modelo de Control de Guias",
-        "required": ["id", "control_inicio", "control_final", "tipo", "cod_agencia", "cod_agente", "cod_cliente"],
+        "required": ["id", "control_inicio", "control_final", "tipo", "cod_agencia"],
         "properties": {
           "id": {
             "type": "number",

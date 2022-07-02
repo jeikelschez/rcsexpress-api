@@ -13,8 +13,13 @@ router.get('/',
   async (req, res, next) => {
   try {
     const agencia = req.headers.agencia;
+    const agente = req.headers.agente;
+    const cliente = req.headers.cliente;
+    const desde = req.headers.desde;
+    const hasta = req.headers.hasta;
+    const disp = req.headers.disp;
     const tipo = req.headers.tipo;
-    const cguias = await service.find(agencia, tipo);
+    const cguias = await service.find(agencia, agente, cliente, desde, hasta, disp, tipo);
     res.json(cguias);
   } catch (error) {
     next(error);

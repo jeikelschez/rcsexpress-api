@@ -19,8 +19,8 @@ const createCguiasSchema = Joi.object({
   cant_disponible: cant_disponible.allow(null, ''),
   fecha_asignacion: fecha_asignacion.allow(null, ''),
   cod_agencia: cod_agencia.required(),
-  cod_agente: cod_agente.required(),
-  cod_cliente: cod_cliente.required(),
+  cod_agente: cod_agente.allow(null, ''),
+  cod_cliente: cod_cliente.allow(null, ''),
   tipo: tipo.required()
 });
 
@@ -32,8 +32,8 @@ const updateCguiasSchema = Joi.object({
   cant_disponible: cant_disponible.allow(null, ''),
   fecha_asignacion: fecha_asignacion.allow(null, ''),
   cod_agencia: cod_agencia,
-  cod_agente: cod_agente,
-  cod_cliente: cod_cliente,
+  cod_agente: cod_agente.allow(null, ''),
+  cod_cliente: cod_cliente.allow(null, ''),
   tipo: tipo
 });
 
