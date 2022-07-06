@@ -27,6 +27,7 @@ const { Tipos, TiposSchema } = require('./tipos.model');
 const { Empleados, EmpleadosSchema } = require('./empleados.model');
 const { Correlativo, CorrelativoSchema } = require('./controlCorrelativo.model');
 const { Cguias, CguiasSchema } = require('./controlGuias.model');
+const { Vcontrol, VcontrolSchema } = require('./variableControl.model');
 
 function setupModels(sequelize) {
   Bancos.init(BancosSchema, Bancos.config(sequelize));
@@ -58,6 +59,7 @@ function setupModels(sequelize) {
   Empleados.init(EmpleadosSchema, Empleados.config(sequelize));
   Correlativo.init(CorrelativoSchema, Correlativo.config(sequelize));
   Cguias.init(CguiasSchema, Cguias.config(sequelize));
+  Vcontrol.init(VcontrolSchema, Vcontrol.config(sequelize));
 
   Paises.associate(sequelize.models);
   Estados.associate(sequelize.models);

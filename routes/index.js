@@ -31,6 +31,7 @@ const EmpleadosRouter = require('./empleados.router');
 const CorrelativoRouter = require('./controlCorrelativo.router');
 const TiposRouter = require('./tipos.router');
 const CguiasRouter = require('./controlGuias.router');
+const VcontrolRouter = require('./variableControl.router');
 
 function routerApi(app) {
   const router = express.Router();
@@ -65,6 +66,7 @@ function routerApi(app) {
   router.use('/correlativo', CorrelativoRouter);
   router.use('/tipos', TiposRouter);
   router.use('/cguias', CguiasRouter);
+  router.use('/vcontrol', VcontrolRouter);
   router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 
