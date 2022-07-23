@@ -87,6 +87,10 @@
       "description": "API para Manejar el Maestro de Retenciones de la Organizacion"
     },
     {
+      "name": "Maestro_Movimientos",
+      "description": "API para Manejar el Maestro de Movimientos de la Organizacion"
+    },
+    {
       "name": "Municipios",
       "description": "API para Manejar los Municipios de la Organizacion"
     },
@@ -2329,7 +2333,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Control_Guias"
+                  "$ref": "#/components/schemas/Control_Guias",
+                  "properties": {
+                    "tipos": {
+                      "$ref": "#/components/schemas/Tipos"
+                    }
+                  }
                 }
               }
             }
@@ -4408,6 +4417,253 @@
         }
       }
     },
+    "/mmovimientos": {      
+      "post": {
+        "tags": ["Maestro_Movimientos"],
+        "summary": "Crear Movimiento",
+        "description": "API para Crear un nuevo Movimiento",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Maestro_Movimientos"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Maestro_Movimientos"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mmovimientos/{id}": {
+      "get": {
+        "tags": ["Maestro_Movimientos"],
+        "summary": "Obtener Movimiento por su Id",
+        "description": "API para Retornar un Movimiento por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Movimiento",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Maestro_Movimientos"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Maestro_Movimientos"],
+        "summary": "Actualizar Movimiento",
+        "description": "API para Actualizar un Movimiento por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Movimiento",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Maestro_Movimientos"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Maestro_Movimientos"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Maestro_Movimientos"],
+        "summary": "Borrar Movimiento",
+        "description": "API para Borrar un Movimiento por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Movimiento",
+            "required": true, "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Maestro_Movimientos/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/mretenciones/{id}": {
       "get": {
         "tags": ["Maestro_Retenciones"],
@@ -4417,7 +4673,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "Codigo del Ayudante",
+            "description": "Codigo de la Retención",
             "required": true,
             "schema": {
               "type": "integer"
@@ -4465,7 +4721,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "Codigo del Ayudante",
+            "description": "Codigo de la Retención",
             "required": true,
             "schema": {
               "type": "integer"
@@ -4489,7 +4745,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Ayudantes"
+                  "$ref": "#/components/schemas/Maestro_Retenciones"
                 }
               }
             }
@@ -4547,7 +4803,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "Codigo del Ayudante",
+            "description": "Codigo de la Retención",
             "required": true, "schema": {
               "type": "integer"
             }
@@ -8576,6 +8832,331 @@
           },
           "cod_estado": {
             "type": "number"
+          }
+        }
+      },
+      "Maestro_Movimientos": {
+        "description": "Modelo de Maestro de Movimientos",
+        "required": ["id", "cod_agencia", "nro_documento", "t_de_documento", "fecha_emision", "cod_cliente_org", "modalidad_pago", "saldo"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "cod_agencia": {
+            "type": "number"
+          },
+          "nro_documento": {
+            "type": "number"
+          },
+          "t_de_documento": {
+            "type": "string"
+          },
+          "serie_documento": {
+            "type": "number"
+          },
+          "fecha_emision": {
+            "type": "string"
+          },
+          "cod_cliente_org": {
+            "type": "number"
+          },
+          "cod_agencia_dest": {
+            "type": "number"
+          },
+          "cod_cliente_dest": {
+            "type": "number"
+          },
+          "tipo_servicio": {
+            "type": "string"
+          },
+          "tipo_ubicacion": {
+            "type": "string"
+          },
+          "tipo_urgencia": {
+            "type": "string"
+          },
+          "fecha_envio": {
+            "type": "string"
+          },
+          "modalidad_pago": {
+            "type": "string"
+          },
+          "pagado_en": {
+            "type": "string"
+          },
+          "check_pagado": {
+            "type": "number"
+          },
+          "tipo_carga": {
+            "type": "string"
+          },
+          "nro_piezas": {
+            "type": "number"
+          },
+          "peso_kgs": {
+            "type": "number"
+          },
+          "dimensiones": {
+            "type": "string"
+          },
+          "desc_contenido": {
+            "type": "string"
+          },
+          "valor_declarado_cod": {
+            "type": "number"
+          },
+          "valor_declarado_seg": {
+            "type": "number"
+          },
+          "porc_impuesto": {
+            "type": "number"
+          },
+          "monto_subtotal": {
+            "type": "number"
+          },
+          "monto_base": {
+            "type": "number"
+          },
+          "monto_impuesto": {
+            "type": "number"
+          },
+          "monto_total": {
+            "type": "number"
+          },
+          "saldo": {
+            "type": "number"
+          },
+          "tipo_doc_principal": {
+            "type": "string"
+          },
+          "nro_doc_principal": {
+            "type": "number"
+          },
+          "serie_doc_principal": {
+            "type": "string"
+          },
+          "estatus_operativo": {
+            "type": "string"
+          },
+          "estatus_administra": {
+            "type": "string"
+          },
+          "cod_concepto": {
+            "type": "number"
+          },
+          "fecha_anulacion": {
+            "type": "string"
+          },
+          "observacion": {
+            "type": "string"
+          },
+          "cod_proveedor": {
+            "type": "number"
+          },
+          "cod_agente_venta": {
+            "type": "number"
+          },
+          "comision_venta": {
+            "type": "number"
+          },
+          "check_transito": {
+            "type": "number"
+          },
+          "cod_agencia_transito": {
+            "type": "number"
+          },
+          "fecha_llega_transito": {
+            "type": "string"
+          },
+          "fecha_sale_transito": {
+            "type": "string"
+          },
+          "cod_agente_entrega": {
+            "type": "number"
+          },
+          "comision_entrega": {
+            "type": "number"
+          },
+          "persona_recibio": {
+            "type": "string"
+          },
+          "ci_persona_recibio": {
+            "type": "string"
+          },
+          "fecha_recepcion": {
+            "type": "string"
+          },
+          "hora_recepcion": {
+            "type": "string"
+          },
+          "porc_descuento": {
+            "type": "number"
+          },
+          "monto_descuento": {
+            "type": "number"
+          },
+          "porc_apl_seguro": {
+            "type": "number"
+          },
+          "base_comision_vta_rcl": {
+            "type": "number"
+          },
+          "base_comision_seg": {
+            "type": "number"
+          },
+          "comision_seg_vta": {
+            "type": "number"
+          },
+          "comision_seg_entrega": {
+            "type": "number"
+          },
+          "ci_rif_cte_conta_org": {
+            "type": "string"
+          },
+          "ci_rif_cte_conta_dest": {
+            "type": "string"
+          },
+          "observacion_entrega": {
+            "type": "string"
+          },
+          "check_rep_vta_org": {
+            "type": "number"
+          },
+          "check_rep_vta_des": {
+            "type": "number"
+          },
+          "tipo_factura": {
+            "type": "string"
+          },
+          "nro_doc_referencia": {
+            "type": "string"
+          },
+          "fecha_aplicacion": {
+            "type": "string"
+          },
+          "id_clte_part_orig": {
+            "type": "number"
+          },
+          "id_clte_part_dest": {
+            "type": "number"
+          },
+          "check_pe": {
+            "type": "number"
+          },
+          "check_pent": {
+            "type": "number"
+          },
+          "check_entco": {
+            "type": "number"
+          },
+          "check_entnoco": {
+            "type": "number"
+          },
+          "check_elab": {
+            "type": "number"
+          },
+          "check_pxfac": {
+            "type": "number"
+          },
+          "check_cfacgen": {
+            "type": "number"
+          },
+          "check_anulada": {
+            "type": "number"
+          },
+          "check_pxcob": {
+            "type": "number"
+          },
+          "check_pximp": {
+            "type": "number"
+          },
+          "check_cancel": {
+            "type": "number"
+          },
+          "fecha_pe": {
+            "type": "string"
+          },
+          "fecha_pent": {
+            "type": "string"
+          },
+          "fecha_entco": {
+            "type": "string"
+          },
+          "fecha_entnoco": {
+            "type": "string"
+          },
+          "fecha_elab": {
+            "type": "string"
+          },
+          "fecha_pxfac": {
+            "type": "string"
+          },
+          "fecha_cfacgen": {
+            "type": "string"
+          },
+          "fecha_anulada": {
+            "type": "string"
+          },
+          "fecha_pxcob": {
+            "type": "string"
+          },
+          "fecha_pximp": {
+            "type": "string"
+          },
+          "fecha_cancel": {
+            "type": "string"
+          },
+          "nro_doc_guia": {
+            "type": "number"
+          },
+          "fecha_comp_ret_compra": {
+            "type": "string"
+          },
+          "nro_comp_ret_compra": {
+            "type": "string"
+          },
+          "iva_retenido_comprador": {
+            "type": "number"
+          },
+          "nro_control": {
+            "type": "number"
+          },
+          "nro_ctrl_doc_ppal": {
+            "type": "number"
+          },
+          "cod_ag_doc_ppal": {
+            "type": "number"
+          },
+          "nro_control_new": {
+            "type": "number"
+          },
+          "nro_ctrl_doc_ppal_new": {
+            "type": "number"
+          },
+          "cod_zona_dest": {
+            "type": "number"
+          },
+          "cod_motivo_retraso": {
+            "type": "number"
+          },
+          "monto_ref_cte_sin_imp": {
+            "type": "number"
+          },
+          "fecha_emi_comp_ret_compra": {
+            "type": "string"
+          },
+          "monto_fpo": {
+            "type": "number"
+          },
+          "ind_cobranza": {
+            "type": "number"
+          },
+          "carga_neta": {
+            "type": "number"
+          },
+          "cod_fpo": {
+            "type": "string"
           }
         }
       },

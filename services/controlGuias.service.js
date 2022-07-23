@@ -39,7 +39,9 @@ class CguiasService {
   }
 
   async findOne(id) {
-    const cguia = await models.Cguias.findByPk(id);
+    const cguia = await models.Cguias.findByPk(id, {
+      include: ['tipos']
+    });
     if (!cguia) {
       throw boom.notFound('Numero de Control de Guía no existe');
     }
