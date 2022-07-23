@@ -42,7 +42,6 @@ const CguiasSchema = {
     onDelete: 'SET NULL'
   },
   cod_agente: {
-    allowNull: false,
     type: DataTypes.INTEGER,
     references: {
       model: AGENTES_TABLE,
@@ -52,7 +51,6 @@ const CguiasSchema = {
     onDelete: 'SET NULL'
   },
   cod_cliente: {
-    allowNull: false,
     type: DataTypes.INTEGER,
     references: {
       model: CLIENTES_TABLE,
