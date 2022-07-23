@@ -67,6 +67,10 @@
       "description": "API para Manejar las Cuentas Bancarias de la Organizacion"
     },
     {
+      "name": "Detalle_Movimientos",
+      "description": "API para Manejar el Detalle de Movimientos de la Organizacion"
+    },
+    {
       "name": "Empleados",
       "description": "API para Manejar los Empleados de la Organizacion"
     },
@@ -3344,6 +3348,253 @@
                   "properties": {
                     "id": {
                       "$ref": "#/components/schemas/Cuentas/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dmovimientos": {      
+      "post": {
+        "tags": ["Detalle_Movimientos"],
+        "summary": "Crear Detalle de Movimiento",
+        "description": "API para Crear un nuevo Detalle de Movimiento",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Detalle_Movimientos"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detalle_Movimientos"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dmovimientos/{id}": {
+      "get": {
+        "tags": ["Detalle_Movimientos"],
+        "summary": "Obtener Detalle de Movimiento por su Id",
+        "description": "API para Retornar un Detalle de Movimiento por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Detalle de Movimiento",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detalle_Movimientos"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Detalle_Movimientos"],
+        "summary": "Actualizar Detalle de Movimiento",
+        "description": "API para Actualizar un Detalle de Movimiento por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Detalle de Movimiento",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Detalle_Movimientos"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detalle_Movimientos"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Detalle_Movimientos"],
+        "summary": "Borrar Detalle de Movimiento",
+        "description": "API para Borrar un Detalle de Movimiento por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Detalle de Movimiento",
+            "required": true, "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Detalle_Movimientos/properties/id"
                     }
                   },
                   "type": "object"
@@ -8732,6 +8983,46 @@
           "activa_desc": {
             "type": "string",
             "readOnly": true
+          }
+        }
+      },
+      "Detalle_Movimientos": {
+        "description": "Modelo de Detalle de Movimientos",
+        "required": ["id", "cod_movimiento", "nro_item", "precio_unitario"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "cod_movimiento": {
+            "type": "number"
+          },
+          "nro_item": {
+            "type": "number"
+          },
+          "cod_concepto": {
+            "type": "number"
+          },
+          "precio_unitario": {
+            "type": "number"
+          },
+          "cantidad": {
+            "type": "number"
+          },
+          "importe_renglon": {
+            "type": "number"
+          },
+          "descripcion": {
+            "type": "string"
+          },
+          "porc_descuento": {
+            "type": "number"
+          },
+          "monto_descuento": {
+            "type": "number"
+          },
+          "cod_concepto_oper": {
+            "type": "number"
           }
         }
       },

@@ -33,6 +33,7 @@ const TiposRouter = require('./tipos.router');
 const CguiasRouter = require('./controlGuias.router');
 const VcontrolRouter = require('./variableControl.router');
 const MmovimientosRouter = require('./maestroMovimientos.router');
+const DmovimientosRouter = require('./detalleMovimientos.router');
 
 function routerApi(app) {
   const router = express.Router();
@@ -69,6 +70,7 @@ function routerApi(app) {
   router.use('/cguias', CguiasRouter);
   router.use('/vcontrol', VcontrolRouter);
   router.use('/mmovimientos', MmovimientosRouter);
+  router.use('/dmovimientos', DmovimientosRouter);
   router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 
