@@ -6,7 +6,37 @@ class CguiasService {
 
   constructor() {}
 
-  async create(data) {
+  async create(data) {    
+    // Valida que el lote no exista
+    const cguias = await models.Cguias.count({
+      where: {
+        [Sequelize.Op.or]: [
+          {
+            tipo: data.tipo,
+            control_inicio : {
+              [Sequelize.Op.gte]: data.control_inicio
+            },
+            control_final : {
+              [Sequelize.Op.lte]: data.control_final
+            }                    
+          },
+          {
+            tipo: data.tipo,
+            control_inicio : {
+              [Sequelize.Op.lte]: data.control_inicio
+            },
+            control_final : {
+              [Sequelize.Op.gte]: data.control_final
+            }                    
+          },
+        ]
+      }  
+    });
+
+    if (cguias > 0) {
+      throw boom.badRequest('El lote para este tipo de guía ya está registrado');
+    }
+
     const newCguia = await models.Cguias.create(data);
     return newCguia;
   }
