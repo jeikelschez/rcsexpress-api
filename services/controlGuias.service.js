@@ -32,7 +32,7 @@ class CguiasService {
       include: ['tipos'],
       where: params,
       order: [
-        ['control_inicio', 'ASC']
+        ['control_inicio', 'DESC']
       ]
     });
     return cguias;

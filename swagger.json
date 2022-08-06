@@ -47,6 +47,10 @@
       "description": "API para Manejar los Clientes de la Organizacion"
     },
     {
+      "name": "Clientes_Particulares",
+      "description": "API para Manejar los Clientes Particulares de la Organizacion"
+    },
+    {
       "name": "Conceptos_Facturacion",
       "description": "API para Manejar el Maestro de Conceptos de Facturacion"
     },
@@ -1830,6 +1834,280 @@
                   "properties": {
                     "id": {
                       "$ref": "#/components/schemas/Clientes/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cparticulares": {
+      "get": {
+        "tags": ["Clientes_Particulares"],
+        "summary": "Obtener todos los Clientes Particulares",
+        "description": "API para Obtener todos los clientes particulares del sistema",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Clientes_Particulares"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Clientes_Particulares"],
+        "summary": "Crear Clientes Particulares",
+        "description": "API para Crear un nuevo Cliente Particular",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Clientes_Particulares"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Clientes_Particulares"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cparticulares/{id}": {
+      "get": {
+        "tags": ["Clientes"],
+        "summary": "Obtener Cliente Particular por su Id",
+        "description": "API para Retornar un Cliente Particular por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Cliente Particular",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Clientes_Particulares"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Clientes_Particulares"],
+        "summary": "Actualizar Cliente Particular",
+        "description": "API para Actualizar un Cliente Particular por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Cliente Particular",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Clientes_Particulares"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Clientes_Particulares"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Clientes_Particulares"],
+        "summary": "Borrar Cliente Particular",
+        "description": "API para Borrar un Cliente Particular por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Cliente Particular",
+            "required": true, "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Clientes_Particulares/properties/id"
                     }
                   },
                   "type": "object"
@@ -8800,6 +9078,52 @@
           "modalidad_desc": {
             "type": "string",
             "readOnly": true
+          }
+        }
+      },
+      "Clientes_Particulares": {
+        "description": "Modelo de Clientes Particulares",
+        "required": ["id", "cod_agencia", "cod_cliente"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "cod_agencia": {
+            "type": "number"
+          },
+          "cod_cliente": {
+            "type": "number"
+          },
+          "rif_ci": {
+            "type": "string"
+          },
+          "nb_cliente": {
+            "type": "string"
+          },
+          "cod_ciudad": {
+            "type": "number"
+          },
+          "direccion": {
+            "type": "string"
+          },
+          "telefonos": {
+            "type": "string"
+          },
+          "fax": {
+            "type": "string"
+          },
+          "estatus": {
+            "type": "string"
+          },
+          "cod_municipio": {
+            "type": "number"
+          },
+          "cod_parroquia": {
+            "type": "number"
+          },
+          "cod_localidad": {
+            "type": "number"
           }
         }
       },
