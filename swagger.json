@@ -4946,7 +4946,126 @@
         }
       }
     },
-    "/mmovimientos": {      
+    "/mmovimientos": {
+      "get": {
+        "tags": ["Maestro_Movimientos"],
+        "summary": "Obtener todos los Movimientos",
+        "description": "API para Obtener todo el Control de Guias del sistema",
+        "parameters": [
+          {
+            "name": "agencia",
+            "in": "header",
+            "description": "Codigo de la Agencia",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "agencia_dest",
+            "in": "header",
+            "description": "Codigo de la Agencia Destino",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "nro_documento",
+            "in": "header",
+            "description": "Numero de Documento",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "tipo",
+            "in": "header",
+            "description": "Tipo de Documento",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "f_desde",
+            "in": "header",
+            "description": "Fecha de Emision Desde",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "f_hasta",
+            "in": "header",
+            "description": "Fecha de Emision Hasta",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "estatus_oper",
+            "in": "header",
+            "description": "Estatus Operativo",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "transito",
+            "in": "header",
+            "description": "Check Transito",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "cliente_orig",
+            "in": "header",
+            "description": "Codigo Cliente Origen",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "cliente_dest",
+            "in": "header",
+            "description": "Codigo Cliente Origen",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Maestro_Movimientos"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": ["Maestro_Movimientos"],
         "summary": "Crear Movimiento",
@@ -9772,6 +9891,14 @@
           },
           "cod_fpo": {
             "type": "string"
+          },
+          "tipo_desc": {
+            "type": "string",
+            "readOnly": true
+          },
+          "estatus_oper_desc": {
+            "type": "string",
+            "readOnly": true
           }
         }
       },

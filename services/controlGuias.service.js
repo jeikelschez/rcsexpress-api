@@ -42,10 +42,13 @@ class CguiasService {
   }
 
   async find(agencia, agente, cliente, desde, hasta, disp, tipo) {
+    
     let params = {};
+    
     if(agencia) params.cod_agencia = agencia;
     if(agente) params.cod_agente = agente;
     if(cliente) params.cod_cliente = cliente;
+    
     if(desde) {
       params.control_inicio = {
         [Sequelize.Op.gte]: desde
@@ -56,8 +59,10 @@ class CguiasService {
         [Sequelize.Op.lte]: hasta
       }
     };
+    
     if(disp) params.cant_disponible = disp;
     if(tipo) params.tipo = tipo;
+    
     const cguias = await models.Cguias.findAll({
       include: ['tipos'],
       where: params,
@@ -65,6 +70,7 @@ class CguiasService {
         ['control_inicio', 'DESC']
       ]
     });
+    
     return cguias;
   }
 
