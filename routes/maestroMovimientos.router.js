@@ -9,20 +9,13 @@ const router = express.Router();
 const service = new MmovimientosService();
 
 router.get('/',
-  authenticateJWT,
   async (req, res, next) => {
   try {
-    const agencia = req.headers.agencia;
-    const agencia_dest = req.headers.agencia_dest;
-    const nro_documento = req.headers.nro_documento;
-    const tipo = req.headers.tipo;
-    const desde = req.headers.f_desde;
-    const hasta = req.headers.f_hasta;
-    const cliente_orig = req.headers.cliente_orig;
-    const cliente_dest = req.headers.cliente_dest;
-    const estatus_oper = req.headers.estatus_oper;
-    const transito = req.headers.transito;
-    const cguias = await service.find(agencia, agencia_dest, nro_documento, tipo, desde, hasta, cliente_orig, cliente_dest, estatus_oper, transito);
+    const { page, limit, order_by, order_direction, agencia, agencia_dest, nro_documento, 
+      tipo, desde, hasta, cliente_orig, cliente_dest, estatus_oper, transito } = req.headers;
+      
+    const cguias = await service.find(page, limit, order_by, order_direction, agencia, agencia_dest, 
+      nro_documento, tipo, desde, hasta, cliente_orig, cliente_dest, estatus_oper, transito);
     res.json(cguias);
   } catch (error) {
     next(error);

@@ -5,7 +5,7 @@ const { models, Sequelize }= require('./../libs/sequelize');
 const caseActivo = '(CASE flag_activo WHEN "1" THEN "ACTIVO" ELSE "INACTIVO" END)';
 const caseTipo = '(CASE tipo_agente WHEN "RP" THEN "RESPONSABLE DE AGENCIA" WHEN "CR" THEN "COURIERS" ELSE "" END)';
 
-class ObjetosService {
+class AgentesService {
 
   constructor() {}
 
@@ -65,4 +65,4 @@ class ObjetosService {
   }
 }
 
-module.exports = ObjetosService;
+module.exports = AgentesService;

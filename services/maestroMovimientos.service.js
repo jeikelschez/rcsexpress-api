@@ -2,6 +2,8 @@ const boom = require('@hapi/boom');
 const moment = require('moment');
 
 const { models, Sequelize } = require('./../libs/sequelize');
+const UtilsService = require('./utils.service');
+const utils = new UtilsService();
 
 const caseTipo = '(CASE t_de_documento WHEN "GC" THEN "GUIA CARGA"' +
                                      ' WHEN "GF" THEN "GUIA FACTURA"' +
@@ -23,9 +25,11 @@ class MmovimientosService {
     return newMmovimiento;
   }
 
-  async find(agencia, agencia_dest, nro_documento, tipo, desde, hasta, cliente_orig, cliente_dest, estatus_oper, transito) {
+  async find(page, limit, order_by, order_direction, agencia, agencia_dest, nro_documento, 
+    tipo, desde, hasta, cliente_orig, cliente_dest, estatus_oper, transito) {
     
     let params = {};
+    let order = [];
     
     if(agencia) params.cod_agencia = agencia;
     if(agencia_dest) params.cod_agencia_dest = agencia_dest;
@@ -48,17 +52,18 @@ class MmovimientosService {
     if(estatus_oper) params.estatus_operativo = estatus_oper;
     if(transito) params.check_transito = transito;
 
-    const mMovimientos = await models.Mmovimientos.findAll({
-      where: params,
-      attributes: {
-        include: [
-          [Sequelize.literal(caseTipo), 'tipo_desc'],
-          [Sequelize.literal(caseEstatusOper), 'estatus_oper_desc']
-        ]
-      }
-    });
+    let attributes = {
+      include: [
+        [Sequelize.literal(caseTipo), 'tipo_desc'],
+        [Sequelize.literal(caseEstatusOper), 'estatus_oper_desc']
+      ]
+    };
 
-    return mMovimientos;
+    if(order_by && order_direction) {
+      order.push([order_by, order_direction]);
+    }
+
+    return await utils.paginate(models.Mmovimientos, page, limit, params, order, attributes);
   }
 
   async findOne(id) {

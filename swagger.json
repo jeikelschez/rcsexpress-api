@@ -4953,6 +4953,42 @@
         "description": "API para Obtener todo el Control de Guias del sistema",
         "parameters": [
           {
+            "name": "page",
+            "in": "header",
+            "description": "Numero de la pagina",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "header",
+            "description": "Cantidad de registros",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "header",
+            "description": "Ordenado por",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "header",
+            "description": "Direccion del ordenado",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "agencia",
             "in": "header",
             "description": "Codigo de la Agencia",
@@ -5049,7 +5085,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Maestro_Movimientos"
+                  "$ref": "#/extraSchemes/Paginate",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Maestro_Movimientos"
+                    }
+                  }
                 }
               }
             }
@@ -10392,6 +10433,25 @@
         }
       },
       "type": "object"
+    },
+    "Paginate": {
+      "properties": {
+        "previousPage": {
+          "type": "number"
+        },
+        "currentPage": {
+          "type": "number"
+        },
+        "nextPage": {
+          "type": "number"
+        },
+        "total": {
+          "type": "number"
+        },
+        "limit": {
+          "type": "number"
+        }
+      }
     },
     "Refresh": {
       "required": ["username", "token"],
