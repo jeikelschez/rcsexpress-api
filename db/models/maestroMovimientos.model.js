@@ -6,6 +6,7 @@ const { COPERACION_TABLE } = require('./conceptosOperacion.model');
 const { PROVEEDORES_TABLE } = require('./conceptosOperacion.model');
 const { AGENTES_TABLE } = require('./agentes.model');
 const { ZONAS_TABLE } = require('./zonas.model');
+const { CPARTICULARES_TABLE } = require('./clientesParticulares.model');
 
 const MMOVIMIENTOS_TABLE = 'maestro_de_movimientos';
 
@@ -274,7 +275,13 @@ const MmovimientosSchema = {
     type: DataTypes.DECIMAL,
   },
   id_clte_part_dest: {
-    type: DataTypes.DECIMAL,
+    type: DataTypes.INTEGER,
+    references: {
+      model: CPARTICULARES_TABLE,
+      key: 'id'
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL'
   },
   check_pe: {
     type: DataTypes.DECIMAL,

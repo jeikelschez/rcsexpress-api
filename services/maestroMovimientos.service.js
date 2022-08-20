@@ -1,5 +1,7 @@
 const boom = require('@hapi/boom');
-const moment = require('moment');
+const PDFDocument = require('pdfkit');
+const getStream = require('get-stream');
+const fs = require('fs');
 
 const { models, Sequelize } = require('./../libs/sequelize');
 const UtilsService = require('./utils.service');
@@ -19,6 +21,22 @@ const caseEstatusOper = '(CASE estatus_operativo WHEN "PR" THEN "En proceso de E
 class MmovimientosService {
 
   constructor() {}
+
+  async exportPdf() {
+    let pdfDoc = new PDFDocument;
+    pdfDoc.pipe(fs.createWriteStream('SampleDocument2.pdf'));
+    pdfDoc.text("My Sample PDF Document");
+    pdfDoc.end();
+  }
+
+  async generatePdf() {
+    const doc = new PDFDocument();
+    doc.fontSize(25).text('Some text with an embedded font!', 100, 100);
+    doc.pipe(fs.createWriteStream(`file.pdf`));
+    doc.end();
+    const pdfStream = await getStream.buffer(doc);
+    return pdfStream;
+  }
 
   async create(data) {
     const newMmovimiento = await models.Mmovimientos.create(data);

@@ -1,4 +1,5 @@
 const express = require('express');
+const PDFDocument = require('pdfkit');
 
 const MmovimientosService = require('./../services/maestroMovimientos.service');
 const validatorHandler = require('./../middlewares/validator.handler');
@@ -13,10 +14,28 @@ router.get('/',
   try {
     const { page, limit, order_by, order_direction, agencia, agencia_dest, nro_documento, 
       tipo, desde, hasta, cliente_orig, cliente_dest, estatus_oper, transito } = req.headers;
-      
+
     const cguias = await service.find(page, limit, order_by, order_direction, agencia, agencia_dest, 
       nro_documento, tipo, desde, hasta, cliente_orig, cliente_dest, estatus_oper, transito);
     res.json(cguias);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/exportPdf', async (req, res, next) => {
+  await service.exportPdf();
+  res.status(200).json({ message: "PDF Generado" });
+});
+
+router.get('/generatePDF', async (req, res, next) => {
+  try {
+    const pdfStream = await service.generatePdf();
+    res.writeHead(200, {
+      'Content-Length': Buffer.byteLength(pdfStream),
+      'Content-Type': 'application/pdf',
+      'Content-disposition': 'attachment;filename=test.pdf',
+    }).end(pdfStream);
   } catch (error) {
     next(error);
   }
