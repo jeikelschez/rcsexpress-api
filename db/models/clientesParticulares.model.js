@@ -97,7 +97,7 @@ class Cparticulares extends Model {
 
   static associate(models) {
     this.belongsTo(models.Agencias, { foreignKey: 'cod_agencia', as: 'agencias' });
-    this.belongsTo(models.Clientes, { foreignKey: 'cod_clientes', as: 'clientes' });
+    this.belongsTo(models.Clientes, { foreignKey: 'cod_cliente', as: 'clientes' });
     this.belongsTo(models.Ciudades, { foreignKey: 'cod_ciudad', as: 'ciudades' });
     this.belongsTo(models.Municipios, { foreignKey: 'cod_municipio', as: 'municipios' });
     this.belongsTo(models.Parroquias, { foreignKey: 'cod_parroquia', as: 'parroquias' });

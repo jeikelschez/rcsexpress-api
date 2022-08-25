@@ -1956,7 +1956,7 @@
     },
     "/cparticulares/{id}": {
       "get": {
-        "tags": ["Clientes"],
+        "tags": ["Clientes_Particulares"],
         "summary": "Obtener Cliente Particular por su Id",
         "description": "API para Retornar un Cliente Particular por su ID específico",
         "parameters": [
@@ -4956,7 +4956,6 @@
             "name": "page",
             "in": "header",
             "description": "Numero de la pagina",
-            "required": true,
             "schema": {
               "type": "integer"
             }
@@ -4965,7 +4964,6 @@
             "name": "limit",
             "in": "header",
             "description": "Cantidad de registros",
-            "required": true,
             "schema": {
               "type": "integer"
             }
@@ -4974,7 +4972,6 @@
             "name": "order_by",
             "in": "header",
             "description": "Ordenado por",
-            "required": true,
             "schema": {
               "type": "string"
             }
@@ -4983,7 +4980,6 @@
             "name": "order_direction",
             "in": "header",
             "description": "Direccion del ordenado",
-            "required": true,
             "schema": {
               "type": "string"
             }
