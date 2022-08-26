@@ -1,6 +1,8 @@
 const boom = require('@hapi/boom');
 
 const { models }= require('./../libs/sequelize');
+const UtilsService = require('./utils.service');
+const utils = new UtilsService();
 
 class CparticularesService {
 
@@ -9,6 +11,21 @@ class CparticularesService {
   async create(data) {
     const newCparticular = await models.Cparticulares.create(data);
     return newCparticular;
+  }
+
+  async find(page, limit, order_by, order_direction, agencia, rif) {    
+    let params = {};
+    let order = [];
+    let attributes = {};
+    
+    if(agencia) params.cod_agencia = agencia;
+    if(rif) params.rif_ci = rif;    
+
+    if(order_by && order_direction) {
+      order.push([order_by, order_direction]);
+    }
+
+    return await utils.paginate(models.Cparticulares, page, limit, params, order, attributes);
   }
 
   async findOne(id) {

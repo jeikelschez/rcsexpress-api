@@ -8,6 +8,17 @@ const authenticateJWT  = require('./../middlewares/authenticate.handler');
 const router = express.Router();
 const service = new CparticularesService();
 
+router.get('/',
+  async (req, res, next) => {
+  try {
+    const { page, limit, order_by, order_direction, agencia, rif } = req.headers;
+    const cParticulares = await service.find(page, limit, order_by, order_direction, agencia, rif);
+    res.json(cParticulares);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get('/:id',
   authenticateJWT,
   validatorHandler(getCparticularesSchema, 'params'),
