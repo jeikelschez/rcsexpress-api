@@ -17,6 +17,7 @@ const cod_localidad = Joi.number().integer();
 const createCparticularesSchema = Joi.object({
   cod_agencia: cod_agencia.required(),
   cod_ciudad: cod_ciudad.required(),
+  cod_cliente: cod_cliente.required(),
   rif_ci: rif_ci.allow(null, ''),
   nb_cliente: nb_cliente.allow(null, ''),
   cod_ciudad: cod_ciudad.required(),
@@ -33,6 +34,7 @@ const updateCparticularesSchema = Joi.object({
   id: id,
   cod_agencia: cod_agencia,
   cod_ciudad: cod_ciudad,
+  cod_cliente: cod_cliente,
   rif_ci: rif_ci.allow(null, ''),
   nb_cliente: nb_cliente.allow(null, ''),
   cod_ciudad: cod_ciudad.required(),
