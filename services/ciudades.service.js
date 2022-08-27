@@ -1,6 +1,8 @@
 const boom = require('@hapi/boom');
 
 const { models, Sequelize } = require('./../libs/sequelize');
+const UtilsService = require('./utils.service');
+const utils = new UtilsService();
 
 const caseUrbano = '(CASE check_urbano WHEN "u" THEN "URBANO" ELSE "EXTRAURBANO" END)';
 const caseRegion = '(CASE cod_region WHEN "CE" THEN "CENTRAL" WHEN "OC" THEN "OCCIDENTAL" ELSE "ORIENTAL" END)';
@@ -14,20 +16,25 @@ class CiudadesService {
     return newCiudad;
   }
 
-  async find(estado) {
+  async find(page, limit, order_by, order_direction, estado) {    
     let params = {};
+    let order = [];
+    let attributes = {};
+    
     if(estado) params.cod_estado = estado;
-    const ciudades = await models.Ciudades.findAll({
-      where: params,
-      include: ['estados'],
-      attributes: {
-        include: [
-          [Sequelize.literal(caseUrbano), 'check_urbano_desc'],
-          [Sequelize.literal(caseRegion), 'cod_region_desc']
-        ]
-      }
-    });
-    return ciudades;
+
+    if(order_by && order_direction) {
+      order.push([order_by, order_direction]);
+    }
+
+    attributes = {
+      include: [
+        [Sequelize.literal(caseUrbano), 'check_urbano_desc'],
+        [Sequelize.literal(caseRegion), 'cod_region_desc']
+      ]
+    };
+
+    return await utils.paginate(models.Ciudades, page, limit, params, order, attributes);
   }
 
   async findOne(id) {

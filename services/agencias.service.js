@@ -1,6 +1,8 @@
 const boom = require('@hapi/boom');
 
 const { models, Sequelize }= require('./../libs/sequelize');
+const UtilsService = require('./utils.service');
+const utils = new UtilsService();
 
 const caseStatus = '(CASE estatus WHEN "A" THEN "ACTIVA" ELSE "INACTIVA" END)';
 
@@ -13,20 +15,24 @@ class AgenciasService {
     return newAgencia;
   }
 
-  async find(ciudad) {
+  async find(page, limit, order_by, order_direction, ciudad) {    
     let params = {};
+    let order = [];
+    let attributes = {};
+    
     if(ciudad) params.cod_ciudad = ciudad;
-    const agencias = await models.Agencias.findAll(
-    {
-      where: params,
-      include: ['ciudades'],
-      attributes: {
-        include: [
-          [Sequelize.literal(caseStatus), 'activo_desc']
-        ]
-      }
-    });
-    return agencias;
+
+    if(order_by && order_direction) {
+      order.push([order_by, order_direction]);
+    }
+
+    attributes = {
+      include: [
+        [Sequelize.literal(caseStatus), 'activo_desc']
+      ]
+    };
+
+    return await utils.paginate(models.Agencias, page, limit, params, order, attributes);
   }
 
   async findOne(id) {

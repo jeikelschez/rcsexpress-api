@@ -16,7 +16,14 @@ const caseEstatusOper = '(CASE estatus_operativo WHEN "PR" THEN "En proceso de E
                                                ' WHEN "PE" THEN "Pendiente por Entrega"' +
                                                ' WHEN "CO" THEN "Entrega Conforme"' +
                                                ' WHEN "NC" THEN "Entrega NO Conforme"' +
-                                               ' ELSE "" END)';                                 
+                                               ' ELSE "" END)';
+const casePagadoEn = '(CASE pagado_en WHEN "O" THEN "Origen"' +
+                                    ' WHEN "D" THEN "Destino"' +
+                                    ' ELSE "" END)';
+const caseModalidad = '(CASE modalidad_pago WHEN "CR" THEN "Crédito"' +
+                                          ' WHEN "CO" THEN "Contado"' +
+                                          ' WHEN "PP" THEN "Prepagada"' +
+                                          ' ELSE "" END)';
 
 class MmovimientosService {
 
@@ -44,10 +51,10 @@ class MmovimientosService {
   }
 
   async find(page, limit, order_by, order_direction, agencia, agencia_dest, nro_documento, 
-    tipo, desde, hasta, cliente_orig, cliente_dest, estatus_oper, transito) {
-    
+    tipo, desde, hasta, cliente_orig, cliente_dest, estatus_oper, transito) {    
     let params = {};
     let order = [];
+    let attributes = {};
     
     if(agencia) params.cod_agencia = agencia;
     if(agencia_dest) params.cod_agencia_dest = agencia_dest;
@@ -70,10 +77,12 @@ class MmovimientosService {
     if(estatus_oper) params.estatus_operativo = estatus_oper;
     if(transito) params.check_transito = transito;
 
-    let attributes = {
+    attributes = {
       include: [
         [Sequelize.literal(caseTipo), 'tipo_desc'],
-        [Sequelize.literal(caseEstatusOper), 'estatus_oper_desc']
+        [Sequelize.literal(caseEstatusOper), 'estatus_oper_desc'],
+        [Sequelize.literal(casePagadoEn), 'pagado_en_desc'],
+        [Sequelize.literal(caseModalidad), 'modalidad_desc']
       ]
     };
 

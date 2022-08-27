@@ -163,6 +163,38 @@
         "description": "API para Obtener todas las agencias del sistema",
         "parameters": [
           {
+            "name": "page",
+            "in": "header",
+            "description": "Numero de la pagina",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "header",
+            "description": "Cantidad de registros",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "header",
+            "description": "Ordenado por",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "header",
+            "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "ciudad",
             "in": "header",
             "description": "Codigo de la Ciudad",
@@ -457,6 +489,38 @@
         "summary": "Obtener todos los agentes",
         "description": "API para Obtener todos los agentes del sistema",
         "parameters": [
+          {
+            "name": "page",
+            "in": "header",
+            "description": "Numero de la pagina",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "header",
+            "description": "Cantidad de registros",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "header",
+            "description": "Ordenado por",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "header",
+            "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "agencia",
             "in": "header",
@@ -1291,6 +1355,38 @@
         "description": "API para Obtener todos las ciudades del sistema",
         "parameters": [
           {
+            "name": "page",
+            "in": "header",
+            "description": "Numero de la pagina",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "header",
+            "description": "Cantidad de registros",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "header",
+            "description": "Ordenado por",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "header",
+            "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "estado",
             "in": "header",
             "description": "Codigo del Estado",
@@ -1585,6 +1681,38 @@
         "summary": "Obtener todos los clientes",
         "description": "API para Obtener todos los clientes del sistema",
         "parameters": [
+          {
+            "name": "page",
+            "in": "header",
+            "description": "Numero de la pagina",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "header",
+            "description": "Cantidad de registros",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "header",
+            "description": "Ordenado por",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "header",
+            "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "agencia",
             "in": "header",
@@ -9986,6 +10114,14 @@
             "readOnly": true
           },
           "estatus_oper_desc": {
+            "type": "string",
+            "readOnly": true
+          },
+          "pagado_en_desc": {
+            "type": "string",
+            "readOnly": true
+          },
+          "modalidad_desc": {
             "type": "string",
             "readOnly": true
           }
