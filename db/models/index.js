@@ -31,6 +31,7 @@ const { Vcontrol, VcontrolSchema } = require('./variableControl.model');
 const { Mmovimientos, MmovimientosSchema } = require('./maestroMovimientos.model');
 const { Dmovimientos, DmovimientosSchema } = require('./detalleMovimientos.model');
 const { Cparticulares, CparticularesSchema } = require('./clientesParticulares.model');
+const { Ginutilizadas, GinutilizadasSchema } = require('./guiasInutilizadas.model');
 
 function setupModels(sequelize) {
   Bancos.init(BancosSchema, Bancos.config(sequelize));
@@ -66,6 +67,7 @@ function setupModels(sequelize) {
   Mmovimientos.init(MmovimientosSchema, Mmovimientos.config(sequelize));
   Dmovimientos.init(DmovimientosSchema, Dmovimientos.config(sequelize));
   Cparticulares.init(CparticularesSchema, Cparticulares.config(sequelize));
+  Ginutilizadas.init(GinutilizadasSchema, Ginutilizadas.config(sequelize));
 
   Paises.associate(sequelize.models);
   Estados.associate(sequelize.models);
@@ -92,6 +94,7 @@ function setupModels(sequelize) {
   Mmovimientos.associate(sequelize.models);
   Dmovimientos.associate(sequelize.models);
   Cparticulares.associate(sequelize.models);
+  Ginutilizadas.associate(sequelize.models);
 
   Usuarios.hooks(sequelize.models);
 }

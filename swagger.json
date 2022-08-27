@@ -87,6 +87,10 @@
       "description": "API para Manejar los Fpos de la Organizacion"
     },
     {
+      "name": "Guias_Inutilizadas",
+      "description": "API para Manejar las Guias Inutilizadas de la Organizacion"
+    },
+    {
       "name": "Localidades",
       "description": "API para Manejar las Localidades de la Organizacion"
     },
@@ -4896,6 +4900,341 @@
                   "properties": {
                     "id": {
                       "$ref": "#/components/schemas/Fpos/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ginutilizadas": {
+      "get": {
+        "tags": ["Guias_Inutilizadas"],
+        "summary": "Obtener todas las Guias Inutilizadas",
+        "description": "API para Obtener todas las Guias Inutilizadas del sistema",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "header",
+            "description": "Numero de la pagina",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "header",
+            "description": "Cantidad de registros",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "header",
+            "description": "Ordenado por",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "header",
+            "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "agencia",
+            "in": "header",
+            "description": "Codigo de la Agencia",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "tipo",
+            "in": "header",
+            "description": "Tipo de Guia",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "nro_guia",
+            "in": "header",
+            "description": "Numero de Guia",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Guias_Inutilizadas"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Guias_Inutilizadas"],
+        "summary": "Crear Fpo",
+        "description": "API para Crear una nueva Guia Inutilizada",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Guias_Inutilizadas"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Guias_Inutilizadas"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ginutilizadas/{id}": {
+      "get": {
+        "tags": ["Guias_Inutilizadas"],
+        "summary": "Obtener una Guia Inutilizada por su Id",
+        "description": "API para Retornar una Guia Inutilizada por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Guia Inutilizada",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Guias_Inutilizadas"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Guias_Inutilizadas"],
+        "summary": "Actualizar una Guia Inutilizada",
+        "description": "API para Actualizar una Guia Inutilizada por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Guia Inutilizada",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Guias_Inutilizadas"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Guias_Inutilizadas"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Guias_Inutilizadas"],
+        "summary": "Borrar una Guia Inutilizada",
+        "description": "API para Borrar una Guia Inutilizada por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Guia Inutilizada",
+            "required": true, "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Guias_Inutilizadas/properties/id"
                     }
                   },
                   "type": "object"
@@ -9767,6 +10106,40 @@
           }
         }
       },
+      "Guias_Inutilizadas": {
+        "description": "Modelo de Guias Inutilizadas",
+        "required": ["id", "nro_guia", "cod_agencia", "tipo_guia", "cod_control_guias", "fecha_registro", "cod_concepto"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "nro_guia": {
+            "type": "number"
+          },
+          "cod_agencia": {
+            "type": "number"
+          },
+          "tipo_guia": {
+            "type": "string"
+          },
+          "cod_control_guias": {
+            "type": "number"
+          },
+          "observaciones": {
+            "type": "string"
+          },
+          "fecha_registro": {
+            "type": "string"
+          },
+          "cod_concepto": {
+            "type": "number"
+          },
+          "estatus_guia": {
+            "type": "string"
+          }
+        }
+      },      
       "Localidades": {
         "description": "Modelo de Localidades",
         "required": ["id", "desc_localidad", "cod_postal", "cod_estado"],
