@@ -3,14 +3,17 @@ class UtilsService {
     constructor() {}
 
     async paginate(model, pageSize, pageLimit, where = {}, order = [], attributes = {}, include = []) {
+        let options = {}
         const limit = parseInt(pageLimit, 10) || 10;
         const page = parseInt(pageSize, 10) || 1;
-
-        // create an options object
-        let options = {
-            offset: this.getOffset(page, limit),
-            limit: limit,
-        };
+        
+        if (pageLimit) {
+            // create an options object
+            options = {
+                offset: this.getOffset(page, limit),
+                limit: limit,
+            };
+        }        
 
         // check if the where object is empty
         if (Object.keys(where).length) {

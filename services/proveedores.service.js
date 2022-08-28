@@ -1,6 +1,8 @@
 const boom = require('@hapi/boom');
 
 const { models, Sequelize }= require('./../libs/sequelize');
+const UtilsService = require('./utils.service');
+const utils = new UtilsService();
 
 const caseActivo = '(CASE flag_activo WHEN "A" THEN "ACTIVO" ELSE "INACTIVO" END)';
 const caseTipo = '(CASE tipo_persona WHEN "N" THEN "NATURAL" ELSE "JURIDICA" END)';
@@ -19,18 +21,25 @@ class ProveedoresService {
     return newProveedor;
   }
 
-  async find() {
-    const proveedores = await models.Proveedores.findAll({
-      include: ['retenciones'],
-      attributes: {
-        include: [
-          [Sequelize.literal(caseActivo), 'activo_desc'],
-          [Sequelize.literal(caseTipo), 'tipo_desc'],
-          [Sequelize.literal(caseTipoSvc), 'tipo_svc']
-        ]
-      }
-    });
-    return proveedores;
+  async find(page, limit, order_by, order_direction) {    
+    let params = {};
+    let order = [];
+
+    if(order_by && order_direction) {
+      order.push([order_by, order_direction]);
+    }
+
+    let attributes = {
+      include: [
+        [Sequelize.literal(caseActivo), 'activo_desc'],
+        [Sequelize.literal(caseTipo), 'tipo_desc'],
+        [Sequelize.literal(caseTipoSvc), 'tipo_svc']
+      ]
+    };
+
+    let include = ['retenciones'];
+
+    return await utils.paginate(models.Proveedores, page, limit, params, order, attributes, include);
   }
 
   async findOne(id) {

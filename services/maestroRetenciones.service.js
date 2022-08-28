@@ -2,6 +2,8 @@ const boom = require('@hapi/boom');
 const moment = require('moment');
 
 const { models, Sequelize } = require('./../libs/sequelize');
+const UtilsService = require('./utils.service');
+const utils = new UtilsService();
 
 const caseTipo = '(CASE cod_tipo_persona WHEN "N" THEN "NATURAL" ELSE "JURIDICA" END)';
 
@@ -14,9 +16,10 @@ class MretencionesService {
     return newMRetencion;
   }
 
-  async find(vigente, tipoPersona) {
+  async find(page, limit, order_by, order_direction, vigente, tipoPersona) {    
     let params = {};
-
+    let order = [];
+    
     if(vigente) {
       let date = moment().format('YYYY-MM-DD');
       params = {
@@ -31,15 +34,17 @@ class MretencionesService {
 
     if(tipoPersona) params.cod_tipo_persona = tipoPersona;
 
-    const mRetenciones = await models.Mretenciones.findAll({
-      where: params,
-      attributes: {
-        include: [
-          [Sequelize.literal(caseTipo), 'tipo_persona_desc']
-        ]
-      }
-    });
-    return mRetenciones;
+    if(order_by && order_direction) {
+      order.push([order_by, order_direction]);
+    }
+
+    let attributes = {
+      include: [
+        [Sequelize.literal(caseTipo), 'tipo_persona_desc']
+      ]
+    };
+
+    return await utils.paginate(models.Mretenciones, page, limit, params, order, attributes);
   }
 
   async findOne(id) {
