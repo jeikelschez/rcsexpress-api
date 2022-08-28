@@ -2644,6 +2644,38 @@
         "description": "API para Obtener todo el Control de Guias del sistema",
         "parameters": [
           {
+            "name": "page",
+            "in": "header",
+            "description": "Numero de la pagina",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "header",
+            "description": "Cantidad de registros",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "header",
+            "description": "Ordenado por",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "header",
+            "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "agencia",
             "in": "header",
             "description": "Codigo de la Agencia",
@@ -2713,10 +2745,15 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Control_Guias",
+                  "$ref": "#/extraSchemes/Paginate",
                   "properties": {
-                    "tipos": {
-                      "$ref": "#/components/schemas/Tipos"
+                    "data": {
+                      "$ref": "#/components/schemas/Control_Guias",
+                      "properties": {
+                        "tipos": {
+                          "$ref": "#/components/schemas/Tipos"
+                        }
+                      }
                     }
                   }
                 }
@@ -3288,6 +3325,38 @@
         "description": "API para Obtener todo el Control Correlativo del sistema",
         "parameters": [
           {
+            "name": "page",
+            "in": "header",
+            "description": "Numero de la pagina",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "header",
+            "description": "Cantidad de registros",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "header",
+            "description": "Ordenado por",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "header",
+            "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "agencia",
             "in": "header",
             "description": "Codigo de la Agencia",
@@ -3312,7 +3381,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Control_Correlativo"
+                  "$ref": "#/extraSchemes/Paginate",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Control_Correlativo"
+                    }
+                  }
                 }
               }
             }

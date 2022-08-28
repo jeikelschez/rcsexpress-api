@@ -1,6 +1,8 @@
 const boom = require('@hapi/boom');
 
 const { models, Sequelize }= require('./../libs/sequelize');
+const UtilsService = require('./utils.service');
+const utils = new UtilsService();
 
 class CguiasService {
 
@@ -39,11 +41,11 @@ class CguiasService {
 
     const newCguia = await models.Cguias.create(data);
     return newCguia;
-  }
+  }  
 
-  async find(agencia, agente, cliente, desde, hasta, disp, tipo) {
-    
+  async find(page, limit, order_by, order_direction, agencia, agente, cliente, desde, hasta, disp, tipo) {    
     let params = {};
+    let order = [];
     
     if(agencia) params.cod_agencia = agencia;
     if(agente) params.cod_agente = agente;
@@ -62,16 +64,15 @@ class CguiasService {
     
     if(disp) params.cant_disponible = disp;
     if(tipo) params.tipo = tipo;
-    
-    const cguias = await models.Cguias.findAll({
-      include: ['tipos'],
-      where: params,
-      order: [
-        ['control_inicio', 'DESC']
-      ]
-    });
-    
-    return cguias;
+
+    if(order_by && order_direction) {
+      order.push([order_by, order_direction]);
+    }
+
+    let attributes = {};
+    let include = ['tipos'];
+
+    return await utils.paginate(models.Cguias, page, limit, params, order, attributes, include);
   }
 
   async findOne(id) {

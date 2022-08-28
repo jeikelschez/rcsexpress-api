@@ -1,6 +1,8 @@
 const boom = require('@hapi/boom');
 
 const { models, Sequelize }= require('./../libs/sequelize');
+const UtilsService = require('./utils.service');
+const utils = new UtilsService();
 
 const caseStatusLote = '(CASE estatus_lote WHEN "A" THEN "ACTIVO"' +
                                          ' WHEN "I" THEN "INACTIVO"' +
@@ -16,19 +18,24 @@ class CorrelativoService {
     return newCorrelativo;
   }
 
-  async find(agencia, tipo) {
+  async find(page, limit, order_by, order_direction, agencia, tipo) {    
     let params = {};
+    let order = [];
+    
     if(agencia) params.cod_agencia = agencia;
     if(tipo) params.tipo = tipo;
-    const correlativos = await models.Correlativo.findAll({
-      where: params,
-      attributes: {
-        include: [
-          [Sequelize.literal(caseStatusLote), 'estatus_desc']
-        ]
-      }
-    });
-    return correlativos;
+
+    if(order_by && order_direction) {
+      order.push([order_by, order_direction]);
+    }
+
+    let attributes = {
+      include: [
+        [Sequelize.literal(caseStatusLote), 'estatus_desc']
+      ]
+    };
+
+    return await utils.paginate(models.Correlativo, page, limit, params, order, attributes);
   }
 
   async findOne(id) {
