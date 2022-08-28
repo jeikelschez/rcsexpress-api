@@ -33,7 +33,9 @@ class CiudadesService {
       ]
     };
 
-    return await utils.paginate(models.Ciudades, page, limit, params, order, attributes);
+    let include = ['estados'];
+
+    return await utils.paginate(models.Ciudades, page, limit, params, order, attributes, include);
   }
 
   async findOne(id) {

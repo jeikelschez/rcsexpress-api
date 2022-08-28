@@ -214,10 +214,15 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Agencias",
+                  "$ref": "#/extraSchemes/Paginate",
                   "properties": {
-                    "ciudades": {
-                      "$ref": "#/components/schemas/Ciudades"
+                    "data": {
+                      "$ref": "#/components/schemas/Agencias",
+                      "properties": {
+                        "ciudades": {
+                          "$ref": "#/components/schemas/Ciudades"
+                        }
+                      }
                     }
                   }
                 }
@@ -541,7 +546,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Agentes"
+                  "$ref": "#/extraSchemes/Paginate",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Agentes"
+                    }
+                  }
                 }
               }
             }
@@ -1406,10 +1416,15 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Ciudades",
+                  "$ref": "#/extraSchemes/Paginate",
                   "properties": {
-                    "estados": {
-                      "$ref": "#/components/schemas/Estados"
+                    "data": {
+                      "$ref": "#/components/schemas/Ciudades",
+                      "properties": {
+                        "estados": {
+                          "$ref": "#/components/schemas/Estados"
+                        }
+                      }
                     }
                   }
                 }
@@ -1733,7 +1748,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Clientes"
+                  "$ref": "#/extraSchemes/Paginate",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Clientes"
+                    }
+                  }
                 }
               }
             }
