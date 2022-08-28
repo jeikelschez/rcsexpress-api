@@ -16,7 +16,6 @@ class CparticularesService {
   async find(page, limit, order_by, order_direction, agencia, rif) {    
     let params = {};
     let order = [];
-    let attributes = {};
     
     if(agencia) params.cod_agencia = agencia;
     if(rif) params.rif_ci = rif;    
@@ -25,7 +24,7 @@ class CparticularesService {
       order.push([order_by, order_direction]);
     }
 
-    return await utils.paginate(models.Cparticulares, page, limit, params, order, attributes);
+    return await utils.paginate(models.Cparticulares, page, limit, params, order);
   }
 
   async findOne(id) {

@@ -18,7 +18,6 @@ class AgenciasService {
   async find(page, limit, order_by, order_direction, ciudad) {    
     let params = {};
     let order = [];
-    let attributes = {};
     
     if(ciudad) params.cod_ciudad = ciudad;
 
@@ -26,13 +25,15 @@ class AgenciasService {
       order.push([order_by, order_direction]);
     }
 
-    attributes = {
+    let attributes = {
       include: [
         [Sequelize.literal(caseStatus), 'activo_desc']
       ]
     };
 
-    return await utils.paginate(models.Agencias, page, limit, params, order, attributes);
+    let include = ['ciudades'];
+
+    return await utils.paginate(models.Agencias, page, limit, params, order, attributes, include);
   }
 
   async findOne(id) {

@@ -54,7 +54,6 @@ class MmovimientosService {
     tipo, desde, hasta, cliente_orig, cliente_dest, estatus_oper, transito) {    
     let params = {};
     let order = [];
-    let attributes = {};
     
     if(agencia) params.cod_agencia = agencia;
     if(agencia_dest) params.cod_agencia_dest = agencia_dest;
@@ -77,7 +76,7 @@ class MmovimientosService {
     if(estatus_oper) params.estatus_operativo = estatus_oper;
     if(transito) params.check_transito = transito;
 
-    attributes = {
+    let attributes = {
       include: [
         [Sequelize.literal(caseTipo), 'tipo_desc'],
         [Sequelize.literal(caseEstatusOper), 'estatus_oper_desc'],

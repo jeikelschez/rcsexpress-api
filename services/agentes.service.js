@@ -19,7 +19,6 @@ class AgentesService {
   async find(page, limit, order_by, order_direction, agencia) {    
     let params = {};
     let order = [];
-    let attributes = {};
     
     if(agencia) params.cod_agencia = agencia;
 
@@ -27,7 +26,7 @@ class AgentesService {
       order.push([order_by, order_direction]);
     }
 
-    attributes = {
+    let attributes = {
       include: [
         [Sequelize.literal(caseActivo), 'activo_desc'],
         [Sequelize.literal(caseTipo), 'tipo_desc']

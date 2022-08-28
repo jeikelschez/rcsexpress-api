@@ -19,7 +19,6 @@ class CiudadesService {
   async find(page, limit, order_by, order_direction, estado) {    
     let params = {};
     let order = [];
-    let attributes = {};
     
     if(estado) params.cod_estado = estado;
 
@@ -27,7 +26,7 @@ class CiudadesService {
       order.push([order_by, order_direction]);
     }
 
-    attributes = {
+    let attributes = {
       include: [
         [Sequelize.literal(caseUrbano), 'check_urbano_desc'],
         [Sequelize.literal(caseRegion), 'cod_region_desc']

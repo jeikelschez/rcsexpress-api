@@ -2,7 +2,7 @@ class UtilsService {
 
     constructor() {}
 
-    async paginate(model, pageSize, pageLimit, where = {}, order = [], attributes) {
+    async paginate(model, pageSize, pageLimit, where = {}, order = [], attributes = {}, include = []) {
         const limit = parseInt(pageLimit, 10) || 10;
         const page = parseInt(pageSize, 10) || 1;
 
@@ -23,6 +23,10 @@ class UtilsService {
         }
 
         // check if the order array is empty
+        if (Object.keys(include).length) {
+            options['include'] = include;
+        }
+
         if (Object.keys(attributes).length) {
             options['attributes'] = attributes;
         }
