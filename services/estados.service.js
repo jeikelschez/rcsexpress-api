@@ -1,6 +1,8 @@
 const boom = require('@hapi/boom');
 
 const { models, Sequelize } = require('./../libs/sequelize');
+const UtilsService = require('./utils.service');
+const utils = new UtilsService();
 
 class EstadosService {
 
@@ -11,14 +13,20 @@ class EstadosService {
     return newEstado;
   }
 
-  async find(pais) {
+  async find(page, limit, order_by, order_direction, pais) {    
     let params = {};
+    let order = [];
+    
     if(pais) params.cod_pais = pais;
-    const estados = await models.Estados.findAll({
-      where: params,
-      include: ['paises']
-    });
-    return estados;
+
+    if(order_by && order_direction) {
+      order.push([order_by, order_direction]);
+    }
+
+    let attributes = {};
+    let include = ['paises'];
+
+    return await utils.paginate(models.Estados, page, limit, params, order, attributes, include);
   }
 
   async findOne(id) {

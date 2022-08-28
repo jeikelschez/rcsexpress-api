@@ -4462,6 +4462,38 @@
         "description": "API para Obtener todos los estados del sistema",
         "parameters": [
           {
+            "name": "page",
+            "in": "header",
+            "description": "Numero de la pagina",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "header",
+            "description": "Cantidad de registros",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "header",
+            "description": "Ordenado por",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "header",
+            "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "pais",
             "in": "header",
             "description": "Codigo del Pais",
@@ -4477,10 +4509,15 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Estados",
+                  "$ref": "#/extraSchemes/Paginate",
                   "properties": {
-                    "paises": {
-                      "$ref": "#/components/schemas/Paises"
+                    "data": {
+                      "$ref": "#/components/schemas/Estados",
+                      "properties": {
+                        "paises": {
+                          "$ref": "#/components/schemas/Paises"
+                        }
+                      }
                     }
                   }
                 }
@@ -5366,6 +5403,38 @@
         "description": "API para Obtener todos las localidades del sistema",
         "parameters": [
           {
+            "name": "page",
+            "in": "header",
+            "description": "Numero de la pagina",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "header",
+            "description": "Cantidad de registros",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "header",
+            "description": "Ordenado por",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "header",
+            "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "estado",
             "in": "header",
             "description": "Codigo del Estado",
@@ -5381,7 +5450,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Localidades"
+                  "$ref": "#/extraSchemes/Paginate",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Localidades"
+                    }
+                  }
                 }
               }
             }
