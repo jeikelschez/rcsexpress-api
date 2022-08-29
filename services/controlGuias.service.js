@@ -25,10 +25,10 @@ class CguiasService {
           {
             tipo: data.tipo,
             control_inicio : {
-              [Sequelize.Op.gte]: data.control_inicio
+              [Sequelize.Op.lte]: data.control_inicio
             },
             control_final : {
-              [Sequelize.Op.lte]: data.control_final
+              [Sequelize.Op.gte]: data.control_final
             }                    
           },
         ]
@@ -53,12 +53,12 @@ class CguiasService {
     
     if(desde) {
       params.control_inicio = {
-        [Sequelize.Op.gte]: desde
+        [Sequelize.Op.lte]: desde
       }
     };
     if(hasta) {
       params.control_final = {
-        [Sequelize.Op.lte]: hasta
+        [Sequelize.Op.gte]: hasta
       }
     };
     
