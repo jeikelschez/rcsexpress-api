@@ -8,6 +8,19 @@ const authenticateJWT  = require('./../middlewares/authenticate.handler');
 const router = express.Router();
 const service = new DmovimientosService();
 
+router.get('/',
+  authenticateJWT,
+  async (req, res, next) => {
+  try {
+    const { page, limit, order_by, order_direction, cod_movimiento } = req.headers;
+
+    const dMovimientos = await service.find(page, limit, order_by, order_direction, cod_movimiento);
+    res.json(dMovimientos);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get('/:id',
   authenticateJWT,
   validatorHandler(getDmovimientosSchema, 'params'),

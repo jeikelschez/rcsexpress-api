@@ -166,9 +166,7 @@
   "paths": {
     "/agencias": {
       "get": {
-        "tags": [
-          "Agencias"
-        ],
+        "tags": ["Agencias"],
         "summary": "Obtener todas las agencias",
         "description": "API para Obtener todas las agencias del sistema",
         "parameters": [
@@ -248,9 +246,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Agencias"
-        ],
+        "tags": ["Agencias"],
         "summary": "Crear Agencias",
         "description": "API para Crear una nueva Agencia",
         "requestBody": {
@@ -313,9 +309,7 @@
     },
     "/agencias/{id}": {
       "get": {
-        "tags": [
-          "Agencias"
-        ],
+        "tags": ["Agencias"],
         "summary": "Obtener Agencia por su Id",
         "description": "API para Retornar una Agencia por su ID específico",
         "parameters": [
@@ -368,9 +362,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Agencias"
-        ],
+        "tags": ["Agencias"],
         "summary": "Actualizar Agencias",
         "description": "API para Actualizar una Agencia por su ID específico",
         "parameters": [
@@ -452,9 +444,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Agencias"
-        ],
+        "tags": ["Agencias"],
         "summary": "Borrar Agencias",
         "description": "API para Borrar una Agencia por su ID específico",
         "parameters": [
@@ -509,9 +499,7 @@
     },
     "/agentes": {
       "get": {
-        "tags": [
-          "Agentes"
-        ],
+        "tags": ["Agentes"],
         "summary": "Obtener todos los agentes",
         "description": "API para Obtener todos los agentes del sistema",
         "parameters": [
@@ -586,9 +574,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Agentes"
-        ],
+        "tags": ["Agentes"],
         "summary": "Crear Agentes",
         "description": "API para Crear un nuevo Agente",
         "requestBody": {
@@ -651,9 +637,7 @@
     },
     "/agentes/{id}": {
       "get": {
-        "tags": [
-          "Agentes"
-        ],
+        "tags": ["Agentes"],
         "summary": "Obtener Agente por su Id",
         "description": "API para Retornar un Agente por su ID específico",
         "parameters": [
@@ -701,9 +685,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Agentes"
-        ],
+        "tags": ["Agentes"],
         "summary": "Actualizar Agentes",
         "description": "API para Actualizar un Agente por su ID específico",
         "parameters": [
@@ -785,9 +767,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Agentes"
-        ],
+        "tags": ["Agentes"],
         "summary": "Borrar Agentes",
         "description": "API para Borrar un Agente por su ID específico",
         "parameters": [
@@ -842,9 +822,7 @@
     },
     "/ayudantes": {
       "get": {
-        "tags": [
-          "Ayudantes"
-        ],
+        "tags": ["Ayudantes"],
         "summary": "Obtener todos los ayudantes",
         "description": "API para Obtener todos los ayudantes del sistema",
         "responses": {
@@ -871,9 +849,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Ayudantes"
-        ],
+        "tags": ["Ayudantes"],
         "summary": "Crear Ayudantes",
         "description": "API para Crear un nuevo Ayudante",
         "requestBody": {
@@ -936,9 +912,7 @@
     },
     "/ayudantes/{id}": {
       "get": {
-        "tags": [
-          "Ayudantes"
-        ],
+        "tags": ["Ayudantes"],
         "summary": "Obtener Ayudante por su Id",
         "description": "API para Retornar un Ayudante por su ID específico",
         "parameters": [
@@ -986,9 +960,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Ayudantes"
-        ],
+        "tags": ["Ayudantes"],
         "summary": "Actualizar Ayudantes",
         "description": "API para Actualizar un Ayudante por su ID específico",
         "parameters": [
@@ -1070,9 +1042,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Ayudantes"
-        ],
+        "tags": ["Ayudantes"],
         "summary": "Borrar Ayudantes",
         "description": "API para Borrar un Ayudante por su ID específico",
         "parameters": [
@@ -1127,9 +1097,7 @@
     },
     "/bancos": {
       "get": {
-        "tags": [
-          "Bancos"
-        ],
+        "tags": ["Bancos"],
         "summary": "Obtener todos los bancos",
         "description": "API para Obtener todos los bancos del sistema",
         "responses": {
@@ -1156,9 +1124,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Bancos"
-        ],
+        "tags": ["Bancos"],
         "summary": "Crear Bancos",
         "description": "API para Crear un nuevo Banco",
         "requestBody": {
@@ -1221,9 +1187,7 @@
     },
     "/bancos/{id}": {
       "get": {
-        "tags": [
-          "Bancos"
-        ],
+        "tags": ["Bancos"],
         "summary": "Obtener Banco por su Id",
         "description": "API para Retornar un Banco por su ID específico",
         "parameters": [
@@ -1271,9 +1235,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Bancos"
-        ],
+        "tags": ["Bancos"],
         "summary": "Actualizar Bancos",
         "description": "API para Actualizar un Banco por su ID específico",
         "parameters": [
@@ -1355,9 +1317,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Bancos"
-        ],
+        "tags": ["Bancos"],
         "summary": "Borrar Bancos",
         "description": "API para Borrar un Banco por su ID específico",
         "parameters": [
@@ -1412,9 +1372,7 @@
     },
     "/ciudades": {
       "get": {
-        "tags": [
-          "Ciudades"
-        ],
+        "tags": ["Ciudades"],
         "summary": "Obtener todos las ciudades",
         "description": "API para Obtener todos las ciudades del sistema",
         "parameters": [
@@ -1494,9 +1452,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Ciudades"
-        ],
+        "tags": ["Ciudades"],
         "summary": "Crear Ciudades",
         "description": "API para Crear una nueva Ciudades",
         "requestBody": {
@@ -1559,9 +1515,7 @@
     },
     "/ciudades/{id}": {
       "get": {
-        "tags": [
-          "Ciudades"
-        ],
+        "tags": ["Ciudades"],
         "summary": "Obtener Ciudad por su Id",
         "description": "API para Retornar una Ciudad por su ID específico",
         "parameters": [
@@ -1614,9 +1568,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Ciudades"
-        ],
+        "tags": ["Ciudades"],
         "summary": "Actualizar Ciudad",
         "description": "API para Actualizar una Ciudad por su ID específico",
         "parameters": [
@@ -1698,9 +1650,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Ciudades"
-        ],
+        "tags": ["Ciudades"],
         "summary": "Borrar Ciudad",
         "description": "API para Borrar un Ciudad por su ID específico",
         "parameters": [
@@ -1755,9 +1705,7 @@
     },
     "/clientes": {
       "get": {
-        "tags": [
-          "Clientes"
-        ],
+        "tags": ["Clientes"],
         "summary": "Obtener todos los clientes",
         "description": "API para Obtener todos los clientes del sistema",
         "parameters": [
@@ -1832,9 +1780,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Clientes"
-        ],
+        "tags": ["Clientes"],
         "summary": "Crear Clientes",
         "description": "API para Crear un nuevo Cliente",
         "requestBody": {
@@ -1897,9 +1843,7 @@
     },
     "/clientes/{id}": {
       "get": {
-        "tags": [
-          "Clientes"
-        ],
+        "tags": ["Clientes"],
         "summary": "Obtener Cliente por su Id",
         "description": "API para Retornar un Cliente por su ID específico",
         "parameters": [
@@ -1947,9 +1891,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Clientes"
-        ],
+        "tags": ["Clientes"],
         "summary": "Actualizar Cliente",
         "description": "API para Actualizar un Cliente por su ID específico",
         "parameters": [
@@ -2031,9 +1973,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Clientes"
-        ],
+        "tags": ["Clientes"],
         "summary": "Borrar Cliente",
         "description": "API para Borrar un Cliente por su ID específico",
         "parameters": [
@@ -2088,9 +2028,7 @@
     },
     "/cparticulares": {
       "get": {
-        "tags": [
-          "Clientes_Particulares"
-        ],
+        "tags": ["Clientes_Particulares"],
         "summary": "Obtener todos los Clientes Particulares",
         "description": "API para Obtener todos los clientes particulares del sistema",
         "parameters": [
@@ -2169,9 +2107,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Clientes_Particulares"
-        ],
+        "tags": ["Clientes_Particulares"],
         "summary": "Crear Clientes Particulares",
         "description": "API para Crear un nuevo Cliente Particular",
         "requestBody": {
@@ -2234,9 +2170,7 @@
     },
     "/cparticulares/{id}": {
       "get": {
-        "tags": [
-          "Clientes_Particulares"
-        ],
+        "tags": ["Clientes_Particulares"],
         "summary": "Obtener Cliente Particular por su Id",
         "description": "API para Retornar un Cliente Particular por su ID específico",
         "parameters": [
@@ -2284,9 +2218,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Clientes_Particulares"
-        ],
+        "tags": ["Clientes_Particulares"],
         "summary": "Actualizar Cliente Particular",
         "description": "API para Actualizar un Cliente Particular por su ID específico",
         "parameters": [
@@ -2368,9 +2300,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Clientes_Particulares"
-        ],
+        "tags": ["Clientes_Particulares"],
         "summary": "Borrar Cliente Particular",
         "description": "API para Borrar un Cliente Particular por su ID específico",
         "parameters": [
@@ -2425,9 +2355,7 @@
     },
     "/cfacturacion": {
       "get": {
-        "tags": [
-          "Conceptos_Facturacion"
-        ],
+        "tags": ["Conceptos_Facturacion"],
         "summary": "Obtener todos los Conceptos de Facturacion",
         "description": "API para Obtener todos los conceptos de facturacion del sistema",
         "parameters": [
@@ -2470,9 +2398,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Conceptos_Facturacion"
-        ],
+        "tags": ["Conceptos_Facturacion"],
         "summary": "Crear Concepto de Facturacion",
         "description": "API para Crear un nuevo Concepto de Facturacion",
         "requestBody": {
@@ -2535,9 +2461,7 @@
     },
     "/cfacturacion/{id}": {
       "get": {
-        "tags": [
-          "Conceptos_Facturacion"
-        ],
+        "tags": ["Conceptos_Facturacion"],
         "summary": "Obtener Concepto de Facturacion por su Id",
         "description": "API para Retornar un Concepto de Facturacion por su ID específico",
         "parameters": [
@@ -2590,9 +2514,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Conceptos_Facturacion"
-        ],
+        "tags": ["Conceptos_Facturacion"],
         "summary": "Actualizar Concepto de Facturacion",
         "description": "API para Actualizar un Concepto de Facturacion por su ID específico",
         "parameters": [
@@ -2674,9 +2596,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Conceptos_Facturacion"
-        ],
+        "tags": ["Conceptos_Facturacion"],
         "summary": "Borrar Concepto de Facturacion",
         "description": "API para Borrar un Concepto de Facturacion por su ID específico",
         "parameters": [
@@ -2731,9 +2651,7 @@
     },
     "/cguias": {
       "get": {
-        "tags": [
-          "Control_Guias"
-        ],
+        "tags": ["Control_Guias"],
         "summary": "Obtener todo el Control de Guias",
         "description": "API para Obtener todo el Control de Guias del sistema",
         "parameters": [
@@ -2867,9 +2785,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Control_Guias"
-        ],
+        "tags": ["Control_Guias"],
         "summary": "Crear Control de Guias",
         "description": "API para Crear un nuevo Control de Guias",
         "requestBody": {
@@ -2932,9 +2848,7 @@
     },
     "/cguias/{id}": {
       "get": {
-        "tags": [
-          "Control_Guias"
-        ],
+        "tags": ["Control_Guias"],
         "summary": "Obtener Control de Guias por su Id",
         "description": "API para Retornar un Control de Guias por su ID específico",
         "parameters": [
@@ -2987,9 +2901,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Control_Guias"
-        ],
+        "tags": ["Control_Guias"],
         "summary": "Actualizar Control de Guias",
         "description": "API para Actualizar un Control de Guias por su ID específico",
         "parameters": [
@@ -3071,9 +2983,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Control_Guias"
-        ],
+        "tags": ["Control_Guias"],
         "summary": "Borrar Control de Guias",
         "description": "API para Borrar un Control de Guias por su ID específico",
         "parameters": [
@@ -3128,9 +3038,7 @@
     },
     "/coperacion": {
       "get": {
-        "tags": [
-          "Conceptos_Operacion"
-        ],
+        "tags": ["Conceptos_Operacion"],
         "summary": "Obtener todos los Conceptos de Operacion",
         "description": "API para Obtener todos los conceptos de operacion del sistema",
         "parameters": [
@@ -3173,9 +3081,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Conceptos_Operacion"
-        ],
+        "tags": ["Conceptos_Operacion"],
         "summary": "Crear Concepto de Operacion",
         "description": "API para Crear un nuevo Concepto de Operacion",
         "requestBody": {
@@ -3238,9 +3144,7 @@
     },
     "/coperacion/{id}": {
       "get": {
-        "tags": [
-          "Conceptos_Operacion"
-        ],
+        "tags": ["Conceptos_Operacion"],
         "summary": "Obtener Concepto de Operacion por su Id",
         "description": "API para Retornar un Concepto de Operacion por su ID específico",
         "parameters": [
@@ -3293,9 +3197,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Conceptos_Operacion"
-        ],
+        "tags": ["Conceptos_Operacion"],
         "summary": "Actualizar Concepto de Operacion",
         "description": "API para Actualizar un Concepto de Operacion por su ID específico",
         "parameters": [
@@ -3377,9 +3279,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Conceptos_Operacion"
-        ],
+        "tags": ["Conceptos_Operacion"],
         "summary": "Borrar Concepto de Operacion",
         "description": "API para Borrar un Concepto de Operacion por su ID específico",
         "parameters": [
@@ -3434,9 +3334,7 @@
     },
     "/correlativo": {
       "get": {
-        "tags": [
-          "Control_Correlativo"
-        ],
+        "tags": ["Control_Correlativo"],
         "summary": "Obtener todo el Control Correlativo",
         "description": "API para Obtener todo el Control Correlativo del sistema",
         "parameters": [
@@ -3520,9 +3418,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Control_Correlativo"
-        ],
+        "tags": ["Control_Correlativo"],
         "summary": "Crear Control Correlativo",
         "description": "API para Crear un nuevo Control Correlativo",
         "requestBody": {
@@ -3585,9 +3481,7 @@
     },
     "/correlativo/{id}": {
       "get": {
-        "tags": [
-          "Control_Correlativo"
-        ],
+        "tags": ["Control_Correlativo"],
         "summary": "Obtener Control Correlativo por su Id",
         "description": "API para Retornar un Control Correlativo por su ID específico",
         "parameters": [
@@ -3635,9 +3529,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Control_Correlativo"
-        ],
+        "tags": ["Control_Correlativo"],
         "summary": "Actualizar Control Correlativo",
         "description": "API para Actualizar un Control Correlativo por su ID específico",
         "parameters": [
@@ -3719,9 +3611,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Control_Correlativo"
-        ],
+        "tags": ["Control_Correlativo"],
         "summary": "Borrar Control Correlativo",
         "description": "API para Borrar un Control Correlativo por su ID específico",
         "parameters": [
@@ -3776,9 +3666,7 @@
     },
     "/cuentas": {
       "get": {
-        "tags": [
-          "Cuentas"
-        ],
+        "tags": ["Cuentas"],
         "summary": "Obtener todos las cuentas",
         "description": "API para Obtener todos las cuentas del sistema",
         "parameters": [
@@ -3816,9 +3704,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Cuentas"
-        ],
+        "tags": ["Cuentas"],
         "summary": "Crear Cuentas",
         "description": "API para Crear una nueva Cuenta",
         "requestBody": {
@@ -3881,9 +3767,7 @@
     },
     "/cuentas/{id}": {
       "get": {
-        "tags": [
-          "Cuentas"
-        ],
+        "tags": ["Cuentas"],
         "summary": "Obtener Cuenta por su Id",
         "description": "API para Retornar una Cuenta por su ID específico",
         "parameters": [
@@ -3931,9 +3815,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Cuentas"
-        ],
+        "tags": ["Cuentas"],
         "summary": "Actualizar Cuentas",
         "description": "API para Actualizar una Cuenta por su ID específico",
         "parameters": [
@@ -4015,9 +3897,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Cuentas"
-        ],
+        "tags": ["Cuentas"],
         "summary": "Borrar Cuentas",
         "description": "API para Borrar una Cuenta por su ID específico",
         "parameters": [
@@ -4071,10 +3951,88 @@
       }
     },
     "/dmovimientos": {
-      "post": {
-        "tags": [
-          "Detalle_Movimientos"
+      "get": {
+        "tags": ["Detalle_Movimientos"],
+        "summary": "Obtener todos los Detalles de un Movimientos",
+        "description": "API para Obtener todos los Detalles de Movimientos del sistema",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "header",
+            "description": "Numero de la pagina",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "header",
+            "description": "Cantidad de registros",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "header",
+            "description": "Ordenado por",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "header",
+            "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cod_movimiento",
+            "in": "header",
+            "description": "Codigo del Movimiento",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
         ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/extraSchemes/Paginate",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Detalle_Movimientos",
+                      "properties": {
+                        "ciudades": {
+                          "$ref": "#/components/schemas/Conceptos_Operacion"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Detalle_Movimientos"],
         "summary": "Crear Detalle de Movimiento",
         "description": "API para Crear un nuevo Detalle de Movimiento",
         "requestBody": {
@@ -4137,9 +4095,7 @@
     },
     "/dmovimientos/{id}": {
       "get": {
-        "tags": [
-          "Detalle_Movimientos"
-        ],
+        "tags": ["Detalle_Movimientos"],
         "summary": "Obtener Detalle de Movimiento por su Id",
         "description": "API para Retornar un Detalle de Movimiento por su ID específico",
         "parameters": [
@@ -4187,9 +4143,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Detalle_Movimientos"
-        ],
+        "tags": ["Detalle_Movimientos"],
         "summary": "Actualizar Detalle de Movimiento",
         "description": "API para Actualizar un Detalle de Movimiento por su ID específico",
         "parameters": [
@@ -4271,9 +4225,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Detalle_Movimientos"
-        ],
+        "tags": ["Detalle_Movimientos"],
         "summary": "Borrar Detalle de Movimiento",
         "description": "API para Borrar un Detalle de Movimiento por su ID específico",
         "parameters": [
@@ -4328,9 +4280,7 @@
     },
     "/empleados": {
       "get": {
-        "tags": [
-          "Empleados"
-        ],
+        "tags": ["Empleados"],
         "summary": "Obtener todos los empleados",
         "description": "API para Obtener todos los empleados del sistema",
         "responses": {
@@ -4357,9 +4307,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Empleados"
-        ],
+        "tags": ["Empleados"],
         "summary": "Crear Empleados",
         "description": "API para Crear un nuevo Empleado",
         "requestBody": {
@@ -4422,9 +4370,7 @@
     },
     "/empleados/{id}": {
       "get": {
-        "tags": [
-          "Empleados"
-        ],
+        "tags": ["Empleados"],
         "summary": "Obtener Empleado por su Id",
         "description": "API para Retornar un Empleado por su ID específico",
         "parameters": [
@@ -4472,9 +4418,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Empleados"
-        ],
+        "tags": ["Empleados"],
         "summary": "Actualizar Empleados",
         "description": "API para Actualizar un Empleado por su ID específico",
         "parameters": [
@@ -4556,9 +4500,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Empleados"
-        ],
+        "tags": ["Empleados"],
         "summary": "Borrar Empleados",
         "description": "API para Borrar un Empleado por su ID específico",
         "parameters": [
@@ -4613,9 +4555,7 @@
     },
     "/estados": {
       "get": {
-        "tags": [
-          "Estados"
-        ],
+        "tags": ["Estados"],
         "summary": "Obtener todos los estados",
         "description": "API para Obtener todos los estados del sistema",
         "parameters": [
@@ -4695,9 +4635,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Estados"
-        ],
+        "tags": ["Estados"],
         "summary": "Crear Estados",
         "description": "API para Crear un nuevo Estado",
         "requestBody": {
@@ -4760,9 +4698,7 @@
     },
     "/estados/{id}": {
       "get": {
-        "tags": [
-          "Estados"
-        ],
+        "tags": ["Estados"],
         "summary": "Obtener Estado por su Id",
         "description": "API para Retornar un Estado por su ID específico",
         "parameters": [
@@ -4815,9 +4751,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Estados"
-        ],
+        "tags": ["Estados"],
         "summary": "Actualizar Estado",
         "description": "API para Actualizar un Estado por su ID específico",
         "parameters": [
@@ -4899,9 +4833,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Estados"
-        ],
+        "tags": ["Estados"],
         "summary": "Borrar Estado",
         "description": "API para Borrar un Estado por su ID específico",
         "parameters": [
@@ -4956,9 +4888,7 @@
     },
     "/fpos": {
       "get": {
-        "tags": [
-          "Fpos"
-        ],
+        "tags": ["Fpos"],
         "summary": "Obtener todos los fpos",
         "description": "API para Obtener todos los fpos del sistema",
         "responses": {
@@ -4985,9 +4915,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Fpos"
-        ],
+        "tags": ["Fpos"],
         "summary": "Crear Fpo",
         "description": "API para Crear un nuevo Fpo",
         "requestBody": {
@@ -5050,9 +4978,7 @@
     },
     "/fpos/{id}": {
       "get": {
-        "tags": [
-          "Fpos"
-        ],
+        "tags": ["Fpos"],
         "summary": "Obtener Fpo por su Id",
         "description": "API para Retornar un Fpo por su ID específico",
         "parameters": [
@@ -5100,9 +5026,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Fpos"
-        ],
+        "tags": ["Fpos"],
         "summary": "Actualizar Fpo",
         "description": "API para Actualizar un Fpo por su ID específico",
         "parameters": [
@@ -5184,9 +5108,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Fpos"
-        ],
+        "tags": ["Fpos"],
         "summary": "Borrar Fpo",
         "description": "API para Borrar un Fpo por su ID específico",
         "parameters": [
@@ -5241,9 +5163,7 @@
     },
     "/ginutilizadas": {
       "get": {
-        "tags": [
-          "Guias_Inutilizadas"
-        ],
+        "tags": ["Guias_Inutilizadas"],
         "summary": "Obtener todas las Guias Inutilizadas",
         "description": "API para Obtener todas las Guias Inutilizadas del sistema",
         "parameters": [
@@ -5331,9 +5251,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Guias_Inutilizadas"
-        ],
+        "tags": ["Guias_Inutilizadas"],
         "summary": "Crear Fpo",
         "description": "API para Crear una nueva Guia Inutilizada",
         "requestBody": {
@@ -5396,9 +5314,7 @@
     },
     "/ginutilizadas/{id}": {
       "get": {
-        "tags": [
-          "Guias_Inutilizadas"
-        ],
+        "tags": ["Guias_Inutilizadas"],
         "summary": "Obtener una Guia Inutilizada por su Id",
         "description": "API para Retornar una Guia Inutilizada por su ID específico",
         "parameters": [
@@ -5446,9 +5362,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Guias_Inutilizadas"
-        ],
+        "tags": ["Guias_Inutilizadas"],
         "summary": "Actualizar una Guia Inutilizada",
         "description": "API para Actualizar una Guia Inutilizada por su ID específico",
         "parameters": [
@@ -5530,9 +5444,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Guias_Inutilizadas"
-        ],
+        "tags": ["Guias_Inutilizadas"],
         "summary": "Borrar una Guia Inutilizada",
         "description": "API para Borrar una Guia Inutilizada por su ID específico",
         "parameters": [
@@ -5587,9 +5499,7 @@
     },
     "/localidades": {
       "get": {
-        "tags": [
-          "Localidades"
-        ],
+        "tags": ["Localidades"],
         "summary": "Obtener todos las localidades",
         "description": "API para Obtener todos las localidades del sistema",
         "parameters": [
@@ -5666,9 +5576,7 @@
     },
     "/localidades/{id}": {
       "get": {
-        "tags": [
-          "Localidades"
-        ],
+        "tags": ["Localidades"],
         "summary": "Obtener Localidad por su Id",
         "description": "API para Retornar una Localidad por su ID específico",
         "parameters": [
@@ -5718,9 +5626,7 @@
     },
     "/mretenciones": {
       "get": {
-        "tags": [
-          "Maestro_Retenciones"
-        ],
+        "tags": ["Maestro_Retenciones"],
         "summary": "Obtener todo el maestro de Retenciones",
         "description": "API para Obtener el maestro de Retenciones del sistema",
         "parameters": [
@@ -5804,9 +5710,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Maestro_Retenciones"
-        ],
+        "tags": ["Maestro_Retenciones"],
         "summary": "Crear concepto de Retención",
         "description": "API para Crear un nuevo concepto de Retención",
         "requestBody": {
@@ -5869,9 +5773,7 @@
     },
     "/mmovimientos": {
       "get": {
-        "tags": [
-          "Maestro_Movimientos"
-        ],
+        "tags": ["Maestro_Movimientos"],
         "summary": "Obtener todos los Movimientos",
         "description": "API para Obtener todo el Control de Guias del sistema",
         "parameters": [
@@ -6027,9 +5929,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Maestro_Movimientos"
-        ],
+        "tags": ["Maestro_Movimientos"],
         "summary": "Crear Movimiento",
         "description": "API para Crear un nuevo Movimiento",
         "requestBody": {
@@ -6092,9 +5992,7 @@
     },
     "/mmovimientos/{id}": {
       "get": {
-        "tags": [
-          "Maestro_Movimientos"
-        ],
+        "tags": ["Maestro_Movimientos"],
         "summary": "Obtener Movimiento por su Id",
         "description": "API para Retornar un Movimiento por su ID específico",
         "parameters": [
@@ -6142,9 +6040,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Maestro_Movimientos"
-        ],
+        "tags": ["Maestro_Movimientos"],
         "summary": "Actualizar Movimiento",
         "description": "API para Actualizar un Movimiento por su ID específico",
         "parameters": [
@@ -6226,9 +6122,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Maestro_Movimientos"
-        ],
+        "tags": ["Maestro_Movimientos"],
         "summary": "Borrar Movimiento",
         "description": "API para Borrar un Movimiento por su ID específico",
         "parameters": [
@@ -6283,9 +6177,7 @@
     },
     "/mretenciones/{id}": {
       "get": {
-        "tags": [
-          "Maestro_Retenciones"
-        ],
+        "tags": ["Maestro_Retenciones"],
         "summary": "Obtener concepto de Retención por su Id",
         "description": "API para Retornar un concepto de Retención por su ID específico",
         "parameters": [
@@ -6333,9 +6225,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Maestro_Retenciones"
-        ],
+        "tags": ["Maestro_Retenciones"],
         "summary": "Actualizar concepto de Retención",
         "description": "API para Actualizar un concepto de Retención por su ID específico",
         "parameters": [
@@ -6417,9 +6307,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Maestro_Retenciones"
-        ],
+        "tags": ["Maestro_Retenciones"],
         "summary": "Borrar concepto de Retención",
         "description": "API para Borrar un concepto de Retención por su ID específico",
         "parameters": [
@@ -6474,9 +6362,7 @@
     },
     "/municipios": {
       "get": {
-        "tags": [
-          "Municipios"
-        ],
+        "tags": ["Municipios"],
         "summary": "Obtener todos los municipios",
         "description": "API para Obtener todos los municipios del sistema",
         "parameters": [
@@ -6553,9 +6439,7 @@
     },
     "/municipios/{id}": {
       "get": {
-        "tags": [
-          "Municipios"
-        ],
+        "tags": ["Municipios"],
         "summary": "Obtener Municipio por su Id",
         "description": "API para Retornar un Municipio por su ID específico",
         "parameters": [
@@ -6605,9 +6489,7 @@
     },
     "/objetos": {
       "get": {
-        "tags": [
-          "Objetos"
-        ],
+        "tags": ["Objetos"],
         "summary": "Obtener todos los objetos",
         "description": "API para Obtener todos los objetos del sistema",
         "responses": {
@@ -6634,9 +6516,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Objetos"
-        ],
+        "tags": ["Objetos"],
         "summary": "Crear Objetos",
         "description": "API para Crear un nuevo Objeto",
         "requestBody": {
@@ -6699,9 +6579,7 @@
     },
     "/objetos/{codigo}": {
       "get": {
-        "tags": [
-          "Objetos"
-        ],
+        "tags": ["Objetos"],
         "summary": "Obtener Objeto por su Codigo",
         "description": "API para Retornar un Objeto por su Codigo específico",
         "parameters": [
@@ -6749,9 +6627,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Objetos"
-        ],
+        "tags": ["Objetos"],
         "summary": "Actualizar Pais",
         "description": "API para Actualizar un Objeto por su Codigo específico",
         "parameters": [
@@ -6833,9 +6709,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Objetos"
-        ],
+        "tags": ["Objetos"],
         "summary": "Borrar Objeto",
         "description": "API para Borrar un Objeto por su Codigo específico",
         "parameters": [
@@ -6890,9 +6764,7 @@
     },
     "/paises": {
       "get": {
-        "tags": [
-          "Paises"
-        ],
+        "tags": ["Paises"],
         "summary": "Obtener todos los paises",
         "description": "API para Obtener todos los paises del sistema",
         "responses": {
@@ -6919,9 +6791,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Paises"
-        ],
+        "tags": ["Paises"],
         "summary": "Crear Paises",
         "description": "API para Crear un nuevo Pais",
         "requestBody": {
@@ -6984,9 +6854,7 @@
     },
     "/paises/{id}": {
       "get": {
-        "tags": [
-          "Paises"
-        ],
+        "tags": ["Paises"],
         "summary": "Obtener Pais por su Id",
         "description": "API para Retornar un Pais por su ID específico",
         "parameters": [
@@ -7034,9 +6902,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Paises"
-        ],
+        "tags": ["Paises"],
         "summary": "Actualizar Pais",
         "description": "API para Actualizar un Pais por su ID específico",
         "parameters": [
@@ -7118,9 +6984,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Paises"
-        ],
+        "tags": ["Paises"],
         "summary": "Borrar Pais",
         "description": "API para Borrar un Pais por su ID específico",
         "parameters": [
@@ -7175,9 +7039,7 @@
     },
     "/parroquias": {
       "get": {
-        "tags": [
-          "Parroquias"
-        ],
+        "tags": ["Parroquias"],
         "summary": "Obtener todos las parroquias",
         "description": "API para Obtener todos las parroquias del sistema",
         "parameters": [
@@ -7254,9 +7116,7 @@
     },
     "/parroquias/{id}": {
       "get": {
-        "tags": [
-          "Parroquias"
-        ],
+        "tags": ["Parroquias"],
         "summary": "Obtener Parroquia por su Id",
         "description": "API para Retornar una Parroquia por su ID específico",
         "parameters": [
@@ -7306,9 +7166,7 @@
     },
     "/permisos": {
       "get": {
-        "tags": [
-          "Permisos"
-        ],
+        "tags": ["Permisos"],
         "summary": "Obtener todos los permisos",
         "description": "API para Obtener todos los permisos del sistema",
         "parameters": [
@@ -7346,9 +7204,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Permisos"
-        ],
+        "tags": ["Permisos"],
         "summary": "Crear Permiso",
         "description": "API para Crear un nuevo Permiso",
         "requestBody": {
@@ -7411,9 +7267,7 @@
     },
     "/permisos/{id}": {
       "get": {
-        "tags": [
-          "Permisos"
-        ],
+        "tags": ["Permisos"],
         "summary": "Obtener Permiso por su Id",
         "description": "API para Retornar un Permiso por su ID específico",
         "parameters": [
@@ -7461,9 +7315,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Permisos"
-        ],
+        "tags": ["Permisos"],
         "summary": "Actualizar Permiso",
         "description": "API para Actualizar un Permiso por su ID específico",
         "parameters": [
@@ -7545,9 +7397,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Permisos"
-        ],
+        "tags": ["Permisos"],
         "summary": "Borrar Permiso",
         "description": "API para Borrar un Permiso por su ID específico",
         "parameters": [
@@ -7602,9 +7452,7 @@
     },
     "/proveedores": {
       "get": {
-        "tags": [
-          "Proveedores"
-        ],
+        "tags": ["Proveedores"],
         "summary": "Obtener todos los proveedores",
         "description": "API para Obtener todos los proveedores del sistema",
         "parameters": [
@@ -7675,9 +7523,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Proveedores"
-        ],
+        "tags": ["Proveedores"],
         "summary": "Crear Proveedor",
         "description": "API para Crear un nuevo Proveedor",
         "requestBody": {
@@ -7740,9 +7586,7 @@
     },
     "/proveedores/{id}": {
       "get": {
-        "tags": [
-          "Proveedores"
-        ],
+        "tags": ["Proveedores"],
         "summary": "Obtener Proveedor por su Id",
         "description": "API para Retornar un Proveedor por su ID específico",
         "parameters": [
@@ -7795,9 +7639,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Proveedores"
-        ],
+        "tags": ["Proveedores"],
         "summary": "Actualizar Proveedor",
         "description": "API para Actualizar un Proveedor por su ID específico",
         "parameters": [
@@ -7879,9 +7721,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Proveedores"
-        ],
+        "tags": ["Proveedores"],
         "summary": "Borrar Proveedor",
         "description": "API para Borrar un Proveedor por su ID específico",
         "parameters": [
@@ -7936,9 +7776,7 @@
     },
     "/receptores": {
       "get": {
-        "tags": [
-          "Receptores"
-        ],
+        "tags": ["Receptores"],
         "summary": "Obtener todos los receptores",
         "description": "API para Obtener todos los receptores del sistema",
         "responses": {
@@ -7965,9 +7803,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Receptores"
-        ],
+        "tags": ["Receptores"],
         "summary": "Crear Receptor",
         "description": "API para Crear un nuevo Receptor",
         "requestBody": {
@@ -8030,9 +7866,7 @@
     },
     "/receptores/{id}": {
       "get": {
-        "tags": [
-          "Receptores"
-        ],
+        "tags": ["Receptores"],
         "summary": "Obtener Receptor por su Id",
         "description": "API para Retornar un Receptor por su ID específico",
         "parameters": [
@@ -8080,9 +7914,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Receptores"
-        ],
+        "tags": ["Receptores"],
         "summary": "Actualizar Receptor",
         "description": "API para Actualizar un Receptor por su ID específico",
         "parameters": [
@@ -8164,9 +7996,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Receptores"
-        ],
+        "tags": ["Receptores"],
         "summary": "Borrar Receptor",
         "description": "API para Borrar un Receptor por su ID específico",
         "parameters": [
@@ -8221,9 +8051,7 @@
     },
     "/roles": {
       "get": {
-        "tags": [
-          "Roles"
-        ],
+        "tags": ["Roles"],
         "summary": "Obtener todos los roles",
         "description": "API para Obtener todos los roles del sistema",
         "parameters": [
@@ -8261,9 +8089,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Roles"
-        ],
+        "tags": ["Roles"],
         "summary": "Crear Roles",
         "description": "API para Crear un nuevo Rol",
         "requestBody": {
@@ -8326,9 +8152,7 @@
     },
     "/roles/{id}": {
       "get": {
-        "tags": [
-          "Roles"
-        ],
+        "tags": ["Roles"],
         "summary": "Obtener Rol por su Id",
         "description": "API para Retornar un Rol por su ID específico",
         "parameters": [
@@ -8376,9 +8200,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Roles"
-        ],
+        "tags": ["Roles"],
         "summary": "Actualizar Rol",
         "description": "API para Actualizar un Rol por su ID específico",
         "parameters": [
@@ -8460,9 +8282,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Roles"
-        ],
+        "tags": ["Roles"],
         "summary": "Borrar Rol",
         "description": "API para Borrar un Rol por su ID específico",
         "parameters": [
@@ -8517,9 +8337,7 @@
     },
     "/tarifas": {
       "get": {
-        "tags": [
-          "Tarifas"
-        ],
+        "tags": ["Tarifas"],
         "summary": "Obtener todos las tarifas",
         "description": "API para Obtener todos las tarifas del sistema",
         "responses": {
@@ -8546,9 +8364,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Tarifas"
-        ],
+        "tags": ["Tarifas"],
         "summary": "Crear Tarifa",
         "description": "API para Crear una nueva Tarifas",
         "requestBody": {
@@ -8611,9 +8427,7 @@
     },
     "/tarifas/{id}": {
       "get": {
-        "tags": [
-          "Tarifas"
-        ],
+        "tags": ["Tarifas"],
         "summary": "Obtener Tarifa por su Id",
         "description": "API para Retornar una Tarifa por su ID específico",
         "parameters": [
@@ -8661,9 +8475,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Tarifas"
-        ],
+        "tags": ["Tarifas"],
         "summary": "Actualizar Tarifa",
         "description": "API para Actualizar una Tarifa por su ID específico",
         "parameters": [
@@ -8745,9 +8557,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Tarifas"
-        ],
+        "tags": ["Tarifas"],
         "summary": "Borrar Tarifa",
         "description": "API para Borrar una Tarifa por su ID específico",
         "parameters": [
@@ -8802,9 +8612,7 @@
     },
     "/tipos": {
       "get": {
-        "tags": [
-          "Tipos"
-        ],
+        "tags": ["Tipos"],
         "summary": "Obtener todos los tipos",
         "description": "API para Obtener todos los tipos del sistema",
         "parameters": [
@@ -8844,9 +8652,7 @@
     },
     "/unidades": {
       "get": {
-        "tags": [
-          "Unidades"
-        ],
+        "tags": ["Unidades"],
         "summary": "Obtener todas las unidades de transporte",
         "description": "API para Obtener todas las unidades de transporte del sistema",
         "responses": {
@@ -8873,9 +8679,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Unidades"
-        ],
+        "tags": ["Unidades"],
         "summary": "Crear Unidad de Trasporte",
         "description": "API para Crear una nueva Unidad de Trasporte",
         "requestBody": {
@@ -8938,9 +8742,7 @@
     },
     "/unidades/{id}": {
       "get": {
-        "tags": [
-          "Unidades"
-        ],
+        "tags": ["Unidades"],
         "summary": "Obtener Unidad de Transporte por su Id",
         "description": "API para Retornar una  Unidad de Transporte por su ID específico",
         "parameters": [
@@ -8988,9 +8790,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Unidades"
-        ],
+        "tags": ["Unidades"],
         "summary": "Actualizar Unidad de Transporte",
         "description": "API para Actualizar una Unidad de Transporte por su ID específico",
         "parameters": [
@@ -9072,9 +8872,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Unidades"
-        ],
+        "tags": ["Unidades"],
         "summary": "Borrar Unidad de Transporte",
         "description": "API para Borrar una Unidad de Transporte por su ID específico",
         "parameters": [
@@ -9129,9 +8927,7 @@
     },
     "/usuarios": {
       "get": {
-        "tags": [
-          "Usuarios"
-        ],
+        "tags": ["Usuarios"],
         "summary": "Obtener todos los usuarios",
         "description": "API para Obtener todos los usuarios del sistema",
         "parameters": [
@@ -9174,9 +8970,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Usuarios"
-        ],
+        "tags": ["Usuarios"],
         "summary": "Crear Usuarios",
         "description": "API para Crear un nuevo Usuario",
         "requestBody": {
@@ -9239,9 +9033,7 @@
     },
     "/usuarios/{login}": {
       "get": {
-        "tags": [
-          "Usuarios"
-        ],
+        "tags": ["Usuarios"],
         "summary": "Obtener Usuario por su Login",
         "description": "API para Retornar un Usuario por su Login específico",
         "parameters": [
@@ -9294,9 +9086,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Usuarios"
-        ],
+        "tags": ["Usuarios"],
         "summary": "Actualizar Usuario",
         "description": "API para Actualizar un Usuario por su Login específico",
         "parameters": [
@@ -9378,9 +9168,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Usuarios"
-        ],
+        "tags": ["Usuarios"],
         "summary": "Borrar Usuario",
         "description": "API para Borrar un Usuario por su Login específico",
         "parameters": [
@@ -9435,9 +9223,7 @@
     },
     "/usuarios/login": {
       "post": {
-        "tags": [
-          "Usuarios"
-        ],
+        "tags": ["Usuarios"],
         "summary": "Autenticacion del usuario para obtener Token",
         "description": "API para Autenticacion del Usuario",
         "requestBody": {
@@ -9491,9 +9277,7 @@
     },
     "/usuarios/refresh": {
       "post": {
-        "tags": [
-          "Usuarios"
-        ],
+        "tags": ["Usuarios"],
         "summary": "Refrescar Token del usuario",
         "description": "API para Refrescar Token del Usuario",
         "requestBody": {
@@ -9557,9 +9341,7 @@
     },
     "/usuarios/logout": {
       "post": {
-        "tags": [
-          "Usuarios"
-        ],
+        "tags": ["Usuarios"],
         "summary": "Eliminar Token del usuario",
         "description": "API para Eliminar Token del Usuario",
         "requestBody": {
@@ -9599,9 +9381,7 @@
     },
     "/zonas": {
       "get": {
-        "tags": [
-          "Zonas"
-        ],
+        "tags": ["Zonas"],
         "summary": "Obtener todas las zonas",
         "description": "API para Obtener todas las zonas del sistema",
         "parameters": [
@@ -9639,9 +9419,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Zonas"
-        ],
+        "tags": ["Zonas"],
         "summary": "Crear Zonas",
         "description": "API para Crear una nueva Zona",
         "requestBody": {
@@ -9704,9 +9482,7 @@
     },
     "/vcontrol": {
       "get": {
-        "tags": [
-          "Variable_Control"
-        ],
+        "tags": ["Variable_Control"],
         "summary": "Obtener todas las Variables de Control",
         "description": "API para Obtener todas las Variables de Control del sistema",
         "responses": {
@@ -9733,9 +9509,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Variable_Control"
-        ],
+        "tags": ["Variable_Control"],
         "summary": "Crear Variable de Control",
         "description": "API para Crear una nueva Variable de Control",
         "requestBody": {
@@ -9798,9 +9572,7 @@
     },
     "/vcontrol/{id}": {
       "get": {
-        "tags": [
-          "Variable_Control"
-        ],
+        "tags": ["Variable_Control"],
         "summary": "Obtener Variable de Control por su Id",
         "description": "API para Retornar una Variable de Control por su ID específico",
         "parameters": [
@@ -9848,9 +9620,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Variable_Control"
-        ],
+        "tags": ["Variable_Control"],
         "summary": "Actualizar Variable de Control",
         "description": "API para Actualizar una Variable de Control por su ID específico",
         "parameters": [
@@ -9932,9 +9702,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Variable_Control"
-        ],
+        "tags": ["Variable_Control"],
         "summary": "Borrar Variable de Control",
         "description": "API para Borrar una Variable de Control por su ID específico",
         "parameters": [
@@ -9989,9 +9757,7 @@
     },
     "/zonas/{id}": {
       "get": {
-        "tags": [
-          "Zonas"
-        ],
+        "tags": ["Zonas"],
         "summary": "Obtener Zona por su Id",
         "description": "API para Retornar una Zona por su ID específico",
         "parameters": [
@@ -10039,9 +9805,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Zonas"
-        ],
+        "tags": ["Zonas"],
         "summary": "Actualizar Zonas",
         "description": "API para Actualizar una Zona por su ID específico",
         "parameters": [
@@ -10123,9 +9887,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Zonas"
-        ],
+        "tags": ["Zonas"],
         "summary": "Borrar Zonas",
         "description": "API para Borrar una Zona por su ID específico",
         "parameters": [
@@ -10186,8 +9948,7 @@
         "required": [
           "id",
           "nb_agencia",
-          "cod_ciudad"
-        ],
+          "cod_ciudad"],
         "properties": {
           "id": {
             "type": "number",
@@ -10230,8 +9991,7 @@
         "required": [
           "id",
           "nb_agente",
-          "cod_agencia"
-        ],
+          "cod_agencia"],
         "properties": {
           "id": {
             "type": "number",
@@ -10293,8 +10053,7 @@
         "description": "Modelo de Ayudantes",
         "required": [
           "id",
-          "nb_ayudante"
-        ],
+          "nb_ayudante"],
         "properties": {
           "id": {
             "type": "number",
@@ -10325,8 +10084,7 @@
         "description": "Modelo de Bancos",
         "required": [
           "id",
-          "nb_banco"
-        ],
+          "nb_banco"],
         "properties": {
           "id": {
             "type": "number",
@@ -10363,8 +10121,7 @@
           "tipo_persona",
           "modalidad_pago",
           "cod_agencia",
-          "cod_ciudad"
-        ],
+          "cod_ciudad"],
         "properties": {
           "id": {
             "type": "number",
@@ -10455,8 +10212,7 @@
         "required": [
           "id",
           "cod_agencia",
-          "cod_cliente"
-        ],
+          "cod_cliente"],
         "properties": {
           "id": {
             "type": "number",
@@ -10505,8 +10261,7 @@
         "required": [
           "id",
           "desc_ciudad",
-          "cod_estado"
-        ],
+          "cod_estado"],
         "properties": {
           "id": {
             "type": "number",
@@ -10544,8 +10299,7 @@
           "desc_concepto",
           "check_comision",
           "check_impuesto",
-          "cod_concepto"
-        ],
+          "cod_concepto"],
         "properties": {
           "id": {
             "type": "number",
@@ -10572,8 +10326,7 @@
           "control_inicio",
           "control_final",
           "tipo",
-          "cod_agencia"
-        ],
+          "cod_agencia"],
         "properties": {
           "id": {
             "type": "number",
@@ -10614,8 +10367,7 @@
           "id",
           "desc_concepto",
           "tipo",
-          "afecta_estado"
-        ],
+          "afecta_estado"],
         "properties": {
           "id": {
             "type": "number",
@@ -10643,8 +10395,7 @@
           "tipo",
           "control_inicio",
           "control_final",
-          "cod_agencia"
-        ],
+          "cod_agencia"],
         "properties": {
           "id": {
             "type": "number",
@@ -10682,8 +10433,7 @@
         "required": [
           "id",
           "nro_cuenta",
-          "cod_banco"
-        ],
+          "cod_banco"],
         "properties": {
           "id": {
             "type": "number",
@@ -10720,8 +10470,7 @@
           "id",
           "cod_movimiento",
           "nro_item",
-          "precio_unitario"
-        ],
+          "precio_unitario"],
         "properties": {
           "id": {
             "type": "number",
@@ -10767,8 +10516,7 @@
           "nombre",
           "aplica_retencion",
           "porcentaje_retencion",
-          "periodo"
-        ],
+          "periodo"],
         "properties": {
           "id": {
             "type": "number",
@@ -10801,8 +10549,7 @@
           "desc_estado",
           "siglas",
           "iso_3166",
-          "cod_pais"
-        ],
+          "cod_pais"],
         "properties": {
           "id": {
             "type": "number",
@@ -10830,8 +10577,7 @@
           "desc_tipo",
           "valor",
           "f_val",
-          "f_anul"
-        ],
+          "f_anul"],
         "properties": {
           "id": {
             "type": "number",
@@ -10869,8 +10615,7 @@
           "tipo_guia",
           "cod_control_guias",
           "fecha_registro",
-          "cod_concepto"
-        ],
+          "cod_concepto"],
         "properties": {
           "id": {
             "type": "number",
@@ -10908,8 +10653,7 @@
           "id",
           "desc_localidad",
           "cod_postal",
-          "cod_estado"
-        ],
+          "cod_estado"],
         "properties": {
           "id": {
             "type": "number",
@@ -10936,8 +10680,7 @@
           "fecha_emision",
           "cod_cliente_org",
           "modalidad_pago",
-          "saldo"
-        ],
+          "saldo"],
         "properties": {
           "id": {
             "type": "number",
@@ -11266,6 +11009,10 @@
             "type": "string",
             "readOnly": true
           },
+          "estatus_admin_desc": {
+            "type": "string",
+            "readOnly": true
+          },
           "pagado_en_desc": {
             "type": "string",
             "readOnly": true
@@ -11289,8 +11036,7 @@
           "sustraendo",
           "cod_seniat",
           "fecha_ini_val",
-          "fecha_fin_val"
-        ],
+          "fecha_fin_val"],
         "properties": {
           "id": {
             "type": "number",
@@ -11337,8 +11083,7 @@
         "required": [
           "id",
           "desc_municipio",
-          "cod_estado"
-        ],
+          "cod_estado"],
         "properties": {
           "id": {
             "type": "number",
@@ -11356,8 +11101,7 @@
         "description": "Modelo de Objetos",
         "required": [
           "codigo",
-          "descripcion"
-        ],
+          "descripcion"],
         "properties": {
           "codigo": {
             "type": "string"
@@ -11372,8 +11116,7 @@
         "required": [
           "id",
           "desc_pais",
-          "tipo_pais"
-        ],
+          "tipo_pais"],
         "properties": {
           "id": {
             "type": "number",
@@ -11396,8 +11139,7 @@
         "required": [
           "id",
           "desc_parroquia",
-          "cod_municipio"
-        ],
+          "cod_municipio"],
         "properties": {
           "id": {
             "type": "number",
@@ -11416,8 +11158,7 @@
         "required": [
           "id",
           "codigo",
-          "cod_rol"
-        ],
+          "cod_rol"],
         "properties": {
           "id": {
             "type": "number",
@@ -11436,8 +11177,7 @@
         "required": [
           "id",
           "nb_proveedor",
-          "rif_proveedor"
-        ],
+          "rif_proveedor"],
         "properties": {
           "id": {
             "type": "number",
@@ -11506,8 +11246,7 @@
         "description": "Modelo de Receptores",
         "required": [
           "id",
-          "nb_receptor"
-        ],
+          "nb_receptor"],
         "properties": {
           "id": {
             "type": "number",
@@ -11548,8 +11287,7 @@
         "required": [
           "id",
           "descripcion",
-          "cod_agencia"
-        ],
+          "cod_agencia"],
         "properties": {
           "id": {
             "type": "number",
@@ -11567,8 +11305,7 @@
         "description": "Modelo de Tarifas",
         "required": [
           "id",
-          "monto_tarifa"
-        ],
+          "monto_tarifa"],
         "properties": {
           "id": {
             "type": "number",
@@ -11646,8 +11383,7 @@
         "required": [
           "codigo",
           "descripcion",
-          "fuente"
-        ],
+          "fuente"],
         "properties": {
           "codigo": {
             "type": "number",
@@ -11666,8 +11402,7 @@
         "required": [
           "id",
           "placas",
-          "descripcion"
-        ],
+          "descripcion"],
         "properties": {
           "id": {
             "type": "number",
@@ -11692,8 +11427,7 @@
           "nombre",
           "activo",
           "cod_agencia",
-          "cod_rol"
-        ],
+          "cod_rol"],
         "properties": {
           "login": {
             "type": "string"
@@ -11725,8 +11459,7 @@
           "id",
           "nombre",
           "tipo",
-          "valor"
-        ],
+          "valor"],
         "properties": {
           "id": {
             "type": "number",
@@ -11753,8 +11486,7 @@
           "id",
           "nb_zona",
           "tipo_zona",
-          "cod_agencia"
-        ],
+          "cod_agencia"],
         "properties": {
           "id": {
             "type": "number",

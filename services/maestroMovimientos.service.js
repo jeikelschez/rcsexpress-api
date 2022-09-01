@@ -17,6 +17,14 @@ const caseEstatusOper = '(CASE estatus_operativo WHEN "PR" THEN "En proceso de E
                                                ' WHEN "CO" THEN "Entrega Conforme"' +
                                                ' WHEN "NC" THEN "Entrega NO Conforme"' +
                                                ' ELSE "" END)';
+const caseEstatusAdmin = '(CASE estatus_administra WHEN "E" THEN "En Elaboración"' +
+                                                 ' WHEN "F" THEN "Pendiente por Facturar"' +
+                                                 ' WHEN "G" THEN "Con Factura Generada"' +
+                                                 ' WHEN "A" THEN "Anulada"' +
+                                                 ' WHEN "P" THEN "Pendiente por Cobrar"' +
+                                                 ' WHEN "C" THEN "Cancelada"' +
+                                                 ' WHEN "I" THEN "Pendiente por Imprimir"' +
+                                                 ' ELSE "" END)';
 const casePagadoEn = '(CASE pagado_en WHEN "O" THEN "Origen"' +
                                     ' WHEN "D" THEN "Destino"' +
                                     ' ELSE "" END)';
@@ -80,6 +88,7 @@ class MmovimientosService {
       include: [
         [Sequelize.literal(caseTipo), 'tipo_desc'],
         [Sequelize.literal(caseEstatusOper), 'estatus_oper_desc'],
+        [Sequelize.literal(caseEstatusAdmin), 'estatus_admin_desc'],        
         [Sequelize.literal(casePagadoEn), 'pagado_en_desc'],
         [Sequelize.literal(caseModalidad), 'modalidad_desc']
       ]
