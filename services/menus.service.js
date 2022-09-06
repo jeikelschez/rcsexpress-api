@@ -6,11 +6,26 @@ class MenusService {
 
   constructor() {}
 
-  async find() {
-    const menus = await models.Menus.findAll({order: [
-      ['level', 'ASC'],
-      ['order', 'ASC']
-    ]});
+  async find(direct) {
+    let params = {};
+    let order = [];
+
+    if(direct) {      
+      params.direct = direct;
+      order = [
+        ['dorder', 'ASC']
+      ];
+    } else {      
+      order = [
+        ['level', 'ASC'],
+        ['order', 'ASC']
+      ];
+    }
+
+    const menus = await models.Menus.findAll({
+      where: params,
+      order: order
+    });
     return menus;
   }
 

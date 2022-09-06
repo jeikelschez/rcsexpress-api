@@ -6371,43 +6371,11 @@
         "description": "API para Obtener todos los Menus del sistema",
         "parameters": [
           {
-            "name": "page",
-            "in": "header",
-            "description": "Numero de la pagina",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "limit",
-            "in": "header",
-            "description": "Cantidad de registros",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "order_by",
-            "in": "header",
-            "description": "Ordenado por",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "order_direction",
-            "in": "header",
-            "description": "Direccion del ordenado",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "direct",
             "in": "header",
-            "description": "Acceso Directo",
+            "description": "Acceso directo (1)",
             "schema": {
-              "type": "number"
+              "type": "integer"
             }
           }
         ],
@@ -6417,12 +6385,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/extraSchemes/Paginate",
-                  "properties": {
-                    "data": {
-                      "$ref": "#/components/schemas/Menus"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Menus"                  
                 }
               }
             }
