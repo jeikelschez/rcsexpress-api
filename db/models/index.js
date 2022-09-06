@@ -32,6 +32,7 @@ const { Mmovimientos, MmovimientosSchema } = require('./maestroMovimientos.model
 const { Dmovimientos, DmovimientosSchema } = require('./detalleMovimientos.model');
 const { Cparticulares, CparticularesSchema } = require('./clientesParticulares.model');
 const { Ginutilizadas, GinutilizadasSchema } = require('./guiasInutilizadas.model');
+const { Menus, MenusSchema } = require('./menus.model');
 
 function setupModels(sequelize) {
   Bancos.init(BancosSchema, Bancos.config(sequelize));
@@ -68,6 +69,7 @@ function setupModels(sequelize) {
   Dmovimientos.init(DmovimientosSchema, Dmovimientos.config(sequelize));
   Cparticulares.init(CparticularesSchema, Cparticulares.config(sequelize));
   Ginutilizadas.init(GinutilizadasSchema, Ginutilizadas.config(sequelize));
+  Menus.init(MenusSchema, Menus.config(sequelize));
 
   Paises.associate(sequelize.models);
   Estados.associate(sequelize.models);

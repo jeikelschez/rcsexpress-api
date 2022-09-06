@@ -107,6 +107,10 @@
       "description": "API para Manejar el Maestro de Movimientos de la Organizacion"
     },
     {
+      "name": "Menus",
+      "description": "API para Manejar el Maestro de Menus de la Organizacion"
+    },
+    {
       "name": "Municipios",
       "description": "API para Manejar los Municipios de la Organizacion"
     },
@@ -6360,6 +6364,132 @@
         }
       }
     },
+    "/menus": {
+      "get": {
+        "tags": ["Menus"],
+        "summary": "Obtener todos los Menus",
+        "description": "API para Obtener todos los Menus del sistema",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "header",
+            "description": "Numero de la pagina",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "header",
+            "description": "Cantidad de registros",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "header",
+            "description": "Ordenado por",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "header",
+            "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direct",
+            "in": "header",
+            "description": "Acceso Directo",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/extraSchemes/Paginate",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Menus"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/menus/{id}": {
+      "get": {
+        "tags": ["Menus"],
+        "summary": "Obtener Menu por su Id",
+        "description": "API para Retornar un Menu por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Menu",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Menus"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/municipios": {
       "get": {
         "tags": ["Municipios"],
@@ -11075,6 +11205,55 @@
           "tipo_persona_desc": {
             "type": "string",
             "readOnly": true
+          }
+        }
+      },
+      "Menus": {
+        "description": "Modelo de Maestro de Menus",
+        "required": [
+          "name",
+          "label",
+          "level",
+          "qitem",
+          "icon",
+          "model",
+          "direct",
+          "padre",
+          "order"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "readOnly": true
+          },
+          "label": {
+            "type": "string"
+          },
+          "level": {
+            "type": "number"
+          },
+          "qitem": {
+            "type": "number"
+          },
+          "icon": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "model": {
+            "type": "number"
+          },
+          "direct": {
+            "type": "number"
+          },          
+          "padre": {
+            "type": "string"
+          },
+          "order": {
+            "type": "number"
+          },
+          "dorder": {
+            "type": "number"
           }
         }
       },
