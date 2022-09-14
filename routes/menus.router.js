@@ -13,7 +13,8 @@ router.get('/',
   async (req, res, next) => {
   try {
     const direct = req.headers.direct;
-    const menus = await service.find(direct);
+    const rol = req.headers.rol;
+    const menus = await service.find(direct, rol);
     res.json(menus);
   } catch (error) {
     next(error);

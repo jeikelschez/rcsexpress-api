@@ -6,8 +6,9 @@ class MenusService {
 
   constructor() {}
 
-  async find(direct) {
+  async find(direct, rol) {
     let params = {};
+    let params2 = {};
     let order = [];
 
     if(direct) {      
@@ -22,7 +23,29 @@ class MenusService {
       ];
     }
 
+    if(rol) {      
+      params2.cod_rol = rol;
+    }
+
     const menus = await models.Menus.findAll({
+      include : [
+        {
+          model: models.Acciones,       
+          as: "acciones",
+          required: false,
+          where: {
+            accion: 1
+          },
+          include : [
+            {
+              model: models.Rpermisos,
+              as: "rpermisos",
+              required: false,
+              where: params2
+            }
+          ]      
+        }
+      ],
       where: params,
       order: order
     });

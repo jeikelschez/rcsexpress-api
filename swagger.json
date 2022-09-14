@@ -6385,6 +6385,14 @@
             "schema": {
               "type": "integer"
             }
+          },
+          {
+            "name": "rol",
+            "in": "header",
+            "description": "Codigo del Rol",
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -6393,7 +6401,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Menus"                  
+                  "$ref": "#/components/schemas/Menus",
+                  "properties": {
+                    "acciones": {
+                      "$ref": "#/components/schemas/Menus_Acciones",
+                      "properties": {
+                        "permisos": {
+                          "$ref": "#/components/schemas/Roles_Permisos"
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
