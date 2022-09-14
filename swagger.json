@@ -111,6 +111,10 @@
       "description": "API para Manejar el Maestro de Menus de la Organizacion"
     },
     {
+      "name": "Menus_Acciones",
+      "description": "API para Manejar el Maestro de Acciones de un Menu de la Organizacion"
+    },
+    {
       "name": "Municipios",
       "description": "API para Manejar los Municipios de la Organizacion"
     },
@@ -141,6 +145,10 @@
     {
       "name": "Roles",
       "description": "API para Manejar los Roles de la Organizacion"
+    },
+    {
+      "name": "Roles_Permisos",
+      "description": "API para Manejar los Permisos de Roles de la Organizacion"
     },
     {
       "name": "Tarifas",
@@ -6453,6 +6461,45 @@
         }
       }
     },
+    "/acciones": {
+      "get": {
+        "tags": ["Menus_Acciones"],
+        "summary": "Obtener todas las acciones de un Menu",
+        "description": "API para Obtener todas las acciones de un Menu del sistema",
+        "parameters": [
+          {
+            "name": "menu",
+            "in": "header",
+            "description": "Nombre del Menu",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Menus_Acciones"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/municipios": {
       "get": {
         "tags": ["Municipios"],
@@ -8417,6 +8464,66 @@
           },
           "404": {
             "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rpermisos": {
+      "get": {
+        "tags": ["Roles_Permisos"],
+        "summary": "Obtener todas los Permisos de un Rol",
+        "description": "API para Obtener todas los Permisos de un Rol del sistema",
+        "parameters": [
+          {
+            "name": "rol",
+            "in": "header",
+            "description": "Codigo del Rol",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "menu",
+            "in": "header",
+            "description": "Nombre del Menu",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "accion",
+            "in": "header",
+            "description": "Codigo de la Accion",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Roles_Permisos",
+                  "properties": {
+                    "acciones": {
+                      "$ref": "#/components/schemas/Menus_Acciones"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -11220,6 +11327,29 @@
           }
         }
       },
+      "Menus_Acciones": {
+        "description": "Modelo de Maestro de Acciones del Menu",
+        "required": [
+          "id",
+          "cod_menu",
+          "accion",
+          "descripcion"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "accion": {
+            "type": "number"
+          },
+          "descripcion": {
+            "type": "string"
+          }
+        }
+      },
       "Municipios": {
         "description": "Modelo de Municipios",
         "required": [
@@ -11439,6 +11569,25 @@
             "type": "string"
           },
           "cod_agencia": {
+            "type": "number"
+          }
+        }
+      },
+      "Roles_Permisos": {
+        "description": "Modelo de Permisos de Roles",
+        "required": [
+          "id",
+          "cod_rol",
+          "cod_menu_accion"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "cod_rol": {
+            "type": "number"
+          },
+          "cod_menu_accion": {
             "type": "number"
           }
         }

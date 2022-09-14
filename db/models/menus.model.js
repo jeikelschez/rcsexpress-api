@@ -52,6 +52,7 @@ const MenusSchema = {
 class Menus extends Model {
 
   static associate(models) {
+    this.hasMany(models.Acciones, { foreignKey: 'cod_menu', as: 'acciones' });
   }
 
   static config(sequelize) {

@@ -37,6 +37,8 @@ const DmovimientosRouter = require('./detalleMovimientos.router');
 const CparticularesRouter = require('./clientesParticulares.router');
 const GinutilizadasRouter = require('./guiasInutilizadas.router');
 const MenusRouter = require('./menus.router');
+const AccionesRouter = require('./menusAcciones.router');
+const RpermisosRouter = require('./rolesPermisos.router');
 
 function routerApi(app) {
   const router = express.Router();
@@ -77,6 +79,8 @@ function routerApi(app) {
   router.use('/cparticulares', CparticularesRouter);
   router.use('/ginutilizadas', GinutilizadasRouter);
   router.use('/menus', MenusRouter);
+  router.use('/acciones', AccionesRouter);
+  router.use('/rpermisos', RpermisosRouter);
   router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 
