@@ -6406,7 +6406,7 @@
                     "acciones": {
                       "$ref": "#/components/schemas/Menus_Acciones",
                       "properties": {
-                        "permisos": {
+                        "rpermisos": {
                           "$ref": "#/components/schemas/Roles_Permisos"
                         }
                       }

@@ -10,6 +10,8 @@ class MenusService {
     let params = {};
     let params2 = {};
     let order = [];
+    let menusLv2 = [];
+    let menusLv1 = [];
 
     if(direct) {      
       params.direct = direct;
@@ -27,7 +29,7 @@ class MenusService {
       params2.cod_rol = rol;
     }
 
-    const menus = await models.Menus.findAll({
+    let menus = await models.Menus.findAll({
       include : [
         {
           model: models.Acciones,       
@@ -49,7 +51,27 @@ class MenusService {
       where: params,
       order: order
     });
-    return menus;
+
+    // Filta solo los que tienen permisos y sus padres
+    let menusAllow = menus.filter(menu => (menu.qitem && menu.acciones[0].rpermisos.length) > 0 || !menu.qitem);
+    
+    // Filta solo padres que tienen hijos con permisos
+    menusAllow.forEach(function(menu) {
+      if (menu.padre != "") {
+        menusAllow.forEach(function(menu2) {
+          if (menu2.name == menu.padre && !menusLv2.find(menu3 => menu3.name == menu2.name)) 
+            menusLv2.push(menu2);
+        });  
+      }
+    });
+
+    // Agrega los hijos que tienen permisos
+    menusAllow.forEach(function(menu) {
+      if (menu.qitem && menu.acciones[0].rpermisos.length > 0) 
+        menusLv2.push(menu);
+    });
+
+    return menusLv2.sort((a, b) => { return a.order - b.order });
   }
 
   async findOne(id) {
