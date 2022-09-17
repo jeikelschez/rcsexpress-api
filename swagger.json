@@ -215,6 +215,24 @@
             }
           },
           {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "ciudad",
             "in": "header",
             "description": "Codigo de la Ciudad",
@@ -548,6 +566,24 @@
             }
           },
           {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "agencia",
             "in": "header",
             "description": "Codigo de la Agencia",
@@ -555,7 +591,7 @@
             "schema": {
               "type": "integer"
             }
-          }
+          }          
         ],
         "responses": {
           "200": {
@@ -1421,6 +1457,24 @@
             }
           },
           {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "estado",
             "in": "header",
             "description": "Codigo del Estado",
@@ -1754,6 +1808,24 @@
             }
           },
           {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "agencia",
             "in": "header",
             "description": "Codigo de la Agencia",
@@ -2072,6 +2144,24 @@
             "name": "order_direction",
             "in": "header",
             "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -2695,6 +2785,24 @@
             "name": "order_direction",
             "in": "header",
             "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -3383,6 +3491,24 @@
             }
           },
           {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "agencia",
             "in": "header",
             "description": "Codigo de la Agencia",
@@ -4001,6 +4127,24 @@
             }
           },
           {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "cod_movimiento",
             "in": "header",
             "description": "Codigo del Movimiento",
@@ -4599,6 +4743,24 @@
             "name": "order_direction",
             "in": "header",
             "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -5212,6 +5374,24 @@
             }
           },
           {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "agencia",
             "in": "header",
             "description": "Codigo de la Agencia",
@@ -5548,6 +5728,24 @@
             }
           },
           {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "estado",
             "in": "header",
             "description": "Codigo del Estado",
@@ -5635,154 +5833,7 @@
           }
         }
       }
-    },
-    "/mretenciones": {
-      "get": {
-        "tags": ["Maestro_Retenciones"],
-        "summary": "Obtener todo el maestro de Retenciones",
-        "description": "API para Obtener el maestro de Retenciones del sistema",
-        "parameters": [
-          {
-            "name": "page",
-            "in": "header",
-            "description": "Numero de la pagina",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "limit",
-            "in": "header",
-            "description": "Cantidad de registros",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "order_by",
-            "in": "header",
-            "description": "Ordenado por",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "order_direction",
-            "in": "header",
-            "description": "Direccion del ordenado",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "tipo_persona",
-            "in": "header",
-            "description": "Tipo de Persona",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "vigente",
-            "in": "header",
-            "description": "Solo matestro de Retenciones Vigentes, Para filtrar escriba 'S'",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/extraSchemes/Paginate",
-                  "properties": {
-                    "data": {
-                      "$ref": "#/components/schemas/Maestro_Retenciones"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": ["Maestro_Retenciones"],
-        "summary": "Crear concepto de Retención",
-        "description": "API para Crear un nuevo concepto de Retención",
-        "requestBody": {
-          "description": "Post object",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Maestro_Retenciones"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Ok",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Maestro_Retenciones"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/400"
-                }
-              }
-            }
-          },
-          "415": {
-            "description": "MediaType No Soportado"
-          },
-          "500": {
-            "description": "Error Interno del Sistema",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/standarResponses/500"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
+    },    
     "/mmovimientos": {
       "get": {
         "tags": ["Maestro_Movimientos"],
@@ -5817,6 +5868,24 @@
             "name": "order_direction",
             "in": "header",
             "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -6180,6 +6249,171 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mretenciones": {
+      "get": {
+        "tags": ["Maestro_Retenciones"],
+        "summary": "Obtener todo el maestro de Retenciones",
+        "description": "API para Obtener el maestro de Retenciones del sistema",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "header",
+            "description": "Numero de la pagina",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "header",
+            "description": "Cantidad de registros",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "header",
+            "description": "Ordenado por",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "header",
+            "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tipo_persona",
+            "in": "header",
+            "description": "Tipo de Persona",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "vigente",
+            "in": "header",
+            "description": "Solo matestro de Retenciones Vigentes, Para filtrar escriba 'S'",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/extraSchemes/Paginate",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Maestro_Retenciones"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Maestro_Retenciones"],
+        "summary": "Crear concepto de Retención",
+        "description": "API para Crear un nuevo concepto de Retención",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Maestro_Retenciones"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Maestro_Retenciones"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
                 }
               }
             }
@@ -6552,6 +6786,24 @@
             "name": "order_direction",
             "in": "header",
             "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -7234,6 +7486,24 @@
             }
           },
           {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "municipio",
             "in": "header",
             "description": "Codigo del Municipio",
@@ -7642,6 +7912,24 @@
             "name": "order_direction",
             "in": "header",
             "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
             "schema": {
               "type": "string"
             }

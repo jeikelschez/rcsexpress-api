@@ -13,13 +13,29 @@ class CparticularesService {
     return newCparticular;
   }
 
-  async find(page, limit, order_by, order_direction, agencia, rif) {    
-    let params = {};
-    let order = [];
+  async find(page, limit, order_by, order_direction, filter, filter_value, agencia, rif) {
+    let params2 = {};
+    let filterArray = {};
+    let order = [];    
     
-    if(agencia) params.cod_agencia = agencia;
-    if(rif) params.rif_ci = rif;    
+    if(agencia) params2.cod_agencia = agencia;
+    if(rif) params2.rif_ci = rif;    
 
+    if(filter && filter_value) {
+      let filters = [];
+      filter.split(",").forEach(function(item) {
+        let itemArray = {};
+        itemArray[item] = { [Sequelize.Op.substring]: filter_value };
+        filters.push(itemArray);
+      })
+
+      filterArray = { 
+        [Sequelize.Op.or]: filters 
+      };      
+    }
+
+    let params = { ...params2, ...filterArray };
+    
     if(order_by && order_direction) {
       order.push([order_by, order_direction]);
     }

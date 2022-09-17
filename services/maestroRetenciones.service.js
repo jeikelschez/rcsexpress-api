@@ -16,13 +16,14 @@ class MretencionesService {
     return newMRetencion;
   }
 
-  async find(page, limit, order_by, order_direction, vigente, tipoPersona) {    
-    let params = {};
-    let order = [];
+  async find(page, limit, order_by, order_direction, filter, filter_value, vigente, tipoPersona) {    
+    let params2 = {};
+    let filterArray = {};
+    let order = []; 
     
     if(vigente) {
       let date = moment().format('YYYY-MM-DD');
-      params = {
+      params2 = {
         fecha_ini_val: {
           [Sequelize.Op.lte]: date
         },
@@ -32,7 +33,22 @@ class MretencionesService {
       }
     }
 
-    if(tipoPersona) params.cod_tipo_persona = tipoPersona;
+    if(tipoPersona) params2.cod_tipo_persona = tipoPersona;
+
+    if(filter && filter_value) {
+      let filters = [];
+      filter.split(",").forEach(function(item) {
+        let itemArray = {};
+        itemArray[item] = { [Sequelize.Op.substring]: filter_value };
+        filters.push(itemArray);
+      })
+
+      filterArray = { 
+        [Sequelize.Op.or]: filters 
+      };      
+    }
+
+    let params = { ...params2, ...filterArray };
 
     if(order_by && order_direction) {
       order.push([order_by, order_direction]);

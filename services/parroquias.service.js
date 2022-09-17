@@ -8,11 +8,27 @@ class ParroquiasService {
 
   constructor() {}
 
-  async find(page, limit, order_by, order_direction, municipio) {    
-    let params = {};
-    let order = [];
+  async find(page, limit, order_by, order_direction, filter, filter_value, municipio) {    
+    let params2 = {};
+    let filterArray = {};
+    let order = []; 
     
-    if(municipio) params.cod_municipio = municipio;
+    if(municipio) params2.cod_municipio = municipio;
+
+    if(filter && filter_value) {
+      let filters = [];
+      filter.split(",").forEach(function(item) {
+        let itemArray = {};
+        itemArray[item] = { [Sequelize.Op.substring]: filter_value };
+        filters.push(itemArray);
+      })
+
+      filterArray = { 
+        [Sequelize.Op.or]: filters 
+      };      
+    }
+
+    let params = { ...params2, ...filterArray };
 
     if(order_by && order_direction) {
       order.push([order_by, order_direction]);

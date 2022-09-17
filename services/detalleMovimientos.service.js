@@ -14,13 +14,27 @@ class DmovimientosService {
     return newDmovimiento;
   }
 
-  async find(page, limit, order_by, order_direction, cod_movimiento) {    
-    let params = {};
-    let order = [];
+  async find(page, limit, order_by, order_direction, filter, filter_value, cod_movimiento) {    
+    let params2 = {};
+    let filterArray = {};
+    let order = [];    
+    
+    if(cod_movimiento) params2.cod_movimiento = cod_movimiento;
 
-    if(cod_movimiento) params.cod_movimiento = cod_movimiento;
+    if(filter && filter_value) {
+      let filters = [];
+      filter.split(",").forEach(function(item) {
+        let itemArray = {};
+        itemArray[item] = { [Sequelize.Op.substring]: filter_value };
+        filters.push(itemArray);
+      })
 
-    console.log(params)
+      filterArray = { 
+        [Sequelize.Op.or]: filters 
+      };      
+    }
+
+    let params = { ...params2, ...filterArray };
 
     if(order_by && order_direction) {
       order.push([order_by, order_direction]);

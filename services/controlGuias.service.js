@@ -43,27 +43,44 @@ class CguiasService {
     return newCguia;
   }  
 
-  async find(page, limit, order_by, order_direction, agencia, agente, cliente, desde, hasta, disp, tipo) {    
-    let params = {};
-    let order = [];
+  async find(page, limit, order_by, order_direction, filter, filter_value, agencia, agente, 
+    cliente, desde, hasta, disp, tipo) {
+    let params2 = {};
+    let filterArray = {};
+    let order = [];    
     
-    if(agencia) params.cod_agencia = agencia;
-    if(agente) params.cod_agente = agente;
-    if(cliente) params.cod_cliente = cliente;
+    if(agencia) params2.cod_agencia = agencia;
+    if(agente) params2.cod_agente = agente;
+    if(cliente) params2.cod_cliente = cliente;
     
     if(desde) {
-      params.control_inicio = {
+      params2.control_inicio = {
         [Sequelize.Op.lte]: desde
       }
     };
     if(hasta) {
-      params.control_final = {
+      params2.control_final = {
         [Sequelize.Op.gte]: hasta
       }
     };
     
-    if(disp) params.cant_disponible = disp;
-    if(tipo) params.tipo = tipo;
+    if(disp) params2.cant_disponible = disp;
+    if(tipo) params2.tipo = tipo;
+
+    if(filter && filter_value) {
+      let filters = [];
+      filter.split(",").forEach(function(item) {
+        let itemArray = {};
+        itemArray[item] = { [Sequelize.Op.substring]: filter_value };
+        filters.push(itemArray);
+      })
+
+      filterArray = { 
+        [Sequelize.Op.or]: filters 
+      };      
+    }
+
+    let params = { ...params2, ...filterArray };
 
     if(order_by && order_direction) {
       order.push([order_by, order_direction]);
