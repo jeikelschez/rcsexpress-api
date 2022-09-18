@@ -11,9 +11,8 @@ const service = new MenusService();
 router.get('/',
   async (req, res, next) => {
   try {
-    const direct = req.headers.direct;
-    const rol = req.headers.rol;
-    const menus = await service.find(direct, rol);
+    const { direct, rol, read }= req.headers;
+    const menus = await service.find(direct, rol, read);
     res.json(menus);
   } catch (error) {
     next(error);

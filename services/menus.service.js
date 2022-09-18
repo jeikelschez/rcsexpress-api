@@ -1,17 +1,17 @@
 const boom = require('@hapi/boom');
 
-const { models }= require('../libs/sequelize');
+const { models, Sequelize }= require('../libs/sequelize');
 
 class MenusService {
 
   constructor() {}
 
-  async find(direct, rol) {
+  async find(direct, rol, read) {
     let params = {};
     let params2 = {};
+    let params3 = {};
     let order = [];
-    let menusLv2 = [];
-    let menusLv1 = [];
+    let menusLv = [];
 
     if(direct) {      
       params.direct = direct;
@@ -26,7 +26,15 @@ class MenusService {
     }
 
     if(rol) {      
-      params2.cod_rol = rol;
+      params3.cod_rol = rol;
+    }
+
+    if(read) {
+      params2.accion = 1      
+    } else {
+      params.url = {
+        [Sequelize.Op.notLike]: ''  
+      }
     }
 
     let menus = await models.Menus.findAll({
@@ -35,15 +43,13 @@ class MenusService {
           model: models.Acciones,       
           as: "acciones",
           required: false,
-          where: {
-            accion: 1
-          },
+          where: params2,
           include : [
             {
               model: models.Rpermisos,
               as: "rpermisos",
               required: false,
-              where: params2
+              where: params3
             }
           ]      
         }
@@ -59,8 +65,8 @@ class MenusService {
     menusAllow.forEach(function(menu) {
       if (menu.padre != "") {
         menusAllow.forEach(function(menu2) {
-          if (menu2.name == menu.padre && !menusLv2.find(menu3 => menu3.name == menu2.name)) 
-            menusLv2.push(menu2);
+          if (menu2.name == menu.padre && !menusLv.find(menu3 => menu3.name == menu2.name)) 
+          menusLv.push(menu2);
         });  
       }
     });
@@ -68,10 +74,14 @@ class MenusService {
     // Agrega los hijos que tienen permisos
     menusAllow.forEach(function(menu) {
       if (menu.qitem && menu.acciones[0].rpermisos.length > 0) 
-        menusLv2.push(menu);
+      menusLv.push(menu);
     });
 
-    return menusLv2.sort((a, b) => { return a.order - b.order });
+    if(read) {
+      return menusLv.sort((a, b) => { return a.order - b.order });      
+    } else {
+      return menus;
+    }    
   }
 
   async findOne(id) {

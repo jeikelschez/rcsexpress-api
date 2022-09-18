@@ -6627,6 +6627,14 @@
             "schema": {
               "type": "integer"
             }
+          },
+          {
+            "name": "read",
+            "in": "header",
+            "description": "Solo los permisos de Lectura (S)",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
