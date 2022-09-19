@@ -6,6 +6,11 @@ class RpermisosService {
 
   constructor() {}
 
+  async create(data) {
+    const newRpermiso = await models.Rpermisos.create(data);
+    return newRpermiso;
+  }
+
   async find(rol, menu, accion) {
     let params = {};
     let params2 = {};
@@ -31,6 +36,15 @@ class RpermisosService {
       }
     });
     return rpermisos;
+  }
+
+  async delete(id) {
+    const rpermiso = await models.Rpermisos.findByPk(id);
+    if (!rpermiso) {
+      throw boom.notFound('Permisos del Rol no existe');
+    }
+    await rpermiso.destroy();
+    return { id };
   }
 }
 
