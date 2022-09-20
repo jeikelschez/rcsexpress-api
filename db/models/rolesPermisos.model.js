@@ -15,6 +15,7 @@ const RpermisosSchema = {
   cod_rol: {
     allowNull: false,
     type: DataTypes.INTEGER,
+    unique: 'uniqueTag',
     references: {
       model: ROLES_TABLE,
       key: 'id'
@@ -25,6 +26,7 @@ const RpermisosSchema = {
   cod_menu_accion: {
     allowNull: false,
     type: DataTypes.INTEGER,
+    unique: 'uniqueTag',
     references: {
       model: ACCIONES_TABLE,
       key: 'id'
