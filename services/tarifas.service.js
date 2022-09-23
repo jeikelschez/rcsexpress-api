@@ -38,8 +38,27 @@ class TarifasService {
     return newTarifa;
   }
 
-  async find() {
+  async find(tipo_tarifa, tipo_urgencia, tipo_ubicacion, tipo_carga) {
+    let params = {};
+
+    if(tipo_tarifa) {      
+      params.tipo_tarifa = tipo_tarifa;
+    }
+
+    if(tipo_urgencia) {      
+      params.tipo_urgencia = tipo_urgencia;
+    }
+
+    if(tipo_ubicacion) {      
+      params.tipo_ubicacion = tipo_ubicacion;
+    }
+
+    if(tipo_carga) {      
+      params.tipo_carga = tipo_carga;
+    }
+
     const tarifas = await models.Tarifas.findAll({
+      where: params,
       attributes: {
         include: [
           [Sequelize.literal(caseUrgencia), 'urgencia_desc'],

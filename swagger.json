@@ -8970,6 +8970,40 @@
         "tags": ["Tarifas"],
         "summary": "Obtener todos las tarifas",
         "description": "API para Obtener todos las tarifas del sistema",
+        "parameters": [
+          {
+            "name": "tipo_tarifa",
+            "in": "header",
+            "description": "Tipo de Tarifa",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tipo_urgencia",
+            "in": "header",
+            "description": "Tipo de Urgencia",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tipo_ubicacion",
+            "in": "header",
+            "description": "Tipo de Ubicacion",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tipo_carga",
+            "in": "header",
+            "description": "Tipo de Carga",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",

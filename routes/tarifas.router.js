@@ -12,7 +12,8 @@ router.get('/',
   authenticateJWT,
   async (req, res, next) => {
   try {
-    const tarifas = await service.find();
+    const { tipo_tarifa, tipo_urgencia, tipo_ubicacion, tipo_carga } = req.headers;
+    const tarifas = await service.find(tipo_tarifa, tipo_urgencia, tipo_ubicacion, tipo_carga);
     res.json(tarifas);
   } catch (error) {
     next(error);
