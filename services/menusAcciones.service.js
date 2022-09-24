@@ -9,9 +9,7 @@ class AccionesService {
   async find(menu) {
     let params = {};
 
-    if(menu) {      
-      params.cod_menu = menu;
-    }
+    if(menu) params.cod_menu = menu;
 
     const acciones = await models.Acciones.findAll({
       where: params

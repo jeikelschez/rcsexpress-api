@@ -9,11 +9,12 @@ const router = express.Router();
 const service = new TarifasService();
 
 router.get('/',
-  authenticateJWT,
   async (req, res, next) => {
   try {
-    const { tipo_tarifa, tipo_urgencia, tipo_ubicacion, tipo_carga } = req.headers;
-    const tarifas = await service.find(tipo_tarifa, tipo_urgencia, tipo_ubicacion, tipo_carga);
+    const { tipo_tarifa, tipo_urgencia, tipo_ubicacion, tipo_carga, modalidad_pago, 
+      pagado_en, region_origen, region_destino, mix_region } = req.headers;
+    const tarifas = await service.find(tipo_tarifa, tipo_urgencia, tipo_ubicacion, tipo_carga, 
+      modalidad_pago, pagado_en, region_origen, region_destino, mix_region);
     res.json(tarifas);
   } catch (error) {
     next(error);

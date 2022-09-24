@@ -15,17 +15,9 @@ class RpermisosService {
     let params = {};
     let params2 = {};
 
-    if(rol) {      
-      params.cod_rol = rol;
-    }
-
-    if(menu) {      
-      params2.cod_menu = menu;
-    }
-
-    if(accion) {      
-      params2.accion = accion;
-    }
+    if(rol) params.cod_rol = rol;
+    if(menu) params2.cod_menu = menu;
+    if(accion) params2.accion = accion;
 
     const rpermisos = await models.Rpermisos.findAll({
       where: params,

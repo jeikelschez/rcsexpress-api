@@ -9002,6 +9002,46 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "modalidad_pago",
+            "in": "header",
+            "description": "Modalidad Pago",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pagado_en",
+            "in": "header",
+            "description": "Pagado En",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "region_origen",
+            "in": "header",
+            "description": "Region Origen",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "region_destino",
+            "in": "header",
+            "description": "Region Destino",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mix_region",
+            "in": "header",
+            "description": "Mix de Region Origen y Destino (S)",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
