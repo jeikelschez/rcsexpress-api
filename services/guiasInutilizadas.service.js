@@ -18,7 +18,7 @@ class GinutilizadasService {
     let filterArray = {};
     let order = []; 
     
-    if(agencia) param2.cod_agencia = agencia;
+    if(agencia) params2.cod_agencia = agencia;
     if(tipo) params2.tipo_guia = tipo;
     if(nro_guia) params2.nro_guia = nro_guia;
 
@@ -41,7 +41,7 @@ class GinutilizadasService {
       order.push([order_by, order_direction]);
     }
 
-    return await utils.paginate(models.Ginutilizadas, page, limit, params, order, attributes);
+    return await utils.paginate(models.Ginutilizadas, page, limit, params, order); 
   }
 
   async findOne(id) {
