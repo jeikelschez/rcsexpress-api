@@ -30,7 +30,7 @@ const DmovimientosSchema = {
   cod_concepto: {
     type: DataTypes.INTEGER,
     references: {
-      model: COPERACION_TABLE,
+      model: CFACTURACION_TABLE,
       key: 'id'
     },
     onUpdate: 'CASCADE',
@@ -58,7 +58,7 @@ const DmovimientosSchema = {
   cod_concepto_oper: {
     type: DataTypes.INTEGER,
     references: {
-      model: CFACTURACION_TABLE,
+      model: COPERACION_TABLE,
       key: 'id'
     },
     onUpdate: 'CASCADE',
@@ -70,8 +70,8 @@ class Dmovimientos extends Model {
 
   static associate(models) {
     this.belongsTo(models.Mmovimientos, { foreignKey: 'cod_movimiento', as: 'movimientos' });
-    this.belongsTo(models.Coperacion, { foreignKey: 'cod_concepto', as: 'conceptos' });
-    this.belongsTo(models.Cfacturacion, { foreignKey: 'cod_concepto_oper', as: 'conceptos_operacion' });
+    this.belongsTo(models.Cfacturacion, { foreignKey: 'cod_concepto', as: 'conceptos' });
+    this.belongsTo(models.Coperacion, { foreignKey: 'cod_concepto_oper', as: 'conceptos_operacion' });
   }
 
   static config(sequelize) {
