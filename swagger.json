@@ -5065,6 +5065,24 @@
         "tags": ["Fpos"],
         "summary": "Obtener todos los fpos",
         "description": "API para Obtener todos los fpos del sistema",
+        "parameters": [
+          {
+            "name": "fecha",
+            "in": "header",
+            "description": "Fecha a evaluar",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "peso",
+            "in": "header",
+            "description": "Peso a evaluar",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",

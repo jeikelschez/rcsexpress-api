@@ -12,7 +12,8 @@ router.get('/',
   authenticateJWT,
   async (req, res, next) => {
   try {
-    const fpos = await service.find();
+    const { fecha, peso } = req.headers;
+    const fpos = await service.find(fecha, peso);
     res.json(fpos);
   } catch (error) {
     next(error);

@@ -1,6 +1,6 @@
 const boom = require('@hapi/boom');
 
-const { models }= require('./../libs/sequelize');
+const { models, Sequelize }= require('./../libs/sequelize');
 
 class FposService {
 
@@ -11,8 +11,29 @@ class FposService {
     return newFpo;
   }
 
-  async find() {
-    const fpos = await models.Fpos.findAll();
+  async find(fecha, peso) {
+    let params = {};
+
+    if(fecha) {
+      params.f_val = {
+        [Sequelize.Op.lte]: fecha
+      }
+      params.f_anul = {
+        [Sequelize.Op.gt]: fecha
+      }
+    };
+    if(peso) {
+      params.peso_inicio = {
+        [Sequelize.Op.lt]: peso
+      }
+      params.peso_fin = {
+        [Sequelize.Op.gte]: peso
+      }
+    };
+
+    const fpos = await models.Fpos.findAll({
+      where: params
+    });
     return fpos;
   }
 
