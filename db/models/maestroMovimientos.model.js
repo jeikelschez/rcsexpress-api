@@ -428,6 +428,7 @@ class Mmovimientos extends Model {
     this.belongsTo(models.Agentes, { foreignKey: 'cod_agente_entrega', as: 'agentes_entrega' });
     this.belongsTo(models.Agencias, { foreignKey: 'cod_ag_doc_ppal', as: 'agencias_doc_ppal' });
     this.belongsTo(models.Zonas, { foreignKey: 'cod_zona_dest', as: 'zonas_dest' });
+    this.hasMany(models.Ccomisiones, { foreignKey: 'cod_movimiento', as: 'comisiones' });
   }
 
   static config(sequelize) {

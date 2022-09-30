@@ -141,7 +141,7 @@ class Clientes extends Model {
     this.belongsTo(models.Municipios, { foreignKey: 'cod_municipio', as: 'municipios' });
     this.belongsTo(models.Parroquias, { foreignKey: 'cod_parroquia', as: 'parroquias' });
     this.belongsTo(models.Localidades, { foreignKey: 'cod_localidad', as: 'localidades' });
-    this.hasMany(models.Cguias, { foreignKey: 'cod_agencia', as: 'control_guias' });
+    this.hasMany(models.Cguias, { foreignKey: 'cod_cliente', as: 'control_guias' });
   }
 
   static config(sequelize) {

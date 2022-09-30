@@ -40,6 +40,7 @@ const MenusRouter = require('./menus.router');
 const AccionesRouter = require('./menusAcciones.router');
 const RpermisosRouter = require('./rolesPermisos.router');
 const HdolarRouter = require('./historicoDolar.router');
+const CcomisionesRouter = require('./controlComisiones.router');
 
 function routerApi(app) {
   const router = express.Router();
@@ -83,6 +84,7 @@ function routerApi(app) {
   router.use('/acciones', AccionesRouter);
   router.use('/rpermisos', RpermisosRouter);
   router.use('/hdolar', HdolarRouter);
+  router.use('/ccomisiones', CcomisionesRouter);
   router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 

@@ -36,6 +36,7 @@ const { Menus, MenusSchema } = require('./menus.model');
 const { Acciones, AccionesSchema } = require('./menusAcciones.model');
 const { Rpermisos, RpermisosSchema } = require('./rolesPermisos.model');
 const { Hdolar, HdolarSchema } = require('./historicoDolar.model');
+const { Ccomisiones, CcomisionesSchema } = require('./controlComisiones.model');
 
 function setupModels(sequelize) {
   Bancos.init(BancosSchema, Bancos.config(sequelize));
@@ -76,6 +77,7 @@ function setupModels(sequelize) {
   Acciones.init(AccionesSchema, Acciones.config(sequelize));
   Rpermisos.init(RpermisosSchema, Rpermisos.config(sequelize));
   Hdolar.init(HdolarSchema, Hdolar.config(sequelize));
+  Ccomisiones.init(CcomisionesSchema, Ccomisiones.config(sequelize));
 
   Paises.associate(sequelize.models);
   Estados.associate(sequelize.models);
@@ -106,6 +108,7 @@ function setupModels(sequelize) {
   Menus.associate(sequelize.models);
   Acciones.associate(sequelize.models);
   Rpermisos.associate(sequelize.models);
+  Ccomisiones.associate(sequelize.models);
 
   Usuarios.hooks(sequelize.models);
 }
