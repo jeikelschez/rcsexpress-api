@@ -95,6 +95,10 @@
       "description": "API para Manejar las Guias Inutilizadas de la Organizacion"
     },
     {
+      "name": "Historico_Dolar",
+      "description": "API para Manejar el Historico del Dolar de la Organizacion"
+    },
+    {
       "name": "Localidades",
       "description": "API para Manejar las Localidades de la Organizacion"
     },
@@ -5677,6 +5681,342 @@
                   "properties": {
                     "id": {
                       "$ref": "#/components/schemas/Guias_Inutilizadas/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hdolar": {
+      "get": {
+        "tags": ["Historico_Dolar"],
+        "summary": "Obtener todo el Historico del Dolar",
+        "description": "API para Obtener todos el Historico delDolar del sistema",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "header",
+            "description": "Numero de la pagina",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "header",
+            "description": "Cantidad de registros",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "header",
+            "description": "Ordenado por",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "header",
+            "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fecha",
+            "in": "header",
+            "description": "Fecha del Historico del Dolar",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Historico_Dolar"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Historico_Dolar"],
+        "summary": "Crear Historico del Dolar",
+        "description": "API para Crear un nuevo Historico del Dolar",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Historico_Dolar"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Historico_Dolar"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hdolar/{fecha}": {
+      "get": {
+        "tags": ["Historico_Dolar"],
+        "summary": "Obtener Historico del Dolar por su fecha",
+        "description": "API para Retornar un Historico del Dolar por su fecha específica",
+        "parameters": [
+          {
+            "name": "fecha",
+            "in": "path",
+            "description": "Fecha del historico",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Historico_Dolar"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Historico_Dolar"],
+        "summary": "Actualizar Historico del Dolar",
+        "description": "API para Actualizar un Historico del Dolar por su fecha específica",
+        "parameters": [
+          {
+            "name": "fecha",
+            "in": "path",
+            "description": "Fecha del Historico del Dolar",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Historico_Dolar"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Historico_Dolar"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Historico_Dolar"],
+        "summary": "Borrar Historico del Dolar",
+        "description": "API para Borrar un Historico del Dolar por su fecha específica",
+        "parameters": [
+          {
+            "name": "fecha",
+            "in": "path",
+            "description": "Fecha del Historico del Dolar",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Historico_Dolar/properties/fecha"
                     }
                   },
                   "type": "object"
@@ -11366,6 +11706,20 @@
           },
           "estatus_guia": {
             "type": "string"
+          }
+        }
+      },
+      "Historico_Dolar": {
+        "description": "Modelo de Historico del Dolar",
+        "required": [
+          "fecha",
+          "valor"],
+        "properties": {
+          "fecha": {
+            "type": "string"
+          },
+          "valor": {
+            "type": "number"
           }
         }
       },

@@ -39,6 +39,7 @@ const GinutilizadasRouter = require('./guiasInutilizadas.router');
 const MenusRouter = require('./menus.router');
 const AccionesRouter = require('./menusAcciones.router');
 const RpermisosRouter = require('./rolesPermisos.router');
+const HdolarRouter = require('./historicoDolar.router');
 
 function routerApi(app) {
   const router = express.Router();
@@ -81,6 +82,7 @@ function routerApi(app) {
   router.use('/menus', MenusRouter);
   router.use('/acciones', AccionesRouter);
   router.use('/rpermisos', RpermisosRouter);
+  router.use('/hdolar', HdolarRouter);
   router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 
