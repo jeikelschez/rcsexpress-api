@@ -4,9 +4,6 @@ const { models, Sequelize }= require('./../libs/sequelize');
 const UtilsService = require('./utils.service');
 const utils = new UtilsService();
 
-const caseActivo = '(CASE flag_activo WHEN "1" THEN "ACTIVO" ELSE "INACTIVO" END)';
-const caseTipo = '(CASE tipo_agente WHEN "RP" THEN "RESPONSABLE DE AGENCIA" WHEN "CR" THEN "COURIERS" ELSE "" END)';
-
 class AgentesService {
 
   constructor() {}
@@ -42,27 +39,11 @@ class AgentesService {
       order.push([order_by, order_direction]);
     }
 
-    let attributes = {
-      include: [
-        [Sequelize.literal(caseActivo), 'activo_desc'],
-        [Sequelize.literal(caseTipo), 'tipo_desc']
-      ]
-    };
-
-    return await utils.paginate(models.Agentes, page, limit, params, order, attributes);
+    return await utils.paginate(models.Agentes, page, limit, params, order);
   }
 
   async findOne(id) {
-    const agente = await models.Agentes.findByPk(id,
-      {
-        attributes: {
-          include: [
-            [Sequelize.literal(caseActivo), 'activo_desc'],
-            [Sequelize.literal(caseTipo), 'tipo_desc']
-          ]
-        }
-      }
-    );
+    const agente = await models.Agentes.findByPk(id);
     if (!agente) {
       throw boom.notFound('Agente no existe');
     }

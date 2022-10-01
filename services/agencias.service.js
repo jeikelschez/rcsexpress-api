@@ -4,8 +4,6 @@ const { models, Sequelize }= require('./../libs/sequelize');
 const UtilsService = require('./utils.service');
 const utils = new UtilsService();
 
-const caseStatus = '(CASE estatus WHEN "A" THEN "ACTIVA" ELSE "INACTIVA" END)';
-
 class AgenciasService {
 
   constructor() {}
@@ -41,12 +39,7 @@ class AgenciasService {
       order.push([order_by, order_direction]);
     }
 
-    let attributes = {
-      include: [
-        [Sequelize.literal(caseStatus), 'activo_desc']
-      ]
-    };
-
+    let attributes = {};
     let include = ['ciudades'];
 
     return await utils.paginate(models.Agencias, page, limit, params, order, attributes, include);
@@ -55,12 +48,7 @@ class AgenciasService {
   async findOne(id) {
     const agencia = await models.Agencias.findByPk(id,
     {
-      include: ['ciudades'],
-      attributes: {
-        include: [
-          [Sequelize.literal(caseStatus), 'activo_desc']
-        ]
-      }
+      include: ['ciudades']
     });
     if (!agencia) {
       throw boom.notFound('Agencia no existe');
