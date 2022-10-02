@@ -2,8 +2,6 @@ const boom = require('@hapi/boom');
 
 const { models, Sequelize }= require('./../libs/sequelize');
 
-const caseActivo = '(CASE flag_activo WHEN "1" THEN "ACTIVO" ELSE "INACTIVO" END)';
-
 class AyudantesService {
 
   constructor() {}
@@ -14,26 +12,12 @@ class AyudantesService {
   }
 
   async find() {
-    const ayudantes = await models.Ayudantes.findAll({
-      attributes: {
-        include: [
-          [Sequelize.literal(caseActivo), 'activo_desc']
-        ]
-      }
-    });
+    const ayudantes = await models.Ayudantes.findAll();
     return ayudantes;
   }
 
   async findOne(id) {
-    const ayudante = await models.Ayudantes.findByPk(id,
-      {
-        attributes: {
-          include: [
-            [Sequelize.literal(caseActivo), 'activo_desc']
-          ]
-        }
-      }
-    );
+    const ayudante = await models.Ayudantes.findByPk(id);
     if (!ayudante) {
       throw boom.notFound('Ayudante no existe');
     }

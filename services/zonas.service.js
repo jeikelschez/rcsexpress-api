@@ -2,8 +2,6 @@ const boom = require('@hapi/boom');
 
 const { models, Sequelize }= require('./../libs/sequelize');
 
-const caseTipo = '(CASE tipo_zona WHEN "U" THEN "URBANA" ELSE "EXTRAURBANA" END)';
-
 class ZonasService {
 
   constructor() {}
@@ -17,26 +15,13 @@ class ZonasService {
     let params = {};
     if(agencia) params.cod_agencia = agencia;
     const zonas = await models.Zonas.findAll({
-      where: params,
-      attributes: {
-        include: [
-          [Sequelize.literal(caseTipo), 'tipo_desc']
-        ]
-      }
+      where: params
     });
     return zonas;
   }
 
   async findOne(id) {
-    const zona = await models.Zonas.findByPk(id,
-      {
-        attributes: {
-          include: [
-            [Sequelize.literal(caseTipo), 'tipo_desc']
-          ]
-        }
-      }
-    );
+    const zona = await models.Zonas.findByPk(id);
     if (!zona) {
       throw boom.notFound('Zona no existe');
     }
