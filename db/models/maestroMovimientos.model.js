@@ -409,9 +409,24 @@ const MmovimientosSchema = {
   carga_neta: {
     type: DataTypes.DECIMAL,
   },
+  porc_comision: {
+    type: DataTypes.DECIMAL,
+  },
   cod_fpo: {
     type: DataTypes.STRING,
-  }
+  },
+  fecha_comp_igtf: {
+    type: DataTypes.STRING,
+  },
+  nro_comp_igtf: {
+    type: DataTypes.STRING,
+  },
+  periodo_igtf: {
+    type: DataTypes.STRING,
+  },
+  monto_divisas_igtf: {
+    type: DataTypes.DECIMAL
+  },
 }
 
 class Mmovimientos extends Model {

@@ -12500,8 +12500,23 @@
           "carga_neta": {
             "type": "number"
           },
+          "porc_comision": {
+            "type": "number"
+          },
           "cod_fpo": {
             "type": "string"
+          },
+          "fecha_comp_igtf": {
+            "type": "string"
+          },
+          "nro_comp_igtf": {
+            "type": "string"
+          },
+          "periodo_igtf": {
+            "type": "string"
+          },
+          "monto_divisas_igtf": {
+            "type": "number"
           },
           "tipo_desc": {
             "type": "string",

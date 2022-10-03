@@ -105,7 +105,12 @@ const fecha_emi_comp_ret_compra = Joi.date();
 const monto_fpo = Joi.number().precision(2);
 const ind_cobranza = Joi.number().precision(0);
 const carga_neta = Joi.number().precision(2);
+const porc_comision = Joi.number().precision(2);
 const cod_fpo = Joi.string().min(1).max(5);
+const fecha_comp_igtf = Joi.date();
+const nro_comp_igtf = Joi.string().min(1).max(20);
+const periodo_igtf = Joi.string().min(1).max(200);
+const monto_divisas_igtf = Joi.number().precision(2);
 
 const createMmovimientosSchema = Joi.object({
   cod_agencia: cod_agencia.required(),
@@ -211,8 +216,13 @@ const createMmovimientosSchema = Joi.object({
   fecha_emi_comp_ret_compra: fecha_emi_comp_ret_compra.allow(null, ''),
   monto_fpo: monto_fpo.allow(null, ''),
   ind_cobranza: ind_cobranza.allow(null, ''),
+  porc_comision: porc_comision.allow(null, ''),
   carga_neta: carga_neta.allow(null, ''),
-  cod_fpo: cod_fpo.allow(null, '')
+  cod_fpo: cod_fpo.allow(null, ''),
+  fecha_comp_igtf: fecha_comp_igtf.allow(null, ''),
+  nro_comp_igtf: nro_comp_igtf.allow(null, ''),
+  periodo_igtf: periodo_igtf.allow(null, ''),
+  monto_divisas_igtf: monto_divisas_igtf.allow(null, '')
 });
 
 const updateMmovimientosSchema = Joi.object({
@@ -320,8 +330,13 @@ const updateMmovimientosSchema = Joi.object({
   fecha_emi_comp_ret_compra: fecha_emi_comp_ret_compra.allow(null, ''),
   monto_fpo: monto_fpo.allow(null, ''),
   ind_cobranza: ind_cobranza.allow(null, ''),
+  porc_comision: porc_comision.allow(null, ''),
   carga_neta: carga_neta.allow(null, ''),
-  cod_fpo: cod_fpo.allow(null, '')
+  cod_fpo: cod_fpo.allow(null, ''),
+  fecha_comp_igtf: fecha_comp_igtf.allow(null, ''),
+  nro_comp_igtf: nro_comp_igtf.allow(null, ''),
+  periodo_igtf: periodo_igtf.allow(null, ''),
+  monto_divisas_igtf: monto_divisas_igtf.allow(null, '')
 });
 
 const getMmovimientosSchema = Joi.object({
