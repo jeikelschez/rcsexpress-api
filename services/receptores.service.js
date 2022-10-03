@@ -2,8 +2,6 @@ const boom = require('@hapi/boom');
 
 const { models, Sequelize }= require('./../libs/sequelize');
 
-const caseActivo = '(CASE flag_activo WHEN "A" THEN "ACTIVO" ELSE "INACTIVO" END)';
-
 class ReceptoresService {
 
   constructor() {}
@@ -14,26 +12,12 @@ class ReceptoresService {
   }
 
   async find() {
-    const receptores = await models.Receptores.findAll({
-      attributes: {
-        include: [
-          [Sequelize.literal(caseActivo), 'activo_desc']
-        ]
-      }
-    });
+    const receptores = await models.Receptores.findAll();
     return receptores;
   }
 
   async findOne(id) {
-    const receptor = await models.Receptores.findByPk(id,
-      {
-        attributes: {
-          include: [
-            [Sequelize.literal(caseActivo), 'activo_desc']
-          ]
-        }
-      }
-    );
+    const receptor = await models.Receptores.findByPk(id);
     if (!receptor) {
       throw boom.notFound('Receptor no existe');
     }
