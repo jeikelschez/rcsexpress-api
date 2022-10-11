@@ -16,7 +16,7 @@ class MretencionesService {
     return newMRetencion;
   }
 
-  async find(page, limit, order_by, order_direction, filter, filter_value, vigente, tipoPersona) {    
+  async find(page, limit, order_by, order_direction, filter, filter_value, vigente, tipo_persona) {    
     let params2 = {};
     let filterArray = {};
     let order = []; 
@@ -33,7 +33,7 @@ class MretencionesService {
       }
     }
 
-    if(tipoPersona) params2.cod_tipo_persona = tipoPersona;
+    if(tipo_persona) params2.cod_tipo_persona = tipo_persona;
 
     if(filter && filter_value) {
       let filters = [];
