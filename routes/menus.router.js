@@ -9,7 +9,6 @@ const router = express.Router();
 const service = new MenusService();
 
 router.get('/',
-  authenticateJWT,
   async (req, res, next) => {
   try {
     const { direct, rol, read }= req.headers;

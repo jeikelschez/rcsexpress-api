@@ -55,12 +55,12 @@ class CguiasService {
     
     if(desde) {
       params2.control_inicio = {
-        [Sequelize.Op.lte]: desde
+        [Sequelize.Op.gte]: desde
       }
     };
     if(hasta) {
       params2.control_final = {
-        [Sequelize.Op.gte]: hasta
+        [Sequelize.Op.lte]: hasta
       }
     };
     

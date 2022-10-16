@@ -13,12 +13,13 @@ class EstadosService {
     return newEstado;
   }
 
-  async find(page, limit, order_by, order_direction, filter, filter_value, pais) {    
+  async find(page, limit, order_by, order_direction, filter, filter_value, pais, desc) {    
     let params2 = {};
     let filterArray = {};
     let order = []; 
     
     if(pais) params2.cod_pais = pais;
+    if(desc) params2.desc_estado = desc;
 
     if(filter && filter_value) {
       let filters = [];

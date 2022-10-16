@@ -9,7 +9,6 @@ const router = express.Router();
 const service = new TarifasService();
 
 router.get('/',
-  authenticateJWT,
   async (req, res, next) => {
   try {
     const { tipo_tarifa, tipo_urgencia, tipo_ubicacion, tipo_carga, modalidad_pago, 

@@ -13,12 +13,13 @@ class CiudadesService {
     return newCiudad;
   }
 
-  async find(page, limit, order_by, order_direction, filter, filter_value, estado) {
+  async find(page, limit, order_by, order_direction, filter, filter_value, estado, desc) {
     let params2 = {};
     let filterArray = {};
     let order = [];    
     
     if(estado) params2.cod_estado = estado;
+    if(desc) params2.desc_ciudad = desc;
 
     if(filter && filter_value) {
       let filters = [];

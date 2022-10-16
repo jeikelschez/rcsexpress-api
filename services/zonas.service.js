@@ -11,9 +11,10 @@ class ZonasService {
     return newZona;
   }
 
-  async find(agencia) {
+  async find(agencia, desc) {
     let params = {};
     if(agencia) params.cod_agencia = agencia;
+    if(desc) params.nb_zona = desc.trim();
     const zonas = await models.Zonas.findAll({
       where: params
     });

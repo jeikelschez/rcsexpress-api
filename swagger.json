@@ -1490,6 +1490,15 @@
             "schema": {
               "type": "integer"
             }
+          },
+          {
+            "name": "desc",
+            "in": "header",
+            "description": "Descripción de la Ciudad",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -5157,6 +5166,15 @@
             "required": false,
             "schema": {
               "type": "integer"
+            }
+          },
+          {
+            "name": "desc",
+            "in": "header",
+            "description": "Descripción del Estado",
+            "required": false,
+            "schema": {
+              "type": "string"
             }
           }
         ],
@@ -10835,6 +10853,15 @@
             "required": false,
             "schema": {
               "type": "integer"
+            }
+          },
+          {
+            "name": "desc",
+            "in": "header",
+            "description": "Nombre de la Zona",
+            "required": false,
+            "schema": {
+              "type": "string"
             }
           }
         ],

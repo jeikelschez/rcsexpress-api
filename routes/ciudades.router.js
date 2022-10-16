@@ -12,8 +12,8 @@ router.get('/',
   authenticateJWT,
   async (req, res, next) => {
   try {
-    const { page, limit, order_by, order_direction, filter, filter_value, estado } = req.headers;
-    const ciudades = await service.find(page, limit, order_by, order_direction, filter, filter_value, estado);
+    const { page, limit, order_by, order_direction, filter, filter_value, estado, desc } = req.headers;
+    const ciudades = await service.find(page, limit, order_by, order_direction, filter, filter_value, estado, desc);
     res.json(ciudades);
   } catch (error) {
     next(error);
