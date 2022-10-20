@@ -32,11 +32,10 @@ router.get('/exportPdf', async (req, res, next) => {
 router.get('/generatePDF', async (req, res, next) => {
   try {
     const pdfStream = await service.generatePdf();
-    res.writeHead(200, {
-      'Content-Length': Buffer.byteLength(pdfStream),
-      'Content-Type': 'application/pdf',
-      'Content-disposition': 'attachment;filename=test.pdf',
-    }).end(pdfStream);
+    res.status(200).json({ 
+      message: "PDF Generado", 
+      base64: pdfStream 
+    });
   } catch (error) {
     next(error);
   }

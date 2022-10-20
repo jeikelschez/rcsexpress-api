@@ -1,6 +1,7 @@
 const boom = require('@hapi/boom');
 const PDFDocument = require('pdfkit');
 const getStream = require('get-stream');
+const base64 = require('base64-stream');
 const fs = require('fs');
 
 const { models, Sequelize } = require('./../libs/sequelize');
@@ -45,14 +46,43 @@ class MmovimientosService {
   }
 
   async generatePdf() {
-    const doc = new PDFDocument();
-    doc.fontSize(25).text('Some text with an embedded font!', 100, 100);
-    doc.pipe(fs.createWriteStream(`file.pdf`));
+    let doc = new PDFDocument({ margin: 50 });
+
+    this.generateHeader(doc);
+	  //generateCustomerInformation(doc, invoice);
+	  //generateInvoiceTable(doc, invoice);
+	  this.generateFooter(doc);
+    //doc.fontSize(25).text('Some text with an embedded font!', 100, 100);
+    //doc.pipe(fs.createWriteStream(`file.pdf`));
     doc.end();
-    const pdfStream = await getStream.buffer(doc);
-    return pdfStream;
+
+    var encoder = new base64.Base64Encode();
+    var b64s = doc.pipe(encoder);
+    return await getStream(b64s);
   }
 
+  generateHeader(doc) {
+    doc.image('./img/logo_rc.png', 50, 45, { width: 50 })
+      .fillColor('#444444')
+      .fontSize(12)
+      .text('Reporte de Guias Disponibles', 110, 57)
+      .text('Reporte de Guias Disponibles', 110, 77)
+      .fontSize(10)
+      .text('19/10/2022', 200, 65, { align: 'right' })
+      .moveDown();
+  }
+  
+  generateFooter(doc) {
+    doc.fontSize(
+      10,
+    ).text(
+      'Payment is due within 15 days. Thank you for your business.',
+      50,
+      780,
+      { align: 'center', width: 500 },
+    );
+  }
+  
   async create(data) {
     const newMmovimiento = await models.Mmovimientos.create(data);
     return newMmovimiento;
