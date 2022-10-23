@@ -1,8 +1,14 @@
 const boom = require('@hapi/boom');
 
+const PDFDocument = require('pdfkit');
+const getStream = require('get-stream');
+const base64 = require('base64-stream');
+
 const { models, Sequelize }= require('./../libs/sequelize');
 const UtilsService = require('./utils.service');
 const utils = new UtilsService();
+const PdfService = require('./pdf.service');
+const pdf = new PdfService();
 
 class CguiasService {
 
@@ -118,6 +124,22 @@ class CguiasService {
     }
     await cguia.destroy();
     return { id };
+  }
+
+  async generatePdf() {
+    let doc = new PDFDocument({ margin: 50 });
+
+    pdf.generateHeader(doc);
+	  //generateCustomerInformation(doc, invoice);
+	  //generateInvoiceTable(doc, invoice);
+	  pdf.generateFooter(doc);
+    //doc.fontSize(25).text('Some text with an embedded font!', 100, 100);
+    //doc.pipe(fs.createWriteStream(`file.pdf`));
+    doc.end();
+
+    var encoder = new base64.Base64Encode();
+    var b64s = doc.pipe(encoder);
+    return await getStream(b64s);
   }
 }
 

@@ -77,12 +77,7 @@ class UsuariosService {
       where: {
         login: username
       },
-      include: [
-        {
-          association: 'roles',
-          include: ['permisos']
-        }
-      ]
+      include: ['roles']
     });
 
     if (usuario) {
@@ -118,12 +113,7 @@ class UsuariosService {
       where: {
         login: username
       },
-      include: [
-        {
-          association: 'roles',
-          include: ['permisos']
-        }
-      ]
+      include: ['roles']
     });
 
     if (usuario) {

@@ -31,7 +31,6 @@ class Roles extends Model {
 
   static associate(models) {
     this.belongsTo(models.Agencias, { foreignKey: 'cod_agencia', as: 'agencias' });
-    this.hasMany(models.Permisos, { foreignKey: 'cod_rol', as: 'permisos' });
     this.hasMany(models.Usuarios, { foreignKey: 'cod_rol', as: 'usuarios' });
     this.hasMany(models.Rpermisos, { foreignKey: 'cod_rol', as: 'rpermisos' });
   }

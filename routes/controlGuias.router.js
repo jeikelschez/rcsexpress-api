@@ -20,6 +20,20 @@ router.get('/',
   }
 });
 
+router.get('/generatePDF',
+  authenticateJWT,
+  async (req, res, next) => {
+  try {
+    const pdfStream = await service.generatePdf();
+    res.status(200).json({ 
+      message: "PDF Generado", 
+      base64: pdfStream 
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get('/:id',
   authenticateJWT,
   validatorHandler(getCguiasSchema, 'params'),

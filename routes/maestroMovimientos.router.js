@@ -1,5 +1,4 @@
 const express = require('express');
-const PDFDocument = require('pdfkit');
 
 const MmovimientosService = require('./../services/maestroMovimientos.service');
 const validatorHandler = require('./../middlewares/validator.handler');
@@ -10,6 +9,7 @@ const router = express.Router();
 const service = new MmovimientosService();
 
 router.get('/',
+  authenticateJWT,
   async (req, res, next) => {
   try {
     const { page, limit, order_by, order_direction, filter, filter_value, agencia, agencia_dest, 
@@ -24,36 +24,18 @@ router.get('/',
   }
 });
 
-router.get('/exportPdf', async (req, res, next) => {
-  await service.exportPdf();
-  res.status(200).json({ message: "PDF Generado" });
-});
-
-router.get('/generatePDF', async (req, res, next) => {
-  try {
-    const pdfStream = await service.generatePdf();
-    res.status(200).json({ 
-      message: "PDF Generado", 
-      base64: pdfStream 
-    });
-  } catch (error) {
-    next(error);
-  }
-});
-
 router.get('/:id',
   authenticateJWT,
   validatorHandler(getMmovimientosSchema, 'params'),
   async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const mMovimiento = await service.findOne(id);
-      res.json(mMovimiento);
-    } catch (error) {
-      next(error);
-    }
+  try {
+    const { id } = req.params;
+    const mMovimiento = await service.findOne(id);
+    res.json(mMovimiento);
+  } catch (error) {
+    next(error);
   }
-);
+});
 
 router.post('/',
   authenticateJWT,

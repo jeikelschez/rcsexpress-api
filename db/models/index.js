@@ -4,8 +4,6 @@ const { Estados, EstadosSchema } = require('./estados.model');
 const { Ciudades, CiudadesSchema } = require('./ciudades.model');
 const { Agencias, AgenciasSchema } = require('./agencias.model');
 const { Roles, RolesSchema } = require('./roles.model');
-const { Objetos, ObjetosSchema } = require('./objetos.model');
-const { Permisos, PermisosSchema } = require('./permisos.model');
 const { Usuarios, UsuariosSchema } = require('./usuarios.model');
 const { Cuentas, CuentasSchema } = require('./cuentas.model');
 const { Agentes, AgentesSchema } = require('./agentes.model');
@@ -45,8 +43,6 @@ function setupModels(sequelize) {
   Ciudades.init(CiudadesSchema, Ciudades.config(sequelize));
   Agencias.init(AgenciasSchema, Agencias.config(sequelize));
   Roles.init(RolesSchema, Roles.config(sequelize));
-  Objetos.init(ObjetosSchema, Objetos.config(sequelize));
-  Permisos.init(PermisosSchema, Permisos.config(sequelize));
   Usuarios.init(UsuariosSchema, Usuarios.config(sequelize));
   Cuentas.init(CuentasSchema, Cuentas.config(sequelize));
   Agentes.init(AgentesSchema, Agentes.config(sequelize));
@@ -84,7 +80,6 @@ function setupModels(sequelize) {
   Ciudades.associate(sequelize.models);
   Agencias.associate(sequelize.models);
   Roles.associate(sequelize.models);
-  Permisos.associate(sequelize.models);
   Cuentas.associate(sequelize.models);
   Bancos.associate(sequelize.models);
   Usuarios.associate(sequelize.models);
