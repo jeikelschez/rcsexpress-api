@@ -3238,9 +3238,27 @@
             }
           },
           {
+            "name": "desde_fact",
+            "in": "header",
+            "description": "Guía Desde (Facturación)",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
             "name": "hasta",
             "in": "header",
             "description": "Guía Hasta",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "hasta_fact",
+            "in": "header",
+            "description": "Guía Hasta (Facturación)",
             "required": false,
             "schema": {
               "type": "integer"
@@ -8694,6 +8712,15 @@
             "name": "filter_value",
             "in": "header",
             "description": "Valor a filtrar",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tipo_servicio",
+            "in": "header",
+            "description": "Tipo Servicio",
             "required": false,
             "schema": {
               "type": "string"

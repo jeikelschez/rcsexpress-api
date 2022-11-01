@@ -50,7 +50,7 @@ class CguiasService {
   }  
 
   async find(page, limit, order_by, order_direction, filter, filter_value, agencia, agente, 
-    cliente, desde, hasta, disp, tipo) {
+    cliente, desde, desde_fact, hasta, hasta_fact, disp, tipo) {
     let params2 = {};
     let filterArray = {};
     let order = [];    
@@ -67,6 +67,17 @@ class CguiasService {
     if(hasta) {
       params2.control_final = {
         [Sequelize.Op.lte]: hasta
+      }
+    };
+
+    if(desde_fact) {
+      params2.control_inicio = {
+        [Sequelize.Op.lte]: desde_fact
+      }
+    };
+    if(hasta_fact) {
+      params2.control_final = {
+        [Sequelize.Op.gte]: hasta_fact
       }
     };
     
