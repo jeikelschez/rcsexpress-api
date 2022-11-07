@@ -152,6 +152,28 @@ class CguiasService {
     var b64s = doc.pipe(encoder);
     return await getStream(b64s);
   }
+
+  async guiasDispLote(lote) {
+    let arrayDisp = [];
+    let arrayLote = await models.Cguias.findByPk(lote, {raw: true});
+    let movimientos = await models.Mmovimientos.findAll({
+      where: {
+        t_de_documento: "GC",
+        nro_documento: {
+          [Sequelize.Op.gte]: arrayLote.control_inicio,
+          [Sequelize.Op.lte]: arrayLote.control_final
+        }
+      },
+      raw: true
+    });
+    for (var i = arrayLote.control_inicio; i <= arrayLote.control_final; i++) {
+      if(movimientos.findIndex((item) => item.nro_documento == i) < 0) 
+        arrayDisp.push(i);
+    }      
+    return arrayDisp;
+  }
+
+
 }
 
 module.exports = CguiasService;

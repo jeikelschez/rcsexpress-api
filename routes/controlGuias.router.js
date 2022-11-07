@@ -38,6 +38,18 @@ router.get('/generatePDF',
   }
 });
 
+router.get('/disp',
+  authenticateJWT,
+  async (req, res, next) => {
+  try {
+    const lote = req.headers.lote;
+    const dispLote = await service.guiasDispLote(lote);
+    res.json(dispLote);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get('/:id',
   authenticateJWT,
   validatorHandler(getCguiasSchema, 'params'),
