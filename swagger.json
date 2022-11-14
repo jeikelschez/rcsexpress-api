@@ -1850,6 +1850,24 @@
             "schema": {
               "type": "integer"
             }
+          },
+          {
+            "name": "particular",
+            "in": "header",
+            "description": "Cliente Particular (S)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "activo",
+            "in": "header",
+            "description": "Cliente Activo (S)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2196,6 +2214,24 @@
             "name": "rif",
             "in": "header",
             "description": "Rif del Cliente",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cod_cliente",
+            "in": "header",
+            "description": "Codigo del Cliente",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "activo",
+            "in": "header",
+            "description": "Cliente Particular Activo (S)",
             "required": false,
             "schema": {
               "type": "string"
