@@ -14,7 +14,7 @@ router.get('/',
   try {
     const { page, limit, order_by, order_direction, filter, filter_value,
       agencia, agente, cliente, desde, desde_fact, hasta, hasta_fact,
-      disp, tipo } = req.headers;
+      disp, tipo} = req.headers;
     const cguias = await service.find(page, limit, order_by, order_direction, filter,
       filter_value, agencia, agente, cliente, desde, desde_fact, hasta, hasta_fact,
       disp, tipo);
@@ -28,7 +28,8 @@ router.get('/generatePDF',
   authenticateJWT,
   async (req, res, next) => {
   try {
-    const pdfStream = await service.generatePdf();
+    const { id } = req.headers;
+    const pdfStream = await service.generatePdf(id);
     res.status(200).json({ 
       message: "PDF Generado", 
       base64: pdfStream 

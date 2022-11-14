@@ -137,11 +137,10 @@ class CguiasService {
     return { id };
   }
 
-  async generatePdf() {
+  async generatePdf(id) {
     let doc = new PDFDocument({ margin: 50 });
-
     pdf.generateHeader(doc);
-	  //generateCustomerInformation(doc, invoice);
+    this.generateCustomerInformation(doc, id);
 	  //generateInvoiceTable(doc, invoice);
 	  pdf.generateFooter(doc);
     //doc.fontSize(25).text('Some text with an embedded font!', 100, 100);
@@ -151,6 +150,144 @@ class CguiasService {
     var encoder = new base64.Base64Encode();
     var b64s = doc.pipe(encoder);
     return await getStream(b64s);
+  }
+
+  async generateCustomerInformation(doc) {
+    var data = [
+      {
+        name: 'GUIA CARGA',
+        id: '21342342'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '2325'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '567567'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '13123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '7897978'
+      },
+      {
+        name: 'GUIA FACTURA',
+        id: '234234'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '907686786'
+      },
+      {
+        name: 'GUIA FACTURA',
+        id: '12367967'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123708078'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '5461238'
+      },
+      {
+        name: 'GUIA FACTURA',
+        id: '345098123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '456456890'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '2342367867'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '7689089'
+      },
+      {
+        name: 'GUIA FACTURA',
+        id: '67089435'
+      },
+      {
+        name: 'GUIA FACTURA',
+        id: '89089089'
+      },
+      {
+        name: 'GUIA FACTURA',
+        id: '234234'
+      },
+      {
+        name: 'GUIA FACTURA',
+        id: '45654654'
+      },
+      {
+        name: 'GUIA FACTURA',
+        id: '789'
+      },
+      {
+        name: 'GUIA FACTURA',
+        id: '34534'
+      },
+      {
+        name: 'GUIA FACTURA',
+        id: '978978'
+      },
+    ]
+    this.row(doc, 140);
+    doc.y = 147;
+    doc.x = 283;
+    doc.fillColor('black')
+    doc.text('NRO. GUIA', {
+      paragraphGap: 5,
+      indent: 5,
+      align: 'justify',
+      columns: 1,
+    });
+    doc.lineCap('butt')
+    for (var i = 0; i <= 500;) {
+      this.row(doc, (160 + i));
+      this.textInRowFirst(doc, data[i/20].name, (167 + i), 1);
+      this.textInRowFirst(doc, data[i/20].id, (167 + i), 2);
+      doc.lineCap('butt')
+      .moveTo(300, (160 + i))
+      .lineTo(300, (180 + i))
+      .stroke() 
+      if ((i/20) == data.length - 1) {
+        i = 500
+      }
+      i = i + 20
+    }
+  }
+
+  async textInRowFirst(doc, text, heigth, column) {
+    if (column == 1) {
+      column = 195
+    } else {
+      column = 300
+    }
+    doc.y = heigth;
+    doc.x = column;
+    doc.fillColor('black')
+    doc.text(text, {
+      paragraphGap: 5,
+      indent: 5,
+      align: 'justify',
+      columns: 1,
+    });
+    return doc
+  }
+
+  async row(doc, heigth) {
+    doc.lineJoin('miter')
+      .rect(190, heigth, 250, 20)
+      .stroke()
+    return doc
   }
 }
 
