@@ -206,38 +206,6 @@ class CguiasService {
         name: 'GUIA CARGA',
         id: '2342367867'
       },
-      {
-        name: 'GUIA CARGA',
-        id: '7689089'
-      },
-      {
-        name: 'GUIA FACTURA',
-        id: '67089435'
-      },
-      {
-        name: 'GUIA FACTURA',
-        id: '89089089'
-      },
-      {
-        name: 'GUIA FACTURA',
-        id: '234234'
-      },
-      {
-        name: 'GUIA FACTURA',
-        id: '45654654'
-      },
-      {
-        name: 'GUIA FACTURA',
-        id: '789'
-      },
-      {
-        name: 'GUIA FACTURA',
-        id: '34534'
-      },
-      {
-        name: 'GUIA FACTURA',
-        id: '978978'
-      },
     ]
     this.row(doc, 140);
     doc.y = 147;
