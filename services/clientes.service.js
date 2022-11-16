@@ -17,12 +17,14 @@ class ClientesService {
     return newCliente;
   }
 
-  async find(page, limit, order_by, order_direction, filter, filter_value, agencia) {
+  async find(page, limit, order_by, order_direction, filter, filter_value, agencia, particular, activo) {
     let params2 = {};
     let filterArray = {};
     let order = [];    
     
     if(agencia) params2.cod_agencia = agencia;
+    if(particular) params2.cte_decontado = 1;
+    if(activo) params2.flag_activo = "A";
 
     if(filter && filter_value) {
       let filters = [];

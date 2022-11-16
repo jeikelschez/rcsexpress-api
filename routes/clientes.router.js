@@ -12,8 +12,9 @@ router.get('/',
   authenticateJWT,
   async (req, res, next) => {
   try {
-    const { page, limit, order_by, order_direction, filter, filter_value, agencia } = req.headers;
-    const clientes = await service.find(page, limit, order_by, order_direction, filter, filter_value, agencia);
+    const { page, limit, order_by, order_direction, filter, filter_value, agencia, particular, activo } = req.headers;
+    const clientes = await service.find(page, limit, order_by, order_direction, filter, filter_value, 
+      agencia, particular, activo);
     res.json(clientes);
   } catch (error) {
     next(error);

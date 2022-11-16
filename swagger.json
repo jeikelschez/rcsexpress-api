@@ -1850,6 +1850,24 @@
             "schema": {
               "type": "integer"
             }
+          },
+          {
+            "name": "particular",
+            "in": "header",
+            "description": "Cliente Particular (S)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "activo",
+            "in": "header",
+            "description": "Cliente Activo (S)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2196,6 +2214,24 @@
             "name": "rif",
             "in": "header",
             "description": "Rif del Cliente",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cod_cliente",
+            "in": "header",
+            "description": "Codigo del Cliente",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "activo",
+            "in": "header",
+            "description": "Cliente Particular Activo (S)",
             "required": false,
             "schema": {
               "type": "string"
@@ -3281,7 +3317,7 @@
             "schema": {
               "type": "integer"
             }
-          }
+          }          
         ],
         "responses": {
           "200": {
@@ -3557,6 +3593,46 @@
           },
           "404": {
             "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cguias/disp": {
+      "get": {
+        "tags": ["Control_Guias"],
+        "summary": "Obtener listado de Guias Disponibles por Lote",
+        "description": "API para Obtener todos las Guias Disponibles por Lote",
+        "parameters": [
+          {
+            "name": "lote",
+            "in": "header",
+            "description": "Numero de Lote a Consultar Disponibles",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Control_Guias"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
