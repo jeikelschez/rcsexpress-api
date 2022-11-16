@@ -6796,6 +6796,24 @@
             }
           },
           {
+            "name": "cliente_orig",
+            "in": "header",
+            "description": "Codigo Cliente Origen",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "cliente_dest",
+            "in": "header",
+            "description": "Codigo Cliente Origen",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
             "name": "estatus_oper",
             "in": "header",
             "description": "Estatus Operativo",
@@ -6814,23 +6832,23 @@
             }
           },
           {
-            "name": "cliente_orig",
+            "name": "estatus_admin_ex",
             "in": "header",
-            "description": "Codigo Cliente Origen",
+            "description": "Excluir Estatus Administrativo (Sepadado ,)",
             "required": false,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           },
           {
-            "name": "cliente_dest",
+            "name": "no_abono",
             "in": "header",
-            "description": "Codigo Cliente Origen",
+            "description": "Monto Total = Saldo (S)",
             "required": false,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
-          }
+          }       
         ],
         "responses": {
           "200": {

@@ -13,11 +13,12 @@ router.get('/',
   async (req, res, next) => {
   try {
     const { page, limit, order_by, order_direction, filter, filter_value, agencia, agencia_dest, 
-      nro_documento, tipo, desde, hasta, cliente_orig, cliente_dest, estatus_oper, transito } = req.headers;
+      nro_documento, tipo, desde, hasta, cliente_orig, cliente_dest, estatus_oper, transito, 
+      estatus_admin_ex, no_abono } = req.headers;
 
     const cguias = await service.find(page, limit, order_by, order_direction, filter, 
       filter_value, agencia, agencia_dest, nro_documento, tipo, desde, hasta, cliente_orig, 
-      cliente_dest, estatus_oper, transito);
+      cliente_dest, estatus_oper, transito, estatus_admin_ex, no_abono);
     res.json(cguias);
   } catch (error) {
     next(error);

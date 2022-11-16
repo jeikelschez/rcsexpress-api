@@ -40,7 +40,8 @@ class MmovimientosService {
   }
 
   async find(page, limit, order_by, order_direction, filter, filter_value, agencia, agencia_dest, 
-    nro_documento, tipo, desde, hasta, cliente_orig, cliente_dest, estatus_oper, transito) {    
+    nro_documento, tipo, desde, hasta, cliente_orig, cliente_dest, estatus_oper, transito, 
+    estatus_admin_ex, no_abono) {    
 
     let params2 = {};
     let filterArray = {};
@@ -66,6 +67,16 @@ class MmovimientosService {
     if(cliente_dest) params2.cod_cliente_dest = cliente_dest;
     if(estatus_oper) params2.estatus_operativo = estatus_oper;
     if(transito) params2.check_transito = transito;
+    if(estatus_admin_ex) {
+      params2.estatus_administra = {
+        [Sequelize.Op.notIn]: estatus_admin_ex.split(",")
+      }
+    };
+    if(no_abono) {
+      params2.monto_total = {
+        [Sequelize.Op.col]: 'saldo'
+      }
+    };
 
     if(filter && filter_value) {
       let filters = [];
