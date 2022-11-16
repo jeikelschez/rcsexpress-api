@@ -1,25 +1,15 @@
 class PdfService {
     
-    generateHeader(doc) {
+    generateHeader(doc, t1, st1, st2, date) {
         doc.image('./img/logo_rc.png', 50, 45, { width: 50 })
         .fillColor('#444444')
+        .fontSize(18)
+        .text(t1, 110, 50)
         .fontSize(12)
-        .text('Reporte de Guias Disponibles', 110, 57)
-        .text('Reporte de Guias Disponibles', 110, 77)
-        .fontSize(10)
-        .text('19/10/2022', 200, 65, { align: 'right' })
+        .text(date, 200, 50, { align: 'right' })
+        .text(st1, 110, 80)
+        .text(st2, 110, 100)
         .moveDown();
-    }
-      
-    generateFooter(doc) {
-        doc.fontSize(
-            10,
-        ).text(
-            'Payment is due within 15 days. Thank you for your business.',
-            50,
-            780,
-            { align: 'center', width: 500 },
-        );
     }
 }
 

@@ -137,22 +137,6 @@ class CguiasService {
     return { id };
   }
 
-  async generatePdf() {
-    let doc = new PDFDocument({ margin: 50 });
-
-    pdf.generateHeader(doc);
-	  //generateCustomerInformation(doc, invoice);
-	  //generateInvoiceTable(doc, invoice);
-	  pdf.generateFooter(doc);
-    //doc.fontSize(25).text('Some text with an embedded font!', 100, 100);
-    //doc.pipe(fs.createWriteStream(`file.pdf`));
-    doc.end();
-
-    var encoder = new base64.Base64Encode();
-    var b64s = doc.pipe(encoder);
-    return await getStream(b64s);
-  }
-
   async guiasDispLote(lote) {
     let arrayDisp = [];
     let arrayLote = await models.Cguias.findByPk(lote, {raw: true});
@@ -173,7 +157,611 @@ class CguiasService {
     return arrayDisp;
   }
 
+  async generatePdf(id) {
+    let doc = new PDFDocument({ margin: 50 });
+    this.generateHeader(doc)
+    this.generateCustomerInformation(doc, id);
+    doc.end();
+    var encoder = new base64.Base64Encode();
+    var b64s = doc.pipe(encoder);
+    return await getStream(b64s);
+  }
+  
+  async generateHeader(doc) {
+    pdf.generateHeader(
+      doc,
+      'Reporte de Guias Disponibles',
+      'Guias Desde: 34234234234       Guias Hasta: 234234234234', 
+      'Asignada a:  Agencia - VALENCIA, RCS EXPRESS, S.A',
+      '14/11/2022');
+  }
 
+  async titleTable(doc, title) {
+    this.row(doc, 140);
+    doc.y = 147;
+    doc.x = 283;
+    doc.fillColor('black')
+    doc.text(title, {
+      paragraphGap: 5,
+      indent: 5,
+      align: 'justify',
+      columns: 1,
+    });
+    doc.lineCap('butt')
+  }
+
+  async textInRowFirst(doc, text, heigth, column) {
+    if (column == 1) {
+      column = 195
+    } else {
+      column = 300
+    }
+    doc.y = heigth;
+    doc.x = column;
+    doc.fillColor('black')
+    doc.text(text, {
+      paragraphGap: 5,
+      indent: 5,
+      align: 'justify',
+      columns: 1,
+    });
+    return doc
+  }
+
+  async row(doc, heigth) {
+    doc.lineJoin('miter')
+      .rect(190, heigth, 250, 20)
+      .stroke()
+    return doc
+  }
+
+  async generateCustomerInformation(doc) {
+    var data = [
+      {
+        name: 'GUIA CARGA',
+        id: '7587595689'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '456879'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '80789578'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '12312321'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '546456546'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '7689678678'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '12367543'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '900980'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '56798089'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '45628548'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '547895623'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '5683456'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '4579865345'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '4842554854'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '65823428'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '5682345'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '679635465345'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '45623425'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '5467674'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '678678678'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '678678678'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '678678678'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '678678678'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '678678678'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '678678678'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '678678678'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '678678678'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '678678678'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '678678678'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '678678678'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '678678678'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '678678678'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '678678678'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '678678678'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '678678678'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '678678678'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '678678678'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '678678678'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '678678678'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      }, 
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },{
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },{
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: '123123'
+      },
+      {
+        name: 'GUIA CARGA',
+        id: 'FINAL'
+      },
+    ]
+
+    // TITULO DE TABLA
+
+    this.titleTable(doc, 'NRO. GUIA')
+
+    // DATOS DE TABLA 
+
+    var i = 0
+    var page = 0
+    for (var item = 0; item <= (data.length - 1);) {
+      this.row(doc, (160 + i));
+      this.textInRowFirst(doc, data[item].name, (167 + i), 1);
+      this.textInRowFirst(doc, data[item].id, (167 + i), 2);
+      doc.lineCap('butt')
+      .moveTo(300, (160 + i))
+      .lineTo(300, (180 + i))
+      .stroke() 
+      item = item + 1
+      i = i + 20
+
+      if (i >= 573) {
+        doc.addPage();
+        page = page + 1
+        doc.switchToPage(page);
+        this.row(doc, 140);
+
+        this.titleTable(doc, 'NRO. GUIA')
+
+        this.generateHeader(doc)
+        
+        i = 0
+      }
+    }
+  }
 }
 
 module.exports = CguiasService;
