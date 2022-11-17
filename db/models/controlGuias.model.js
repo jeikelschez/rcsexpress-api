@@ -75,8 +75,8 @@ class Cguias extends Model {
 
   static associate(models) {
     this.belongsTo(models.Agencias, { foreignKey: 'cod_agencia', as: 'agencias' });
-    this.belongsTo(models.Agentes, { foreignKey: 'cod_agencia', as: 'agentes' });
-    this.belongsTo(models.Clientes, { foreignKey: 'cod_agencia', as: 'clientes' });
+    this.belongsTo(models.Agentes, { foreignKey: 'cod_agente', as: 'agentes' });
+    this.belongsTo(models.Clientes, { foreignKey: 'cod_cliente', as: 'clientes' });
     this.belongsTo(models.Tipos, { foreignKey: 'tipo', as: 'tipos' });
   }
 
