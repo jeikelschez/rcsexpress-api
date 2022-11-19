@@ -6848,7 +6848,52 @@
             "schema": {
               "type": "string"
             }
-          }       
+          },
+          {
+            "name": "tipo_doc_ppal",
+            "in": "header",
+            "description": "Tipo Doc Principal",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "nro_doc_ppal",
+            "in": "header",
+            "description": "Nro Doc Principal",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "serie_doc_ppal",
+            "in": "header",
+            "description": "Serie Doc Principal",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "nro_ctrl_doc_ppal",
+            "in": "header",
+            "description": "Nro Ctrl Doc Principal",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "cod_ag_doc_ppal",
+            "in": "header",
+            "description": "Codigo Agencia Doc Principal",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }   
         ],
         "responses": {
           "200": {

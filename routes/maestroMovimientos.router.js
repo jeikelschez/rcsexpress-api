@@ -2,43 +2,92 @@ const express = require('express');
 
 const MmovimientosService = require('./../services/maestroMovimientos.service');
 const validatorHandler = require('./../middlewares/validator.handler');
-const { createMmovimientosSchema, updateMmovimientosSchema, getMmovimientosSchema } = require('./../schemas/maestroMovimientos.schema');
-const authenticateJWT  = require('./../middlewares/authenticate.handler');
+const {
+  createMmovimientosSchema,
+  updateMmovimientosSchema,
+  getMmovimientosSchema,
+} = require('./../schemas/maestroMovimientos.schema');
+const authenticateJWT = require('./../middlewares/authenticate.handler');
 
 const router = express.Router();
 const service = new MmovimientosService();
 
-router.get('/',
-  authenticateJWT,
-  async (req, res, next) => {
+router.get('/', authenticateJWT, async (req, res, next) => {
   try {
-    const { page, limit, order_by, order_direction, filter, filter_value, agencia, agencia_dest, 
-      nro_documento, tipo, desde, hasta, cliente_orig, cliente_dest, estatus_oper, transito, 
-      estatus_admin_ex, no_abono } = req.headers;
+    const {
+      page,
+      limit,
+      order_by,
+      order_direction,
+      filter,
+      filter_value,
+      agencia,
+      agencia_dest,
+      nro_documento,
+      tipo,
+      desde,
+      hasta,
+      cliente_orig,
+      cliente_dest,
+      estatus_oper,
+      transito,
+      estatus_admin_ex,
+      no_abono,
+      tipo_doc_ppal,
+      nro_doc_ppal,
+      serie_doc_ppal,
+      nro_ctrl_doc_ppal,
+      cod_ag_doc_ppal
+    } = req.headers;
 
-    const cguias = await service.find(page, limit, order_by, order_direction, filter, 
-      filter_value, agencia, agencia_dest, nro_documento, tipo, desde, hasta, cliente_orig, 
-      cliente_dest, estatus_oper, transito, estatus_admin_ex, no_abono);
+    const cguias = await service.find(
+      page,
+      limit,
+      order_by,
+      order_direction,
+      filter,
+      filter_value,
+      agencia,
+      agencia_dest,
+      nro_documento,
+      tipo,
+      desde,
+      hasta,
+      cliente_orig,
+      cliente_dest,
+      estatus_oper,
+      transito,
+      estatus_admin_ex,
+      no_abono,
+      tipo_doc_ppal,
+      nro_doc_ppal,
+      serie_doc_ppal,
+      nro_ctrl_doc_ppal,
+      cod_ag_doc_ppal
+    );
     res.json(cguias);
   } catch (error) {
     next(error);
   }
 });
 
-router.get('/:id',
+router.get(
+  '/:id',
   authenticateJWT,
   validatorHandler(getMmovimientosSchema, 'params'),
   async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const mMovimiento = await service.findOne(id);
-    res.json(mMovimiento);
-  } catch (error) {
-    next(error);
+    try {
+      const { id } = req.params;
+      const mMovimiento = await service.findOne(id);
+      res.json(mMovimiento);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
-router.post('/',
+router.post(
+  '/',
   authenticateJWT,
   validatorHandler(createMmovimientosSchema, 'body'),
   async (req, res, next) => {
@@ -52,7 +101,8 @@ router.post('/',
   }
 );
 
-router.put('/:id',
+router.put(
+  '/:id',
   authenticateJWT,
   validatorHandler(getMmovimientosSchema, 'params'),
   validatorHandler(updateMmovimientosSchema, 'body'),
@@ -68,14 +118,15 @@ router.put('/:id',
   }
 );
 
-router.delete('/:id',
+router.delete(
+  '/:id',
   authenticateJWT,
   validatorHandler(getMmovimientosSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
       await service.delete(id);
-      res.status(201).json({id});
+      res.status(201).json({ id });
     } catch (error) {
       next(error);
     }
