@@ -6814,6 +6814,24 @@
             }
           },
           {
+            "name": "cliente_orig_exist",
+            "in": "header",
+            "description": "Exista Cliente Origen (S)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cliente_part_exist",
+            "in": "header",
+            "description": "Exista Cliente Particular Origen (S)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "estatus_oper",
             "in": "header",
             "description": "Estatus Operativo",
@@ -6832,9 +6850,18 @@
             }
           },
           {
+            "name": "estatus_admin_in",
+            "in": "header",
+            "description": "Incluir Estatus Administrativo (Separado ,)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "estatus_admin_ex",
             "in": "header",
-            "description": "Excluir Estatus Administrativo (Sepadado ,)",
+            "description": "Excluir Estatus Administrativo (Separado ,)",
             "required": false,
             "schema": {
               "type": "string"
