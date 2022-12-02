@@ -2,7 +2,7 @@ const Joi = require('joi');
 
 const id = Joi.number().integer();
 const nb_cliente = Joi.string().min(3).max(100);
-const rif_cedula = Joi.string().min(3).max(20);
+const rif_cedula = Joi.string().min(1).max(20);
 const nit = Joi.string().min(3).max(20);
 const dir_correo = Joi.string().min(3).max(100);
 const dir_fiscal = Joi.string().min(3).max(200);

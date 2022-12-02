@@ -11,6 +11,38 @@ const utils = new UtilsService();
 const PdfService = require('./pdf.service');
 const pdf = new PdfService();
 
+const clienteOrigDesc =
+  '(CASE WHEN (ci_rif_cte_conta_org IS NULL || ci_rif_cte_conta_org = "")' +
+  ' THEN (SELECT nb_cliente' +
+  ' FROM clientes ' +
+  ' WHERE `Mmovimientos`.cod_cliente_org = clientes.id)' +
+  ' ELSE (SELECT nb_cliente' +
+  ' FROM clientes_particulares' +
+  ' WHERE `Mmovimientos`.cod_agencia = clientes_particulares.cod_agencia' +
+  ' AND `Mmovimientos`.cod_cliente_org = clientes_particulares.cod_cliente' +
+  ' AND `Mmovimientos`.ci_rif_cte_conta_org = clientes_particulares.rif_ci' +
+  ' AND clientes_particulares.estatus = "A" LIMIT 1)' +
+  ' END)';
+const clienteDestDesc =
+  '(CASE WHEN (ci_rif_cte_conta_dest IS NULL || ci_rif_cte_conta_dest = "")' +
+  ' THEN (SELECT nb_cliente' +
+  ' FROM clientes ' +
+  ' WHERE `Mmovimientos`.cod_cliente_dest = clientes.id)' +
+  ' ELSE (SELECT nb_cliente' +
+  ' FROM clientes_particulares' +
+  ' WHERE `Mmovimientos`.cod_agencia_dest = clientes_particulares.cod_agencia' +
+  ' AND `Mmovimientos`.cod_cliente_dest = clientes_particulares.cod_cliente' +
+  ' AND `Mmovimientos`.ci_rif_cte_conta_dest = clientes_particulares.rif_ci' + 
+  ' AND clientes_particulares.estatus = "A" LIMIT 1)' +
+  ' END)';
+const caseStatusOper =
+  '(CASE estatus_operativo WHEN "PR" THEN "EN PROCESO DE ENVÍO"' +
+  ' WHEN "PE" THEN "PENDIENTE POR ENTREGA"' +
+  ' WHEN "CO" THEN "ENTREGA CONFORME"' +
+  ' WHEN "NC" THEN "ENTREGA NO CONFORME"' +
+  ' ELSE "" END)';
+const fechaRecepFormat = 'DATE_FORMAT(fecha_recepcion, "%d/%m/%Y")';
+
 class MmovimientosService {
   constructor() {}
 
@@ -46,11 +78,13 @@ class MmovimientosService {
     nro_doc_ppal,
     serie_doc_ppal,
     nro_ctrl_doc_ppal,
-    cod_ag_doc_ppal
+    cod_ag_doc_ppal,
+    order_pe
   ) {
     let params2 = {};
     let filterArray = {};
     let order = [];
+    let include = [];
 
     if (agencia) params2.cod_agencia = agencia;
     if (agencia_dest) params2.cod_agencia_dest = agencia_dest;
@@ -137,9 +171,22 @@ class MmovimientosService {
 
     let params = { ...params2, ...filterArray };
 
-    let attributes = {};
+    let attributes = {
+      include: [
+        [Sequelize.literal(clienteOrigDesc), 'cliente_orig_desc'],
+        [Sequelize.literal(clienteDestDesc), 'cliente_dest_desc'],
+        [Sequelize.literal(caseStatusOper), 'estatus_oper_desc'],
+        [Sequelize.literal(fechaRecepFormat), 'fecha_recepcion_format'],
+      ],
+    };
 
-    if (order_by && order_direction) {
+    if (order_pe) {
+      include = ['agentes_entrega'];
+      order.push(['cod_agencia', 'ASC']);
+      order.push(['cod_agencia_dest', 'ASC']);
+      order.push(['nro_documento', 'ASC']);
+      order.push(['fecha_emision', 'ASC']);
+    } else if (order_by && order_direction) {
       order.push([order_by, order_direction]);
     }
 
@@ -149,7 +196,8 @@ class MmovimientosService {
       limit,
       params,
       order,
-      attributes
+      attributes,
+      include
     );
   }
 

@@ -28,8 +28,6 @@ class ProveedoresService {
 
     if(tipo_servicio) params2.tipo_servicio = tipo_servicio;
 
-    console.log(tipo_servicio)
-
     if(filter && filter_value) {
       let filters = [];
       filter.split(",").forEach(function(item) {

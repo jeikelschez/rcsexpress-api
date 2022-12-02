@@ -2,25 +2,48 @@ const express = require('express');
 
 const AgentesService = require('./../services/agentes.service');
 const validatorHandler = require('./../middlewares/validator.handler');
-const { createAgentesSchema, updateAgentesSchema, getAgentesSchema } = require('./../schemas/agentes.schema');
-const authenticateJWT  = require('./../middlewares/authenticate.handler');
+const {
+  createAgentesSchema,
+  updateAgentesSchema,
+  getAgentesSchema,
+} = require('./../schemas/agentes.schema');
+const authenticateJWT = require('./../middlewares/authenticate.handler');
 
 const router = express.Router();
 const service = new AgentesService();
 
-router.get('/',
-  authenticateJWT,
-  async (req, res, next) => {
+router.get('/', authenticateJWT, async (req, res, next) => {
   try {
-    const { page, limit, order_by, order_direction, filter, filter_value, agencia } = req.headers;
-    const agentes = await service.find(page, limit, order_by, order_direction, filter, filter_value, agencia);
+    const {
+      page,
+      limit,
+      order_by,
+      order_direction,
+      filter,
+      filter_value,
+      agencia,
+      activo,
+      group_ag,
+    } = req.headers;
+    const agentes = await service.find(
+      page,
+      limit,
+      order_by,
+      order_direction,
+      filter,
+      filter_value,
+      agencia,
+      activo,
+      group_ag
+    );
     res.json(agentes);
   } catch (error) {
     next(error);
   }
 });
 
-router.get('/:id',
+router.get(
+  '/:id',
   authenticateJWT,
   validatorHandler(getAgentesSchema, 'params'),
   async (req, res, next) => {
@@ -34,7 +57,8 @@ router.get('/:id',
   }
 );
 
-router.post('/',
+router.post(
+  '/',
   authenticateJWT,
   validatorHandler(createAgentesSchema, 'body'),
   async (req, res, next) => {
@@ -48,7 +72,8 @@ router.post('/',
   }
 );
 
-router.put('/:id',
+router.put(
+  '/:id',
   authenticateJWT,
   validatorHandler(getAgentesSchema, 'params'),
   validatorHandler(updateAgentesSchema, 'body'),
@@ -64,14 +89,15 @@ router.put('/:id',
   }
 );
 
-router.delete('/:id',
+router.delete(
+  '/:id',
   authenticateJWT,
   validatorHandler(getAgentesSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
       await service.delete(id);
-      res.status(201).json({id});
+      res.status(201).json({ id });
     } catch (error) {
       next(error);
     }

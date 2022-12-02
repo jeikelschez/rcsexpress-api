@@ -42,6 +42,7 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       serie_doc_ppal,
       nro_ctrl_doc_ppal,
       cod_ag_doc_ppal,
+      order_pe
     } = req.headers;
 
     const cguias = await service.find(
@@ -71,7 +72,8 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       nro_doc_ppal,
       serie_doc_ppal,
       nro_ctrl_doc_ppal,
-      cod_ag_doc_ppal
+      cod_ag_doc_ppal,
+      order_pe
     );
     res.json(cguias);
   } catch (error) {

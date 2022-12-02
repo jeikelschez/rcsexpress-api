@@ -1,11 +1,10 @@
 const boom = require('@hapi/boom');
 
-const { models, Sequelize }= require('./../libs/sequelize');
+const { models, Sequelize } = require('./../libs/sequelize');
 const UtilsService = require('./utils.service');
 const utils = new UtilsService();
 
 class AgentesService {
-
   constructor() {}
 
   async create(data) {
@@ -13,30 +12,57 @@ class AgentesService {
     return newAgente;
   }
 
-  async find(page, limit, order_by, order_direction, filter, filter_value, agencia) {    
+  async find(
+    page,
+    limit,
+    order_by,
+    order_direction,
+    filter,
+    filter_value,
+    agencia,
+    activo,
+    group_ag
+  ) {
     let params2 = {};
     let filterArray = {};
-    let order = [];    
-    
-    if(agencia) params2.cod_agencia = agencia;
+    let order = [];
 
-    if(filter && filter_value) {
+    if (agencia) params2.cod_agencia = agencia;
+    if (activo) params2.flag_activo = 1;
+
+    if (filter && filter_value) {
       let filters = [];
-      filter.split(",").forEach(function(item) {
+      filter.split(',').forEach(function (item) {
         let itemArray = {};
         itemArray[item] = { [Sequelize.Op.substring]: filter_value };
         filters.push(itemArray);
-      })
+      });
 
-      filterArray = { 
-        [Sequelize.Op.or]: filters 
-      };      
+      filterArray = {
+        [Sequelize.Op.or]: filters,
+      };
     }
 
     let params = { ...params2, ...filterArray };
 
-    if(order_by && order_direction) {
+    if (order_by && order_direction) {
       order.push([order_by, order_direction]);
+    }
+
+    if (group_ag) {
+      let agencias = await models.Agencias.findAll();
+      let agentesArray = [];
+      for (var i = 0; i <= agencias.length - 1; i++) {
+        let agentes = await models.Agentes.findAll({
+          where: {
+            cod_agencia: agencias[i].id,
+            flag_activo: 1,
+          },
+          raw: true,
+        });
+        agentesArray.splice(agencias[i].id, 0, agentes);
+      }
+      return agentesArray;
     }
 
     return await utils.paginate(models.Agentes, page, limit, params, order);

@@ -599,7 +599,25 @@
             "schema": {
               "type": "integer"
             }
-          }          
+          },
+          {
+            "name": "activo",
+            "in": "header",
+            "description": "Activo (S)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "group_ag",
+            "in": "header",
+            "description": "Agentes Agrupados por Agencia (S)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
         "responses": {
           "200": {
@@ -6778,7 +6796,7 @@
             }
           },
           {
-            "name": "f_desde",
+            "name": "desde",
             "in": "header",
             "description": "Fecha de Emision Desde",
             "required": false,
@@ -6787,7 +6805,7 @@
             }
           },
           {
-            "name": "f_hasta",
+            "name": "hasta",
             "in": "header",
             "description": "Fecha de Emision Hasta",
             "required": false,
@@ -6920,7 +6938,16 @@
             "schema": {
               "type": "integer"
             }
-          }   
+          },
+          {
+            "name": "order_pe",
+            "in": "header",
+            "description": "Ordenado Especial para Prueba de Entrega (S)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          } 
         ],
         "responses": {
           "200": {
@@ -12738,7 +12765,11 @@
           "monto_divisas_igtf": {
             "type": "number"
           },
-          "tipo_desc": {
+          "cliente_orig_desc": {
+            "type": "string",
+            "readOnly": true
+          },
+          "cliente_dest_desc": {
             "type": "string",
             "readOnly": true
           },
@@ -12746,15 +12777,7 @@
             "type": "string",
             "readOnly": true
           },
-          "estatus_admin_desc": {
-            "type": "string",
-            "readOnly": true
-          },
-          "pagado_en_desc": {
-            "type": "string",
-            "readOnly": true
-          },
-          "modalidad_desc": {
+          "fecha_recepcion_format": {
             "type": "string",
             "readOnly": true
           }
