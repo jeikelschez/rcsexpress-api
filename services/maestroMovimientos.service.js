@@ -35,13 +35,6 @@ const clienteDestDesc =
   ' AND `Mmovimientos`.ci_rif_cte_conta_dest = clientes_particulares.rif_ci' + 
   ' AND clientes_particulares.estatus = "A" LIMIT 1)' +
   ' END)';
-const caseStatusOper =
-  '(CASE estatus_operativo WHEN "PR" THEN "EN PROCESO DE ENVÍO"' +
-  ' WHEN "PE" THEN "PENDIENTE POR ENTREGA"' +
-  ' WHEN "CO" THEN "ENTREGA CONFORME"' +
-  ' WHEN "NC" THEN "ENTREGA NO CONFORME"' +
-  ' ELSE "" END)';
-const fechaRecepFormat = 'DATE_FORMAT(fecha_recepcion, "%d/%m/%Y")';
 
 class MmovimientosService {
   constructor() {}
@@ -175,13 +168,10 @@ class MmovimientosService {
       include: [
         [Sequelize.literal(clienteOrigDesc), 'cliente_orig_desc'],
         [Sequelize.literal(clienteDestDesc), 'cliente_dest_desc'],
-        [Sequelize.literal(caseStatusOper), 'estatus_oper_desc'],
-        [Sequelize.literal(fechaRecepFormat), 'fecha_recepcion_format'],
       ],
     };
 
     if (order_pe) {
-      include = ['agentes_entrega'];
       order.push(['cod_agencia', 'ASC']);
       order.push(['cod_agencia_dest', 'ASC']);
       order.push(['nro_documento', 'ASC']);

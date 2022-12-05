@@ -52,15 +52,16 @@ class AgentesService {
     if (group_ag) {
       let agencias = await models.Agencias.findAll();
       let agentesArray = [];
-      for (var i = 0; i <= agencias.length - 1; i++) {
+      for (var i = 0; i <= agencias[agencias.length - 1].id - 1; i++) {
+        let cod_agencia = agencias[i] ? agencias[i].id : i;
         let agentes = await models.Agentes.findAll({
           where: {
-            cod_agencia: agencias[i].id,
+            cod_agencia: cod_agencia,
             flag_activo: 1,
           },
           raw: true,
         });
-        agentesArray.splice(agencias[i].id, 0, agentes);
+        agentesArray.splice(cod_agencia, 0, agentes);
       }
       return agentesArray;
     }

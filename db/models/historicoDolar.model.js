@@ -1,12 +1,18 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
+const moment = require('moment');
 
 const HDOLAR_TABLE = 'historico_dolar';
 
 const HdolarSchema = {
-  fecha: {
+  fecha: {    
+    type: DataTypes.DATEONLY,
+    get: function () {
+      return this.getDataValue('fecha')
+        ? moment(this.getDataValue('fecha')).format('DD/MM/YYYY')
+        : null;
+    },
     allowNull: false,
     primaryKey: true,
-    type: DataTypes.STRING,
   },
   valor: {
     type: DataTypes.DECIMAL,

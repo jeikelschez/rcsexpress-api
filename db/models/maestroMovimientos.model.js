@@ -1,4 +1,5 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
+const moment = require('moment');
 
 const { AGENCIAS_TABLE } = require('./agencias.model');
 const { CLIENTES_TABLE } = require('./clientes.model');
@@ -22,10 +23,10 @@ const MmovimientosSchema = {
     type: DataTypes.INTEGER,
     references: {
       model: AGENCIAS_TABLE,
-      key: 'id'
+      key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',
   },
   nro_documento: {
     type: DataTypes.DECIMAL,
@@ -39,7 +40,12 @@ const MmovimientosSchema = {
     type: DataTypes.STRING,
   },
   fecha_emision: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
+    get: function () {
+      return this.getDataValue('fecha_emision')
+        ? moment(this.getDataValue('fecha_emision')).format('DD/MM/YYYY')
+        : null;
+    },
     allowNull: false,
   },
   cod_cliente_org: {
@@ -47,28 +53,28 @@ const MmovimientosSchema = {
     type: DataTypes.INTEGER,
     references: {
       model: CLIENTES_TABLE,
-      key: 'id'
+      key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',
   },
   cod_agencia_dest: {
     type: DataTypes.INTEGER,
     references: {
       model: AGENCIAS_TABLE,
-      key: 'id'
+      key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',
   },
   cod_cliente_dest: {
     type: DataTypes.INTEGER,
     references: {
       model: CLIENTES_TABLE,
-      key: 'id'
+      key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',
   },
   tipo_servicio: {
     type: DataTypes.STRING,
@@ -80,7 +86,12 @@ const MmovimientosSchema = {
     type: DataTypes.STRING,
   },
   fecha_envio: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
+    get: function () {
+      return this.getDataValue('fecha_envio')
+        ? moment(this.getDataValue('fecha_envio')).format('DD/MM/YYYY')
+        : null;
+    },
   },
   modalidad_pago: {
     type: DataTypes.STRING,
@@ -108,7 +119,7 @@ const MmovimientosSchema = {
   },
   desc_contenido: {
     type: DataTypes.STRING,
-  },  
+  },
   valor_declarado_cod: {
     type: DataTypes.DECIMAL,
   },
@@ -152,13 +163,18 @@ const MmovimientosSchema = {
     type: DataTypes.INTEGER,
     references: {
       model: COPERACION_TABLE,
-      key: 'id'
+      key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',
   },
   fecha_anulacion: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
+    get: function () {
+      return this.getDataValue('fecha_anulacion')
+        ? moment(this.getDataValue('fecha_anulacion')).format('DD/MM/YYYY')
+        : null;
+    },
   },
   observacion: {
     type: DataTypes.STRING,
@@ -167,19 +183,19 @@ const MmovimientosSchema = {
     type: DataTypes.INTEGER,
     references: {
       model: PROVEEDORES_TABLE,
-      key: 'id'
+      key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',
   },
   cod_agente_venta: {
     type: DataTypes.INTEGER,
     references: {
       model: AGENTES_TABLE,
-      key: 'id'
+      key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',
   },
   comision_venta: {
     type: DataTypes.DECIMAL,
@@ -191,25 +207,35 @@ const MmovimientosSchema = {
     type: DataTypes.INTEGER,
     references: {
       model: AGENCIAS_TABLE,
-      key: 'id'
+      key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',
   },
   fecha_llega_transito: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
+    get: function () {
+      return moment(this.getDataValue('fecha_llega_transito')).format('DD/MM/YYYY') != 'Invalid date'
+        ? moment(this.getDataValue('fecha_llega_transito')).format('DD/MM/YYYY')
+        : '00/00/0000';
+    },
   },
   fecha_sale_transito: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
+    get: function () {
+      return moment(this.getDataValue('fecha_sale_transito')).format('DD/MM/YYYY') != 'Invalid date'
+        ? moment(this.getDataValue('fecha_sale_transito')).format('DD/MM/YYYY')
+        : null;
+    },
   },
   cod_agente_entrega: {
     type: DataTypes.INTEGER,
     references: {
       model: AGENTES_TABLE,
-      key: 'id'
+      key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',
   },
   comision_entrega: {
     type: DataTypes.DECIMAL,
@@ -221,7 +247,12 @@ const MmovimientosSchema = {
     type: DataTypes.STRING,
   },
   fecha_recepcion: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
+    get: function () {
+      return this.getDataValue('fecha_recepcion')
+        ? moment(this.getDataValue('fecha_recepcion')).format('DD/MM/YYYY')
+        : null;
+    },
   },
   hora_recepcion: {
     type: DataTypes.STRING,
@@ -269,7 +300,12 @@ const MmovimientosSchema = {
     type: DataTypes.STRING,
   },
   fecha_aplicacion: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
+    get: function () {
+      return this.getDataValue('fecha_aplicacion')
+        ? moment(this.getDataValue('fecha_aplicacion')).format('DD/MM/YYYY')
+        : null;
+    },
   },
   id_clte_part_orig: {
     type: DataTypes.DECIMAL,
@@ -278,10 +314,10 @@ const MmovimientosSchema = {
     type: DataTypes.INTEGER,
     references: {
       model: CPARTICULARES_TABLE,
-      key: 'id'
+      key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',
   },
   check_pe: {
     type: DataTypes.DECIMAL,
@@ -317,43 +353,105 @@ const MmovimientosSchema = {
     type: DataTypes.DECIMAL,
   },
   fecha_pe: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
+    get: function () {
+      return this.getDataValue('fecha_pe')
+        ? moment(this.getDataValue('fecha_pe')).format('DD/MM/YYYY')
+        : null;
+    },
   },
   fecha_pent: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
+    get: function () {
+      return this.getDataValue('fecha_pent')
+        ? moment(this.getDataValue('fecha_pent')).format('DD/MM/YYYY')
+        : null;
+    },
   },
   fecha_entco: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
+    get: function () {
+      return this.getDataValue('fecha_entco')
+        ? moment(this.getDataValue('fecha_entco')).format('DD/MM/YYYY')
+        : null;
+    },
   },
   fecha_entnoco: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
+    get: function () {
+      return this.getDataValue('fecha_entnoco')
+        ? moment(this.getDataValue('fecha_entnoco')).format('DD/MM/YYYY')
+        : null;
+    },
   },
   fecha_elab: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
+    get: function () {
+      return this.getDataValue('fecha_elab')
+        ? moment(this.getDataValue('fecha_elab')).format('DD/MM/YYYY')
+        : null;
+    },
   },
   fecha_pxfac: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
+    get: function () {
+      return this.getDataValue('fecha_pxfac')
+        ? moment(this.getDataValue('fecha_pxfac')).format('DD/MM/YYYY')
+        : null;
+    },
   },
   fecha_cfacgen: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
+    get: function () {
+      return this.getDataValue('fecha_cfacgen')
+        ? moment(this.getDataValue('fecha_cfacgen')).format('DD/MM/YYYY')
+        : null;
+    },
   },
   fecha_anulada: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
+    get: function () {
+      return this.getDataValue('fecha_anulada')
+        ? moment(this.getDataValue('fecha_anulada')).format('DD/MM/YYYY')
+        : null;
+    },
   },
   fecha_pxcob: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
+    get: function () {
+      return this.getDataValue('fecha_pxcob')
+        ? moment(this.getDataValue('fecha_pxcob')).format('DD/MM/YYYY')
+        : null;
+    },
   },
   fecha_pximp: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
+    get: function () {
+      return this.getDataValue('fecha_pximp')
+        ? moment(this.getDataValue('fecha_pximp')).format('DD/MM/YYYY')
+        : null;
+    },
   },
   fecha_cancel: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
+    get: function () {
+      return this.getDataValue('fecha_cancel')
+        ? moment(this.getDataValue('fecha_cancel')).format('DD/MM/YYYY')
+        : null;
+    },
   },
   nro_doc_guia: {
     type: DataTypes.DECIMAL,
   },
   fecha_comp_ret_compra: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
+    get: function () {
+      return this.getDataValue('fecha_comp_ret_compra')
+        ? moment(this.getDataValue('fecha_comp_ret_compra')).format(
+            'DD/MM/YYYY'
+          )
+        : null;
+    },
   },
   nro_comp_ret_compra: {
     type: DataTypes.STRING,
@@ -371,10 +469,10 @@ const MmovimientosSchema = {
     type: DataTypes.INTEGER,
     references: {
       model: AGENCIAS_TABLE,
-      key: 'id'
+      key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',
   },
   nro_control_new: {
     type: DataTypes.DECIMAL,
@@ -386,10 +484,10 @@ const MmovimientosSchema = {
     type: DataTypes.INTEGER,
     references: {
       model: ZONAS_TABLE,
-      key: 'id'
+      key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',
   },
   cod_motivo_retraso: {
     type: DataTypes.DECIMAL,
@@ -398,7 +496,14 @@ const MmovimientosSchema = {
     type: DataTypes.DECIMAL,
   },
   fecha_emi_comp_ret_compra: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
+    get: function () {
+      return this.getDataValue('fecha_emi_comp_ret_compra')
+        ? moment(this.getDataValue('fecha_emi_comp_ret_compra')).format(
+            'DD/MM/YYYY'
+          )
+        : null;
+    },
   },
   monto_fpo: {
     type: DataTypes.DECIMAL,
@@ -416,7 +521,12 @@ const MmovimientosSchema = {
     type: DataTypes.STRING,
   },
   fecha_comp_igtf: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
+    get: function () {
+      return this.getDataValue('fecha_comp_igtf')
+        ? moment(this.getDataValue('fecha_comp_igtf')).format('DD/MM/YYYY')
+        : null;
+    },
   },
   nro_comp_igtf: {
     type: DataTypes.STRING,
@@ -425,25 +535,60 @@ const MmovimientosSchema = {
     type: DataTypes.STRING,
   },
   monto_divisas_igtf: {
-    type: DataTypes.DECIMAL
+    type: DataTypes.DECIMAL,
   },
-}
+};
 
 class Mmovimientos extends Model {
-
   static associate(models) {
-    this.belongsTo(models.Agencias, { foreignKey: 'cod_agencia', as: 'agencias' });
-    this.belongsTo(models.Clientes, { foreignKey: 'cod_cliente_org', as: 'clientes_org' });
-    this.belongsTo(models.Agencias, { foreignKey: 'cod_agencia_dest', as: 'agencias_dest' });
-    this.belongsTo(models.Clientes, { foreignKey: 'cod_cliente_dest', as: 'clientes_dest' });
-    this.belongsTo(models.Coperacion, { foreignKey: 'cod_concepto', as: 'conceptos' });
-    this.belongsTo(models.Proveedores, { foreignKey: 'cod_proveedor', as: 'proveedores' });
-    this.belongsTo(models.Agentes, { foreignKey: 'cod_agente_venta', as: 'agentes_venta' });
-    this.belongsTo(models.Agencias, { foreignKey: 'cod_agencia_transito', as: 'agencias_trans' });
-    this.belongsTo(models.Agentes, { foreignKey: 'cod_agente_entrega', as: 'agentes_entrega' });
-    this.belongsTo(models.Agencias, { foreignKey: 'cod_ag_doc_ppal', as: 'agencias_doc_ppal' });
-    this.belongsTo(models.Zonas, { foreignKey: 'cod_zona_dest', as: 'zonas_dest' });
-    this.hasMany(models.Ccomisiones, { foreignKey: 'cod_movimiento', as: 'comisiones' });
+    this.belongsTo(models.Agencias, {
+      foreignKey: 'cod_agencia',
+      as: 'agencias',
+    });
+    this.belongsTo(models.Clientes, {
+      foreignKey: 'cod_cliente_org',
+      as: 'clientes_org',
+    });
+    this.belongsTo(models.Agencias, {
+      foreignKey: 'cod_agencia_dest',
+      as: 'agencias_dest',
+    });
+    this.belongsTo(models.Clientes, {
+      foreignKey: 'cod_cliente_dest',
+      as: 'clientes_dest',
+    });
+    this.belongsTo(models.Coperacion, {
+      foreignKey: 'cod_concepto',
+      as: 'conceptos',
+    });
+    this.belongsTo(models.Proveedores, {
+      foreignKey: 'cod_proveedor',
+      as: 'proveedores',
+    });
+    this.belongsTo(models.Agentes, {
+      foreignKey: 'cod_agente_venta',
+      as: 'agentes_venta',
+    });
+    this.belongsTo(models.Agencias, {
+      foreignKey: 'cod_agencia_transito',
+      as: 'agencias_trans',
+    });
+    this.belongsTo(models.Agentes, {
+      foreignKey: 'cod_agente_entrega',
+      as: 'agentes_entrega',
+    });
+    this.belongsTo(models.Agencias, {
+      foreignKey: 'cod_ag_doc_ppal',
+      as: 'agencias_doc_ppal',
+    });
+    this.belongsTo(models.Zonas, {
+      foreignKey: 'cod_zona_dest',
+      as: 'zonas_dest',
+    });
+    this.hasMany(models.Ccomisiones, {
+      foreignKey: 'cod_movimiento',
+      as: 'comisiones',
+    });
   }
 
   static config(sequelize) {
@@ -451,8 +596,8 @@ class Mmovimientos extends Model {
       sequelize,
       tableName: MMOVIMIENTOS_TABLE,
       modelName: 'Mmovimientos',
-      timestamps: false
-    }
+      timestamps: false,
+    };
   }
 }
 

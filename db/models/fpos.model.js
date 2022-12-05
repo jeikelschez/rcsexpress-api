@@ -1,4 +1,5 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
+const moment = require('moment');
 
 const FPOS_TABLE = 'fpos';
 
@@ -23,12 +24,22 @@ const FposSchema = {
     allowNull: false,
   },
   f_val: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
+    get: function () {
+      return this.getDataValue('f_val')
+        ? moment(this.getDataValue('f_val')).format('DD/MM/YYYY')
+        : null;
+    },
     allowNull: false,
     unique: 'uniqueTag',
   },
   f_anul: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
+    get: function () {
+      return this.getDataValue('f_anul')
+        ? moment(this.getDataValue('f_anul')).format('DD/MM/YYYY')
+        : null;
+    },
     allowNull: false,
     unique: 'uniqueTag',
   },

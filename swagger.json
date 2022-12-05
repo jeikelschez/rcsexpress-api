@@ -12772,14 +12772,6 @@
           "cliente_dest_desc": {
             "type": "string",
             "readOnly": true
-          },
-          "estatus_oper_desc": {
-            "type": "string",
-            "readOnly": true
-          },
-          "fecha_recepcion_format": {
-            "type": "string",
-            "readOnly": true
           }
         }
       },

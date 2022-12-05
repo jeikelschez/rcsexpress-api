@@ -1,4 +1,5 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
+const moment = require('moment');
 
 const MRETENCIONES_TABLE = 'maestro_retenciones';
 
@@ -44,12 +45,22 @@ const MretencionesSchema = {
     allowNull: false,
   },
   fecha_ini_val: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
+    get: function () {
+      return this.getDataValue('fecha_ini_val')
+        ? moment(this.getDataValue('fecha_ini_val')).format('DD/MM/YYYY')
+        : null;
+    },
     allowNull: false,
     unique: 'uniqueTag',
   },
   fecha_fin_val: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
+    get: function () {
+      return this.getDataValue('fecha_fin_val')
+        ? moment(this.getDataValue('fecha_fin_val')).format('DD/MM/YYYY')
+        : null;
+    },
     allowNull: false,
     unique: 'uniqueTag',
   }
