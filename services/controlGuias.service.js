@@ -8,8 +8,6 @@ const moment = require('moment');
 const { models, Sequelize } = require('./../libs/sequelize');
 const UtilsService = require('./utils.service');
 const utils = new UtilsService();
-const PdfService = require('./pdf.service');
-const pdf = new PdfService();
 
 class CguiasService {
   constructor() {}
@@ -189,7 +187,11 @@ class CguiasService {
 
   async generatePdf(id) {
     let doc = new PDFDocument({ margin: 50 });
-    await this.generateCustomerInformation(doc, id);
+    var data = await this.guiasDispLote(id);
+   
+    await this.generateHeader(doc, data);
+    await this.generateCustomerInformation(doc, data);
+    
     doc.end();
     var encoder = new base64.Base64Encode();
     var b64s = doc.pipe(encoder);
@@ -208,13 +210,20 @@ class CguiasService {
       assign = '';
     }
 
-    pdf.generateHeader(
-      doc,
-      'Reporte de Guias Disponibles',
-      `Guias Desde: ${data.control_inicio}       Guias Hasta: ${data.control_final}`,
-      assign,
-      moment().format('DD/MM/YYYY')
-    );
+    doc
+      .image('./img/logo_rc.png', 50, 45, { width: 50 })
+      .fillColor('#444444')
+      .fontSize(18)
+      .text('Reporte de Guias Disponibles', 110, 50)
+      .fontSize(12)
+      .text(moment().format('DD/MM/YYYY'), 200, 50, { align: 'right' })
+      .text(
+        `Guias Desde: ${data.control_inicio}       Guias Hasta: ${data.control_final}`,
+        110,
+        80
+      )
+      .text(assign, 110, 100)
+      .moveDown();
   }
 
   async titleTable(doc, title) {
@@ -254,10 +263,7 @@ class CguiasService {
     return doc;
   }
 
-  async generateCustomerInformation(doc, id) {
-    var data = await this.guiasDispLote(id);
-    await this.generateHeader(doc, data);
-
+  async generateCustomerInformation(doc, data) {
     // TITULO DE TABLA
     this.titleTable(doc, 'NRO. GUIA');
 

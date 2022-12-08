@@ -83,8 +83,8 @@ router.get('/', authenticateJWT, async (req, res, next) => {
 
 router.get('/letterPDF', authenticateJWT, async (req, res, next) => {
   try {
-    const { data, contacto, cargo } = req.headers;
-    const pdfStream = await service.letterPDF(data, contacto, cargo);
+    const { data, cliente, contacto, cargo, ciudad } = req.headers;
+    const pdfStream = await service.letterPDF(data, cliente, contacto, cargo, ciudad);
     res.status(200).json({
       message: 'PDF Generado',
       base64: pdfStream,

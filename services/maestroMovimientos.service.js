@@ -9,7 +9,6 @@ const { models, Sequelize } = require('./../libs/sequelize');
 const UtilsService = require('./utils.service');
 const utils = new UtilsService();
 const PdfService = require('./pdf.service');
-const pdf = new PdfService();
 
 const clienteOrigDesc =
   '(CASE WHEN (ci_rif_cte_conta_org IS NULL || ci_rif_cte_conta_org = "")' +
@@ -32,8 +31,18 @@ const clienteDestDesc =
   ' FROM clientes_particulares' +
   ' WHERE `Mmovimientos`.cod_agencia_dest = clientes_particulares.cod_agencia' +
   ' AND `Mmovimientos`.cod_cliente_dest = clientes_particulares.cod_cliente' +
-  ' AND `Mmovimientos`.ci_rif_cte_conta_dest = clientes_particulares.rif_ci' + 
+  ' AND `Mmovimientos`.ci_rif_cte_conta_dest = clientes_particulares.rif_ci' +
   ' AND clientes_particulares.estatus = "A" LIMIT 1)' +
+  ' END)';
+const nroControlDesc =
+  '(CASE WHEN nro_control IS NULL THEN CONCAT(serie_documento, nro_documento)' +
+  ' WHEN nro_control_new IS NULL THEN LPAD(nro_control, 4, "0000")' +
+  ' WHEN serie_documento IS NULL THEN LPAD(nro_control_new, 9, "00-000000")' +
+  ' ELSE CONCAT(serie_documento, "-", LPAD(nro_control_new, 9, "00-000000")) ' +
+  ' END)';
+const nroDocumentoDesc =
+  '(CASE WHEN nro_control IS NULL THEN CONCAT(serie_documento, "-",  nro_documento)' +
+  ' ELSE CONCAT(t_de_documento, " ", LPAD(nro_control, 5, "0")) ' +
   ' END)';
 
 class MmovimientosService {
@@ -242,34 +251,47 @@ class MmovimientosService {
     return arrayLote;
   }
 
-  async letterPDF(data, contacto, cargo) {
+  async letterPDF(data, cliente, contacto, cargo, ciudad) {
     let doc = new PDFDocument({ margin: 50 });
-    await this.generateCustomerInformation(doc, data, contacto, cargo);
+    await this.generateHeader(doc, cliente, contacto, cargo, ciudad);
+    await this.generateCustomerInformation(doc, data);
     doc.end();
     var encoder = new base64.Base64Encode();
     var b64s = doc.pipe(encoder);
     return await getStream(b64s);
   }
 
-  async generateHeader(doc, data) {
-    var assign = 'Asignada a: ';
-    if (data['agentes.id']) {
-      assign += `Agente: ${data['agentes.nb_agente']} - ${data['agentes.persona_responsable']}`;
-    } else if (data['clientes.id']) {
-      assign += `Cliente: ${data['clientes.razon_social']}`;
-    } else if (data['agencias.id']) {
-      assign += `Agencia: ${data['agencias.nb_agencia']}`;
-    } else {
-      assign = '';
-    }
+  async generateHeader(doc, cliente, contacto, cargo, ciudad) {
+    moment.locale('es');
+    doc
+      .image('./img/logo_rc.png', 50, 45, { width: 50 })
+      .fillColor('#444444')
+      .fontSize(13)
+      .font('Helvetica-Bold')
+      .text('RCS Express, S.A', 110, 89)
+      .text('R.I.F. J-31028463-6', 110, 107)
+      .fontSize(12)
+      .text('Valencia, ' + moment().format('LL'), 200, 50, { align: 'right' })
+      .moveDown();
 
-    pdf.generateHeader(
-      doc,
-      'Reporte de Guias Disponibles',
-      `Guias Desde: ${data.control_inicio}       Guias Hasta: ${data.control_final}`,
-      assign,
-      moment().format('DD/MM/YYYY')
-    );
+    doc
+      .fontSize(12)
+      .text('Señores', 50, 150)
+      .text(cliente, 50, 165)
+      .text(contacto ? 'Atención' : ciudad, 50, 180)
+      .text(contacto ? 'Sr(a).' + contacto : '', 50, 195)
+      .text(contacto ? cargo : '', 50, 210);
+
+    doc
+      .fontSize(14)
+      .text(
+        'Después de saludarle, sirva la presente para informarle que anexo le estamos enviando relación de cobros correspondiente a los servicios de transporte prestados',
+        50,
+        240,
+        {
+          align: 'justify',
+        }
+      );
   }
 
   async titleTable(doc) {
@@ -285,7 +307,7 @@ class MmovimientosService {
     });
     doc.lineCap('butt');
 
-    doc.lineJoin('miter').rect(127, 50, 78, 20).stroke();
+    doc.lineJoin('miter').rect(115, 50, 78, 20).stroke();
     doc.y = 56;
     doc.x = 132;
     doc.fillColor('black');
@@ -352,24 +374,10 @@ class MmovimientosService {
     return doc;
   }
 
-  async generateCustomerInformation(doc, data, contacto, cargo) {
-    var data = await this.guiasDispLote(32783);
-    await this.generateHeader(doc, data);
+  async generateCustomerInformation(doc, data) {
+    doc.fontSize(10);
 
-    doc
-      .fontSize(14)
-      .text('Señores', 50, 150)
-      .text('COMERCIALIZADORA CIERO, C.A', 50, 170)
-      .text('VALENCIA.-', 50, 190)
-
-      .text(
-        'Después de saludarle, sirva la presente para informarle que anexo le estamos enviando relación de cobros correspondiente a los servicios de transporte prestados',
-        50,
-        220
-      );
-    doc.fontSize(12);
-
-    doc.lineJoin('miter').rect(50, 299, 78, 20).stroke();
+    doc.lineJoin('miter').rect(50, 299, 65, 20).stroke();
     doc.y = 306;
     doc.x = 52;
     doc.fillColor('black');
@@ -381,9 +389,9 @@ class MmovimientosService {
     });
     doc.lineCap('butt');
 
-    doc.lineJoin('miter').rect(127, 299, 78, 20).stroke();
+    doc.lineJoin('miter').rect(115, 299, 65, 20).stroke();
     doc.y = 306;
-    doc.x = 132;
+    doc.x = 117;
     doc.fillColor('black');
     doc.text('NRO. DOC', {
       paragraphGap: 5,
@@ -393,9 +401,9 @@ class MmovimientosService {
     });
     doc.lineCap('butt');
 
-    doc.lineJoin('miter').rect(205, 299, 78, 20).stroke();
+    doc.lineJoin('miter').rect(180, 299, 60, 20).stroke();
     doc.y = 306;
-    doc.x = 215;
+    doc.x = 186;
     doc.fillColor('black');
     doc.text('FECHA', {
       paragraphGap: 5,
@@ -405,7 +413,7 @@ class MmovimientosService {
     });
     doc.lineCap('butt');
 
-    doc.lineJoin('miter').rect(283, 299, 280, 20).stroke();
+    doc.lineJoin('miter').rect(240, 299, 323, 20).stroke();
     doc.y = 306;
     doc.x = 375;
     doc.fillColor('black');
@@ -423,19 +431,34 @@ class MmovimientosService {
     var y = 320;
     var ymax = 400;
 
-    for (var item = 0; item <= data.data.length - 1; ) {
+    data = data.split(',');
+
+    for (var item = 0; item <= data.length - 1; item++) {
+      let dataMovimiento = await models.Mmovimientos.findByPk(data[item], {
+        attributes: {
+          include: [
+            [Sequelize.literal(nroControlDesc), 'nro_control_desc'],
+            [Sequelize.literal(nroDocumentoDesc), 'nro_documento_desc'],
+          ],
+        },
+        raw: true,
+      });
       this.row(doc, y + i);
-      this.textInRowFirst(doc, 'Guía Carga', y + 7 + i, 1);
-      this.textInRowFirst(doc, data.data[item].nro_documento, y + 7 + i, 2);
-      this.textInRowFirst(doc, data.data[item].nro_documento, y + 7 + i, 3);
-      this.textInRowFirst(doc, data.data[item].nro_documento, y + 7 + i, 4);
-      this.textInRowFirst(doc, 'Facturas Asociadas', y + 36 + i, 1);
-      doc.fontSize(12);
-      doc.y = y + 30 + i;
-      doc.x = 200;
+      this.textInRowFirst(doc, dataMovimiento.nro_control_desc, y + 7 + i, 1);
+      this.textInRowFirst(doc, dataMovimiento.nro_documento_desc, y + 7 + i, 2);
+      this.textInRowFirst(doc, moment(dataMovimiento.fecha_emision).format("DD/MM/YYYY"), y + 7 + i, 3);
+      doc.fontSize(8);
+      doc.y = y + 7 + i;
+      doc.x = 290;
+      doc.text(dataMovimiento.observacion_entrega + "sdfsdfsd sdfsdfsdf");
+      doc.fontSize(10);
+      this.textInRowFirst(doc, 'Facturas', y + 29 + i, 1);
+      this.textInRowFirst(doc, 'Asociadas', y + 42 + i, 1);
+      doc.y = y + 29 + i;
+      doc.x = 132;
       doc.fillColor('black');
       doc.text(
-        '1010/1023/1233/23423/2342/3454322/34534/3454322/34534/34534/34534/34534/34534'
+        '1010/1023/1233/23423/2342/3454322/34534/3454322/34534/34534/34534/34534/345341010/1023/1233/23423/2342/3454322/34534/3454322/34534/34534/34534/34534/34534'
       );
       doc
         .lineJoin('miter')
@@ -444,15 +467,16 @@ class MmovimientosService {
 
       doc
         .lineCap('butt')
-        .moveTo(190, y + 20 + i)
-        .lineTo(190, y + 60 + i)
+        .moveTo(115, y + 20 + i)
+        .lineTo(115, y + 60 + i)
         .stroke();
 
       doc
         .lineCap('butt')
-        .moveTo(127, y + i)
-        .lineTo(127, y + 20 + i)
+        .moveTo(115, y + i)
+        .lineTo(115, y + 20 + i)
         .stroke();
+
       doc
         .lineCap('butt')
         .moveTo(205, y + i)
@@ -465,7 +489,6 @@ class MmovimientosService {
         .lineTo(283, y + 20 + i)
         .stroke();
 
-      item = item + 1;
       i = i + 60;
 
       if (i >= ymax) {
@@ -473,7 +496,7 @@ class MmovimientosService {
         y = 70;
         ymax = 640;
         page = page + 1;
-        this.titleTable(doc, 'NRO. GUIA');
+        this.titleTable(doc);
         doc.switchToPage(page);
         i = 0;
       }
