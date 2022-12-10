@@ -349,13 +349,10 @@ class MmovimientosService {
       column = 52;
     }
     if (column == 2) {
-      column = 132;
+      column = 120;
     }
     if (column == 3) {
-      column = 209;
-    }
-    if (column == 4) {
-      column = 383;
+      column = 180;
     }
     doc.y = heigth;
     doc.x = column;
@@ -370,7 +367,7 @@ class MmovimientosService {
   }
 
   async row(doc, heigth) {
-    doc.lineJoin('miter').rect(50, heigth, 513, 20).stroke();
+    doc.lineJoin('miter').rect(50, heigth, 513, 30).stroke();
     return doc;
   }
 
@@ -415,7 +412,7 @@ class MmovimientosService {
 
     doc.lineJoin('miter').rect(240, 299, 323, 20).stroke();
     doc.y = 306;
-    doc.x = 375;
+    doc.x = 355;
     doc.fillColor('black');
     doc.text('DESCRIPCION', {
       paragraphGap: 5,
@@ -444,17 +441,17 @@ class MmovimientosService {
         raw: true,
       });
       this.row(doc, y + i);
-      this.textInRowFirst(doc, dataMovimiento.nro_control_desc, y + 7 + i, 1);
-      this.textInRowFirst(doc, dataMovimiento.nro_documento_desc, y + 7 + i, 2);
-      this.textInRowFirst(doc, moment(dataMovimiento.fecha_emision).format("DD/MM/YYYY"), y + 7 + i, 3);
+      this.textInRowFirst(doc, dataMovimiento.nro_control_desc, y + 11 + i, 1);
+      this.textInRowFirst(doc, dataMovimiento.nro_documento_desc, y + 11 + i, 2);
+      this.textInRowFirst(doc, moment(dataMovimiento.fecha_emision).format("DD/MM/YYYY"), y + 11 + i, 3);
       doc.fontSize(8);
       doc.y = y + 7 + i;
-      doc.x = 290;
+      doc.x = 255;
       doc.text(dataMovimiento.observacion_entrega + "sdfsdfsd sdfsdfsdf");
       doc.fontSize(10);
-      this.textInRowFirst(doc, 'Facturas', y + 29 + i, 1);
-      this.textInRowFirst(doc, 'Asociadas', y + 42 + i, 1);
-      doc.y = y + 29 + i;
+      this.textInRowFirst(doc, 'Facturas', y + 36 + i, 1);
+      this.textInRowFirst(doc, 'Asociadas', y + 47 + i, 1);
+      doc.y = y + 36 + i;
       doc.x = 132;
       doc.fillColor('black');
       doc.text(
@@ -462,31 +459,31 @@ class MmovimientosService {
       );
       doc
         .lineJoin('miter')
-        .rect(50, y + 20 + i, 513, 40)
+        .rect(50, y + 30 + i, 513, 30)
         .stroke();
 
       doc
         .lineCap('butt')
-        .moveTo(115, y + 20 + i)
+        .moveTo(115, y + 30 + i)
         .lineTo(115, y + 60 + i)
         .stroke();
 
       doc
         .lineCap('butt')
         .moveTo(115, y + i)
-        .lineTo(115, y + 20 + i)
+        .lineTo(115, y + 30 + i)
         .stroke();
 
       doc
         .lineCap('butt')
-        .moveTo(205, y + i)
-        .lineTo(205, y + 20 + i)
+        .moveTo(180, y + i)
+        .lineTo(180, y + 30 + i)
         .stroke();
 
       doc
         .lineCap('butt')
-        .moveTo(283, y + i)
-        .lineTo(283, y + 20 + i)
+        .moveTo(240, y + i)
+        .lineTo(240, y + 30 + i)
         .stroke();
 
       i = i + 60;
