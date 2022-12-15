@@ -42,7 +42,9 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       serie_doc_ppal,
       nro_ctrl_doc_ppal,
       cod_ag_doc_ppal,
-      order_pe
+      order_pe,
+      pagado_en,
+      modalidad,
     } = req.headers;
 
     const cguias = await service.find(
@@ -73,7 +75,9 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       serie_doc_ppal,
       nro_ctrl_doc_ppal,
       cod_ag_doc_ppal,
-      order_pe
+      order_pe,
+      pagado_en,
+      modalidad
     );
     res.json(cguias);
   } catch (error) {
@@ -84,7 +88,13 @@ router.get('/', authenticateJWT, async (req, res, next) => {
 router.get('/letterPDF', authenticateJWT, async (req, res, next) => {
   try {
     const { data, cliente, contacto, cargo, ciudad } = req.headers;
-    const pdfStream = await service.letterPDF(data, cliente, contacto, cargo, ciudad);
+    const pdfStream = await service.letterPDF(
+      data,
+      cliente,
+      contacto,
+      cargo,
+      ciudad
+    );
     res.status(200).json({
       message: 'PDF Generado',
       base64: pdfStream,

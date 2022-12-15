@@ -6947,7 +6947,25 @@
             "schema": {
               "type": "string"
             }
-          } 
+          },
+          {
+            "name": "pagado_en",
+            "in": "header",
+            "description": "Pagado En",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "modalidad",
+            "in": "header",
+            "description": "Modalidad Pago",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
         "responses": {
           "200": {

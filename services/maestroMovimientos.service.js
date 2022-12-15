@@ -81,7 +81,9 @@ class MmovimientosService {
     serie_doc_ppal,
     nro_ctrl_doc_ppal,
     cod_ag_doc_ppal,
-    order_pe
+    order_pe,
+    pagado_en,
+    modalidad
   ) {
     let params2 = {};
     let filterArray = {};
@@ -157,6 +159,8 @@ class MmovimientosService {
     if (serie_doc_ppal) params2.serie_doc_principal = serie_doc_ppal;
     if (nro_ctrl_doc_ppal) params2.nro_ctrl_doc_ppal = nro_ctrl_doc_ppal;
     if (cod_ag_doc_ppal) params2.cod_ag_doc_ppal = cod_ag_doc_ppal;
+    if (pagado_en) params2.pagado_en = pagado_en;
+    if (modalidad) params2.modalidad_pago = modalidad;
 
     if (filter && filter_value) {
       let filters = [];
@@ -446,11 +450,16 @@ class MmovimientosService {
       this.row(doc, y + i);
       this.textInRowFirst(doc, dataMovimiento.nro_control_desc, y + 7 + i, 1);
       this.textInRowFirst(doc, dataMovimiento.nro_documento_desc, y + 7 + i, 2);
-      this.textInRowFirst(doc, moment(dataMovimiento.fecha_emision).format("DD/MM/YYYY"), y + 7 + i, 3);
+      this.textInRowFirst(
+        doc,
+        moment(dataMovimiento.fecha_emision).format('DD/MM/YYYY'),
+        y + 7 + i,
+        3
+      );
       doc.fontSize(8);
       doc.y = y + 7 + i;
       doc.x = 290;
-      doc.text(dataMovimiento.observacion_entrega + "sdfsdfsd sdfsdfsdf");
+      doc.text(dataMovimiento.observacion_entrega + 'sdfsdfsd sdfsdfsdf');
       doc.fontSize(10);
       this.textInRowFirst(doc, 'Facturas', y + 29 + i, 1);
       this.textInRowFirst(doc, 'Asociadas', y + 42 + i, 1);

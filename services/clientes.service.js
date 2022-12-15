@@ -21,6 +21,10 @@ class ClientesService {
     let params2 = {};
     let filterArray = {};
     let order = [];    
+
+    params2.nb_cliente = {
+      [Sequelize.Op.ne]: "",
+    };
     
     if(agencia) params2.cod_agencia = agencia;
     if(particular) params2.cte_decontado = 1;
@@ -43,6 +47,8 @@ class ClientesService {
 
     if(order_by && order_direction) {
       order.push([order_by, order_direction]);
+    } else {
+      order.push(["nb_cliente", "ASC"]);
     }
 
     let attributes = {
