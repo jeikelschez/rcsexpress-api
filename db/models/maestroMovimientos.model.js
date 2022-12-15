@@ -96,9 +96,6 @@ const MmovimientosSchema = {
   modalidad_pago: {
     type: DataTypes.STRING,
   },
-  modalidad_pago: {
-    type: DataTypes.STRING,
-  },
   pagado_en: {
     type: DataTypes.STRING,
   },
@@ -225,7 +222,7 @@ const MmovimientosSchema = {
     get: function () {
       return moment(this.getDataValue('fecha_sale_transito')).format('DD/MM/YYYY') != 'Invalid date'
         ? moment(this.getDataValue('fecha_sale_transito')).format('DD/MM/YYYY')
-        : null;
+        : '00/00/0000';
     },
   },
   cod_agente_entrega: {
