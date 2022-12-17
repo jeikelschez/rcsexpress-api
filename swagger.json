@@ -6931,6 +6931,15 @@
             }
           },
           {
+            "name": "nro_ctrl_doc_ppal_new",
+            "in": "header",
+            "description": "Nro Ctrl Doc Principal New",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
             "name": "cod_ag_doc_ppal",
             "in": "header",
             "description": "Codigo Agencia Doc Principal",
@@ -6947,7 +6956,25 @@
             "schema": {
               "type": "string"
             }
-          } 
+          },
+          {
+            "name": "pagado_en",
+            "in": "header",
+            "description": "Pagado En",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "modalidad",
+            "in": "header",
+            "description": "Modalidad Pago",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
         "responses": {
           "200": {
