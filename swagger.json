@@ -6931,6 +6931,15 @@
             }
           },
           {
+            "name": "nro_ctrl_doc_ppal_new",
+            "in": "header",
+            "description": "Nro Ctrl Doc Principal New",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
             "name": "cod_ag_doc_ppal",
             "in": "header",
             "description": "Codigo Agencia Doc Principal",

@@ -80,6 +80,7 @@ class MmovimientosService {
     nro_doc_ppal,
     serie_doc_ppal,
     nro_ctrl_doc_ppal,
+    nro_ctrl_doc_ppal_new,
     cod_ag_doc_ppal,
     order_pe,
     pagado_en,
@@ -158,6 +159,7 @@ class MmovimientosService {
     if (nro_doc_ppal) params2.nro_doc_principal = nro_doc_ppal;
     if (serie_doc_ppal) params2.serie_doc_principal = serie_doc_ppal;
     if (nro_ctrl_doc_ppal) params2.nro_ctrl_doc_ppal = nro_ctrl_doc_ppal;
+    if (nro_ctrl_doc_ppal_new) params2.nro_ctrl_doc_ppal_new = nro_ctrl_doc_ppal_new;
     if (cod_ag_doc_ppal) params2.cod_ag_doc_ppal = cod_ag_doc_ppal;
     if (pagado_en) params2.pagado_en = pagado_en;
     if (modalidad) params2.modalidad_pago = modalidad;
@@ -255,6 +257,23 @@ class MmovimientosService {
     return arrayLote;
   }
 
+  async getGuiasAsoc(dataFact) {
+    let guiasAsoc = "";
+    let movimientos = await models.Mmovimientos.findAll({
+      where: {
+        nro_doc_principal: dataFact.nro_documento,
+        nro_ctrl_doc_ppal_new: dataFact.nro_control_new,
+        tipo_doc_principal: dataFact.t_de_documento,
+        cod_ag_doc_ppal: dataFact.cod_agencia,
+      },
+      raw: true,
+    });
+    for (var i = 0; i < movimientos.length; i++) {
+      guiasAsoc += movimientos[i].dimensiones.replace(/^\s+/,"") + " / ";
+    }
+    return guiasAsoc;
+  }
+
   async letterPDF(data, cliente, contacto, cargo, ciudad) {
     let doc = new PDFDocument({ margin: 50 });
     await this.generateHeader(doc, cliente, contacto, cargo, ciudad);
@@ -283,7 +302,7 @@ class MmovimientosService {
       .text('Señores', 50, 150)
       .text(cliente, 50, 165)
       .text(contacto ? 'Atención' : ciudad, 50, 180)
-      .text(contacto ? 'Sr(a).' + contacto : '', 50, 195)
+      .text(contacto ? 'Sr(a). ' + contacto : '', 50, 195)
       .text(contacto ? cargo : '', 50, 210);
 
     doc
@@ -433,9 +452,9 @@ class MmovimientosService {
     var ymax = 400;
 
     data = data.split(',');
-
     for (var item = 0; item <= data.length - 1; item++) {
-      let dataMovimiento = await models.Mmovimientos.findByPk(data[item], {
+      let factId = data[item].split('/');
+      let dataMovimiento = await models.Mmovimientos.findByPk(factId[0], {
         attributes: {
           include: [
             [Sequelize.literal(nroControlDesc), 'nro_control_desc'],
@@ -444,23 +463,22 @@ class MmovimientosService {
         },
         raw: true,
       });
+      let guiasAsoc = await this.getGuiasAsoc(dataMovimiento);
       this.row(doc, y + i);
       this.textInRowFirst(doc, dataMovimiento.nro_control_desc, y + 11 + i, 1);
       this.textInRowFirst(doc, dataMovimiento.nro_documento_desc, y + 11 + i, 2);
       this.textInRowFirst(doc, moment(dataMovimiento.fecha_emision).format("DD/MM/YYYY"), y + 11 + i, 3);
       doc.fontSize(8);
       doc.y = y + 7 + i;
-      doc.x = 255;
-      doc.text(dataMovimiento.observacion_entrega + "sdfsdfsd sdfsdfsdf");
+      doc.x = 255;      
+      doc.text(dataMovimiento.observacion_entrega + " " + factId[1]);
       doc.fontSize(10);
       this.textInRowFirst(doc, 'Facturas', y + 36 + i, 1);
       this.textInRowFirst(doc, 'Asociadas', y + 47 + i, 1);
       doc.y = y + 36 + i;
       doc.x = 132;
       doc.fillColor('black');
-      doc.text(
-        '1010/1023/1233/23423/2342/3454322/34534/3454322/34534/34534/34534/34534/345341010/1023/1233/23423/2342/3454322/34534/3454322/34534/34534/34534/34534/34534'
-      );
+      doc.text(guiasAsoc);
       doc
         .lineJoin('miter')
         .rect(50, y + 30 + i, 513, 30)
