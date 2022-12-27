@@ -40,7 +40,18 @@ class AgenciasService {
     }
 
     let attributes = {};
-    let include = ['ciudades'];
+    let include = {
+      model: models.Ciudades,
+      as: 'ciudades',
+      include: {
+        model: models.Estados,
+        as: 'estados',
+        include: {
+          model: models.Paises,
+          as: 'paises'
+        }
+      }
+    };
 
     return await utils.paginate(models.Agencias, page, limit, params, order, attributes, include);
   }
