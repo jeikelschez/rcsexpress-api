@@ -4031,6 +4031,15 @@
             "schema": {
               "type": "integer"
             }
+          },
+          {
+            "name": "estatus",
+            "in": "header",
+            "description": "Estatus Lote",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -10328,6 +10337,15 @@
             "name": "fuente",
             "in": "header",
             "description": "Fuente del Tipo",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "codigo",
+            "in": "header",
+            "description": "Codigo del Tipo",
             "required": false,
             "schema": {
               "type": "string"

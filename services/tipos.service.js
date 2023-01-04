@@ -6,9 +6,10 @@ class TiposService {
 
   constructor() {}
 
-  async find(fuente) {
+  async find(fuente, codigo) {
     let params = {};
     if(fuente) params.fuente = fuente;
+    if(codigo) params.codigo = codigo;
     const tipos = await models.Tipos.findAll({
       where: params
     });
