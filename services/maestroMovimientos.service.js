@@ -318,7 +318,9 @@ class MmovimientosService {
   }
 
   async titleTable(doc) {
-    doc.lineJoin('miter').rect(50, 50, 78, 20).stroke();
+    doc.fontSize(10);
+
+    doc.lineJoin('miter').rect(50, 50, 65, 20).stroke();
     doc.y = 56;
     doc.x = 52;
     doc.fillColor('black');
@@ -330,9 +332,9 @@ class MmovimientosService {
     });
     doc.lineCap('butt');
 
-    doc.lineJoin('miter').rect(115, 50, 78, 20).stroke();
+    doc.lineJoin('miter').rect(115, 50, 65, 20).stroke();
     doc.y = 56;
-    doc.x = 132;
+    doc.x = 117;
     doc.fillColor('black');
     doc.text('NRO. DOC', {
       paragraphGap: 5,
@@ -342,9 +344,9 @@ class MmovimientosService {
     });
     doc.lineCap('butt');
 
-    doc.lineJoin('miter').rect(205, 50, 78, 20).stroke();
+    doc.lineJoin('miter').rect(180, 50, 60, 20).stroke();
     doc.y = 56;
-    doc.x = 215;
+    doc.x = 186;
     doc.fillColor('black');
     doc.text('FECHA', {
       paragraphGap: 5,
@@ -354,9 +356,9 @@ class MmovimientosService {
     });
     doc.lineCap('butt');
 
-    doc.lineJoin('miter').rect(283, 50, 280, 20).stroke();
+    doc.lineJoin('miter').rect(240, 50, 323, 20).stroke();
     doc.y = 56;
-    doc.x = 375;
+    doc.x = 355;
     doc.fillColor('black');
     doc.text('DESCRIPCION', {
       paragraphGap: 5,
@@ -393,10 +395,16 @@ class MmovimientosService {
     doc.lineJoin('miter').rect(50, heigth, 513, 30).stroke();
     return doc;
   }
+  async line(doc, x, y1, y2) {
+    doc.lineCap('butt')
+    .moveTo(x, y1)
+    .lineTo(x, y2)
+    .stroke();
+    return doc; 
+  }
 
   async generateCustomerInformation(doc, data) {
     doc.fontSize(10);
-
     doc.lineJoin('miter').rect(50, 299, 65, 20).stroke();
     doc.y = 306;
     doc.x = 52;
@@ -449,10 +457,11 @@ class MmovimientosService {
     var i = 0;
     var page = 0;
     var y = 320;
-    var ymax = 400;
+    var ymax = 280;
 
     data = data.split(',');
     for (var item = 0; item <= data.length - 1; item++) {
+      
       let factId = data[item].split('/');
       let dataMovimiento = await models.Mmovimientos.findByPk(factId[0], {
         attributes: {
@@ -464,62 +473,58 @@ class MmovimientosService {
         raw: true,
       });
       let guiasAsoc = await this.getGuiasAsoc(dataMovimiento);
-      this.row(doc, y + i);
+      doc.lineJoin('miter').rect(50, y + i, 513, 30).stroke()
       this.textInRowFirst(doc, dataMovimiento.nro_control_desc, y + 11 + i, 1);
       this.textInRowFirst(doc, dataMovimiento.nro_documento_desc, y + 11 + i, 2);
+      this.line(doc, 180, y + i, y + 30 + i)
+      this.line(doc, 240, y + i, y + 30 + i)
+      this.line(doc, 115, y + i, y + 30 + i)
       this.textInRowFirst(doc, moment(dataMovimiento.fecha_emision).format("DD/MM/YYYY"), y + 11 + i, 3);
       doc.fontSize(8);
       doc.y = y + 7 + i;
       doc.x = 255;      
       doc.text(dataMovimiento.observacion_entrega + " " + factId[1]);
       doc.fontSize(10);
+      if (y + 60 + i + (guiasAsoc.length/75) * 10 >= 700) {
+        doc.addPage();
+        y = 70;
+        ymax = 350;
+        page = page + 1;
+        this.titleTable(doc);
+        doc.switchToPage(page);
+        i = 0;
+      }
       this.textInRowFirst(doc, 'Facturas', y + 36 + i, 1);
       this.textInRowFirst(doc, 'Asociadas', y + 47 + i, 1);
       doc.y = y + 36 + i;
       doc.x = 132;
       doc.fillColor('black');
       doc.text(guiasAsoc);
-      doc
-        .lineJoin('miter')
-        .rect(50, y + 30 + i, 513, 30)
-        .stroke();
-
-      doc
-        .lineCap('butt')
-        .moveTo(115, y + 30 + i)
-        .lineTo(115, y + 60 + i)
-        .stroke();
-
-      doc
-        .lineCap('butt')
-        .moveTo(115, y + i)
-        .lineTo(115, y + 30 + i)
-        .stroke();
-
-      doc
-        .lineCap('butt')
-        .moveTo(180, y + i)
-        .lineTo(180, y + 30 + i)
-        .stroke();
-
-      doc
-        .lineCap('butt')
-        .moveTo(240, y + i)
-        .lineTo(240, y + 30 + i)
-        .stroke();
-
+      doc.lineJoin('miter').rect(50, y + 30 + i, 513, 30 + (guiasAsoc.length/75) * 10).stroke()
+      this.line(doc, 115, y + 30 + i, y + 60 + i + (guiasAsoc.length/75) * 10)
+      y = y + (guiasAsoc.length/75) * 10
       i = i + 60;
 
-      if (i >= ymax) {
+      if (i >= ymax && !(item == data.length - 1)) {
         doc.addPage();
         y = 70;
-        ymax = 640;
+        ymax = 350;
         page = page + 1;
         this.titleTable(doc);
         doc.switchToPage(page);
         i = 0;
       }
     }
+
+    if (i >= 600) {
+      doc.addPage();
+      y = 70;
+      ymax = 350;
+      page = page + 1;
+      doc.switchToPage(page);
+      i = 0;
+    }
+    
     doc.y = y + 30 + i;
     doc.x = 100;
     doc.fillColor('black');
