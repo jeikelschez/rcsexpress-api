@@ -18,13 +18,14 @@ class CorrelativoService {
     return newCorrelativo;
   }
 
-  async find(page, limit, order_by, order_direction, filter, filter_value, agencia, tipo) { 
+  async find(page, limit, order_by, order_direction, filter, filter_value, agencia, tipo, estatus) { 
     let params2 = {};
     let filterArray = {};
     let order = [];    
     
     if(agencia) params2.cod_agencia = agencia;
     if(tipo) params2.tipo = tipo;
+    if(estatus) params2.estatus_lote = estatus;
 
     if(filter && filter_value) {
       let filters = [];

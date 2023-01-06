@@ -2,25 +2,48 @@ const express = require('express');
 
 const CorrelativoService = require('./../services/controlCorrelativo.service');
 const validatorHandler = require('./../middlewares/validator.handler');
-const { createCorrelativoSchema, updateCorrelativoSchema, getCorrelativoSchema } = require('./../schemas/controlCorrelativo.schema');
-const authenticateJWT  = require('./../middlewares/authenticate.handler');
+const {
+  createCorrelativoSchema,
+  updateCorrelativoSchema,
+  getCorrelativoSchema,
+} = require('./../schemas/controlCorrelativo.schema');
+const authenticateJWT = require('./../middlewares/authenticate.handler');
 
 const router = express.Router();
 const service = new CorrelativoService();
 
-router.get('/',
-  authenticateJWT,
-  async (req, res, next) => {
+router.get('/', authenticateJWT, async (req, res, next) => {
   try {
-    const { page, limit, order_by, order_direction, filter, filter_value, agencia, tipo } = req.headers;
-    const correlativos = await service.find(page, limit, order_by, order_direction, filter, filter_value, agencia, tipo);
+    const {
+      page,
+      limit,
+      order_by,
+      order_direction,
+      filter,
+      filter_value,
+      agencia,
+      tipo,
+      estatus
+    } = req.headers;
+    const correlativos = await service.find(
+      page,
+      limit,
+      order_by,
+      order_direction,
+      filter,
+      filter_value,
+      agencia,
+      tipo,
+      estatus
+    );
     res.json(correlativos);
   } catch (error) {
     next(error);
   }
 });
 
-router.get('/:id',
+router.get(
+  '/:id',
   authenticateJWT,
   validatorHandler(getCorrelativoSchema, 'params'),
   async (req, res, next) => {
@@ -34,7 +57,8 @@ router.get('/:id',
   }
 );
 
-router.post('/',
+router.post(
+  '/',
   authenticateJWT,
   validatorHandler(createCorrelativoSchema, 'body'),
   async (req, res, next) => {
@@ -48,7 +72,8 @@ router.post('/',
   }
 );
 
-router.put('/:id',
+router.put(
+  '/:id',
   authenticateJWT,
   validatorHandler(getCorrelativoSchema, 'params'),
   validatorHandler(updateCorrelativoSchema, 'body'),
@@ -64,14 +89,15 @@ router.put('/:id',
   }
 );
 
-router.delete('/:id',
+router.delete(
+  '/:id',
   authenticateJWT,
   validatorHandler(getCorrelativoSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
       await service.delete(id);
-      res.status(201).json({id});
+      res.status(201).json({ id });
     } catch (error) {
       next(error);
     }
