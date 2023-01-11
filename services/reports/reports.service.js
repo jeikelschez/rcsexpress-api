@@ -37,7 +37,9 @@ class ReportsService {
   }
 
   // REPORTE FACTURACION
-  async facturaPreimpreso() {
+  async facturaPreimpreso(data) {
+    data = JSON.parse(data)
+    console.log(data.cliente_orig);
     let doc = new PDFDocument({
       size: [500, 841],
       layout: 'landscape',
@@ -51,9 +53,9 @@ class ReportsService {
   }
 
   // REPORTE ANEXO FACTURACION
-  async anexoFactura(data, cliente, contacto, cargo, ciudad) {
+  async anexoFactura() {
     let doc = new PDFDocument({ margin: 50 });
-    await anexoFacturaService.generateHeader(doc, cliente, contacto, cargo, ciudad);
+    await anexoFacturaService.generateHeader(doc);
     await anexoFacturaService.generateCustomerInformation(doc);
     doc.end();
     var encoder = new base64.Base64Encode();

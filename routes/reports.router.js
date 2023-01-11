@@ -27,14 +27,8 @@ router.get('/cartaCliente', authenticateJWT, async (req, res, next) => {
 
 router.get('/facturaPreimpreso', authenticateJWT, async (req, res, next) => {
   try {
-    const { data, cliente, contacto, cargo, ciudad } = req.headers;
-    const pdfStream = await service.facturaPreimpreso(
-      data,
-      cliente,
-      contacto,
-      cargo,
-      ciudad
-    );
+    const { data } = req.headers;
+    const pdfStream = await service.facturaPreimpreso(data);
     res.status(200).json({
       message: 'PDF Generado',
       base64: pdfStream,
@@ -46,14 +40,7 @@ router.get('/facturaPreimpreso', authenticateJWT, async (req, res, next) => {
 
 router.get('/anexoFactura', authenticateJWT, async (req, res, next) => {
   try {
-    const { data, cliente, contacto, cargo, ciudad } = req.headers;
-    const pdfStream = await service.anexoFactura(
-      data,
-      cliente,
-      contacto,
-      cargo,
-      ciudad
-    );
+    const pdfStream = await service.anexoFactura();
     res.status(200).json({
       message: 'PDF Generado',
       base64: pdfStream,
