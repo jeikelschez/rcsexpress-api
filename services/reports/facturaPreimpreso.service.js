@@ -1,42 +1,61 @@
-const moment = require('moment');
+const { models } = require('./../../libs/sequelize');
+
+const UtilsService = require('./../utils.service');
+const utils = new UtilsService();
 
 class FacturaPreimpresoService {
-  async generateData(doc) {
-    moment.locale('es');
-    var data = [
-      {
-        concepto: 'TRANSPORTE DE MERCANCIAS (E)',
-        cantidad: '1',
-        precio_unitario: '330,20',
-        iva: '0,00',
-        precio_total: '330,20',
-      },
-      {
-        concepto: 'TRANSPORTE DE PRODUCTOS (G)',
-        cantidad: '1',
-        precio_unitario: '630,20',
-        iva: '0,00',
-        precio_total: '630,20',
-      },
-      {
-        concepto: 'TRANSPORTE DE DATOS (F)',
-        cantidad: '2',
-        precio_unitario: '730,20',
-        iva: '0,00',
-        precio_total: '1460,40',
-      },
-    ];
+  async generateData(doc, data) {
+    let cliente_orig;
+
+    if (data.id_clte_part_orig) {
+      cliente_orig = await models.Cparticulares.findByPk(
+        data.id_clte_part_orig,
+        {
+          raw: true,
+        }
+      );
+    } else {
+      cliente_orig = await models.Clientes.findByPk(data.cliente_orig, {
+        raw: true,
+      });
+    }
+
+    let total = data.totalString.split(',');
+    total =
+      utils.numeroALetras(total[0]) +
+      (utils.numeroALetras(total[1]) != " " ? ' CON ' : ' SIN') +
+      utils.numeroALetras(total[1]) +
+      ' CENTIMOS';
+
     doc
       .fontSize(11)
       .font('Helvetica-Bold')
-      .text('CLIENTE: COMERCIALIZADORA CIERO,C.A.', 40, 40)
-      .text('RIF/CO: J-324234234', 40, 63)
-      .text('TELEFONOS: 0412312323/12312313', 40, 87);
+      .text('CLIENTE: ' + cliente_orig.nb_cliente, 40, 40)
+      .text(
+        'RIF/CO: ' +
+          (cliente_orig.rif_cedula
+            ? cliente_orig.rif_cedula
+            : cliente_orig.rif_ci),
+        40,
+        63
+      )
+      .text(
+        'TELEFONOS: ' +
+          (cliente_orig.tlf_cliente
+            ? cliente_orig.tlf_cliente
+            : cliente_orig.telefonos
+            ? cliente_orig.telefonos
+            : ''),
+        40,
+        87
+      );
     doc.y = 110;
     doc.x = 40;
     doc.fillColor('black');
     doc.text(
-      'DIRECCIÓN FISCAL: CALLE 99 CC INDUSTRIAL UNICENTRO DEL NORTE NIVEL PB LOCAL GALPON 10 ZONA PARTE INDUSTRIAL CASTILLITO VALENCIA EDO. CARABOBO ',
+      cliente_orig.dir_fiscal
+        ? cliente_orig.dir_fiscal
+        : cliente_orig.direccion,
       {
         width: 400,
         align: 'justify',
@@ -45,11 +64,11 @@ class FacturaPreimpresoService {
     doc.text('DOCUMENTO', 470, 40);
     doc.text('FACTURA', 470, 58);
     doc.text('NUMERO', 650, 40);
-    doc.text('12208', 650, 58);
+    doc.text(data.nroControl, 650, 58);
     doc.text('CONDICIONES DE PAGO', 470, 90);
-    doc.text('CREDITO', 470, 110);
+    doc.text(data.formaPago, 470, 110);
     doc.text('FECHA DE EMISION', 650, 90);
-    doc.text('01/12/2021', 650, 110);
+    doc.text(data.fecha_emision, 650, 110);
     doc.text('DESCRIPCIÓN', 40, 170);
     doc.text('CANTIDAD', 360, 170);
     doc.text('PRECIO UNITARIO', 440, 170);
@@ -65,57 +84,53 @@ class FacturaPreimpresoService {
     doc.text('CHEQUE', 130, 335);
     doc.text('NRO.', 50, 355);
     doc.lineCap('butt').moveTo(83, 362).lineTo(180, 362).stroke();
-    doc
-      .text('SON: TRESCIENTOS TREINTA CON VEINTE CENTIMOS', 40, 380)
-      .fontSize(10);
-    doc.text('F 1-5950', 40, 395);
-    doc.text('SUBTOTAL:  330,20', 680, 300);
-    doc.text('BASE IMPONIBLE:  0,00', 680, 330);
-    doc.text('MONTO EXENTO:  330,20', 680, 345);
-    doc.text('IVA: 0%:  0,00', 680, 360);
-    doc.text('TARIFA POSTAL (E):  0,00', 680, 375);
-    doc.text('TOTAL:  330,20', 680, 390);
+    doc.text('SON: ' + total, 40, 380).fontSize(10);
+    doc.text(data.nroDocumento, 40, 455);
+    doc.text('SUBTOTAL: ' + data.subtotal, 680, 300);
+    doc.text('DESCUENTO(' + data.porc_desc + '%): ' + data.descuento, 680, 315);
+    doc.text('BASE IMPONIBLE: ' + data.base, 680, 330);
+    doc.text('MONTO EXENTO: ' + data.exento, 680, 345);
+    doc.text('IVA(' + data.iva + '%): ' + data.impuesto, 680, 360);
+    doc.text('TARIFA POSTAL (E): ' + data.fpo, 680, 375);
+    doc.text('TOTAL: ' + data.total, 680, 390);
     doc.y = 400;
     doc.x = 200;
-    doc.text(
-      'PROVIDENCIA ADMINISTRATIVA N* SENIAT 2023012312312 que designan los Sujetos Publicos como Angete de percepcion Scen 2022 del ICTF',
-      {
-        width: 400,
-        align: 'justify',
-      }
-    );
-    doc.lineJoin('square').rect(200, 430, 400, 45).stroke();
-    doc.lineCap('butt').moveTo(200, 453).lineTo(600, 453).stroke();
-    doc.lineCap('butt').moveTo(300, 430).lineTo(300, 475).stroke();
-    doc.lineCap('butt').moveTo(370, 430).lineTo(370, 475).stroke();
-    doc.lineCap('butt').moveTo(450, 430).lineTo(450, 475).stroke();
-    doc.lineCap('butt').moveTo(530, 430).lineTo(530, 475).stroke();
-    doc.text('PAGO EN DIVISA', 208, 438);
-    doc.text('ALICUOTA', 309, 438);
-    doc.text('IGTF DIVISA', 380, 438);
-    doc.text('TAZA BCV', 465, 438);
-    doc.text('IGTF BS', 545, 438);
-    var i = 0;
-    for (var item = 0; item <= data.length - 1; item++) {
-      doc.text(data[item].concepto, 40, 195 + i);
-      doc.text(data[item].cantidad, 360, 195 + i);
-      doc.text(data[item].precio_unitario, 440, 195 + i);
-      doc.text(data[item].iva, 550, 195 + i);
-      doc.text(data[item].precio_total, 680, 195 + i);
-      i = i + 20;
-      if (item === 2) item = data.length + 2;
+
+    if (data.monto_divisas != '0,00') {
+      doc.text(
+        'PROVIDENCIA ADMINISTRATIVA N° SNAT 2022/000013 que designan a los Sujetos Pasivos Especiales como Agentes de Percepción del IGTF',
+        {
+          width: 400,
+          align: 'justify',
+        }
+      );
+      doc.lineJoin('square').rect(200, 430, 400, 45).stroke();
+      doc.lineCap('butt').moveTo(200, 453).lineTo(600, 453).stroke();
+      doc.lineCap('butt').moveTo(300, 430).lineTo(300, 475).stroke();
+      doc.lineCap('butt').moveTo(370, 430).lineTo(370, 475).stroke();
+      doc.lineCap('butt').moveTo(450, 430).lineTo(450, 475).stroke();
+      doc.lineCap('butt').moveTo(530, 430).lineTo(530, 475).stroke();
+      doc.text('PAGO EN DIVISA', 208, 438);
+      doc.text('ALICUOTA', 309, 438);
+      doc.text('IGTF DIVISA', 380, 438);
+      doc.text('TASA BCV', 465, 438);
+      doc.text('IGTF BS', 545, 438);
+      doc.text(data.monto_divisas, 208, 460);
+      doc.text('3%', 309, 460);
+      doc.text(data.monto_igtf, 380, 460);
+      doc.text(data.valor_dolar, 465, 460);
+      doc.text(data.igtf_bs, 545, 460);
     }
-    var end;
-    const range = doc.bufferedPageRange();
-    for (
-      i = range.start, end = range.start + range.count, range.start <= end;
-      i < end;
-      i++
-    ) {
-      doc.switchToPage(i);
-      doc.x = 275;
-      doc.y = 724;
-      doc.text(`Pagina ${i + 1} de ${range.count}`);
+
+    var i = 0;
+    for (var item = 0; item <= data.detalles.length - 1; item++) {
+      doc.text(data.detalles[item].concepto, 40, 195 + i);
+      doc.text(data.detalles[item].cantidad, 360, 195 + i);
+      doc.text(data.detalles[item].costo_unitario, 440, 195 + i);
+      doc.text(data.iva, 550, 195 + i);
+      doc.text(data.detalles[item].subtotal, 680, 195 + i);
+      i = i + 20;
+      if (item === 2) item = data.detalles.length + 2;
     }
   }
 }

@@ -38,14 +38,13 @@ class ReportsService {
 
   // REPORTE FACTURACION
   async facturaPreimpreso(data) {
-    data = JSON.parse(data)
-    console.log(data.cliente_orig);
+    data = JSON.parse(data)    
     let doc = new PDFDocument({
       size: [500, 841],
       layout: 'landscape',
       margin: 20,
     });
-    await facturaPreimpresoService.generateData(doc);
+    await facturaPreimpresoService.generateData(doc, data);
     doc.end();
     var encoder = new base64.Base64Encode();
     var b64s = doc.pipe(encoder);
