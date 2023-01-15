@@ -8,13 +8,14 @@ const service = new ReportsService();
 
 router.get('/cartaCliente', authenticateJWT, async (req, res, next) => {
   try {
-    const { data, cliente, contacto, cargo, ciudad } = req.headers;
+    const { data, cliente, contacto, cargo, ciudad, usuario } = req.headers;
     const pdfStream = await service.cartaCliente(
       data,
       cliente,
       contacto,
       cargo,
-      ciudad
+      ciudad,
+      usuario
     );
     res.status(200).json({
       message: 'PDF Generado',
@@ -40,7 +41,8 @@ router.get('/facturaPreimpreso', authenticateJWT, async (req, res, next) => {
 
 router.get('/anexoFactura', authenticateJWT, async (req, res, next) => {
   try {
-    const pdfStream = await service.anexoFactura();
+    const { data, detalle } = req.headers;
+    const pdfStream = await service.anexoFactura(data, detalle);
     res.status(200).json({
       message: 'PDF Generado',
       base64: pdfStream,

@@ -1,7 +1,23 @@
 const moment = require('moment');
+const { models } = require('./../../libs/sequelize');
 
 class AnexoFacturaService {
-  async generateHeader(doc) {
+  async generateHeader(doc, data) {
+    let cliente_orig;
+
+    if (data.id_clte_part_orig) {
+      cliente_orig = await models.Cparticulares.findByPk(
+        data.id_clte_part_orig,
+        {
+          raw: true,
+        }
+      );
+    } else {
+      cliente_orig = await models.Clientes.findByPk(data.cliente_orig, {
+        raw: true,
+      });
+    }
+    
     moment.locale('es');
     doc
       .image('./img/logo_rc.png', 50, 45, { width: 50 })
@@ -12,13 +28,12 @@ class AnexoFacturaService {
       .text('R.I.F. J-31028463-6', 110, 70)
       .fontSize(12)
       .text('Valencia, ' + moment().format('LL'), 200, 50, { align: 'right' })
-      .text('Pagina 1 de 1', 200, 70, { align: 'right' })
       .fontSize(16)
       .text('Informe de Ventas Realizadas', 200, 110)
       .fontSize(11);
     doc.y = 130;
     doc.x = 213;
-    doc.text('COMERCIALIZADORA CIERO, C.A.', {
+    doc.text(cliente_orig.nb_cliente, {
       align: 'center',
       columns: 1,
       width: 200,
@@ -108,8 +123,8 @@ class AnexoFacturaService {
     doc.lineCap('butt').moveTo(40, 200).lineTo(565, 200).stroke();
   }
 
-  async generateCustomerInformation(doc) {
-    var data = [
+  async generateCustomerInformation(doc, data, detalle) {
+    var detalle = [
       {
         mes_año: '10-2022',
         fecha_envio: '19/10/2022',
@@ -906,66 +921,66 @@ class AnexoFacturaService {
     var i = 0;
     var page = 0;
     var ymin = 210;
-    for (var item = 0; item <= data.length - 1; item++) {
+    for (var item = 0; item <= detalle.length - 1; item++) {
       doc.y = ymin + i;
       doc.x = 43;
-      doc.text(data[item].mes_año, {
+      doc.text(detalle[item].mes_año, {
         align: 'center',
         columns: 1,
         width: 35,
       });
       doc.y = ymin + i;
       doc.x = 90;
-      doc.text(data[item].fecha_envio, {
+      doc.text(detalle[item].fecha_envio, {
         align: 'center',
         columns: 1,
         width: 47,
       });
       doc.y = ymin + i;
       doc.x = 141;
-      doc.text(data[item].nro_guia, {
+      doc.text(detalle[item].nro_guia, {
         align: 'center',
         columns: 1,
         width: 67,
       });
       doc.y = ymin + i - 3;
       doc.x = 210;
-      doc.text(data[item].facturas_cliente, {
+      doc.text(detalle[item].facturas_cliente, {
         align: 'center',
         columns: 1,
         width: 105,
       });
       doc.y = ymin + i;
       doc.x = 326;
-      doc.text(data[item].origen, {
+      doc.text(detalle[item].origen, {
         align: 'center',
         columns: 1,
         width: 20,
       });
       doc.y = ymin + i;
       doc.x = 361;
-      doc.text(data[item].destino, {
+      doc.text(detalle[item].destino, {
         align: 'center',
         columns: 1,
         width: 20,
       });
       doc.y = ymin + i;
       doc.x = 392;
-      doc.text(data[item].monto_base, {
+      doc.text(detalle[item].monto_base, {
         align: 'center',
         columns: 1,
         width: 65,
       });
       doc.y = ymin + i;
       doc.x = 455;
-      doc.text(data[item].impuesto, {
+      doc.text(detalle[item].impuesto, {
         align: 'center',
         columns: 1,
         width: 44,
       });
       doc.y = ymin + i;
       doc.x = 505;
-      doc.text(data[item].monto_total, {
+      doc.text(detalle[item].monto_total, {
         align: 'center',
         columns: 1,
         width: 65,
@@ -976,14 +991,14 @@ class AnexoFacturaService {
         page = page + 1;
         doc.switchToPage(page);
         i = 0;
-        await this.generateHeader(doc);
+        await this.generateHeader(doc, data);
       }
     }
     if (i >= 500) {
       doc.addPage();
       page = page + 1;
       doc.switchToPage(page);
-      await this.generateHeader(doc);
+      await this.generateHeader(doc, data);
       i = 0;
       ymin = 50;
     }

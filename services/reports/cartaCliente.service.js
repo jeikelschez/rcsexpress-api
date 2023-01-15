@@ -33,7 +33,8 @@ class CartaClienteService {
     cliente,
     contacto,
     cargo,
-    ciudad
+    ciudad,
+    usuario
   ) {
     doc
       .fontSize(12)
@@ -152,7 +153,7 @@ class CartaClienteService {
         page = page + 1;
         doc.switchToPage(page);
         this.titleTable(doc, 165);
-        await this.generateHeader(doc, cliente, contacto, cargo, ciudad);
+        await this.generateHeader(doc);
         i = 0;
       }
       doc.fontSize(10);
@@ -182,7 +183,7 @@ class CartaClienteService {
         page = page + 1;
         doc.switchToPage(page);
         this.titleTable(doc, 165);
-        await this.generateHeader(doc, cliente, contacto, cargo, ciudad);
+        await this.generateHeader(doc);
         i = 0;
       }
     }
@@ -193,7 +194,7 @@ class CartaClienteService {
       ymax = 280;
       page = page + 1;
       doc.switchToPage(page);
-      await this.generateHeader(doc, cliente, contacto, cargo, ciudad);
+      await this.generateHeader(doc);
       i = 0;
     }
 
@@ -228,7 +229,7 @@ class CartaClienteService {
 
     doc.x = 421;
     doc.y = y + 90 + i;
-    doc.text('Zohagrick  Elleboro');
+    doc.text(usuario);
     doc.x = 432;
     doc.y = y + 110 + i;
     doc.text('FACTURACION');
