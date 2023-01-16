@@ -41,8 +41,8 @@ router.get('/facturaPreimpreso', authenticateJWT, async (req, res, next) => {
 
 router.get('/anexoFactura', authenticateJWT, async (req, res, next) => {
   try {
-    const { data, detalle } = req.headers;
-    const pdfStream = await service.anexoFactura(data, detalle);
+    const { data } = req.headers;
+    const pdfStream = await service.anexoFactura(data);
     res.status(200).json({
       message: 'PDF Generado',
       base64: pdfStream,

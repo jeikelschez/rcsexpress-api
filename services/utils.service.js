@@ -69,7 +69,8 @@ class UtilsService {
         if (x == 1) {
           respuesta = ' UN MILLON ' + this.numeroALetras(residuo);
         } else {
-          respuesta = this.numeroALetras(x) + ' MILLONES ' + this.numeroALetras(residuo);
+          respuesta =
+            this.numeroALetras(x) + ' MILLONES ' + this.numeroALetras(residuo);
         }
       } else if ((numero + '').length > 3) {
         var residuo = parseInt(numero + '') % 1000;
@@ -78,7 +79,8 @@ class UtilsService {
         if (x == 1) {
           respuesta = ' MIL ' + this.numeroALetras(residuo);
         } else {
-          respuesta = this.numeroALetras(x) + ' MIL ' + this.numeroALetras(residuo);
+          respuesta =
+            this.numeroALetras(x) + ' MIL ' + this.numeroALetras(residuo);
         }
       }
     } else {
@@ -88,7 +90,8 @@ class UtilsService {
         var cen = parseInt(numero / 100);
         var dec = numero % 100;
 
-        respuesta = ' ' + this.centenas_nal(cen) + ' ' + this.numeroALetras(dec);
+        respuesta =
+          ' ' + this.centenas_nal(cen) + ' ' + this.numeroALetras(dec);
       } else {
         var dec = numero % 100;
 
@@ -99,7 +102,8 @@ class UtilsService {
           var ddec = parseInt(dec / 10);
 
           if (unis != 0) {
-            respuesta = ' ' + this.decenas_nal(ddec) + ' Y ' + this.unidades_nal(unis);
+            respuesta =
+              ' ' + this.decenas_nal(ddec) + ' Y ' + this.unidades_nal(unis);
           } else {
             respuesta = ' ' + this.decenas_nal(ddec);
           }
@@ -292,6 +296,23 @@ class UtilsService {
       return 'DOMINGO';
     }
     return '';
+  }
+
+  // Pasar un numero a numero con dos decimales en formato correcto para efectuar operaciones
+  parseFloatN(number) {
+    number = Math.round(number * 100) / 100;
+    return number;
+  }
+
+  formatNumber(number) {
+    return new Intl.NumberFormat('de-DE', {
+      style: 'currency',
+      currency: 'EUR',
+      currencyDisplay: 'code',
+    })
+      .format(number)
+      .replace('EUR', '')
+      .trim();
   }
 }
 

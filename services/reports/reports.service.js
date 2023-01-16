@@ -1,3 +1,5 @@
+const { models } = require('./../../libs/sequelize');
+
 const PDFDocument = require('pdfkit');
 const getStream = require('get-stream');
 const base64 = require('base64-stream');
@@ -46,13 +48,23 @@ class ReportsService {
   }
 
   // REPORTE ANEXO FACTURACION
-  async anexoFactura(data, detalle) {
+  async anexoFactura(data) {
     let doc = new PDFDocument({ margin: 50 });
-    await anexoFacturaService.generateHeader(doc, JSON.parse(data));
+    data = JSON.parse(data);
+    let detalle = await models.Mmovimientos.findAll({
+      where: {
+        tipo_doc_principal: 'FA',
+        nro_doc_principal: data.nro_documento,
+        nro_ctrl_doc_ppal: data.nro_control,
+        cod_ag_doc_ppal: data.cod_agencia
+      },
+      raw: true,
+    });
+    await anexoFacturaService.generateHeader(doc, data, detalle);
     await anexoFacturaService.generateCustomerInformation(
       doc,
-      JSON.parse(data),
-      JSON.parse(detalle)
+      data,
+      detalle
     );
     doc.end();
     var encoder = new base64.Base64Encode();

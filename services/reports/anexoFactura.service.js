@@ -1,8 +1,11 @@
 const moment = require('moment');
 const { models } = require('./../../libs/sequelize');
 
+const UtilsService = require('./../utils.service');
+const utils = new UtilsService();
+
 class AnexoFacturaService {
-  async generateHeader(doc, data) {
+  async generateHeader(doc, data, detalle) {
     let cliente_orig;
 
     if (data.id_clte_part_orig) {
@@ -13,11 +16,25 @@ class AnexoFacturaService {
         }
       );
     } else {
-      cliente_orig = await models.Clientes.findByPk(data.cliente_orig, {
+      cliente_orig = await models.Clientes.findByPk(data.cod_cliente_org, {
         raw: true,
       });
     }
-    
+
+    let fecha_emision_init =
+      detalle[0].fecha_emision.substring(8, 10) +
+      '/' +
+      detalle[0].fecha_emision.substring(5, 7) +
+      '/' +
+      detalle[0].fecha_emision.substring(0, 4);
+
+    let fecha_emision_end =
+      detalle[detalle.length - 1].fecha_emision.substring(8, 10) +
+      '/' +
+      detalle[detalle.length - 1].fecha_emision.substring(5, 7) +
+      '/' +
+      detalle[detalle.length - 1].fecha_emision.substring(0, 4);
+
     moment.locale('es');
     doc
       .image('./img/logo_rc.png', 50, 45, { width: 50 })
@@ -38,10 +55,10 @@ class AnexoFacturaService {
       columns: 1,
       width: 200,
     });
-    doc.text('Desde: 19/10/2022', 200, 160);
-    doc.text('Hasta: 19/11/2022', 320, 160);
-    doc.text('Nro. Factura: 1231231', 50, 140);
-    doc.text('Nro. Control: 00-0123124', 50, 160);
+    doc.text('Desde: ' + fecha_emision_init, 200, 160);
+    doc.text('Hasta: ' + fecha_emision_end, 320, 160);
+    doc.text('Nro. Factura: ' + data.nroFact, 50, 140);
+    doc.text('Nro. Control: ' + data.nroControl, 50, 160);
     doc.moveDown();
     doc.fontSize(9);
     doc.y = 186;
@@ -124,881 +141,135 @@ class AnexoFacturaService {
   }
 
   async generateCustomerInformation(doc, data, detalle) {
-    var detalle = [
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215/23142342/234234',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '121212121212',
-        impuesto: '556',
-        monto_total: '121212121212',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '121212121212',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-      {
-        mes_año: '10-2022',
-        fecha_envio: '19/10/2022',
-        nro_guia: 'GC 550345455',
-        facturas_cliente: '17643/123215',
-        origen: 'VZL',
-        destino: 'MCV',
-        monto_base: '5.997,90',
-        impuesto: '556',
-        monto_total: '6.402,39',
-      },
-    ];
     var i = 0;
     var page = 0;
     var ymin = 210;
+    let base = 0;
+    let impuesto = 0;
+    let total = 0;
+
+    let descuento = utils.parseFloatN(data.monto_descuento) * -1;
+    let descuento_impuesto =
+      (descuento * utils.parseFloatN(data.porc_impuesto)) / 100;
+
     for (var item = 0; item <= detalle.length - 1; item++) {
+      let fecha_envio =
+        detalle[item].fecha_envio.substring(8, 10) +
+        '/' +
+        detalle[item].fecha_envio.substring(5, 7) +
+        '/' +
+        detalle[item].fecha_envio.substring(0, 4);
+
+      let agencia_org = await models.Agencias.findByPk(
+        detalle[item].cod_agencia,
+        {
+          include: ['ciudades'],
+          raw: true,
+        }
+      );
+
+      let agencia_dest = await models.Agencias.findByPk(
+        detalle[item].cod_agencia_dest,
+        {
+          include: ['ciudades'],
+          raw: true,
+        }
+      );
+
+      base += utils.parseFloatN(detalle[item].monto_base);
+      impuesto += utils.parseFloatN(detalle[item].monto_impuesto);
+      total += utils.parseFloatN(detalle[item].monto_total);
+
       doc.y = ymin + i;
       doc.x = 43;
-      doc.text(detalle[item].mes_año, {
-        align: 'center',
-        columns: 1,
-        width: 35,
-      });
+      doc.text(
+        detalle[item].fecha_emision.substring(5, 7) +
+          '-' +
+          detalle[item].fecha_emision.substring(2, 4),
+        {
+          align: 'center',
+          columns: 1,
+          width: 35,
+        }
+      );
       doc.y = ymin + i;
       doc.x = 90;
-      doc.text(detalle[item].fecha_envio, {
+      doc.text(fecha_envio, {
         align: 'center',
         columns: 1,
         width: 47,
       });
       doc.y = ymin + i;
       doc.x = 141;
-      doc.text(detalle[item].nro_guia, {
+      doc.text(detalle[item].nro_documento, {
         align: 'center',
         columns: 1,
         width: 67,
       });
       doc.y = ymin + i - 3;
       doc.x = 210;
-      doc.text(detalle[item].facturas_cliente, {
+      doc.text(detalle[item].dimensiones.substring(0, 22), {
         align: 'center',
         columns: 1,
         width: 105,
       });
       doc.y = ymin + i;
       doc.x = 326;
-      doc.text(detalle[item].origen, {
+      doc.text(agencia_org['ciudades.siglas'], {
         align: 'center',
         columns: 1,
         width: 20,
       });
       doc.y = ymin + i;
       doc.x = 361;
-      doc.text(detalle[item].destino, {
+      doc.text(agencia_dest['ciudades.siglas'], {
         align: 'center',
         columns: 1,
         width: 20,
       });
       doc.y = ymin + i;
       doc.x = 392;
-      doc.text(detalle[item].monto_base, {
+      doc.text(utils.formatNumber(detalle[item].monto_base), {
         align: 'center',
         columns: 1,
         width: 65,
       });
       doc.y = ymin + i;
       doc.x = 455;
-      doc.text(detalle[item].impuesto, {
+      doc.text(utils.formatNumber(detalle[item].monto_impuesto), {
         align: 'center',
         columns: 1,
         width: 44,
       });
       doc.y = ymin + i;
       doc.x = 505;
-      doc.text(detalle[item].monto_total, {
-        align: 'center',
-        columns: 1,
-        width: 65,
-      });
+      doc.text(
+        utils.formatNumber(
+          (
+            utils.parseFloatN(detalle[item].monto_base) +
+            utils.parseFloatN(detalle[item].monto_impuesto)
+          ).toFixed(2)
+        ),
+        {
+          align: 'center',
+          columns: 1,
+          width: 65,
+        }
+      );
       i = i + 25;
       if (i >= 500) {
         doc.addPage();
         page = page + 1;
         doc.switchToPage(page);
         i = 0;
-        await this.generateHeader(doc, data);
+        await this.generateHeader(doc, data, detalle);
       }
     }
     if (i >= 500) {
       doc.addPage();
       page = page + 1;
       doc.switchToPage(page);
-      await this.generateHeader(doc, data);
+      await this.generateHeader(doc, data, detalle);
       i = 0;
       ymin = 50;
     }
@@ -1008,21 +279,21 @@ class AnexoFacturaService {
     doc.fontSize(10);
     doc.y = ymin + i;
     doc.x = 405;
-    doc.text('123123', {
+    doc.text(utils.formatNumber(base.toFixed(2)), {
       align: 'left',
       columns: 1,
       width: 50,
     });
     doc.y = ymin + i;
     doc.x = 465;
-    doc.text('23423', {
+    doc.text(utils.formatNumber(impuesto.toFixed(2)), {
       align: 'left',
       columns: 1,
       width: 50,
     });
     doc.y = ymin + i;
     doc.x = 525;
-    doc.text('12312', {
+    doc.text(utils.formatNumber((base + impuesto).toFixed(2)), {
       align: 'left',
       columns: 1,
       width: 50,
@@ -1030,54 +301,54 @@ class AnexoFacturaService {
     doc.fontSize(12);
     doc.text('Descuento de Fletes:', 220, ymin + i + 20);
     doc.fontSize(10);
-    (doc.y = ymin + i + 20), (doc.x = 360);
-    doc.text('232323', {
-      align: 'left',
-      columns: 1,
-      width: 50,
-    });
     doc.y = ymin + i + 20;
     doc.x = 405;
-    doc.text('1231231', {
+    doc.text(utils.formatNumber(descuento.toFixed(2)), {
       align: 'left',
       columns: 1,
       width: 50,
     });
     doc.y = ymin + i + 20;
     doc.x = 465;
-    doc.text('1231231', {
+    doc.text(utils.formatNumber(descuento_impuesto.toFixed(2)), {
       align: 'left',
       columns: 1,
       width: 50,
     });
     doc.y = ymin + i + 20;
     doc.x = 525;
-    doc.text('123123', {
+    doc.text(utils.formatNumber((descuento + descuento_impuesto).toFixed(2)), {
       align: 'left',
       columns: 1,
       width: 50,
     });
     doc.y = ymin + i + 40;
     doc.x = 405;
-    doc.text('123123', {
+    doc.text(utils.formatNumber((base + descuento).toFixed(2)), {
       align: 'left',
       columns: 1,
       width: 50,
     });
     doc.y = ymin + i + 40;
     doc.x = 465;
-    doc.text('23423', {
-      align: 'left',
-      columns: 1,
-      width: 50,
-    });
+    doc.text(
+      utils.formatNumber((base + descuento + descuento_impuesto).toFixed(2)),
+      {
+        align: 'left',
+        columns: 1,
+        width: 50,
+      }
+    );
     doc.y = ymin + i + 40;
     doc.x = 525;
-    doc.text('12312312', {
-      align: 'left',
-      columns: 1,
-      width: 50,
-    });
+    doc.text(
+      utils.formatNumber((base + descuento + descuento_impuesto).toFixed(2)),
+      {
+        align: 'left',
+        columns: 1,
+        width: 50,
+      }
+    );
     var end;
     const range = doc.bufferedPageRange();
     for (
