@@ -282,7 +282,7 @@ class CguiasService {
       item = item + 1;
       i = i + 20;
 
-      if (i >= 573) {
+      if (i >= 530) {
         doc.addPage();
         page = page + 1;
         doc.switchToPage(page);
@@ -291,6 +291,18 @@ class CguiasService {
         this.titleTable(doc, 'NRO. GUIA');
         i = 0;
       }
+    }
+    var end;
+    const range = doc.bufferedPageRange();
+    for (
+      i = range.start, end = range.start + range.count, range.start <= end;
+      i < end;
+      i++
+    ) {
+      doc.switchToPage(i);
+      doc.x = 275;
+      doc.y = 724;
+      doc.text(`Pagina ${i + 1} de ${range.count}`);
     }
   }
 }

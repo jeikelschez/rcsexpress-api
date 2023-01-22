@@ -37,7 +37,6 @@ class ReportsService {
   async facturaPreimpreso(data) {
     let doc = new PDFDocument({
       size: [500, 841],
-      layout: 'landscape',
       margin: 20,
     });
     await facturaPreimpresoService.generateData(doc, JSON.parse(data));

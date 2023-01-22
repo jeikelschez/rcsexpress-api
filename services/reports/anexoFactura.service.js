@@ -206,7 +206,7 @@ class AnexoFacturaService {
         columns: 1,
         width: 67,
       });
-      doc.y = ymin + i - 3;
+      doc.y = ymin + i;
       doc.x = 210;
       doc.text(detalle[item].dimensiones.substring(0, 22), {
         align: 'center',
@@ -218,31 +218,31 @@ class AnexoFacturaService {
       doc.text(agencia_org['ciudades.siglas'], {
         align: 'center',
         columns: 1,
-        width: 20,
+        width: 25,
       });
       doc.y = ymin + i;
       doc.x = 361;
       doc.text(agencia_dest['ciudades.siglas'], {
         align: 'center',
         columns: 1,
-        width: 20,
+        width: 25,
       });
       doc.y = ymin + i;
-      doc.x = 392;
+      doc.x = 388;
       doc.text(utils.formatNumber(detalle[item].monto_base), {
-        align: 'center',
+        align: 'right',
         columns: 1,
         width: 65,
       });
       doc.y = ymin + i;
       doc.x = 455;
       doc.text(utils.formatNumber(detalle[item].monto_impuesto), {
-        align: 'center',
+        align: 'right',
         columns: 1,
         width: 44,
       });
       doc.y = ymin + i;
-      doc.x = 505;
+      doc.x = 495;
       doc.text(
         utils.formatNumber(
           (
@@ -251,7 +251,7 @@ class AnexoFacturaService {
           ).toFixed(2)
         ),
         {
-          align: 'center',
+          align: 'right',
           columns: 1,
           width: 65,
         }
@@ -278,75 +278,75 @@ class AnexoFacturaService {
     doc.text('Totales:', 220, ymin + i);
     doc.fontSize(10);
     doc.y = ymin + i;
-    doc.x = 405;
+    doc.x = 388;
     doc.text(utils.formatNumber(base.toFixed(2)), {
-      align: 'left',
+      align: 'right',
       columns: 1,
-      width: 50,
+      width: 65,
     });
     doc.y = ymin + i;
-    doc.x = 465;
+    doc.x = 455;
     doc.text(utils.formatNumber(impuesto.toFixed(2)), {
-      align: 'left',
+      align: 'right',
       columns: 1,
-      width: 50,
+      width: 44,
     });
     doc.y = ymin + i;
-    doc.x = 525;
+    doc.x = 495;
     doc.text(utils.formatNumber((base + impuesto).toFixed(2)), {
-      align: 'left',
+      align: 'right',
       columns: 1,
-      width: 50,
+      width: 65,
     });
     doc.fontSize(12);
     doc.text('Descuento de Fletes:', 220, ymin + i + 20);
     doc.fontSize(10);
     doc.y = ymin + i + 20;
-    doc.x = 405;
+    doc.x = 388;
     doc.text(utils.formatNumber(descuento.toFixed(2)), {
-      align: 'left',
+      align: 'right',
       columns: 1,
-      width: 50,
+      width: 65,
     });
     doc.y = ymin + i + 20;
-    doc.x = 465;
+    doc.x = 455;
     doc.text(utils.formatNumber(descuento_impuesto.toFixed(2)), {
-      align: 'left',
+      align: 'right',
       columns: 1,
-      width: 50,
+      width: 44,
     });
     doc.y = ymin + i + 20;
-    doc.x = 525;
+    doc.x = 495;
     doc.text(utils.formatNumber((descuento + descuento_impuesto).toFixed(2)), {
-      align: 'left',
+      align: 'right',
       columns: 1,
-      width: 50,
+      width: 65,
     });
     doc.y = ymin + i + 40;
-    doc.x = 405;
+    doc.x = 388;
     doc.text(utils.formatNumber((base + descuento).toFixed(2)), {
-      align: 'left',
+      align: 'right',
       columns: 1,
-      width: 50,
+      width: 65,
     });
     doc.y = ymin + i + 40;
-    doc.x = 465;
+    doc.x = 455;
     doc.text(
       utils.formatNumber((base + descuento + descuento_impuesto).toFixed(2)),
       {
-        align: 'left',
+        align: 'right',
         columns: 1,
-        width: 50,
+        width: 44,
       }
     );
     doc.y = ymin + i + 40;
-    doc.x = 525;
+    doc.x = 495;
     doc.text(
       utils.formatNumber((base + descuento + descuento_impuesto).toFixed(2)),
       {
-        align: 'left',
+        align: 'right',
         columns: 1,
-        width: 50,
+        width: 65,
       }
     );
     var end;
@@ -358,7 +358,7 @@ class AnexoFacturaService {
     ) {
       doc.switchToPage(i);
       doc.x = 275;
-      doc.y = 724;
+      doc.y = 800;
       doc.text(`Pagina ${i + 1} de ${range.count}`);
     }
   }

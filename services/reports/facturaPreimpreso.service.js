@@ -28,15 +28,15 @@ class FacturaPreimpresoService {
       ' CENTIMOS';
 
     doc
-      .fontSize(11)
+      .fontSize(9)
       .font('Helvetica-Bold')
-      .text('CLIENTE: ' + cliente_orig.nb_cliente, 40, 40)
+      .text('CLIENTE: ' + cliente_orig.nb_cliente, 30, 40)
       .text(
         'RIF/CO: ' +
           (cliente_orig.rif_cedula
             ? cliente_orig.rif_cedula
             : cliente_orig.rif_ci),
-        40,
+            30,
         63
       )
       .text(
@@ -46,89 +46,233 @@ class FacturaPreimpresoService {
             : cliente_orig.telefonos
             ? cliente_orig.telefonos
             : ''),
-        40,
+            30,
         87
       );
     doc.y = 110;
-    doc.x = 40;
+    doc.x = 30;
     doc.fillColor('black');
     doc.text(
       cliente_orig.dir_fiscal
         ? cliente_orig.dir_fiscal
         : cliente_orig.direccion,
       {
-        width: 400,
+        width: 190,
         align: 'justify',
       }
     );
-    doc.text('DOCUMENTO', 470, 40);
-    doc.text('FACTURA', 470, 58);
-    doc.text('NUMERO', 650, 40);
-    doc.text(data.nroControl, 650, 58);
-    doc.text('CONDICIONES DE PAGO', 470, 90);
-    doc.text(data.formaPago, 470, 110);
-    doc.text('FECHA DE EMISION', 650, 90);
-    doc.text(data.fecha_emision, 650, 110);
-    doc.text('DESCRIPCIÓN', 40, 170);
-    doc.text('CANTIDAD', 360, 170);
-    doc.text('PRECIO UNITARIO', 440, 170);
-    doc.text('%IVA', 550, 170);
-    doc.text('PRECIO TOTAL', 680, 170);
-    doc.lineCap('butt').moveTo(40, 188).lineTo(770, 188).stroke();
-    doc.text('DESCRIPCIÓN', 40, 255);
-    doc.fontSize(10);
-    doc.text('FORMA DE PAGO:', 40, 310);
-    doc.lineJoin('square').rect(40, 325, 390, 45).stroke();
-    doc.text('EFECTIVO', 50, 335);
-    doc.lineJoin('square').rect(110, 334, 10, 10).stroke();
-    doc.text('CHEQUE', 130, 335);
-    doc.text('NRO.', 50, 355);
-    doc.lineCap('butt').moveTo(83, 362).lineTo(180, 362).stroke();
-    doc.text('SON: ' + total, 40, 380).fontSize(10);
-    doc.text(data.nroDocumento, 40, 455);
-    doc.text('SUBTOTAL: ' + data.subtotal, 680, 300);
-    doc.text('DESCUENTO(' + data.porc_desc + '%): ' + data.descuento, 680, 315);
-    doc.text('BASE IMPONIBLE: ' + data.base, 680, 330);
-    doc.text('MONTO EXENTO: ' + data.exento, 680, 345);
-    doc.text('IVA(' + data.iva + '%): ' + data.impuesto, 680, 360);
-    doc.text('TARIFA POSTAL (E): ' + data.fpo, 680, 375);
-    doc.text('TOTAL: ' + data.total, 680, 390);
-    doc.y = 400;
-    doc.x = 200;
-
+    doc.text('DOCUMENTO', 250, 40);
+    doc.text('FACTURA', 250, 58);
+    doc.text('NUMERO', 370, 40);
+    doc.text(data.nroControl, 370, 58);
+    doc.text('CONDICIONES DE PAGO', 250, 90);
+    doc.text(data.formaPago, 250, 110);
+    doc.text('FECHA DE EMISION', 370, 90);
+    doc.text(data.fecha_emision, 370, 110);
+    
+    doc.text('DESCRIPCIÓN', 30, 170);
+    doc.text('CANTIDAD', 200, 170);
+    doc.text('PRECIO UNITARIO', 260, 170);
+    doc.text('%IVA', 350, 170);
+    doc.text('PRECIO TOTAL', 400, 170);
+    doc.lineCap('butt').moveTo(30, 188).lineTo(470, 188).stroke();
+    doc.text('DESCRIPCIÓN', 30, 255);
+    doc.fontSize(8);
+    doc.text('FORMA DE PAGO:', 30, 310);
+    doc.lineJoin('square').rect(30, 325, 230, 45).stroke();
+    doc.text('EFECTIVO', 40, 335);
+    doc.lineJoin('square').rect(90, 334, 10, 10).stroke();
+    doc.text('CHEQUE', 110, 335);
+    doc.text('NRO.', 40, 355);
+    doc.lineCap('butt').moveTo(65, 362).lineTo(180, 362).stroke();
+    doc.fontSize(7);
+    doc.text('SON: ' + total, 30, 380)
+    doc.text(data.nroDocumento, 30, 455);
+    doc.text('SUBTOTAL: ', 340, 300);
+    doc.y = 300;
+    doc.x = 340;
+    doc.text(
+      utils.truncate(data.subtotal, 10),
+      {
+        width: 125,
+        align: 'right',
+      }
+    );
+    doc.text('DESCUENTO(' + data.porc_desc + '%): ', 340, 315);
+    doc.y = 315;
+    doc.x = 340;
+    doc.text(
+      utils.truncate(data.descuento, 10),
+      {
+        width: 125,
+        align: 'right',
+      }
+    );
+    doc.text('BASE IMPONIBLE: ', 340, 330);
+    doc.y = 330;
+    doc.x = 340;
+    doc.text(
+      utils.truncate(data.base, 10),
+      {
+        width: 125,
+        align: 'right',
+      }
+    );
+    doc.text('MONTO EXENTO: ', 340, 345);
+    doc.y = 345;
+    doc.x = 340;
+    doc.text(
+      utils.truncate(data.exento, 10),
+      {
+        width: 125,
+        align: 'right',
+      }
+    );
+    doc.text('IVA(' + data.iva + '%): ', 340, 360);
+    doc.y = 360;
+    doc.x = 340;
+    doc.text(
+      utils.truncate(data.impuesto, 10),
+      {
+        width: 125,
+        align: 'right',
+      }
+    );
+    doc.text('TARIFA POSTAL (E): ', 340, 375);
+    doc.y = 375;
+    doc.x = 340;
+    doc.text(
+      utils.truncate(data.fpo, 10),
+      {
+        width: 125,
+        align: 'right',
+      }
+    );
+    doc.text('TOTAL: ', 340, 390);
+    doc.y = 390;
+    doc.x = 340;
+    doc.text(
+      utils.truncate(data.total, 10),
+      {
+        width: 125,
+        align: 'right',
+      }
+    );
+    doc.y = 275;
+    doc.x = 30;
+    doc.fontSize(8)
     if (data.monto_divisas != '0,00') {
       doc.text(
         'PROVIDENCIA ADMINISTRATIVA N° SNAT 2022/000013 que designan a los Sujetos Pasivos Especiales como Agentes de Percepción del IGTF',
         {
-          width: 400,
+          width: 280,
           align: 'justify',
         }
       );
-      doc.lineJoin('square').rect(200, 430, 400, 45).stroke();
-      doc.lineCap('butt').moveTo(200, 453).lineTo(600, 453).stroke();
-      doc.lineCap('butt').moveTo(300, 430).lineTo(300, 475).stroke();
-      doc.lineCap('butt').moveTo(370, 430).lineTo(370, 475).stroke();
-      doc.lineCap('butt').moveTo(450, 430).lineTo(450, 475).stroke();
-      doc.lineCap('butt').moveTo(530, 430).lineTo(530, 475).stroke();
-      doc.text('PAGO EN DIVISA', 208, 438);
-      doc.text('ALICUOTA', 309, 438);
-      doc.text('IGTF DIVISA', 380, 438);
-      doc.text('TASA BCV', 465, 438);
-      doc.text('IGTF BS', 545, 438);
-      doc.text(data.monto_divisas, 208, 460);
-      doc.text('3%', 309, 460);
-      doc.text(data.monto_igtf, 380, 460);
-      doc.text(data.valor_dolar, 465, 460);
-      doc.text(data.igtf_bs, 545, 460);
+      doc.y = 400;
+      doc.x = 30;
+      doc.fontSize(8);
+      doc.text(
+        'PROVIDENCIA ADMINISTRATIVA N° SNAT 2022/000013 que designan a los Sujetos Pasivos Especiales como Agentes de Percepción del IGTF',
+        {
+          width: 280,
+          align: 'justify',
+        }
+      );
+      doc.lineJoin('square').rect(100, 430, 340, 45).stroke();
+      doc.lineCap('butt').moveTo(100, 453).lineTo(440, 453).stroke();
+      doc.lineCap('butt').moveTo(185, 430).lineTo(185, 475).stroke();
+      doc.lineCap('butt').moveTo(250, 430).lineTo(250, 475).stroke();
+      doc.lineCap('butt').moveTo(320, 430).lineTo(320, 475).stroke();
+      doc.lineCap('butt').moveTo(380, 430).lineTo(380, 475).stroke();
+      doc.text('PAGO EN DIVISA', 108, 438);
+      doc.text('ALICUOTA', 197, 438);
+      doc.text('IGTF DIVISA', 260, 438);
+      doc.text('TAZA BCV', 329, 438);
+      doc.text('IGTF BS', 394, 438);
+      doc.y = 460;
+      doc.x = 108;
+      doc.text(
+        data.monto_divisas,
+        {
+          width: 280,
+          align: 'justify',
+        }
+      );
+      doc.text('3%', 211, 460);
+      doc.y = 460;
+      doc.x = 275;
+      doc.text(
+        data.monto_igtf,
+        {
+          width: 100,
+          align: 'justify',
+        }
+      );
+      doc.y = 460;
+      doc.x = 347;
+      doc.text(
+        data.valor_dolar,
+        {
+          width: 100,
+          align: 'justify',
+        }
+      );
+      doc.y = 460;
+      doc.x = 402;
+      doc.text(
+        data.igtf_bs,
+        {
+          width: 100,
+          align: 'justify',
+        }
+      );
     }
 
     var i = 0;
     for (var item = 0; item <= data.detalles.length - 1; item++) {
-      doc.text(data.detalles[item].concepto, 40, 195 + i);
-      doc.text(data.detalles[item].cantidad, 360, 195 + i);
-      doc.text(data.detalles[item].costo_unitario, 440, 195 + i);
-      doc.text(data.iva, 550, 195 + i);
-      doc.text(data.detalles[item].subtotal, 680, 195 + i);
+      doc.fontSize(8)
+      doc.text(data.detalles[item].concepto, 30, 195 + i);
+      doc.y = 195 + i;
+      doc.x = 193;
+      doc.fillColor('black');
+      doc.text(
+        utils.truncate(data.detalles[item].cantidad, 10),
+        {
+          width: 57,
+          align: 'center',
+        }
+      );
+      doc.y = 195 + i;
+      doc.x = 240;
+      doc.fillColor('black');
+      doc.text(
+        utils.truncate(data.detalles[item].costo_unitario, 10),
+        {
+          width: 97,
+          align: 'right',
+        }
+      );
+      doc.y = 195 + i;
+      doc.x = 340;
+      doc.fillColor('black');
+      doc.text(
+        utils.truncate(data.iva, 5),
+        {
+          width: 30,
+          align: 'right',
+        }
+      );
+      doc.y = 195 + i;
+      doc.x = 380;
+      doc.fillColor('black');
+      doc.text(
+        utils.truncate(data.detalles[item].subtotal, 10),
+        {
+          width: 86,
+          align: 'right',
+        }
+      );
       i = i + 20;
       if (item === 2) item = data.detalles.length + 2;
     }
