@@ -11,8 +11,12 @@ class ReceptoresService {
     return newReceptor;
   }
 
-  async find() {
-    const receptores = await models.Receptores.findAll();
+  async find(activo) {
+    let params = {};
+    if(activo) params.flag_activo = 1;
+    const receptores = await models.Receptores.findAll({
+      where: params
+    });
     return receptores;
   }
 

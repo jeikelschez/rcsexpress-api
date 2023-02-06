@@ -899,6 +899,16 @@
         "tags": ["Ayudantes"],
         "summary": "Obtener todos los ayudantes",
         "description": "API para Obtener todos los ayudantes del sistema",
+        "parameters": [          
+          {
+            "name": "activo",
+            "in": "header",
+            "description": "Flag Activo (S)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -6983,6 +6993,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "prefix_nro",
+            "in": "header",
+            "description": "Prefijo Nro Documento",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -9246,6 +9265,16 @@
         "tags": ["Receptores"],
         "summary": "Obtener todos los receptores",
         "description": "API para Obtener todos los receptores del sistema",
+        "parameters": [          
+          {
+            "name": "activo",
+            "in": "header",
+            "description": "Flag Activo (S)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -11774,11 +11803,7 @@
           "cod_agencia": {
             "type": "number"
           },
-          "activo_desc": {
-            "type": "string",
-            "readOnly": true
-          },
-          "tipo_desc": {
+          "agente_desc": {
             "type": "string",
             "readOnly": true
           }
@@ -13304,6 +13329,10 @@
           },
           "chofer": {
             "type": "string"
+          },
+          "unidad_desc": {
+            "type": "string",
+            "readOnly": true
           }
         }
       },

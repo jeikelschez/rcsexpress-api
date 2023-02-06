@@ -4,6 +4,8 @@ const { models, Sequelize } = require('./../libs/sequelize');
 const UtilsService = require('./utils.service');
 const utils = new UtilsService();
 
+const agenteDesc = "CONCAT(TRIM(persona_responsable), ' - C.I.', TRIM(rif_ci_agente))";
+
 class AgentesService {
   constructor() {}
 
@@ -45,6 +47,12 @@ class AgentesService {
 
     let params = { ...params2, ...filterArray };
 
+    let attributes = {
+      include: [
+        [Sequelize.literal(agenteDesc), 'agente_desc'],
+      ],
+    };
+
     if (order_by && order_direction) {
       order.push([order_by, order_direction]);
     }
@@ -66,7 +74,7 @@ class AgentesService {
       return agentesArray;
     }
 
-    return await utils.paginate(models.Agentes, page, limit, params, order);
+    return await utils.paginate(models.Agentes, page, limit, params, order, attributes);
   }
 
   async findOne(id) {

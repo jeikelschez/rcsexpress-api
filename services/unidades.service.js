@@ -1,6 +1,8 @@
 const boom = require('@hapi/boom');
 
-const { models }= require('./../libs/sequelize');
+const { models, Sequelize } = require('./../libs/sequelize');
+
+const unidadDesc = "CONCAT(placas, ' - Vehículo: ', descripcion, ' - ', chofer)";
 
 class UnidadesService {
 
@@ -12,7 +14,13 @@ class UnidadesService {
   }
 
   async find() {
-    const unidades = await models.Unidades.findAll();
+    const unidades = await models.Unidades.findAll({
+      attributes: {
+        include: [
+          [Sequelize.literal(unidadDesc), 'unidad_desc']
+        ]
+      }
+    });
     return unidades;
   }
 

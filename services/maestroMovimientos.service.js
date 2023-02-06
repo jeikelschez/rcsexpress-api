@@ -68,7 +68,8 @@ class MmovimientosService {
     cod_ag_doc_ppal,
     order_pe,
     pagado_en,
-    modalidad
+    modalidad,
+    prefix_nro
   ) {
     let params2 = {};
     let filterArray = {};
@@ -148,6 +149,11 @@ class MmovimientosService {
     if (cod_ag_doc_ppal) params2.cod_ag_doc_ppal = cod_ag_doc_ppal;
     if (pagado_en) params2.pagado_en = pagado_en;
     if (modalidad) params2.modalidad_pago = modalidad;
+    if (prefix_nro) {
+      params2.nro_documento = {
+        [Sequelize.Op.startsWith]: prefix_nro,
+      };
+    }
 
     if (filter && filter_value) {
       let filters = [];

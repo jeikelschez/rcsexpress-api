@@ -46,6 +46,7 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       order_pe,
       pagado_en,
       modalidad,
+      prefix_nro,
     } = req.headers;
 
     const cguias = await service.find(
@@ -79,7 +80,8 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       cod_ag_doc_ppal,
       order_pe,
       pagado_en,
-      modalidad
+      modalidad,
+      prefix_nro
     );
     res.json(cguias);
   } catch (error) {

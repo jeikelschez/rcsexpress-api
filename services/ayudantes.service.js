@@ -11,8 +11,12 @@ class AyudantesService {
     return newAyudante;
   }
 
-  async find() {
-    const ayudantes = await models.Ayudantes.findAll();
+  async find(activo) {
+    let params = {};
+    if(activo) params.flag_activo = 1;
+    const ayudantes = await models.Ayudantes.findAll({
+      where: params
+    });
     return ayudantes;
   }
 
