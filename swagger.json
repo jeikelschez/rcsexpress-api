@@ -7002,6 +7002,15 @@
             "schema": {
               "type": "integer"
             }
+          },
+          {
+            "name": "include_zona",
+            "in": "header",
+            "description": "Incluir Zona (S)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {

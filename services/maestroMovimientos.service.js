@@ -69,7 +69,8 @@ class MmovimientosService {
     order_pe,
     pagado_en,
     modalidad,
-    prefix_nro
+    prefix_nro,
+    include_zona
   ) {
     let params2 = {};
     let filterArray = {};
@@ -177,11 +178,17 @@ class MmovimientosService {
       ],
     };
 
+    if(include_zona) {
+      include = ['zonas_dest'];
+    }
+    
     if (order_pe) {
       order.push(['cod_agencia', 'ASC']);
       order.push(['cod_agencia_dest', 'ASC']);
       order.push(['nro_documento', 'ASC']);
       order.push(['fecha_emision', 'ASC']);
+    } else if (order_by.includes(',')) {
+      order = JSON.parse(order_by);
     } else if (order_by && order_direction) {
       order.push([order_by, order_direction]);
     }
