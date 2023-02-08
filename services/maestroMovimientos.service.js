@@ -78,7 +78,11 @@ class MmovimientosService {
     let include = [];
 
     if (agencia) params2.cod_agencia = agencia;
-    if (agencia_dest) params2.cod_agencia_dest = agencia_dest;
+
+    if (agencia_dest) {
+      params2.cod_agencia_dest = agencia_dest.split(',');
+    }
+
     if (nro_documento) params2.nro_documento = nro_documento;
     if (tipo) params2.t_de_documento = tipo;
 
