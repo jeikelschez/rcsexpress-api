@@ -1,10 +1,10 @@
 const moment = require('moment');
-const { models } = require('./../../libs/sequelize');
+const { models } = require('../../libs/sequelize');
 
-const UtilsService = require('./../utils.service');
+const UtilsService = require('../utils.service');
 const utils = new UtilsService();
 
-class AnexoFacturaService {
+class RelacionDespachoService {
   async generateHeader(doc, data, detalle) {
     let cliente_orig;
 
@@ -50,7 +50,7 @@ class AnexoFacturaService {
       .fontSize(11);
     doc.y = 130;
     doc.x = 213;
-    doc.text(cliente_orig.nb_cliente, {
+    doc.text("cliente_orig.nb_cliente", {
       align: 'center',
       columns: 1,
       width: 200,
@@ -158,7 +158,7 @@ class AnexoFacturaService {
         '/' +
         detalle[item].fecha_envio.substring(5, 7) +
         '/' +
-        detalle[item].fecha_envio.substring(0, 4);      
+        detalle[item].fecha_envio.substring(0, 4);
 
       base += utils.parseFloatN(detalle[item].monto_base);
       impuesto += utils.parseFloatN(detalle[item].monto_impuesto);
@@ -348,4 +348,4 @@ class AnexoFacturaService {
   }
 }
 
-module.exports = AnexoFacturaService;
+module.exports = RelacionDespachoService;

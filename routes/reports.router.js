@@ -52,4 +52,17 @@ router.get('/anexoFactura', authenticateJWT, async (req, res, next) => {
   }
 });
 
+router.get('/relacionDespacho', authenticateJWT, async (req, res, next) => {
+  try {
+    const { data } = req.headers;
+    const pdfStream = await service.relacionDespacho(data);
+    res.status(200).json({
+      message: 'PDF Generado',
+      base64: pdfStream,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

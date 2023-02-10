@@ -1,4 +1,4 @@
-const { models } = require('./../../libs/sequelize');
+const { models, Sequelize } = require('./../../libs/sequelize');
 
 const PDFDocument = require('pdfkit');
 const getStream = require('get-stream');
@@ -10,6 +10,8 @@ const FacturaPreimpresoService = require('./facturaPreimpreso.service');
 const facturaPreimpresoService = new FacturaPreimpresoService();
 const AnexoFacturaService = require('./anexoFactura.service');
 const anexoFacturaService = new AnexoFacturaService();
+const RelacionDespachoService = require('./relacionDespacho.service');
+const relacionDespachoService = new RelacionDespachoService();
 
 class ReportsService {
   constructor() {}
@@ -57,10 +59,69 @@ class ReportsService {
         nro_ctrl_doc_ppal: data.nro_control,
         cod_ag_doc_ppal: data.cod_agencia
       },
+      include: [
+        {
+          model: models.Agencias,
+          as: 'agencias',
+          include: {
+            model: models.Ciudades,
+            as: 'ciudades'
+          },
+        },
+        {
+          model: models.Agencias,
+          as: 'agencias_dest',
+          include: {
+            model: models.Ciudades,
+            as: 'ciudades'
+          }        
+        }
+      ],
       raw: true,
     });
     await anexoFacturaService.generateHeader(doc, data, detalle);
     await anexoFacturaService.generateCustomerInformation(
+      doc,
+      data,
+      detalle
+    );
+    doc.end();
+    var encoder = new base64.Base64Encode();
+    var b64s = doc.pipe(encoder);
+    return await getStream(b64s);
+  }
+
+  // REPORTE RELACION DESPACHO
+  async relacionDespacho(data) {
+    let doc = new PDFDocument({ margin: 50 });
+    let detalle = await models.Mmovimientos.findAll({
+      where: {
+        nro_documento: {
+          [Sequelize.Op.in]: data.split(','),
+        }
+      },
+      include: [
+        {
+          model: models.Agencias,
+          as: 'agencias',
+          include: {
+            model: models.Ciudades,
+            as: 'ciudades'
+          },
+        },
+        {
+          model: models.Agencias,
+          as: 'agencias_dest',
+          include: {
+            model: models.Ciudades,
+            as: 'ciudades'
+          }        
+        }
+      ],
+      raw: true,
+    });
+    await relacionDespachoService.generateHeader(doc, data, detalle);
+    await relacionDespachoService.generateCustomerInformation(
       doc,
       data,
       detalle

@@ -191,11 +191,13 @@ class MmovimientosService {
       order.push(['cod_agencia_dest', 'ASC']);
       order.push(['nro_documento', 'ASC']);
       order.push(['fecha_emision', 'ASC']);
-    } else if (order_by.includes(',')) {
-      order = JSON.parse(order_by);
-    } else if (order_by && order_direction) {
-      order.push([order_by, order_direction]);
-    }
+    } else if(order_by) {
+      if (order_by.includes(',')) {
+        order = JSON.parse(order_by);
+      } else if (order_by && order_direction) {
+        order.push([order_by, order_direction]);
+      }
+    }   
 
     return await utils.paginate(
       models.Mmovimientos,
