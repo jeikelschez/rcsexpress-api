@@ -318,11 +318,11 @@ class RelacionDespachoService {
             width: 105,
           });
         }
-      doc.lineJoin('square').rect(35, ymin + i + 30, 300, 80).stroke();
-      doc.lineJoin('square').rect(350, ymin + i + 30, 300, 80).stroke();
+      doc.lineJoin('square').rect(35, ymin + i + 30, 350, 80).stroke();
+      doc.lineJoin('square').rect(410, ymin + i + 30, 350, 80).stroke();
       doc.fontSize(12)
       doc.y = ymin + i + 40;
-      doc.x = 110;
+      doc.x = 140;
       doc.fillColor('black');
       doc.text('Autorizado para Traslado');
       doc.y = ymin + i + 65;
@@ -341,12 +341,12 @@ class RelacionDespachoService {
         width: 300,
       });
       doc.y = ymin + i + 40;
-      doc.x = 430;
+      doc.x = 510;
       doc.fillColor('black');
       doc.fontSize(12)
       doc.text('Agente Receptor Entrega');
       doc.y = ymin + i + 60;
-      doc.x = 365;
+      doc.x = 425;
       doc.fontSize(9)
       doc.text('Chofer: Andis Medina - C.I.V V-12313123', {
         align: 'left',
@@ -354,14 +354,14 @@ class RelacionDespachoService {
         width: 300,
       });
       doc.y = ymin + i + 75;
-      doc.x = 365;
+      doc.x = 425;
       doc.text('Vehiculo: Andis Medina - C.I.V V-12313123', {
         align: 'left',
         columns: 1,
         width: 300,
       });
       doc.y = ymin + i + 90;
-      doc.x = 365;
+      doc.x = 425;
       doc.text('Dirección: Andis Medina - C.I.V V-12313123', {
         align: 'left',
         columns: 1,
