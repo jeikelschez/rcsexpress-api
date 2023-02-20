@@ -174,7 +174,7 @@ class RelacionDespachoService {
     doc.y = 189;
     doc.x = 50;
     doc.fillColor('black');
-    doc.fontSize(7);
+    doc.fontSize(6);
   }
 
   async generateCustomerInformation(doc, data, detalle) {
@@ -206,14 +206,14 @@ class RelacionDespachoService {
       });
       doc.y = ymin + i;
       doc.x = 115;
-      doc.text(detalle[item]['agencias.ciudades.siglas'], {
+      doc.text(detalle[item]['agencias_dest.ciudades.siglas'], {
         align: 'center',
         columns: 1,
         width: 67,
       });
       doc.y = ymin + i;
       doc.x = 160;
-      doc.text('BARCELONA');
+      doc.text(detalle[item]['zonas_dest.nb_zona']);
       doc.y = ymin + i;
       doc.x = 167;
       doc.text(detalle[item].nro_piezas, {

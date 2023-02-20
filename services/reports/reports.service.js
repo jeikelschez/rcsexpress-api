@@ -142,6 +142,10 @@ class ReportsService {
             model: models.Ciudades,
             as: 'ciudades'
           }        
+        },
+        {
+          model: models.Zonas,
+          as: 'zonas_dest'
         }
       ],
       attributes: {
