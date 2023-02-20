@@ -14,9 +14,21 @@ class RelacionDespachoService {
       .text('R.I.F. J-31028463-6', 110, 110)
       .text('Fecha: ' + moment().format('DD/MM/YYYY'), 640, 53)
       .fontSize(10)
-      .text('Autorizado Por: ' + data.usuario, 590, 90)
-      .text('Impreso Por: ' + data.usuario, 590, 105)
-      .fontSize(19);
+      doc.y = 90;
+      doc.x = 590;
+      doc.text('Autorizado Por: ' + data.usuario, {
+        align: 'right',
+        columns: 1,
+        width: 150,
+      });
+      doc.y = 105;
+      doc.x = 590;
+      doc.text('Impreso Por: ' + data.usuario, {
+        align: 'right',
+        columns: 1,
+        width: 150,
+      });
+      doc.fontSize(19);
     doc.y = 60;
     doc.x = 150;
     doc.text(
@@ -71,7 +83,7 @@ class RelacionDespachoService {
     });
     doc.fontSize(8);
     doc.y = 166;
-    doc.x = 40;
+    doc.x = 43;
     doc.fillColor('black');
     doc.text('Guia', {
       paragraphGap: 5,
@@ -215,18 +227,18 @@ class RelacionDespachoService {
       doc.x = 160;
       doc.text(detalle[item]['zonas_dest.nb_zona']);
       doc.y = ymin + i;
-      doc.x = 167;
+      doc.x = 185;
       doc.text(detalle[item].nro_piezas, {
-        align: 'center',
+        align: 'right',
         columns: 1,
-        width: 105,
+        width: 40,
       });
       doc.y = ymin + i;
-      doc.x = 187;
+      doc.x = 210;
       doc.text(detalle[item].peso_kgs, {
-        align: 'center',
+        align: 'right',
         columns: 1,
-        width: 105,
+        width: 40,
       });
       doc.y = ymin + i;
       doc.x = 260;
@@ -247,21 +259,21 @@ class RelacionDespachoService {
       doc.y = ymin + i;
       doc.x = 552;
       doc.text('12312', {
-        align: 'center',
+        align: 'right',
         columns: 1,
         width: 40,
       });
       doc.y = ymin + i;
-      doc.x = 605;
+      doc.x = 596;
       doc.text('12312', {
-        align: 'center',
+        align: 'right',
         columns: 1,
         width: 40,
       });
       doc.y = ymin + i;
       doc.x = 657;
       doc.text('12312', {
-        align: 'center',
+        align: 'right',
         columns: 1,
         width: 40,
       });
@@ -276,18 +288,18 @@ class RelacionDespachoService {
       if (i >= 270 || item >= detalle.length - 1) {
         doc
           .lineJoin('square')
-          .rect(35, ymin + i + 30, 350, 80)
+          .rect(35, 490, 350, 80)
           .stroke();
         doc
           .lineJoin('square')
-          .rect(410, ymin + i + 30, 350, 80)
+          .rect(410, 490, 350, 80)
           .stroke();
         doc.fontSize(12);
-        doc.y = ymin + i + 40;
+        doc.y = 500;
         doc.x = 140;
         doc.fillColor('black');
         doc.text('Autorizado para Traslado');
-        doc.y = ymin + i + 65;
+        doc.y = 525;
         doc.x = 50;
         doc.fontSize(9);
         doc.text('Chofer: Andis Medina - C.I.V V-12313123', {
@@ -295,19 +307,19 @@ class RelacionDespachoService {
           columns: 1,
           width: 300,
         });
-        doc.y = ymin + i + 85;
+        doc.y = 550;
         doc.x = 50;
         doc.text('Vehiculo: Andis Medina - C.I.V V-12313123', {
           align: 'left',
           columns: 1,
           width: 300,
         });
-        doc.y = ymin + i + 40;
+        doc.y = 500;
         doc.x = 510;
         doc.fillColor('black');
         doc.fontSize(12);
         doc.text('Agente Receptor Entrega');
-        doc.y = ymin + i + 60;
+        doc.y = 520;
         doc.x = 425;
         doc.fontSize(9);
         doc.text('Chofer: Andis Medina - C.I.V V-12313123', {
@@ -315,14 +327,14 @@ class RelacionDespachoService {
           columns: 1,
           width: 300,
         });
-        doc.y = ymin + i + 75;
+        doc.y = 535;
         doc.x = 425;
         doc.text('Vehiculo: Andis Medina - C.I.V V-12313123', {
           align: 'left',
           columns: 1,
           width: 300,
         });
-        doc.y = ymin + i + 90;
+        doc.y = 550;
         doc.x = 425;
         doc.text('Dirección: Andis Medina - C.I.V V-12313123', {
           align: 'left',
@@ -338,15 +350,16 @@ class RelacionDespachoService {
         }
       }
     }
+    doc.fontSize(8);
     doc.y = ymin + i + 10;
-          doc.x = 30;
+          doc.x = 28;
           doc.text('Total Guias: 3', {
             align: 'center',
             columns: 1,
             width: 70,
           });
           doc.y = ymin + i + 10;
-          doc.x = 150;
+          doc.x = 161;
           doc.text('Total Piezas: 8', {
             align: 'center',
             columns: 1,
@@ -360,32 +373,35 @@ class RelacionDespachoService {
             width: 105,
           });
           doc.y = ymin + i + 10;
-          doc.x = 503;
-          doc.text('Total: 170', {
-            align: 'center',
+          doc.x = 530;
+          doc.text('Totales:');
+          doc.y = ymin + i + 10;
+          doc.x = 552;
+          doc.text('12312', {
+            align: 'right',
             columns: 1,
-            width: 105,
+            width: 40,
           });
           doc.y = ymin + i + 10;
-          doc.x = 556;
-          doc.text('Total: 170', {
-            align: 'center',
+          doc.x = 596;
+          doc.text('12312', {
+            align: 'right',
             columns: 1,
-            width: 105,
-          });
-          doc.y = ymin + i + 10;
-          doc.x = 608;
-          doc.text('Total: 170', {
-            align: 'center',
-            columns: 1,
-            width: 105,
+            width: 40,
           });
           doc.y = ymin + i + 10;
           doc.x = 657;
-          doc.text('Total: 170', {
+          doc.text('12312', {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          });
+          doc.y = ymin + i + 10;
+          doc.x = 705;
+          doc.text('12312', {
             align: 'center',
             columns: 1,
-            width: 105,
+            width: 40,
           });
     var end;
     const range = doc.bufferedPageRange();
@@ -398,8 +414,12 @@ class RelacionDespachoService {
       doc.fontSize(12);
       doc.fillColor('#444444')
       doc.x = 640;
-      doc.y = 70;
-      doc.text(`Pagina ${i + 1} de ${range.count}`);
+      doc.y = 71;
+      doc.text(`Pagina ${i + 1} de ${range.count}`, {
+        align: 'right',
+        columns: 1,
+        width: 100,
+      });
     }
   }
 }
