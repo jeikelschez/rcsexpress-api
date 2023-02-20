@@ -119,7 +119,7 @@ class ReportsService {
   // REPORTE RELACION DESPACHO
   async relacionDespacho(data, detalle) {
     data = JSON.parse(data);
-    let doc = new PDFDocument({ margin: 50, bufferPages: true, layout: 'landscape'});
+    let doc = new PDFDocument({ margin: 10, bufferPages: true, layout: 'landscape'});
     let dataDetalle = await models.Mmovimientos.findAll({
       where: {
         nro_documento: {

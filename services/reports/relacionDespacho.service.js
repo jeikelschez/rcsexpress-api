@@ -6,8 +6,7 @@ const utils = new UtilsService();
 
 class RelacionDespachoService {
   async generateHeader(doc, data) {
-    doc
-      .image('./img/logo_rc.png', 50, 45, { width: 50 })
+    doc.image('./img/logo_rc.png', 50, 45, { width: 50 })
       .fillColor('#444444')
       .fontSize(12)
       .font('Helvetica-Bold')
@@ -15,13 +14,13 @@ class RelacionDespachoService {
       .text('R.I.F. J-31028463-6', 110, 110)
       .text('Fecha: ' + moment().format('DD/MM/YYYY'), 640, 53)
       .fontSize(10)
-      .text('Autorizado Por: ' + data.usuario, 620, 90)
-      .text('Impreso Por: ' + data.usuario, 620, 105)
+      .text('Autorizado Por: ' + data.usuario, 590, 90)
+      .text('Impreso Por: ' + data.usuario, 590, 105)
       .fontSize(19);
-    doc.y = 50;
+    doc.y = 60;
     doc.x = 150;
     doc.text(
-      'Relación de Despacho Agrupada por Zonas para la Agencia Destino',
+      'Relación de Despacho para la Agencia',
       {
         align: 'center',
         columns: 1,
@@ -29,19 +28,19 @@ class RelacionDespachoService {
       }
     );
     doc.fontSize(13);
-    doc.y = 100;
+    doc.y = 90;
     doc.x = 240;
     doc.text('VALENCIA, RCS EXPRESSS S.A', {
       align: 'center',
       columns: 1,
       width: 300,
     });
-    doc.text('Desde: ' + data.fecha_desde, 270, 120);
-    doc.text('Hasta: ' + data.fecha_hasta, 400, 120);
+    doc.text('Desde: ' + data.fecha_desde, 270, 110);
+    doc.text('Hasta: ' + data.fecha_hasta, 400, 110);
     doc.moveDown();
     doc.fontSize(9);
-    doc.lineJoin('miter').rect(35, 140, 192, 20).stroke();
-    doc.lineJoin('miter').rect(227, 140, 318, 20).stroke();
+    doc.lineJoin('miter').rect(35, 140, 217, 20).stroke();
+    doc.lineJoin('miter').rect(252, 140, 293, 20).stroke();
     doc.lineJoin('miter').rect(545, 140, 209, 20).stroke();
     doc.y = 146;
     doc.x = 63;
@@ -70,6 +69,7 @@ class RelacionDespachoService {
       align: 'justify',
       columns: 1,
     });
+    doc.fontSize(8);
     doc.y = 166;
     doc.x = 40;
     doc.fillColor('black');
@@ -80,7 +80,7 @@ class RelacionDespachoService {
       columns: 1,
     });
     doc.y = 166;
-    doc.x = 82;
+    doc.x = 75;
     doc.fillColor('black');
     doc.text('Emision', {
       paragraphGap: 5,
@@ -89,9 +89,18 @@ class RelacionDespachoService {
       columns: 1,
     });
     doc.y = 166;
-    doc.x = 125;
+    doc.x = 118;
     doc.fillColor('black');
-    doc.text('Origen', {
+    doc.text('O.', {
+      paragraphGap: 5,
+      indent: 5,
+      align: 'justify',
+      columns: 1,
+    });
+    doc.y = 166;
+    doc.x = 138;
+    doc.fillColor('black');
+    doc.text('D.', {
       paragraphGap: 5,
       indent: 5,
       align: 'justify',
@@ -100,7 +109,7 @@ class RelacionDespachoService {
     doc.y = 166;
     doc.x = 160;
     doc.fillColor('black');
-    doc.text('Piezas', {
+    doc.text('Zona D.', {
       paragraphGap: 5,
       indent: 5,
       align: 'justify',
@@ -109,6 +118,15 @@ class RelacionDespachoService {
     doc.y = 166;
     doc.x = 195;
     doc.fillColor('black');
+    doc.text('Piezas.', {
+      paragraphGap: 5,
+      indent: 5,
+      align: 'justify',
+      columns: 1,
+    });
+    doc.y = 166;
+    doc.x = 226;
+    doc.fillColor('black');
     doc.text('Kgs.', {
       paragraphGap: 5,
       indent: 5,
@@ -116,7 +134,7 @@ class RelacionDespachoService {
       columns: 1,
     });
     doc.y = 166;
-    doc.x = 230;
+    doc.x = 255;
     doc.fillColor('black');
     doc.text('Remitente', {
       paragraphGap: 5,
@@ -125,7 +143,7 @@ class RelacionDespachoService {
       columns: 1,
     });
     doc.y = 166;
-    doc.x = 381;
+    doc.x = 384;
     doc.fillColor('black');
     doc.text('Destinatario', {
       paragraphGap: 5,
@@ -149,22 +167,20 @@ class RelacionDespachoService {
     doc.x = 705;
     doc.fillColor('black');
     doc.text('Destino');
-    doc.lineJoin('miter').rect(35, 160, 192, 20).stroke();
-    doc.lineJoin('miter').rect(227, 160, 318, 20).stroke();
+    doc.lineJoin('miter').rect(35, 160, 217, 20).stroke();
+    doc.lineJoin('miter').rect(252, 160, 293, 20).stroke();
     doc.lineJoin('miter').rect(545, 160, 105, 20).stroke();
     doc.lineJoin('miter').rect(649, 160, 105, 20).stroke();
     doc.y = 189;
     doc.x = 50;
     doc.fillColor('black');
-    doc.fontSize(12);
-    doc.text('Zona Destino: VALENCIA');
-    doc.fontSize(9);
+    doc.fontSize(7);
   }
 
   async generateCustomerInformation(doc, data, detalle) {
     var i = 0;
     var page = 0;
-    var ymin = 210;
+    var ymin = 190;
 
     for (var item = 0; item < detalle.length; item++) {
       doc.y = ymin + i;
@@ -175,100 +191,89 @@ class RelacionDespachoService {
         width: 50,
       });
       doc.y = ymin + i;
-      doc.x = 82;
+      doc.x = 75;
       doc.text(moment(detalle[item].fecha_emision).format('DD/MM/YYYY'), {
         align: 'center',
         columns: 1,
         width: 47,
       });
       doc.y = ymin + i;
-      doc.x = 110;
+      doc.x = 95;
       doc.text(detalle[item]['agencias.ciudades.siglas'], {
         align: 'center',
         columns: 1,
         width: 67,
       });
       doc.y = ymin + i;
-      doc.x = 125;
+      doc.x = 115;
+      doc.text(detalle[item]['agencias.ciudades.siglas'], {
+        align: 'center',
+        columns: 1,
+        width: 67,
+      });
+      doc.y = ymin + i;
+      doc.x = 160;
+      doc.text('BARCELONA');
+      doc.y = ymin + i;
+      doc.x = 167;
       doc.text(detalle[item].nro_piezas, {
         align: 'center',
         columns: 1,
         width: 105,
       });
       doc.y = ymin + i;
-      doc.x = 155;
+      doc.x = 187;
       doc.text(detalle[item].peso_kgs, {
         align: 'center',
         columns: 1,
         width: 105,
       });
       doc.y = ymin + i;
-      doc.x = 230;
-      doc.text(detalle[item].cliente_orig_desc, {
-        align: 'center',
+      doc.x = 260;
+      doc.text(utils.truncate(detalle[item].cliente_orig_desc, 30), {
+        align: 'left',
         columns: 1,
         width: 150,
       });
       doc.y = ymin + i;
-      doc.x = 375;
-      doc.text(detalle[item].cliente_dest_desc, {
-        align: 'center',
-        columns: 1,
-        width: 180,
-      });
+      doc.x = 390;
+      if (detalle[item].cliente_dest_desc) {
+        doc.text(utils.truncate(detalle[item].cliente_dest_desc, 30), {
+          align: 'left',
+          columns: 1,
+          width: 150,
+        });
+      }
       doc.y = ymin + i;
-      doc.x = 547;
+      doc.x = 552;
       doc.text('12312', {
         align: 'center',
         columns: 1,
         width: 40,
       });
       doc.y = ymin + i;
-      doc.x = 600;
+      doc.x = 605;
       doc.text('12312', {
         align: 'center',
         columns: 1,
         width: 40,
       });
       doc.y = ymin + i;
-      doc.x = 653;
+      doc.x = 657;
       doc.text('12312', {
         align: 'center',
         columns: 1,
         width: 40,
       });
       doc.y = ymin + i;
-      doc.x = 700;
+      doc.x = 705;
       doc.text('12312', {
         align: 'center',
         columns: 1,
         width: 40,
       });
-      i = i + 15;
-      if (i >= 230 || item >= 30) {
-        if (item >= 30) {
-          doc.y = ymin + i + 10;
-          doc.x = 30;
-          doc.text('Total Guias: 3', {
-            align: 'center',
-            columns: 1,
-            width: 70,
-          });
-          doc.y = ymin + i + 10;
-          doc.x = 113;
-          doc.text('Total Piezas: 8', {
-            align: 'center',
-            columns: 1,
-            width: 67,
-          });
-          doc.y = ymin + i + 10;
-          doc.x = 175;
-          doc.text('170 Total Kgs', {
-            align: 'center',
-            columns: 1,
-            width: 105,
-          });
-        }
+      i = i + 10;
+      if (i >= 270 || item >= detalle.length - 1) {
         doc
           .lineJoin('square')
           .rect(35, ymin + i + 30, 350, 80)
@@ -324,7 +329,7 @@ class RelacionDespachoService {
           columns: 1,
           width: 300,
         });
-        if (!(item >= 30)) {
+        if (!(item >= detalle.length - 1)) {
           doc.addPage();
           page = page + 1;
           doc.switchToPage(page);
@@ -333,6 +338,55 @@ class RelacionDespachoService {
         }
       }
     }
+    doc.y = ymin + i + 10;
+          doc.x = 30;
+          doc.text('Total Guias: 3', {
+            align: 'center',
+            columns: 1,
+            width: 70,
+          });
+          doc.y = ymin + i + 10;
+          doc.x = 150;
+          doc.text('Total Piezas: 8', {
+            align: 'center',
+            columns: 1,
+            width: 67,
+          });
+          doc.y = ymin + i + 10;
+          doc.x = 210;
+          doc.text('170 Total Kgs', {
+            align: 'center',
+            columns: 1,
+            width: 105,
+          });
+          doc.y = ymin + i + 10;
+          doc.x = 503;
+          doc.text('Total: 170', {
+            align: 'center',
+            columns: 1,
+            width: 105,
+          });
+          doc.y = ymin + i + 10;
+          doc.x = 556;
+          doc.text('Total: 170', {
+            align: 'center',
+            columns: 1,
+            width: 105,
+          });
+          doc.y = ymin + i + 10;
+          doc.x = 608;
+          doc.text('Total: 170', {
+            align: 'center',
+            columns: 1,
+            width: 105,
+          });
+          doc.y = ymin + i + 10;
+          doc.x = 657;
+          doc.text('Total: 170', {
+            align: 'center',
+            columns: 1,
+            width: 105,
+          });
     var end;
     const range = doc.bufferedPageRange();
     for (
@@ -342,6 +396,7 @@ class RelacionDespachoService {
     ) {
       doc.switchToPage(i);
       doc.fontSize(12);
+      doc.fillColor('#444444')
       doc.x = 640;
       doc.y = 70;
       doc.text(`Pagina ${i + 1} de ${range.count}`);
