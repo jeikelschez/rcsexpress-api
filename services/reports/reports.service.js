@@ -13,6 +13,31 @@ const anexoFacturaService = new AnexoFacturaService();
 const RelacionDespachoService = require('./relacionDespacho.service');
 const relacionDespachoService = new RelacionDespachoService();
 
+const clienteOrigDesc =
+  '(CASE WHEN (ci_rif_cte_conta_org IS NULL || ci_rif_cte_conta_org = "")' +
+  ' THEN (SELECT nb_cliente' +
+  ' FROM clientes ' +
+  ' WHERE `Mmovimientos`.cod_cliente_org = clientes.id)' +
+  ' ELSE (SELECT nb_cliente' +
+  ' FROM clientes_particulares' +
+  ' WHERE `Mmovimientos`.cod_agencia = clientes_particulares.cod_agencia' +
+  ' AND `Mmovimientos`.cod_cliente_org = clientes_particulares.cod_cliente' +
+  ' AND `Mmovimientos`.ci_rif_cte_conta_org = clientes_particulares.rif_ci' +
+  ' AND clientes_particulares.estatus = "A" LIMIT 1)' +
+  ' END)';
+const clienteDestDesc =
+  '(CASE WHEN (ci_rif_cte_conta_dest IS NULL || ci_rif_cte_conta_dest = "")' +
+  ' THEN (SELECT nb_cliente' +
+  ' FROM clientes ' +
+  ' WHERE `Mmovimientos`.cod_cliente_dest = clientes.id)' +
+  ' ELSE (SELECT nb_cliente' +
+  ' FROM clientes_particulares' +
+  ' WHERE `Mmovimientos`.cod_agencia_dest = clientes_particulares.cod_agencia' +
+  ' AND `Mmovimientos`.cod_cliente_dest = clientes_particulares.cod_cliente' +
+  ' AND `Mmovimientos`.ci_rif_cte_conta_dest = clientes_particulares.rif_ci' +
+  ' AND clientes_particulares.estatus = "A" LIMIT 1)' +
+  ' END)';
+
 class ReportsService {
   constructor() {}
 
@@ -92,12 +117,13 @@ class ReportsService {
   }
 
   // REPORTE RELACION DESPACHO
-  async relacionDespacho(data) {
+  async relacionDespacho(data, detalle) {
+    data = JSON.parse(data);
     let doc = new PDFDocument({ margin: 50, bufferPages: true, layout: 'landscape'});
-    let detalle = await models.Mmovimientos.findAll({
+    let dataDetalle = await models.Mmovimientos.findAll({
       where: {
         nro_documento: {
-          [Sequelize.Op.in]: data.split(','),
+          [Sequelize.Op.in]: detalle.split(','),
         }
       },
       include: [
@@ -118,13 +144,22 @@ class ReportsService {
           }        
         }
       ],
+      attributes: {
+        include: [
+          [Sequelize.literal(clienteOrigDesc), 'cliente_orig_desc'],
+          [Sequelize.literal(clienteDestDesc), 'cliente_dest_desc'],
+        ],
+      },
+      order: [
+        ['nro_documento', 'ASC']
+      ],
       raw: true,
     });
-    await relacionDespachoService.generateHeader(doc, data, detalle);
+    await relacionDespachoService.generateHeader(doc, data);
     await relacionDespachoService.generateCustomerInformation(
       doc,
       data,
-      detalle
+      dataDetalle
     );
     doc.end();
     var encoder = new base64.Base64Encode();

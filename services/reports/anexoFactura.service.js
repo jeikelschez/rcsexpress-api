@@ -21,21 +21,13 @@ class AnexoFacturaService {
       });
     }
 
-    let fecha_emision_init =
-      detalle[0].fecha_emision.substring(8, 10) +
-      '/' +
-      detalle[0].fecha_emision.substring(5, 7) +
-      '/' +
-      detalle[0].fecha_emision.substring(0, 4);
+    let fecha_emision_init = moment(detalle[0].fecha_emision).format(
+      'DD/MM/YYYY'
+    );
+    let fecha_emision_end = moment(
+      detalle[detalle.length - 1].fecha_emision
+    ).format('DD/MM/YYYY');
 
-    let fecha_emision_end =
-      detalle[detalle.length - 1].fecha_emision.substring(8, 10) +
-      '/' +
-      detalle[detalle.length - 1].fecha_emision.substring(5, 7) +
-      '/' +
-      detalle[detalle.length - 1].fecha_emision.substring(0, 4);
-
-    moment.locale('es');
     doc
       .image('./img/logo_rc.png', 50, 45, { width: 50 })
       .fillColor('#444444')
@@ -44,7 +36,7 @@ class AnexoFacturaService {
       .text('RCS Express, S.A', 110, 50)
       .text('R.I.F. J-31028463-6', 110, 70)
       .fontSize(12)
-      .text('Valencia, ' + moment().format('LL'), 200, 50, { align: 'right' })
+      .text('Valencia, ' + moment().format('DD/MM/YYYY'), 200, 50, { align: 'right' })
       .fontSize(16)
       .text('Informe de Ventas Realizadas', 200, 110)
       .fontSize(11);
@@ -158,7 +150,7 @@ class AnexoFacturaService {
         '/' +
         detalle[item].fecha_envio.substring(5, 7) +
         '/' +
-        detalle[item].fecha_envio.substring(0, 4);      
+        detalle[item].fecha_envio.substring(0, 4);
 
       base += utils.parseFloatN(detalle[item].monto_base);
       impuesto += utils.parseFloatN(detalle[item].monto_impuesto);

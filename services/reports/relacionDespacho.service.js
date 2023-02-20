@@ -5,57 +5,30 @@ const UtilsService = require('../utils.service');
 const utils = new UtilsService();
 
 class RelacionDespachoService {
-  async generateHeader(doc, data, detalle) {
-    let cliente_orig;
-
-    if (data.id_clte_part_orig) {
-      cliente_orig = await models.Cparticulares.findByPk(
-        data.id_clte_part_orig,
-        {
-          raw: true,
-        }
-      );
-    } else {
-      cliente_orig = await models.Clientes.findByPk(data.cod_cliente_org, {
-        raw: true,
-      });
-    }
-
-    let fecha_emision_init =
-      detalle[0].fecha_emision.substring(8, 10) +
-      '/' +
-      detalle[0].fecha_emision.substring(5, 7) +
-      '/' +
-      detalle[0].fecha_emision.substring(0, 4);
-
-    let fecha_emision_end =
-      detalle[detalle.length - 1].fecha_emision.substring(8, 10) +
-      '/' +
-      detalle[detalle.length - 1].fecha_emision.substring(5, 7) +
-      '/' +
-      detalle[detalle.length - 1].fecha_emision.substring(0, 4);
-
-    moment.locale('es');
+  async generateHeader(doc, data) {
     doc
-    .image('./img/logo_rc.png', 50, 45, { width: 50 })
-    .fillColor('#444444')
-    .fontSize(12)
-    .font('Helvetica-Bold')
-    .text('RCS Express, S.A', 110, 95)
-    .text('R.I.F. J-31028463-6', 110, 110)
-    .text('Fecha: 15/02/2023', 640, 53)
-    .fontSize(10)
-    .text('Autorizado Por: Valencia', 620, 90)
-    .text('Impreso Por: Caracas', 620, 105)
-    .fontSize(19)
+      .image('./img/logo_rc.png', 50, 45, { width: 50 })
+      .fillColor('#444444')
+      .fontSize(12)
+      .font('Helvetica-Bold')
+      .text('RCS Express, S.A', 110, 95)
+      .text('R.I.F. J-31028463-6', 110, 110)
+      .text('Fecha: ' + moment().format('DD/MM/YYYY'), 640, 53)
+      .fontSize(10)
+      .text('Autorizado Por: ' + data.usuario, 620, 90)
+      .text('Impreso Por: ' + data.usuario, 620, 105)
+      .fontSize(19);
     doc.y = 50;
     doc.x = 150;
-    doc.text('Relación de Despacho Agrupada por Zonas para la Agencia Destino', {
-      align: 'center',
-      columns: 1,
-      width: 490,
-    });
-    doc.fontSize(13)
+    doc.text(
+      'Relación de Despacho Agrupada por Zonas para la Agencia Destino',
+      {
+        align: 'center',
+        columns: 1,
+        width: 490,
+      }
+    );
+    doc.fontSize(13);
     doc.y = 100;
     doc.x = 240;
     doc.text('VALENCIA, RCS EXPRESSS S.A', {
@@ -63,8 +36,8 @@ class RelacionDespachoService {
       columns: 1,
       width: 300,
     });
-    doc.text('Desde: ' + fecha_emision_init, 270, 120);
-    doc.text('Hasta: ' + fecha_emision_end, 400, 120);
+    doc.text('Desde: ' + data.fecha_desde, 270, 120);
+    doc.text('Hasta: ' + data.fecha_hasta, 400, 120);
     doc.moveDown();
     doc.fontSize(9);
     doc.lineJoin('miter').rect(35, 140, 192, 20).stroke();
@@ -183,82 +156,62 @@ class RelacionDespachoService {
     doc.y = 189;
     doc.x = 50;
     doc.fillColor('black');
-    doc.fontSize(12)
-    doc.text('Zona Destino: VALENCIA')
-    doc.fontSize(9)
+    doc.fontSize(12);
+    doc.text('Zona Destino: VALENCIA');
+    doc.fontSize(9);
   }
 
   async generateCustomerInformation(doc, data, detalle) {
     var i = 0;
     var page = 0;
     var ymin = 210;
-    let base = 0;
-    let impuesto = 0;
-    let total = 0;
 
-    let descuento = utils.parseFloatN(data.monto_descuento) * -1;
-    let descuento_impuesto =
-      (descuento * utils.parseFloatN(data.porc_impuesto)) / 100;
-
-    for (var item = 0; item <= 30; item++) {
-      let fecha_envio =
-        detalle[item].fecha_envio.substring(8, 10) +
-        '/' +
-        detalle[item].fecha_envio.substring(5, 7) +
-        '/' +
-        detalle[item].fecha_envio.substring(0, 4);
-
-      base += utils.parseFloatN(detalle[item].monto_base);
-      impuesto += utils.parseFloatN(detalle[item].monto_impuesto);
-      total += utils.parseFloatN(detalle[item].monto_total);
-
+    for (var item = 0; item < detalle.length; item++) {
       doc.y = ymin + i;
       doc.x = 33;
-      doc.text('CG 12313',
-        {
-          align: 'center',
-          columns: 1,
-          width: 50,
-        }
-      );
+      doc.text(detalle[item].nro_documento, {
+        align: 'center',
+        columns: 1,
+        width: 50,
+      });
       doc.y = ymin + i;
       doc.x = 82;
-      doc.text(fecha_envio, {
+      doc.text(moment(detalle[item].fecha_emision).format('DD/MM/YYYY'), {
         align: 'center',
         columns: 1,
         width: 47,
       });
       doc.y = ymin + i;
       doc.x = 110;
-      doc.text('VZL', {
+      doc.text(detalle[item]['agencias.ciudades.siglas'], {
         align: 'center',
         columns: 1,
         width: 67,
       });
       doc.y = ymin + i;
       doc.x = 125;
-      doc.text('5', {
+      doc.text(detalle[item].nro_piezas, {
         align: 'center',
         columns: 1,
         width: 105,
       });
       doc.y = ymin + i;
       doc.x = 155;
-      doc.text('12.2', {
+      doc.text(detalle[item].peso_kgs, {
         align: 'center',
         columns: 1,
         width: 105,
       });
       doc.y = ymin + i;
       doc.x = 230;
-      doc.text('COMERCIALIZADORA CIERO, C.A', {
+      doc.text(detalle[item].cliente_orig_desc, {
         align: 'center',
         columns: 1,
         width: 150,
       });
       doc.y = ymin + i;
       doc.x = 375;
-      doc.text('NERIO ALBERTO MOLINA CASTILLA', {
+      doc.text(detalle[item].cliente_dest_desc, {
         align: 'center',
         columns: 1,
         width: 180,
@@ -292,17 +245,15 @@ class RelacionDespachoService {
         width: 40,
       });
       i = i + 15;
-      if ((i >= 230) || (item >= 30)) {
+      if (i >= 230 || item >= 30) {
         if (item >= 30) {
           doc.y = ymin + i + 10;
           doc.x = 30;
-          doc.text('Total Guias: 3',
-            {
-              align: 'center',
-              columns: 1,
-              width: 70,
-            }
-          );
+          doc.text('Total Guias: 3', {
+            align: 'center',
+            columns: 1,
+            width: 70,
+          });
           doc.y = ymin + i + 10;
           doc.x = 113;
           doc.text('Total Piezas: 8', {
@@ -318,62 +269,68 @@ class RelacionDespachoService {
             width: 105,
           });
         }
-      doc.lineJoin('square').rect(35, ymin + i + 30, 350, 80).stroke();
-      doc.lineJoin('square').rect(410, ymin + i + 30, 350, 80).stroke();
-      doc.fontSize(12)
-      doc.y = ymin + i + 40;
-      doc.x = 140;
-      doc.fillColor('black');
-      doc.text('Autorizado para Traslado');
-      doc.y = ymin + i + 65;
-      doc.x = 50;
-      doc.fontSize(9)
-      doc.text('Chofer: Andis Medina - C.I.V V-12313123', {
-        align: 'left',
-        columns: 1,
-        width: 300,
-      });
-      doc.y = ymin + i + 85;
-      doc.x = 50;
-      doc.text('Vehiculo: Andis Medina - C.I.V V-12313123', {
-        align: 'left',
-        columns: 1,
-        width: 300,
-      });
-      doc.y = ymin + i + 40;
-      doc.x = 510;
-      doc.fillColor('black');
-      doc.fontSize(12)
-      doc.text('Agente Receptor Entrega');
-      doc.y = ymin + i + 60;
-      doc.x = 425;
-      doc.fontSize(9)
-      doc.text('Chofer: Andis Medina - C.I.V V-12313123', {
-        align: 'left',
-        columns: 1,
-        width: 300,
-      });
-      doc.y = ymin + i + 75;
-      doc.x = 425;
-      doc.text('Vehiculo: Andis Medina - C.I.V V-12313123', {
-        align: 'left',
-        columns: 1,
-        width: 300,
-      });
-      doc.y = ymin + i + 90;
-      doc.x = 425;
-      doc.text('Dirección: Andis Medina - C.I.V V-12313123', {
-        align: 'left',
-        columns: 1,
-        width: 300,
-      });
-      if (!(item >= 30)) {
-        doc.addPage();
-        page = page + 1;
-        doc.switchToPage(page);
-        i = 0;
-        await this.generateHeader(doc, data, detalle);
-      }
+        doc
+          .lineJoin('square')
+          .rect(35, ymin + i + 30, 350, 80)
+          .stroke();
+        doc
+          .lineJoin('square')
+          .rect(410, ymin + i + 30, 350, 80)
+          .stroke();
+        doc.fontSize(12);
+        doc.y = ymin + i + 40;
+        doc.x = 140;
+        doc.fillColor('black');
+        doc.text('Autorizado para Traslado');
+        doc.y = ymin + i + 65;
+        doc.x = 50;
+        doc.fontSize(9);
+        doc.text('Chofer: Andis Medina - C.I.V V-12313123', {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+        doc.y = ymin + i + 85;
+        doc.x = 50;
+        doc.text('Vehiculo: Andis Medina - C.I.V V-12313123', {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+        doc.y = ymin + i + 40;
+        doc.x = 510;
+        doc.fillColor('black');
+        doc.fontSize(12);
+        doc.text('Agente Receptor Entrega');
+        doc.y = ymin + i + 60;
+        doc.x = 425;
+        doc.fontSize(9);
+        doc.text('Chofer: Andis Medina - C.I.V V-12313123', {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+        doc.y = ymin + i + 75;
+        doc.x = 425;
+        doc.text('Vehiculo: Andis Medina - C.I.V V-12313123', {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+        doc.y = ymin + i + 90;
+        doc.x = 425;
+        doc.text('Dirección: Andis Medina - C.I.V V-12313123', {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+        if (!(item >= 30)) {
+          doc.addPage();
+          page = page + 1;
+          doc.switchToPage(page);
+          i = 0;
+          await this.generateHeader(doc, data);
+        }
       }
     }
     var end;
@@ -384,7 +341,7 @@ class RelacionDespachoService {
       i++
     ) {
       doc.switchToPage(i);
-      doc.fontSize(12)
+      doc.fontSize(12);
       doc.x = 640;
       doc.y = 70;
       doc.text(`Pagina ${i + 1} de ${range.count}`);
