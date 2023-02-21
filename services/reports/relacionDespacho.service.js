@@ -32,7 +32,7 @@ class RelacionDespachoService {
     doc.fontSize(19);
     doc.y = 60;
     doc.x = 150;
-    doc.text('Relación de Despacho para la Agencia', {
+    doc.text(data.nombreReporte, {
       align: 'center',
       columns: 1,
       width: 490,
