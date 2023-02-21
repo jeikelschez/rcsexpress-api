@@ -49,31 +49,10 @@ class RelacionDespachoService {
     doc.text('Hasta: ' + data.fecha_hasta, 400, 110);
     doc.moveDown();
     doc.fontSize(9);
-    doc.lineJoin('miter').rect(35, 140, 217, 20).stroke();
-    doc.lineJoin('miter').rect(252, 140, 293, 20).stroke();
-    doc.lineJoin('miter').rect(545, 140, 209, 20).stroke();
     doc.y = 146;
     doc.x = 63;
     doc.fillColor('black');
     doc.text('DATOS DEL DOCUMENTO', {
-      paragraphGap: 5,
-      indent: 5,
-      align: 'justify',
-      columns: 1,
-    });
-    doc.y = 146;
-    doc.x = 346;
-    doc.fillColor('black');
-    doc.text('CLIENTE', {
-      paragraphGap: 5,
-      indent: 5,
-      align: 'justify',
-      columns: 1,
-    });
-    doc.y = 146;
-    doc.x = 590;
-    doc.fillColor('black');
-    doc.text('MODALIDAD DE PAGO', {
       paragraphGap: 5,
       indent: 5,
       align: 'justify',
@@ -143,48 +122,164 @@ class RelacionDespachoService {
       align: 'justify',
       columns: 1,
     });
-    doc.y = 166;
-    doc.x = 255;
-    doc.fillColor('black');
-    doc.text('Remitente', {
-      paragraphGap: 5,
-      indent: 5,
-      align: 'justify',
-      columns: 1,
-    });
-    doc.y = 166;
-    doc.x = 384;
-    doc.fillColor('black');
-    doc.text('Destinatario', {
-      paragraphGap: 5,
-      indent: 5,
-      align: 'justify',
-      columns: 1,
-    });
-    doc.y = 166;
-    doc.x = 555;
-    doc.fillColor('black');
-    doc.text('Origen');
-    doc.y = 166;
-    doc.x = 604;
-    doc.fillColor('black');
-    doc.text('Destino');
-    doc.y = 166;
-    doc.x = 660;
-    doc.fillColor('black');
-    doc.text('Origen');
-    doc.y = 166;
-    doc.x = 705;
-    doc.fillColor('black');
-    doc.text('Destino');
-    doc.lineJoin('miter').rect(35, 160, 217, 20).stroke();
-    doc.lineJoin('miter').rect(252, 160, 293, 20).stroke();
-    doc.lineJoin('miter').rect(545, 160, 105, 20).stroke();
-    doc.lineJoin('miter').rect(649, 160, 105, 20).stroke();
-    doc.y = 189;
-    doc.x = 50;
-    doc.fillColor('black');
-    doc.fontSize(6);
+    if (data.dolar) {
+      doc.fillColor('black');
+      doc.y = 146;
+      doc.x = 337;
+      doc.fillColor('black');
+      doc.text('CLIENTE', {
+        paragraphGap: 5,
+        indent: 5,
+        align: 'justify',
+        columns: 1,
+      });
+      doc.y = 146;
+      doc.x = 590;
+      doc.fillColor('black');
+      doc.text('MODALIDAD DE PAGO', {
+        paragraphGap: 5,
+        indent: 5,
+        align: 'justify',
+        columns: 1,
+      });
+      doc.y = 146;
+      doc.x = 475;
+      doc.fillColor('black');
+      doc.text('VALOR DECLARADO', {
+        paragraphGap: 5,
+        indent: 5,
+        align: 'justify',
+        columns: 1,
+      });
+      doc.y = 158;
+      doc.x = 732;
+      doc.fillColor('black');
+      doc.text('$', {
+        paragraphGap: 5,
+        indent: 5,
+        align: 'justify',
+        columns: 1,
+      });
+      doc.y = 166;
+      doc.x = 255;
+      doc.text('Remitente', {
+        paragraphGap: 5,
+        indent: 5,
+        align: 'justify',
+        columns: 1,
+      });
+      doc.y = 166;
+      doc.x = 367;
+      doc.fillColor('black');
+      doc.text('Destinatario', {
+        paragraphGap: 5,
+        indent: 5,
+        align: 'justify',
+        columns: 1,
+      });
+      doc.y = 166;
+      doc.x = 484;
+      doc.fillColor('black');
+      doc.text('Bolivares');
+      doc.y = 166;
+      doc.x = 545;
+      doc.fillColor('black');
+      doc.text('$');
+      doc.y = 166;
+      doc.x = 577;
+      doc.fillColor('black');
+      doc.text('Origen');
+      doc.y = 166;
+      doc.x = 610;
+      doc.fillColor('black');
+      doc.text('Destino');
+      doc.y = 166;
+      doc.x = 656;
+      doc.fillColor('black');
+      doc.text('Origen');
+      doc.y = 166;
+      doc.x = 688;
+      doc.fillColor('black');
+      doc.text('Destino');
+      doc.y = 189;
+      doc.x = 50;
+      doc.fillColor('black');
+      doc.fontSize(6);
+      doc.lineJoin('miter').rect(35, 140, 217, 20).stroke();
+      doc.lineJoin('miter').rect(252, 140, 220, 20).stroke();
+      doc.lineJoin('miter').rect(472, 140, 97, 20).stroke();
+      doc.lineJoin('miter').rect(569, 140, 155, 20).stroke();
+      doc.lineJoin('miter').rect(724, 140, 30, 40).stroke();
+      doc.lineJoin('miter').rect(35, 160, 217, 20).stroke();
+      doc.lineJoin('miter').rect(252, 160, 220, 20).stroke();
+      doc.lineJoin('miter').rect(472, 160, 97, 20).stroke();
+      doc.lineJoin('miter').rect(569, 160, 80, 20).stroke();
+      doc.lineJoin('miter').rect(649, 160, 75, 20).stroke();
+  } else {
+      doc.fillColor('black');
+      doc.y = 146;
+      doc.x = 346;
+      doc.fillColor('black');
+      doc.text('CLIENTE', {
+        paragraphGap: 5,
+        indent: 5,
+        align: 'justify',
+        columns: 1,
+      });
+      doc.y = 146;
+      doc.x = 590;
+      doc.fillColor('black');
+      doc.text('MODALIDAD DE PAGO', {
+        paragraphGap: 5,
+        indent: 5,
+        align: 'justify',
+        columns: 1,
+      });
+      doc.y = 166;
+      doc.x = 255;
+      doc.text('Remitente', {
+        paragraphGap: 5,
+        indent: 5,
+        align: 'justify',
+        columns: 1,
+      });
+      doc.y = 166;
+      doc.x = 384;
+      doc.fillColor('black');
+      doc.text('Destinatario', {
+        paragraphGap: 5,
+        indent: 5,
+        align: 'justify',
+        columns: 1,
+      });
+      doc.y = 166;
+      doc.x = 555;
+      doc.fillColor('black');
+      doc.text('Origen');
+      doc.y = 166;
+      doc.x = 604;
+      doc.fillColor('black');
+      doc.text('Destino');
+      doc.y = 166;
+      doc.x = 660;
+      doc.fillColor('black');
+      doc.text('Origen');
+      doc.y = 166;
+      doc.x = 705;
+      doc.fillColor('black');
+      doc.text('Destino');
+      doc.y = 189;
+      doc.x = 50;
+      doc.fillColor('black');
+      doc.fontSize(6);
+      doc.lineJoin('miter').rect(35, 140, 217, 20).stroke();
+      doc.lineJoin('miter').rect(252, 140, 293, 20).stroke();
+      doc.lineJoin('miter').rect(545, 140, 209, 20).stroke();
+      doc.lineJoin('miter').rect(35, 160, 217, 20).stroke();
+      doc.lineJoin('miter').rect(252, 160, 293, 20).stroke();
+      doc.lineJoin('miter').rect(545, 160, 105, 20).stroke();
+      doc.lineJoin('miter').rect(649, 160, 105, 20).stroke();
+    }
   }
 
   async generateCustomerInformation(doc, data, detalle) {
@@ -293,7 +388,97 @@ class RelacionDespachoService {
         });
       }
 
+      if (data.dolar) {
+        doc.y = ymin + i;
+      doc.x = 260;
+      doc.text(utils.truncate(detalle[item].cliente_orig_desc, 30), {
+        align: 'left',
+        columns: 1,
+        width: 150,
+      });
       doc.y = ymin + i;
+      doc.x = 370;
+      if (detalle[item].cliente_dest_desc) {
+        doc.text(utils.truncate(detalle[item].cliente_dest_desc, 27), {
+          align: 'left',
+          columns: 1,
+          width: 150,
+        });
+      }
+      doc.y = ymin + i;
+      doc.x = 480;
+      doc.text(utils.truncate('1.232.232', 9), {
+        align: 'right',
+        columns: 1,
+        width: 40,
+      });
+      doc.y = ymin + i;
+      doc.x = 522;
+      doc.text(utils.truncate('9.999', 5), {
+        align: 'right',
+        columns: 1,
+        width: 40,
+      });
+      if (data.visible == 'V') {
+        doc.y = ymin + i;
+        doc.x = 565;
+        doc.text(
+          detalle[item].modalidad_pago == 'CR' && detalle[item].pagado_en == 'O'
+            ? monto_total
+            : '0,00',
+          {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          }
+        );
+        doc.y = ymin + i;
+        doc.x = 600;
+        doc.text(
+          detalle[item].modalidad_pago == 'CR' && detalle[item].pagado_en == 'D'
+            ? monto_total
+            : '0,00',
+          {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          }
+        );
+        doc.y = ymin + i;
+        doc.x = 645;
+        doc.text(
+          detalle[item].modalidad_pago == 'CO' && detalle[item].pagado_en == 'O'
+            ? monto_total
+            : '0,00',
+          {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          }
+        );
+        doc.y = ymin + i;
+        doc.x = 680;
+        doc.text(
+          detalle[item].modalidad_pago == 'CO' && detalle[item].pagado_en == 'D'
+            ? monto_total
+            : '0,00',
+          {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          }
+        );
+        doc.y = ymin + i;
+        doc.x = 713;
+        doc.text(utils.truncate('9.999', 5), {
+          align: 'right',
+          columns: 1,
+          width: 40,
+        });
+      }
+      }
+      else {
+        doc.y = ymin + i;
       doc.x = 260;
       doc.text(utils.truncate(detalle[item].cliente_orig_desc, 30), {
         align: 'left',
@@ -359,6 +544,7 @@ class RelacionDespachoService {
             width: 40,
           }
         );
+      }
       }
 
       i = i + 9;
@@ -495,9 +681,72 @@ class RelacionDespachoService {
     }    
 
     if (data.visible == 'V') {
-      doc.y = y;
-      doc.x = 530;
-      doc.text('Totales:');
+      if (data.dolar) {
+        doc.y = y;
+        doc.x = 450;
+        doc.text('Totales:');
+        doc.y = y;
+        doc.x = 480;
+        doc.text(utils.truncate('1.232.232', 9), {
+          align: 'right',
+          columns: 1,
+          width: 40,
+        });
+        doc.y = y;
+        doc.x = 522;
+        doc.text(utils.truncate('9.999', 5), {
+          align: 'right',
+          columns: 1,
+          width: 40,
+        });
+          doc.y = y;
+          doc.x = 565;
+          doc.text(
+            '9.999',
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+          doc.y = y;
+          doc.x = 600;
+          doc.text(
+            '9.999',
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+          doc.y = y;
+          doc.x = 645;
+          doc.text(
+            '9.999',
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+          doc.y = y;
+          doc.x = 680;
+          doc.text(
+            '9.999',
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+          doc.y = y;
+          doc.x = 713;
+          doc.text(utils.truncate('9.999', 5), {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          });
+      } else {
       doc.y = y;
       doc.x = 552;
       doc.text(
@@ -565,7 +814,7 @@ class RelacionDespachoService {
           columns: 1,
           width: 40,
         }
-      );
+      );}
     }
     var end;
     const range = doc.bufferedPageRange();
