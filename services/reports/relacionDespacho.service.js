@@ -6,43 +6,41 @@ const utils = new UtilsService();
 
 class RelacionDespachoService {
   async generateHeader(doc, data) {
-    doc.image('./img/logo_rc.png', 50, 45, { width: 50 })
+    doc
+      .image('./img/logo_rc.png', 50, 45, { width: 50 })
       .fillColor('#444444')
       .fontSize(12)
       .font('Helvetica-Bold')
       .text('RCS Express, S.A', 110, 95)
       .text('R.I.F. J-31028463-6', 110, 110)
       .text('Fecha: ' + moment().format('DD/MM/YYYY'), 640, 53)
-      .fontSize(10)
-      doc.y = 90;
-      doc.x = 590;
-      doc.text('Autorizado Por: ' + data.usuario, {
-        align: 'right',
-        columns: 1,
-        width: 150,
-      });
-      doc.y = 105;
-      doc.x = 590;
-      doc.text('Impreso Por: ' + data.usuario, {
-        align: 'right',
-        columns: 1,
-        width: 150,
-      });
-      doc.fontSize(19);
+      .fontSize(10);
+    doc.y = 90;
+    doc.x = 590;
+    doc.text('Autorizado Por: ' + data.usuario, {
+      align: 'right',
+      columns: 1,
+      width: 150,
+    });
+    doc.y = 105;
+    doc.x = 590;
+    doc.text('Impreso Por: ' + data.usuario, {
+      align: 'right',
+      columns: 1,
+      width: 150,
+    });
+    doc.fontSize(19);
     doc.y = 60;
     doc.x = 150;
-    doc.text(
-      'Relación de Despacho para la Agencia',
-      {
-        align: 'center',
-        columns: 1,
-        width: 490,
-      }
-    );
+    doc.text('Relación de Despacho para la Agencia', {
+      align: 'center',
+      columns: 1,
+      width: 490,
+    });
     doc.fontSize(13);
     doc.y = 90;
     doc.x = 240;
-    doc.text('VALENCIA, RCS EXPRESSS S.A', {
+    doc.text(data.agencia, {
       align: 'center',
       columns: 1,
       width: 300,
@@ -139,7 +137,7 @@ class RelacionDespachoService {
     doc.y = 166;
     doc.x = 226;
     doc.fillColor('black');
-    doc.text('Kgs.', {
+    doc.text(data.neta == 'N' ? 'Neto' : 'Kgs.', {
       paragraphGap: 5,
       indent: 5,
       align: 'justify',
@@ -194,7 +192,42 @@ class RelacionDespachoService {
     var page = 0;
     var ymin = 190;
 
+    let credito_orig = 0;
+    let credito_dest = 0;
+    let contado_orig = 0;
+    let contado_dest = 0;
+    let nro_piezas = 0;
+    let peso_kgs = 0;
+    let carga_neta = 0;
+
     for (var item = 0; item < detalle.length; item++) {
+      let monto_total = new Intl.NumberFormat('de-DE', {
+        style: 'currency',
+        currency: 'EUR',
+        currencyDisplay: 'code',
+      })
+        .format(detalle[item].monto_total)
+        .replace('EUR', '')
+        .trim();
+
+      nro_piezas += utils.parseFloatN(detalle[item].nro_piezas);
+      peso_kgs += utils.parseFloatN(detalle[item].peso_kgs);
+      carga_neta += utils.parseFloatN(detalle[item].carga_neta);
+
+      if (detalle[item].modalidad_pago == 'CR') {
+        if (detalle[item].pagado_en == 'O') {
+          credito_orig += utils.parseFloatN(detalle[item].monto_total);
+        } else {
+          credito_dest += utils.parseFloatN(detalle[item].monto_total);
+        }
+      } else {
+        if (detalle[item].pagado_en == 'O') {
+          contado_orig += utils.parseFloatN(detalle[item].monto_total);
+        } else {
+          contado_dest += utils.parseFloatN(detalle[item].monto_total);
+        }
+      }
+
       doc.y = ymin + i;
       doc.x = 33;
       doc.text(detalle[item].nro_documento, {
@@ -225,7 +258,7 @@ class RelacionDespachoService {
       });
       doc.y = ymin + i;
       doc.x = 160;
-      doc.text(detalle[item]['zonas_dest.nb_zona']);
+      doc.text(utils.truncate(detalle[item]['zonas_dest.nb_zona'], 14));
       doc.y = ymin + i;
       doc.x = 185;
       doc.text(detalle[item].nro_piezas, {
@@ -233,13 +266,33 @@ class RelacionDespachoService {
         columns: 1,
         width: 40,
       });
-      doc.y = ymin + i;
-      doc.x = 210;
-      doc.text(detalle[item].peso_kgs, {
-        align: 'right',
-        columns: 1,
-        width: 40,
-      });
+
+      if (data.neta == 'N') {
+        doc.y = ymin + i;
+        doc.x = 210;
+        doc.text(detalle[item].carga_neta, {
+          align: 'right',
+          columns: 1,
+          width: 40,
+        });
+      } else if (data.neta == 'K') {
+        doc.y = ymin + i;
+        doc.x = 210;
+        doc.text(detalle[item].peso_kgs, {
+          align: 'right',
+          columns: 1,
+          width: 40,
+        });
+      } else {
+        doc.y = ymin + i;
+        doc.x = 210;
+        doc.text(detalle[item].peso_kgs, {
+          align: 'right',
+          columns: 1,
+          width: 40,
+        });
+      }
+
       doc.y = ymin + i;
       doc.x = 260;
       doc.text(utils.truncate(detalle[item].cliente_orig_desc, 30), {
@@ -256,91 +309,127 @@ class RelacionDespachoService {
           width: 150,
         });
       }
-      doc.y = ymin + i;
-      doc.x = 552;
-      doc.text('12312', {
-        align: 'right',
-        columns: 1,
-        width: 40,
-      });
-      doc.y = ymin + i;
-      doc.x = 596;
-      doc.text('12312', {
-        align: 'right',
-        columns: 1,
-        width: 40,
-      });
-      doc.y = ymin + i;
-      doc.x = 657;
-      doc.text('12312', {
-        align: 'right',
-        columns: 1,
-        width: 40,
-      });
-      doc.y = ymin + i;
-      doc.x = 705;
-      doc.text('12312', {
-        align: 'center',
-        columns: 1,
-        width: 40,
-      });
-      i = i + 10;
-      if (i >= 270 || item >= detalle.length - 1) {
-        doc
-          .lineJoin('square')
-          .rect(35, 490, 350, 80)
-          .stroke();
-        doc
-          .lineJoin('square')
-          .rect(410, 490, 350, 80)
-          .stroke();
+
+      if (data.visible == 'V') {
+        doc.y = ymin + i;
+        doc.x = 552;
+        doc.text(
+          detalle[item].modalidad_pago == 'CR' && detalle[item].pagado_en == 'O'
+            ? monto_total
+            : '0,00',
+          {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          }
+        );
+        doc.y = ymin + i;
+        doc.x = 596;
+        doc.text(
+          detalle[item].modalidad_pago == 'CR' && detalle[item].pagado_en == 'D'
+            ? monto_total
+            : '0,00',
+          {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          }
+        );
+        doc.y = ymin + i;
+        doc.x = 657;
+        doc.text(
+          detalle[item].modalidad_pago == 'CO' && detalle[item].pagado_en == 'O'
+            ? monto_total
+            : '0,00',
+          {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          }
+        );
+        doc.y = ymin + i;
+        doc.x = 705;
+        doc.text(
+          detalle[item].modalidad_pago == 'CO' && detalle[item].pagado_en == 'D'
+            ? monto_total
+            : '0,00',
+          {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          }
+        );
+      }
+
+      i = i + 9;
+      if (i >= 290 || item >= detalle.length - 1) {
+        doc.lineJoin('square').rect(35, 500, 350, 75).stroke();
         doc.fontSize(12);
-        doc.y = 500;
+        doc.y = 510;
         doc.x = 140;
         doc.fillColor('black');
         doc.text('Autorizado para Traslado');
-        doc.y = 525;
+        doc.y = 530;
         doc.x = 50;
-        doc.fontSize(9);
-        doc.text('Chofer: Andis Medina - C.I.V V-12313123', {
+        doc.fontSize(8);
+        doc.text('Chofer: ' + data.chofer, {
           align: 'left',
           columns: 1,
           width: 300,
         });
-        doc.y = 550;
+        doc.y = 545;
         doc.x = 50;
-        doc.text('Vehiculo: Andis Medina - C.I.V V-12313123', {
+        doc.text('Vehiculo: ' + data.vehiculo, {
           align: 'left',
           columns: 1,
           width: 300,
         });
-        doc.y = 500;
-        doc.x = 510;
-        doc.fillColor('black');
-        doc.fontSize(12);
-        doc.text('Agente Receptor Entrega');
-        doc.y = 520;
-        doc.x = 425;
-        doc.fontSize(9);
-        doc.text('Chofer: Andis Medina - C.I.V V-12313123', {
-          align: 'left',
-          columns: 1,
-          width: 300,
-        });
-        doc.y = 535;
-        doc.x = 425;
-        doc.text('Vehiculo: Andis Medina - C.I.V V-12313123', {
-          align: 'left',
-          columns: 1,
-          width: 300,
-        });
-        doc.y = 550;
-        doc.x = 425;
-        doc.text('Dirección: Andis Medina - C.I.V V-12313123', {
-          align: 'left',
-          columns: 1,
-          width: 300,
-        });
+        if (data.receptor) {
+          doc.lineJoin('square').rect(410, 500, 350, 75).stroke();
+          doc.y = 510;
+          doc.x = 510;
+          doc.fillColor('black');
+          doc.fontSize(12);
+          doc.text('Agente Receptor Entrega');
+          doc.y = 530;
+          doc.x = 425;
+          doc.fontSize(9);
+          doc.text('Chofer: ' + utils.truncate(data.receptor.nb_receptor, 20), {
+            align: 'left',
+            columns: 1,
+            width: 300,
+          });
+          doc.y = 530;
+          doc.x = 590;
+          doc.text('CI: ' + data.receptor.cedula_receptor, {
+            align: 'left',
+            columns: 1,
+            width: 300,
+          });
+          doc.y = 530;
+          doc.x = 660;
+          if (data.receptor.placa) {
+            doc.text('Placas: ' + data.receptor.placa, {
+              align: 'left',
+              columns: 1,
+              width: 300,
+            });
+          }
+          doc.y = 542;
+          doc.x = 425;
+          doc.text('Vehiculo: ' + data.receptor.vehiculo, {
+            align: 'left',
+            columns: 1,
+            width: 300,
+          });
+          doc.y = 554;
+          doc.x = 425;
+          doc.text('Dirección: ' + data.receptor.dir_receptor, {
+            align: 'left',
+            columns: 1,
+            width: 300,
+          });
+        }
         if (!(item >= detalle.length - 1)) {
           doc.addPage();
           page = page + 1;
@@ -350,59 +439,134 @@ class RelacionDespachoService {
         }
       }
     }
-    doc.fontSize(8);
-    doc.y = ymin + i + 10;
-          doc.x = 28;
-          doc.text('Total Guias: 3', {
-            align: 'center',
-            columns: 1,
-            width: 70,
-          });
-          doc.y = ymin + i + 10;
-          doc.x = 161;
-          doc.text('Total Piezas: 8', {
-            align: 'center',
-            columns: 1,
-            width: 67,
-          });
-          doc.y = ymin + i + 10;
-          doc.x = 210;
-          doc.text('170 Total Kgs', {
-            align: 'center',
-            columns: 1,
-            width: 105,
-          });
-          doc.y = ymin + i + 10;
-          doc.x = 530;
-          doc.text('Totales:');
-          doc.y = ymin + i + 10;
-          doc.x = 552;
-          doc.text('12312', {
-            align: 'right',
-            columns: 1,
-            width: 40,
-          });
-          doc.y = ymin + i + 10;
-          doc.x = 596;
-          doc.text('12312', {
-            align: 'right',
-            columns: 1,
-            width: 40,
-          });
-          doc.y = ymin + i + 10;
-          doc.x = 657;
-          doc.text('12312', {
-            align: 'right',
-            columns: 1,
-            width: 40,
-          });
-          doc.y = ymin + i + 10;
-          doc.x = 705;
-          doc.text('12312', {
-            align: 'center',
-            columns: 1,
-            width: 40,
-          });
+    let y = ymin + i + 4;
+    doc.fontSize(6);
+    doc.y = y;
+    doc.x = 28;
+    doc.text('Total Guías: ' + detalle.length, {
+      align: 'center',
+      columns: 1,
+      width: 70,
+    });
+    doc.y = y;
+    doc.x = 161;
+    doc.text('Total Piezas: ' + nro_piezas, {
+      align: 'center',
+      columns: 1,
+      width: 67,
+    });
+    
+    doc.y = y;
+    doc.x = 210;
+    if(data.neta == 'N') {
+      doc.text(
+        'Total Neto: ' +
+          new Intl.NumberFormat('de-DE', {
+            style: 'currency',
+            currency: 'EUR',
+            currencyDisplay: 'code',
+          })
+            .format(carga_neta)
+            .replace('EUR', '')
+            .trim(),
+        {
+          align: 'center',
+          columns: 1,
+          width: 105,
+        }
+      );
+    } else {
+      doc.text(
+        'Total Kgs: ' +
+          new Intl.NumberFormat('de-DE', {
+            style: 'currency',
+            currency: 'EUR',
+            currencyDisplay: 'code',
+          })
+            .format(peso_kgs)
+            .replace('EUR', '')
+            .trim(),
+        {
+          align: 'center',
+          columns: 1,
+          width: 105,
+        }
+      );
+    }    
+
+    if (data.visible == 'V') {
+      doc.y = y;
+      doc.x = 530;
+      doc.text('Totales:');
+      doc.y = y;
+      doc.x = 552;
+      doc.text(
+        new Intl.NumberFormat('de-DE', {
+          style: 'currency',
+          currency: 'EUR',
+          currencyDisplay: 'code',
+        })
+          .format(credito_orig)
+          .replace('EUR', '')
+          .trim(),
+        {
+          align: 'right',
+          columns: 1,
+          width: 40,
+        }
+      );
+      doc.y = y;
+      doc.x = 596;
+      doc.text(
+        new Intl.NumberFormat('de-DE', {
+          style: 'currency',
+          currency: 'EUR',
+          currencyDisplay: 'code',
+        })
+          .format(credito_dest)
+          .replace('EUR', '')
+          .trim(),
+        {
+          align: 'right',
+          columns: 1,
+          width: 40,
+        }
+      );
+      doc.y = y;
+      doc.x = 657;
+      doc.text(
+        new Intl.NumberFormat('de-DE', {
+          style: 'currency',
+          currency: 'EUR',
+          currencyDisplay: 'code',
+        })
+          .format(contado_orig)
+          .replace('EUR', '')
+          .trim(),
+        {
+          align: 'right',
+          columns: 1,
+          width: 40,
+        }
+      );
+      doc.y = y;
+      doc.x = 705;
+      doc.text(
+        new Intl.NumberFormat('de-DE', {
+          style: 'currency',
+          currency: 'EUR',
+          currencyDisplay: 'code',
+        })
+          .format(contado_dest)
+          .replace('EUR', '')
+          .trim(),
+        {
+          align: 'right',
+          columns: 1,
+          width: 40,
+        }
+      );
+    }
     var end;
     const range = doc.bufferedPageRange();
     for (
@@ -412,7 +576,7 @@ class RelacionDespachoService {
     ) {
       doc.switchToPage(i);
       doc.fontSize(12);
-      doc.fillColor('#444444')
+      doc.fillColor('#444444');
       doc.x = 640;
       doc.y = 71;
       doc.text(`Pagina ${i + 1} de ${range.count}`, {
