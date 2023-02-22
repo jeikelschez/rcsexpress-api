@@ -1,5 +1,5 @@
 const moment = require('moment');
-const { models } = require('../../libs/sequelize');
+const { models, Sequelize } = require('../../libs/sequelize');
 
 const UtilsService = require('../utils.service');
 const utils = new UtilsService();
@@ -215,7 +215,7 @@ class RelacionDespachoService {
       doc.lineJoin('miter').rect(472, 160, 97, 20).stroke();
       doc.lineJoin('miter').rect(569, 160, 80, 20).stroke();
       doc.lineJoin('miter').rect(649, 160, 75, 20).stroke();
-  } else {
+    } else {
       doc.fillColor('black');
       doc.y = 146;
       doc.x = 346;
@@ -291,9 +291,23 @@ class RelacionDespachoService {
     let credito_dest = 0;
     let contado_orig = 0;
     let contado_dest = 0;
+    let totalDolar = 0;
+    let totalDeclarado = 0;
+    let totalDeclaradoDolar = 0;
     let nro_piezas = 0;
     let peso_kgs = 0;
     let carga_neta = 0;
+    let hDolar = await models.Hdolar.findAll({
+      where: {
+        fecha: {
+          [Sequelize.Op.between]: [
+            moment(data.fecha_desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+            moment(data.fecha_hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+          ],
+        },
+      },
+      raw: true,
+    });
 
     for (var item = 0; item < detalle.length; item++) {
       let monto_total = new Intl.NumberFormat('de-DE', {
@@ -321,6 +335,55 @@ class RelacionDespachoService {
         } else {
           contado_dest += utils.parseFloatN(detalle[item].monto_total);
         }
+      }
+
+      let label;
+      let field;
+
+      if (data.tipoReporte == 'APZ') {
+        label = 'Zona Destino: ';
+        field = 'zonas_dest.nb_zona';
+      } else if (data.tipoReporte == 'MAD') {
+        label = 'Agencia Destino: ';
+        field = 'agencias_dest.nb_agencia';
+      }
+
+      if (data.tipoReporte == 'APZ' || data.tipoReporte == 'MAD') {
+        if (item == 0) {
+          // Aqui pinto el primer encabezado
+          doc.fontSize(9);
+          doc.y = ymin + i;
+          doc.x = 42;
+          doc.text(label + detalle[item][field], {
+            align: 'left',
+            columns: 1,
+            width: 500,
+          });
+          i += 15;
+        } else if (detalle[item][field] != detalle[item - 1][field]) {
+          // Aqui pinto los totales del agrupado
+          i += 5;
+          doc.y = ymin + i;
+          doc.x = 28;
+          doc.text('TOTALES DEL AGRUPADO', {
+            align: 'left',
+            columns: 1,
+            width: 500,
+          });
+          i += 15;
+
+          // Aqui pinto el encabezado del agrupado
+          doc.fontSize(9);
+          doc.y = ymin + i;
+          doc.x = 42;
+          doc.text(label + detalle[item][field], {
+            align: 'left',
+            columns: 1,
+            width: 500,
+          });
+          i += 15;
+        }
+        doc.fontSize(6);
       }
 
       doc.y = ymin + i;
@@ -389,165 +452,223 @@ class RelacionDespachoService {
       }
 
       if (data.dolar) {
+        let valorDolar = 0;
+        let findDolar = hDolar.findIndex(
+          (arr) => arr.fecha == detalle[item].fecha_emision
+        );
+        if (findDolar >= 0) valorDolar = hDolar[findDolar].valor;
+        let montoDolar = (
+          utils.parseFloatN(detalle[item].monto_total) /
+          utils.parseFloatN(valorDolar)
+        ).toFixed(2);
+        totalDolar += utils.parseFloatN(montoDolar);
+
+        totalDeclarado += utils.parseFloatN(
+          detalle[item].monto_ref_cte_sin_imp
+        );
+        let declaradoDolar = (
+          utils.parseFloatN(detalle[item].monto_ref_cte_sin_imp) /
+          utils.parseFloatN(valorDolar)
+        ).toFixed(2);
+        totalDeclaradoDolar += utils.parseFloatN(declaradoDolar);
+
         doc.y = ymin + i;
-      doc.x = 260;
-      doc.text(utils.truncate(detalle[item].cliente_orig_desc, 30), {
-        align: 'left',
-        columns: 1,
-        width: 150,
-      });
-      doc.y = ymin + i;
-      doc.x = 370;
-      if (detalle[item].cliente_dest_desc) {
-        doc.text(utils.truncate(detalle[item].cliente_dest_desc, 27), {
+        doc.x = 260;
+        doc.text(utils.truncate(detalle[item].cliente_orig_desc, 30), {
           align: 'left',
           columns: 1,
           width: 150,
         });
-      }
-      doc.y = ymin + i;
-      doc.x = 480;
-      doc.text(utils.truncate('1.232.232', 9), {
-        align: 'right',
-        columns: 1,
-        width: 40,
-      });
-      doc.y = ymin + i;
-      doc.x = 522;
-      doc.text(utils.truncate('9.999', 5), {
-        align: 'right',
-        columns: 1,
-        width: 40,
-      });
-      if (data.visible == 'V') {
         doc.y = ymin + i;
-        doc.x = 565;
-        doc.text(
-          detalle[item].modalidad_pago == 'CR' && detalle[item].pagado_en == 'O'
-            ? monto_total
-            : '0,00',
-          {
-            align: 'right',
+        doc.x = 370;
+        if (detalle[item].cliente_dest_desc) {
+          doc.text(utils.truncate(detalle[item].cliente_dest_desc, 27), {
+            align: 'left',
             columns: 1,
-            width: 40,
-          }
-        );
+            width: 150,
+          });
+        }
+
+        if (data.visible == 'V') {
+          doc.y = ymin + i;
+          doc.x = 480;
+          doc.text(
+            new Intl.NumberFormat('de-DE', {
+              style: 'currency',
+              currency: 'EUR',
+              currencyDisplay: 'code',
+            })
+              .format(detalle[item].monto_ref_cte_sin_imp)
+              .replace('EUR', '')
+              .trim(),
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+          doc.y = ymin + i;
+          doc.x = 522;
+          doc.text(
+            new Intl.NumberFormat('de-DE', {
+              style: 'currency',
+              currency: 'EUR',
+              currencyDisplay: 'code',
+            })
+              .format(declaradoDolar)
+              .replace('EUR', '')
+              .trim(),
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+          doc.y = ymin + i;
+          doc.x = 565;
+          doc.text(
+            detalle[item].modalidad_pago == 'CR' &&
+              detalle[item].pagado_en == 'O'
+              ? monto_total
+              : '0,00',
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+          doc.y = ymin + i;
+          doc.x = 600;
+          doc.text(
+            detalle[item].modalidad_pago == 'CR' &&
+              detalle[item].pagado_en == 'D'
+              ? monto_total
+              : '0,00',
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+          doc.y = ymin + i;
+          doc.x = 645;
+          doc.text(
+            detalle[item].modalidad_pago == 'CO' &&
+              detalle[item].pagado_en == 'O'
+              ? monto_total
+              : '0,00',
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+          doc.y = ymin + i;
+          doc.x = 680;
+          doc.text(
+            detalle[item].modalidad_pago == 'CO' &&
+              detalle[item].pagado_en == 'D'
+              ? monto_total
+              : '0,00',
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+          doc.y = ymin + i;
+          doc.x = 712;
+          doc.text(
+            new Intl.NumberFormat('de-DE', {
+              style: 'currency',
+              currency: 'EUR',
+              currencyDisplay: 'code',
+            })
+              .format(montoDolar)
+              .replace('EUR', '')
+              .trim(),
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+        }
+      } else {
         doc.y = ymin + i;
-        doc.x = 600;
-        doc.text(
-          detalle[item].modalidad_pago == 'CR' && detalle[item].pagado_en == 'D'
-            ? monto_total
-            : '0,00',
-          {
-            align: 'right',
-            columns: 1,
-            width: 40,
-          }
-        );
-        doc.y = ymin + i;
-        doc.x = 645;
-        doc.text(
-          detalle[item].modalidad_pago == 'CO' && detalle[item].pagado_en == 'O'
-            ? monto_total
-            : '0,00',
-          {
-            align: 'right',
-            columns: 1,
-            width: 40,
-          }
-        );
-        doc.y = ymin + i;
-        doc.x = 680;
-        doc.text(
-          detalle[item].modalidad_pago == 'CO' && detalle[item].pagado_en == 'D'
-            ? monto_total
-            : '0,00',
-          {
-            align: 'right',
-            columns: 1,
-            width: 40,
-          }
-        );
-        doc.y = ymin + i;
-        doc.x = 713;
-        doc.text(utils.truncate('9.999', 5), {
-          align: 'right',
-          columns: 1,
-          width: 40,
-        });
-      }
-      }
-      else {
-        doc.y = ymin + i;
-      doc.x = 260;
-      doc.text(utils.truncate(detalle[item].cliente_orig_desc, 30), {
-        align: 'left',
-        columns: 1,
-        width: 150,
-      });
-      doc.y = ymin + i;
-      doc.x = 390;
-      if (detalle[item].cliente_dest_desc) {
-        doc.text(utils.truncate(detalle[item].cliente_dest_desc, 30), {
+        doc.x = 260;
+        doc.text(utils.truncate(detalle[item].cliente_orig_desc, 30), {
           align: 'left',
           columns: 1,
           width: 150,
         });
+        doc.y = ymin + i;
+        doc.x = 390;
+        if (detalle[item].cliente_dest_desc) {
+          doc.text(utils.truncate(detalle[item].cliente_dest_desc, 30), {
+            align: 'left',
+            columns: 1,
+            width: 150,
+          });
+        }
+
+        if (data.visible == 'V') {
+          doc.y = ymin + i;
+          doc.x = 552;
+          doc.text(
+            detalle[item].modalidad_pago == 'CR' &&
+              detalle[item].pagado_en == 'O'
+              ? monto_total
+              : '0,00',
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+          doc.y = ymin + i;
+          doc.x = 596;
+          doc.text(
+            detalle[item].modalidad_pago == 'CR' &&
+              detalle[item].pagado_en == 'D'
+              ? monto_total
+              : '0,00',
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+          doc.y = ymin + i;
+          doc.x = 657;
+          doc.text(
+            detalle[item].modalidad_pago == 'CO' &&
+              detalle[item].pagado_en == 'O'
+              ? monto_total
+              : '0,00',
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+          doc.y = ymin + i;
+          doc.x = 705;
+          doc.text(
+            detalle[item].modalidad_pago == 'CO' &&
+              detalle[item].pagado_en == 'D'
+              ? monto_total
+              : '0,00',
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+        }
       }
 
-      if (data.visible == 'V') {
-        doc.y = ymin + i;
-        doc.x = 552;
-        doc.text(
-          detalle[item].modalidad_pago == 'CR' && detalle[item].pagado_en == 'O'
-            ? monto_total
-            : '0,00',
-          {
-            align: 'right',
-            columns: 1,
-            width: 40,
-          }
-        );
-        doc.y = ymin + i;
-        doc.x = 596;
-        doc.text(
-          detalle[item].modalidad_pago == 'CR' && detalle[item].pagado_en == 'D'
-            ? monto_total
-            : '0,00',
-          {
-            align: 'right',
-            columns: 1,
-            width: 40,
-          }
-        );
-        doc.y = ymin + i;
-        doc.x = 657;
-        doc.text(
-          detalle[item].modalidad_pago == 'CO' && detalle[item].pagado_en == 'O'
-            ? monto_total
-            : '0,00',
-          {
-            align: 'right',
-            columns: 1,
-            width: 40,
-          }
-        );
-        doc.y = ymin + i;
-        doc.x = 705;
-        doc.text(
-          detalle[item].modalidad_pago == 'CO' && detalle[item].pagado_en == 'D'
-            ? monto_total
-            : '0,00',
-          {
-            align: 'right',
-            columns: 1,
-            width: 40,
-          }
-        );
-      }
-      }
-
-      i = i + 9;
+      i += 9;
       if (i >= 290 || item >= detalle.length - 1) {
         doc.lineJoin('square').rect(35, 500, 350, 75).stroke();
         doc.fontSize(12);
@@ -625,8 +746,21 @@ class RelacionDespachoService {
         }
       }
     }
+
     let y = ymin + i + 4;
     doc.fontSize(6);
+
+    if (data.tipoReporte == 'APZ' || data.tipoReporte == 'MAD') {
+      doc.y = y;
+      doc.x = 28;
+      doc.text('TOTALES DEL AGRUPADO FINAL', {
+        align: 'center',
+        columns: 1,
+        width: 150,
+      });
+      y += 15;
+    }
+
     doc.y = y;
     doc.x = 28;
     doc.text('Total Guías: ' + detalle.length, {
@@ -641,10 +775,10 @@ class RelacionDespachoService {
       columns: 1,
       width: 67,
     });
-    
+
     doc.y = y;
     doc.x = 210;
-    if(data.neta == 'N') {
+    if (data.neta == 'N') {
       doc.text(
         'Total Neto: ' +
           new Intl.NumberFormat('de-DE', {
@@ -678,7 +812,7 @@ class RelacionDespachoService {
           width: 105,
         }
       );
-    }    
+    }
 
     if (data.visible == 'V') {
       if (data.dolar) {
@@ -687,134 +821,193 @@ class RelacionDespachoService {
         doc.text('Totales:');
         doc.y = y;
         doc.x = 480;
-        doc.text(utils.truncate('1.232.232', 9), {
-          align: 'right',
-          columns: 1,
-          width: 40,
-        });
-        doc.y = y;
-        doc.x = 522;
-        doc.text(utils.truncate('9.999', 5), {
-          align: 'right',
-          columns: 1,
-          width: 40,
-        });
-          doc.y = y;
-          doc.x = 565;
-          doc.text(
-            '9.999',
-            {
-              align: 'right',
-              columns: 1,
-              width: 40,
-            }
-          );
-          doc.y = y;
-          doc.x = 600;
-          doc.text(
-            '9.999',
-            {
-              align: 'right',
-              columns: 1,
-              width: 40,
-            }
-          );
-          doc.y = y;
-          doc.x = 645;
-          doc.text(
-            '9.999',
-            {
-              align: 'right',
-              columns: 1,
-              width: 40,
-            }
-          );
-          doc.y = y;
-          doc.x = 680;
-          doc.text(
-            '9.999',
-            {
-              align: 'right',
-              columns: 1,
-              width: 40,
-            }
-          );
-          doc.y = y;
-          doc.x = 713;
-          doc.text(utils.truncate('9.999', 5), {
+        doc.text(
+          new Intl.NumberFormat('de-DE', {
+            style: 'currency',
+            currency: 'EUR',
+            currencyDisplay: 'code',
+          })
+            .format(totalDeclarado)
+            .replace('EUR', '')
+            .trim(),
+          {
             align: 'right',
             columns: 1,
             width: 40,
-          });
+          }
+        );
+        doc.y = y;
+        doc.x = 522;
+        doc.text(
+          new Intl.NumberFormat('de-DE', {
+            style: 'currency',
+            currency: 'EUR',
+            currencyDisplay: 'code',
+          })
+            .format(totalDeclaradoDolar)
+            .replace('EUR', '')
+            .trim(),
+          {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          }
+        );
+        doc.y = y;
+        doc.x = 565;
+        doc.text(
+          new Intl.NumberFormat('de-DE', {
+            style: 'currency',
+            currency: 'EUR',
+            currencyDisplay: 'code',
+          })
+            .format(credito_orig)
+            .replace('EUR', '')
+            .trim(),
+          {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          }
+        );
+        doc.y = y;
+        doc.x = 600;
+        doc.text(
+          new Intl.NumberFormat('de-DE', {
+            style: 'currency',
+            currency: 'EUR',
+            currencyDisplay: 'code',
+          })
+            .format(credito_dest)
+            .replace('EUR', '')
+            .trim(),
+          {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          }
+        );
+        doc.y = y;
+        doc.x = 645;
+        doc.text(
+          new Intl.NumberFormat('de-DE', {
+            style: 'currency',
+            currency: 'EUR',
+            currencyDisplay: 'code',
+          })
+            .format(contado_orig)
+            .replace('EUR', '')
+            .trim(),
+          {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          }
+        );
+        doc.y = y;
+        doc.x = 680;
+        doc.text(
+          new Intl.NumberFormat('de-DE', {
+            style: 'currency',
+            currency: 'EUR',
+            currencyDisplay: 'code',
+          })
+            .format(contado_dest)
+            .replace('EUR', '')
+            .trim(),
+          {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          }
+        );
+        doc.y = y;
+        doc.x = 713;
+        doc.text(
+          new Intl.NumberFormat('de-DE', {
+            style: 'currency',
+            currency: 'EUR',
+            currencyDisplay: 'code',
+          })
+            .format(totalDolar)
+            .replace('EUR', '')
+            .trim(),
+          {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          }
+        );
       } else {
-      doc.y = y;
-      doc.x = 552;
-      doc.text(
-        new Intl.NumberFormat('de-DE', {
-          style: 'currency',
-          currency: 'EUR',
-          currencyDisplay: 'code',
-        })
-          .format(credito_orig)
-          .replace('EUR', '')
-          .trim(),
-        {
-          align: 'right',
-          columns: 1,
-          width: 40,
-        }
-      );
-      doc.y = y;
-      doc.x = 596;
-      doc.text(
-        new Intl.NumberFormat('de-DE', {
-          style: 'currency',
-          currency: 'EUR',
-          currencyDisplay: 'code',
-        })
-          .format(credito_dest)
-          .replace('EUR', '')
-          .trim(),
-        {
-          align: 'right',
-          columns: 1,
-          width: 40,
-        }
-      );
-      doc.y = y;
-      doc.x = 657;
-      doc.text(
-        new Intl.NumberFormat('de-DE', {
-          style: 'currency',
-          currency: 'EUR',
-          currencyDisplay: 'code',
-        })
-          .format(contado_orig)
-          .replace('EUR', '')
-          .trim(),
-        {
-          align: 'right',
-          columns: 1,
-          width: 40,
-        }
-      );
-      doc.y = y;
-      doc.x = 705;
-      doc.text(
-        new Intl.NumberFormat('de-DE', {
-          style: 'currency',
-          currency: 'EUR',
-          currencyDisplay: 'code',
-        })
-          .format(contado_dest)
-          .replace('EUR', '')
-          .trim(),
-        {
-          align: 'right',
-          columns: 1,
-          width: 40,
-        }
-      );}
+        doc.y = y;
+        doc.x = 552;
+        doc.text(
+          new Intl.NumberFormat('de-DE', {
+            style: 'currency',
+            currency: 'EUR',
+            currencyDisplay: 'code',
+          })
+            .format(credito_orig)
+            .replace('EUR', '')
+            .trim(),
+          {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          }
+        );
+        doc.y = y;
+        doc.x = 596;
+        doc.text(
+          new Intl.NumberFormat('de-DE', {
+            style: 'currency',
+            currency: 'EUR',
+            currencyDisplay: 'code',
+          })
+            .format(credito_dest)
+            .replace('EUR', '')
+            .trim(),
+          {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          }
+        );
+        doc.y = y;
+        doc.x = 657;
+        doc.text(
+          new Intl.NumberFormat('de-DE', {
+            style: 'currency',
+            currency: 'EUR',
+            currencyDisplay: 'code',
+          })
+            .format(contado_orig)
+            .replace('EUR', '')
+            .trim(),
+          {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          }
+        );
+        doc.y = y;
+        doc.x = 705;
+        doc.text(
+          new Intl.NumberFormat('de-DE', {
+            style: 'currency',
+            currency: 'EUR',
+            currencyDisplay: 'code',
+          })
+            .format(contado_dest)
+            .replace('EUR', '')
+            .trim(),
+          {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          }
+        );
+      }
     }
     var end;
     const range = doc.bufferedPageRange();
