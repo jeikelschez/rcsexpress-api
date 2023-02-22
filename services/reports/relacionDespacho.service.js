@@ -291,12 +291,26 @@ class RelacionDespachoService {
     let credito_dest = 0;
     let contado_orig = 0;
     let contado_dest = 0;
-    let totalDolar = 0;
-    let totalDeclarado = 0;
-    let totalDeclaradoDolar = 0;
+    let total_dolar = 0;
+    let total_declarado = 0;
+    let total_declarado_dolar = 0;
     let nro_piezas = 0;
     let peso_kgs = 0;
     let carga_neta = 0;
+
+    let group_len = 0;
+    let group_piezas = 0;
+    let group_neta = 0;
+    let group_kgs = 0;
+    let credito_orig_group = 0;
+    let credito_dest_group = 0;
+    let contado_orig_group = 0;
+    let contado_dest_group = 0;
+    let total_dolar_group = 0;
+    let total_declarado_group = 0;
+    let total_declarado_dolar_group = 0;
+    let total;
+
     let hDolar = await models.Hdolar.findAll({
       where: {
         fecha: {
@@ -339,13 +353,41 @@ class RelacionDespachoService {
 
       let label;
       let field;
+      let valor_dolar = 0;
+      let monto_dolar = 0;
+      let declarado_dolar = 0;
+
+      let find_dolar = hDolar.findIndex(
+        (arr) => arr.fecha == detalle[item].fecha_emision
+      );
+      if (find_dolar >= 0) valor_dolar = hDolar[find_dolar].valor;
+
+      if(valor_dolar > 0) {
+        monto_dolar = (
+          utils.parseFloatN(detalle[item].monto_total) /
+          utils.parseFloatN(valor_dolar)
+        ).toFixed(2);
+      }      
+
+      total_dolar += utils.parseFloatN(monto_dolar);
+      total_declarado += utils.parseFloatN(detalle[item].monto_ref_cte_sin_imp);
+
+      if(valor_dolar > 0) {
+        declarado_dolar = (
+          utils.parseFloatN(detalle[item].monto_ref_cte_sin_imp) /
+          utils.parseFloatN(valor_dolar)
+        ).toFixed(2);
+      }
+      total_declarado_dolar += utils.parseFloatN(declarado_dolar);
 
       if (data.tipoReporte == 'APZ') {
         label = 'Zona Destino: ';
         field = 'zonas_dest.nb_zona';
+        total = 'Total por Zona: ';
       } else if (data.tipoReporte == 'MAD') {
         label = 'Agencia Destino: ';
         field = 'agencias_dest.nb_agencia';
+        total = 'Total por Agencia: ';
       }
 
       if (data.tipoReporte == 'APZ' || data.tipoReporte == 'MAD') {
@@ -365,12 +407,261 @@ class RelacionDespachoService {
           i += 5;
           doc.y = ymin + i;
           doc.x = 28;
-          doc.text('TOTALES DEL AGRUPADO', {
-            align: 'left',
+          doc.text(total + group_len, {
+            align: 'center',
             columns: 1,
-            width: 500,
+            width: 70,
           });
+          doc.y = ymin + i;
+          doc.x = 161;
+          doc.text('Total Piezas: ' + group_piezas, {
+            align: 'center',
+            columns: 1,
+            width: 67,
+          });
+          doc.y = ymin + i;
+          doc.x = 210;
+          if (data.neta == 'N') {
+            doc.text(
+              'Total Neto: ' +
+                new Intl.NumberFormat('de-DE', {
+                  style: 'currency',
+                  currency: 'EUR',
+                  currencyDisplay: 'code',
+                })
+                  .format(group_neta)
+                  .replace('EUR', '')
+                  .trim(),
+              {
+                align: 'center',
+                columns: 1,
+                width: 105,
+              }
+            );
+          } else {
+            doc.text(
+              'Total Kgs: ' +
+                new Intl.NumberFormat('de-DE', {
+                  style: 'currency',
+                  currency: 'EUR',
+                  currencyDisplay: 'code',
+                })
+                  .format(group_kgs)
+                  .replace('EUR', '')
+                  .trim(),
+              {
+                align: 'center',
+                columns: 1,
+                width: 105,
+              }
+            );
+          }
+
+          if (data.visible == 'V') {
+            if (data.dolar) {
+              doc.y = ymin + i;
+              doc.x = 480;
+              doc.text(
+                new Intl.NumberFormat('de-DE', {
+                  style: 'currency',
+                  currency: 'EUR',
+                  currencyDisplay: 'code',
+                })
+                  .format(total_declarado_group)
+                  .replace('EUR', '')
+                  .trim(),
+                {
+                  align: 'right',
+                  columns: 1,
+                  width: 40,
+                }
+              );
+              doc.y = ymin + i;
+              doc.x = 522;
+              doc.text(
+                new Intl.NumberFormat('de-DE', {
+                  style: 'currency',
+                  currency: 'EUR',
+                  currencyDisplay: 'code',
+                })
+                  .format(total_declarado_dolar_group)
+                  .replace('EUR', '')
+                  .trim(),
+                {
+                  align: 'right',
+                  columns: 1,
+                  width: 40,
+                }
+              );
+              doc.y = ymin + i;
+              doc.x = 565;
+              doc.text(
+                new Intl.NumberFormat('de-DE', {
+                  style: 'currency',
+                  currency: 'EUR',
+                  currencyDisplay: 'code',
+                })
+                  .format(credito_orig_group)
+                  .replace('EUR', '')
+                  .trim(),
+                {
+                  align: 'right',
+                  columns: 1,
+                  width: 40,
+                }
+              );
+              doc.y = ymin + i;
+              doc.x = 600;
+              doc.text(
+                new Intl.NumberFormat('de-DE', {
+                  style: 'currency',
+                  currency: 'EUR',
+                  currencyDisplay: 'code',
+                })
+                  .format(credito_dest_group)
+                  .replace('EUR', '')
+                  .trim(),
+                {
+                  align: 'right',
+                  columns: 1,
+                  width: 40,
+                }
+              );
+              doc.y = ymin + i;
+              doc.x = 645;
+              doc.text(
+                new Intl.NumberFormat('de-DE', {
+                  style: 'currency',
+                  currency: 'EUR',
+                  currencyDisplay: 'code',
+                })
+                  .format(contado_orig_group)
+                  .replace('EUR', '')
+                  .trim(),
+                {
+                  align: 'right',
+                  columns: 1,
+                  width: 40,
+                }
+              );
+              doc.y = ymin + i;
+              doc.x = 680;
+              doc.text(
+                new Intl.NumberFormat('de-DE', {
+                  style: 'currency',
+                  currency: 'EUR',
+                  currencyDisplay: 'code',
+                })
+                  .format(contado_dest_group)
+                  .replace('EUR', '')
+                  .trim(),
+                {
+                  align: 'right',
+                  columns: 1,
+                  width: 40,
+                }
+              );
+              doc.y = ymin + i;
+              doc.x = 713;
+              doc.text(
+                new Intl.NumberFormat('de-DE', {
+                  style: 'currency',
+                  currency: 'EUR',
+                  currencyDisplay: 'code',
+                })
+                  .format(total_dolar_group)
+                  .replace('EUR', '')
+                  .trim(),
+                {
+                  align: 'right',
+                  columns: 1,
+                  width: 40,
+                }
+              );
+            } else {
+              doc.y = ymin + i;
+              doc.x = 552;
+              doc.text(
+                new Intl.NumberFormat('de-DE', {
+                  style: 'currency',
+                  currency: 'EUR',
+                  currencyDisplay: 'code',
+                })
+                  .format(credito_orig_group)
+                  .replace('EUR', '')
+                  .trim(),
+                {
+                  align: 'right',
+                  columns: 1,
+                  width: 40,
+                }
+              );
+              doc.y = ymin + i;
+              doc.x = 596;
+              doc.text(
+                new Intl.NumberFormat('de-DE', {
+                  style: 'currency',
+                  currency: 'EUR',
+                  currencyDisplay: 'code',
+                })
+                  .format(credito_dest_group)
+                  .replace('EUR', '')
+                  .trim(),
+                {
+                  align: 'right',
+                  columns: 1,
+                  width: 40,
+                }
+              );
+              doc.y = ymin + i;
+              doc.x = 657;
+              doc.text(
+                new Intl.NumberFormat('de-DE', {
+                  style: 'currency',
+                  currency: 'EUR',
+                  currencyDisplay: 'code',
+                })
+                  .format(contado_orig_group)
+                  .replace('EUR', '')
+                  .trim(),
+                {
+                  align: 'right',
+                  columns: 1,
+                  width: 40,
+                }
+              );
+              doc.y = ymin + i;
+              doc.x = 705;
+              doc.text(
+                new Intl.NumberFormat('de-DE', {
+                  style: 'currency',
+                  currency: 'EUR',
+                  currencyDisplay: 'code',
+                })
+                  .format(contado_dest_group)
+                  .replace('EUR', '')
+                  .trim(),
+                {
+                  align: 'right',
+                  columns: 1,
+                  width: 40,
+                }
+              );
+            }
+          }
+
           i += 15;
+          group_len = 0;
+          group_piezas = 0;
+          group_neta = 0;
+          group_kgs = 0;
+          credito_orig_group = 0;
+          credito_dest_group = 0;
+          contado_orig_group = 0;
+          contado_dest_group = 0;
+          total_dolar_group = 0;
+          total_declarado_group = 0;
+          total_declarado_dolar_group = 0;
 
           // Aqui pinto el encabezado del agrupado
           doc.fontSize(9);
@@ -385,6 +676,38 @@ class RelacionDespachoService {
         }
         doc.fontSize(6);
       }
+      group_len++;
+      group_piezas += utils.parseFloatN(detalle[item].nro_piezas);
+      group_neta += utils.parseFloatN(detalle[item].carga_neta);
+      group_kgs += utils.parseFloatN(detalle[item].peso_kgs);
+
+      if (detalle[item].modalidad_pago == 'CR') {
+        if (detalle[item].pagado_en == 'O') {
+          credito_orig_group += utils.parseFloatN(detalle[item].monto_total);
+        } else {
+          credito_dest_group += utils.parseFloatN(detalle[item].monto_total);
+        }
+      } else {
+        if (detalle[item].pagado_en == 'O') {
+          contado_orig_group += utils.parseFloatN(detalle[item].monto_total);
+        } else {
+          contado_dest_group += utils.parseFloatN(detalle[item].monto_total);
+        }
+      }
+
+      let declarado_dolar_group = 0;
+      total_dolar_group += utils.parseFloatN(monto_dolar);
+      total_declarado_group += utils.parseFloatN(
+        detalle[item].monto_ref_cte_sin_imp
+      );
+      if(valor_dolar > 0) {
+        declarado_dolar_group = (
+          utils.parseFloatN(detalle[item].monto_ref_cte_sin_imp) /
+          utils.parseFloatN(valor_dolar)
+        ).toFixed(2);
+      }
+      
+      total_declarado_dolar_group += utils.parseFloatN(declarado_dolar_group);
 
       doc.y = ymin + i;
       doc.x = 33;
@@ -452,26 +775,6 @@ class RelacionDespachoService {
       }
 
       if (data.dolar) {
-        let valorDolar = 0;
-        let findDolar = hDolar.findIndex(
-          (arr) => arr.fecha == detalle[item].fecha_emision
-        );
-        if (findDolar >= 0) valorDolar = hDolar[findDolar].valor;
-        let montoDolar = (
-          utils.parseFloatN(detalle[item].monto_total) /
-          utils.parseFloatN(valorDolar)
-        ).toFixed(2);
-        totalDolar += utils.parseFloatN(montoDolar);
-
-        totalDeclarado += utils.parseFloatN(
-          detalle[item].monto_ref_cte_sin_imp
-        );
-        let declaradoDolar = (
-          utils.parseFloatN(detalle[item].monto_ref_cte_sin_imp) /
-          utils.parseFloatN(valorDolar)
-        ).toFixed(2);
-        totalDeclaradoDolar += utils.parseFloatN(declaradoDolar);
-
         doc.y = ymin + i;
         doc.x = 260;
         doc.text(utils.truncate(detalle[item].cliente_orig_desc, 30), {
@@ -515,7 +818,7 @@ class RelacionDespachoService {
               currency: 'EUR',
               currencyDisplay: 'code',
             })
-              .format(declaradoDolar)
+              .format(declarado_dolar)
               .replace('EUR', '')
               .trim(),
             {
@@ -584,7 +887,7 @@ class RelacionDespachoService {
               currency: 'EUR',
               currencyDisplay: 'code',
             })
-              .format(montoDolar)
+              .format(monto_dolar)
               .replace('EUR', '')
               .trim(),
             {
@@ -747,19 +1050,276 @@ class RelacionDespachoService {
       }
     }
 
-    let y = ymin + i + 4;
+    if (i >= 290) {
+      doc.addPage();
+      page = page + 1;
+      doc.switchToPage(page);
+      i = 0;
+      await this.generateHeader(doc, data);
+    }
+
+    let y = ymin + i + 6;
     doc.fontSize(6);
 
     if (data.tipoReporte == 'APZ' || data.tipoReporte == 'MAD') {
       doc.y = y;
       doc.x = 28;
-      doc.text('TOTALES DEL AGRUPADO FINAL', {
+      doc.text(total + group_len, {
         align: 'center',
         columns: 1,
-        width: 150,
+        width: 70,
       });
-      y += 15;
+      doc.y = y;
+      doc.x = 161;
+      doc.text('Total Piezas: ' + group_piezas, {
+        align: 'center',
+        columns: 1,
+        width: 67,
+      });
+
+      doc.y = y;
+      doc.x = 210;
+      if (data.neta == 'N') {
+        doc.text(
+          'Total Neto: ' +
+            new Intl.NumberFormat('de-DE', {
+              style: 'currency',
+              currency: 'EUR',
+              currencyDisplay: 'code',
+            })
+              .format(group_neta)
+              .replace('EUR', '')
+              .trim(),
+          {
+            align: 'center',
+            columns: 1,
+            width: 105,
+          }
+        );
+      } else {
+        doc.text(
+          'Total Kgs: ' +
+            new Intl.NumberFormat('de-DE', {
+              style: 'currency',
+              currency: 'EUR',
+              currencyDisplay: 'code',
+            })
+              .format(group_kgs)
+              .replace('EUR', '')
+              .trim(),
+          {
+            align: 'center',
+            columns: 1,
+            width: 105,
+          }
+        );
+      }
+
+      if (data.visible == 'V') {
+        if (data.dolar) {
+          doc.y = y;
+          doc.x = 480;
+          doc.text(
+            new Intl.NumberFormat('de-DE', {
+              style: 'currency',
+              currency: 'EUR',
+              currencyDisplay: 'code',
+            })
+              .format(total_declarado_group)
+              .replace('EUR', '')
+              .trim(),
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+          doc.y = y;
+          doc.x = 522;
+          doc.text(
+            new Intl.NumberFormat('de-DE', {
+              style: 'currency',
+              currency: 'EUR',
+              currencyDisplay: 'code',
+            })
+              .format(total_declarado_dolar_group)
+              .replace('EUR', '')
+              .trim(),
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+          doc.y = y;
+          doc.x = 565;
+          doc.text(
+            new Intl.NumberFormat('de-DE', {
+              style: 'currency',
+              currency: 'EUR',
+              currencyDisplay: 'code',
+            })
+              .format(credito_orig_group)
+              .replace('EUR', '')
+              .trim(),
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+          doc.y = y;
+          doc.x = 600;
+          doc.text(
+            new Intl.NumberFormat('de-DE', {
+              style: 'currency',
+              currency: 'EUR',
+              currencyDisplay: 'code',
+            })
+              .format(credito_dest_group)
+              .replace('EUR', '')
+              .trim(),
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+          doc.y = y;
+          doc.x = 645;
+          doc.text(
+            new Intl.NumberFormat('de-DE', {
+              style: 'currency',
+              currency: 'EUR',
+              currencyDisplay: 'code',
+            })
+              .format(contado_orig_group)
+              .replace('EUR', '')
+              .trim(),
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+          doc.y = y;
+          doc.x = 680;
+          doc.text(
+            new Intl.NumberFormat('de-DE', {
+              style: 'currency',
+              currency: 'EUR',
+              currencyDisplay: 'code',
+            })
+              .format(contado_dest_group)
+              .replace('EUR', '')
+              .trim(),
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+          doc.y = y;
+          doc.x = 713;
+          doc.text(
+            new Intl.NumberFormat('de-DE', {
+              style: 'currency',
+              currency: 'EUR',
+              currencyDisplay: 'code',
+            })
+              .format(total_dolar_group)
+              .replace('EUR', '')
+              .trim(),
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+        } else {
+          doc.y = y;
+          doc.x = 552;
+          doc.text(
+            new Intl.NumberFormat('de-DE', {
+              style: 'currency',
+              currency: 'EUR',
+              currencyDisplay: 'code',
+            })
+              .format(credito_orig_group)
+              .replace('EUR', '')
+              .trim(),
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+          doc.y = y;
+          doc.x = 596;
+          doc.text(
+            new Intl.NumberFormat('de-DE', {
+              style: 'currency',
+              currency: 'EUR',
+              currencyDisplay: 'code',
+            })
+              .format(credito_dest_group)
+              .replace('EUR', '')
+              .trim(),
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+          doc.y = y;
+          doc.x = 657;
+          doc.text(
+            new Intl.NumberFormat('de-DE', {
+              style: 'currency',
+              currency: 'EUR',
+              currencyDisplay: 'code',
+            })
+              .format(contado_orig_group)
+              .replace('EUR', '')
+              .trim(),
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+          doc.y = y;
+          doc.x = 705;
+          doc.text(
+            new Intl.NumberFormat('de-DE', {
+              style: 'currency',
+              currency: 'EUR',
+              currencyDisplay: 'code',
+            })
+              .format(contado_dest_group)
+              .replace('EUR', '')
+              .trim(),
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+        }
+      }
+      y += 20;
     }
+
+    doc
+      .lineCap('butt')
+      .moveTo(35, y - 5)
+      .lineTo(755, y - 5)
+      .stroke();
+    doc
+      .lineCap('butt')
+      .moveTo(35, y + 9)
+      .lineTo(755, y + 9)
+      .stroke();
 
     doc.y = y;
     doc.x = 28;
@@ -817,9 +1377,6 @@ class RelacionDespachoService {
     if (data.visible == 'V') {
       if (data.dolar) {
         doc.y = y;
-        doc.x = 450;
-        doc.text('Totales:');
-        doc.y = y;
         doc.x = 480;
         doc.text(
           new Intl.NumberFormat('de-DE', {
@@ -827,7 +1384,7 @@ class RelacionDespachoService {
             currency: 'EUR',
             currencyDisplay: 'code',
           })
-            .format(totalDeclarado)
+            .format(total_declarado)
             .replace('EUR', '')
             .trim(),
           {
@@ -844,7 +1401,7 @@ class RelacionDespachoService {
             currency: 'EUR',
             currencyDisplay: 'code',
           })
-            .format(totalDeclaradoDolar)
+            .format(total_declarado_dolar)
             .replace('EUR', '')
             .trim(),
           {
@@ -929,7 +1486,7 @@ class RelacionDespachoService {
             currency: 'EUR',
             currencyDisplay: 'code',
           })
-            .format(totalDolar)
+            .format(total_dolar)
             .replace('EUR', '')
             .trim(),
           {
