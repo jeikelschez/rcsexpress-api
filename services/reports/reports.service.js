@@ -11,6 +11,7 @@ const facturaPreimpresoService = new FacturaPreimpresoService();
 const AnexoFacturaService = require('./anexoFactura.service');
 const anexoFacturaService = new AnexoFacturaService();
 const RelacionDespachoService = require('./relacionDespacho.service');
+const registroCostosService = require('./registroCostos.service');
 const relacionDespachoService = new RelacionDespachoService();
 
 const clienteOrigDesc =
@@ -67,6 +68,17 @@ class ReportsService {
       margin: 20,
     });
     await facturaPreimpresoService.generateData(doc, JSON.parse(data));
+    doc.end();
+    var encoder = new base64.Base64Encode();
+    var b64s = doc.pipe(encoder);
+    return await getStream(b64s);
+  }
+
+  // REPORTE REGISTRO COSTOS
+  async registroCostos(data) {
+    let doc = new PDFDocument({ margin: 50 });
+    await anexoFacturaService.generateHeader(doc, data);
+    await anexoFacturaService.generateCustomerInformation();
     doc.end();
     var encoder = new base64.Base64Encode();
     var b64s = doc.pipe(encoder);
