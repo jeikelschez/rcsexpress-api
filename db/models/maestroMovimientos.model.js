@@ -586,6 +586,10 @@ class Mmovimientos extends Model {
       foreignKey: 'cod_movimiento',
       as: 'comisiones',
     });
+    this.hasMany(models.Dcostost, {
+      foreignKey: 'cod_movimiento',
+      as: 'detalles_costo',
+    });
   }
 
   static config(sequelize) {

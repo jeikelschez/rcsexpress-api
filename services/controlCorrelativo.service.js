@@ -1,16 +1,16 @@
 const boom = require('@hapi/boom');
 
-const { models, Sequelize }= require('./../libs/sequelize');
+const { models, Sequelize } = require('./../libs/sequelize');
 const UtilsService = require('./utils.service');
 const utils = new UtilsService();
 
-const caseStatusLote = '(CASE estatus_lote WHEN "A" THEN "ACTIVO"' +
-                                         ' WHEN "I" THEN "INACTIVO"' +
-                                         ' WHEN "C" THEN "CERRADO"' +
-                                         ' ELSE "" END)';
+const caseStatusLote =
+  '(CASE estatus_lote WHEN "A" THEN "ACTIVO"' +
+  ' WHEN "I" THEN "INACTIVO"' +
+  ' WHEN "C" THEN "CERRADO"' +
+  ' ELSE "" END)';
 
 class CorrelativoService {
-
   constructor() {}
 
   async create(data) {
@@ -18,53 +18,64 @@ class CorrelativoService {
     return newCorrelativo;
   }
 
-  async find(page, limit, order_by, order_direction, filter, filter_value, agencia, tipo, estatus) { 
+  async find(
+    page,
+    limit,
+    order_by,
+    order_direction,
+    filter,
+    filter_value,
+    agencia,
+    tipo,
+    estatus
+  ) {
     let params2 = {};
     let filterArray = {};
-    let order = [];    
-    
-    if(agencia) params2.cod_agencia = agencia;
-    if(tipo) params2.tipo = tipo;
-    if(estatus) params2.estatus_lote = estatus;
+    let order = [];
 
-    if(filter && filter_value) {
+    if (agencia) params2.cod_agencia = agencia;
+    if (tipo) params2.tipo = tipo;
+    if (estatus) params2.estatus_lote = estatus;
+
+    if (filter && filter_value) {
       let filters = [];
-      filter.split(",").forEach(function(item) {
+      filter.split(',').forEach(function (item) {
         let itemArray = {};
         itemArray[item] = { [Sequelize.Op.substring]: filter_value };
         filters.push(itemArray);
-      })
+      });
 
-      filterArray = { 
-        [Sequelize.Op.or]: filters 
-      };      
+      filterArray = {
+        [Sequelize.Op.or]: filters,
+      };
     }
 
     let params = { ...params2, ...filterArray };
 
-    if(order_by && order_direction) {
+    if (order_by && order_direction) {
       order.push([order_by, order_direction]);
     }
 
     let attributes = {
-      include: [
-        [Sequelize.literal(caseStatusLote), 'estatus_desc']
-      ]
+      include: [[Sequelize.literal(caseStatusLote), 'estatus_desc']],
     };
 
-    return await utils.paginate(models.Correlativo, page, limit, params, order, attributes);
+    return await utils.paginate(
+      models.Correlativo,
+      page,
+      limit,
+      params,
+      order,
+      attributes
+    );
   }
 
   async findOne(id) {
-    const correlativo = await models.Correlativo.findByPk(id,
-      {
-        attributes: {
-          include: [
-            [Sequelize.literal(caseStatusLote), 'estatus_desc']
-          ]
-        }
-      }
-    );
+    const correlativo = await models.Correlativo.findByPk(id, {
+      attributes: {
+        include: [[Sequelize.literal(caseStatusLote), 'estatus_desc']],
+      },
+    });
     if (!correlativo) {
       throw boom.notFound('Correlativo no existe');
     }

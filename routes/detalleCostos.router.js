@@ -1,16 +1,16 @@
 const express = require('express');
 
-const CcomisionesService = require('../services/controlComisiones.service');
+const DcostosService = require('../services/detalleCostos.service');
 const validatorHandler = require('../middlewares/validator.handler');
 const {
-  createCcomisionesSchema,
-  updateCcomisionesSchema,
-  getCcomisionesSchema,
-} = require('../schemas/controlComisiones.schema');
+  createDcostosSchema,
+  updateDcostosSchema,
+  getDcostosSchema,
+} = require('../schemas/detalleCostos.schema');
 const authenticateJWT = require('../middlewares/authenticate.handler');
 
 const router = express.Router();
-const service = new CcomisionesService();
+const service = new DcostosService();
 
 router.get('/', authenticateJWT, async (req, res, next) => {
   try {
@@ -21,26 +21,18 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       order_direction,
       filter,
       filter_value,
-      agencia,
-      agente,
-      cod_movimiento,
-      tipo,
-      mayor,
+      cod_costo,
     } = req.headers;
-    const comisiones = await service.find(
+    const dCostos = await service.find(
       page,
       limit,
       order_by,
       order_direction,
       filter,
       filter_value,
-      agencia,
-      agente,
-      cod_movimiento,
-      tipo,
-      mayor
+      cod_costo
     );
-    res.json(comisiones);
+    res.json(dCostos);
   } catch (error) {
     next(error);
   }
@@ -49,12 +41,12 @@ router.get('/', authenticateJWT, async (req, res, next) => {
 router.get(
   '/:id',
   authenticateJWT,
-  validatorHandler(getCcomisionesSchema, 'params'),
+  validatorHandler(getDcostosSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const comision = await service.findOne(id);
-      res.json(comision);
+      const dCosto = await service.findOne(id);
+      res.json(dCosto);
     } catch (error) {
       next(error);
     }
@@ -64,12 +56,12 @@ router.get(
 router.post(
   '/',
   authenticateJWT,
-  validatorHandler(createCcomisionesSchema, 'body'),
+  validatorHandler(createDcostosSchema, 'body'),
   async (req, res, next) => {
     try {
       const body = req.body;
-      const newCcomision = await service.create(body);
-      res.status(201).json(newCcomision);
+      const newDcosto = await service.create(body);
+      res.status(201).json(newDcosto);
     } catch (error) {
       next(error);
     }
@@ -79,14 +71,14 @@ router.post(
 router.put(
   '/:id',
   authenticateJWT,
-  validatorHandler(getCcomisionesSchema, 'params'),
-  validatorHandler(updateCcomisionesSchema, 'body'),
+  validatorHandler(getDcostosSchema, 'params'),
+  validatorHandler(updateDcostosSchema, 'body'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
       const body = req.body;
-      const comision = await service.update(id, body);
-      res.json(comision);
+      const dCosto = await service.update(id, body);
+      res.json(dCosto);
     } catch (error) {
       next(error);
     }
@@ -96,7 +88,7 @@ router.put(
 router.delete(
   '/:id',
   authenticateJWT,
-  validatorHandler(getCcomisionesSchema, 'params'),
+  validatorHandler(getDcostosSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
