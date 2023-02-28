@@ -75,17 +75,6 @@ class ReportsService {
     return await getStream(b64s);
   }
 
-  // REPORTE REGISTRO COSTOS
-  async registroCostos() {
-    let doc = new PDFDocument({ margin: 50 });
-    await registroCostosService.generateHeader(doc);
-    await registroCostosService.generateCustomerInformation(doc);
-    doc.end();
-    var encoder = new base64.Base64Encode();
-    var b64s = doc.pipe(encoder);
-    return await getStream(b64s);
-  }
-
   // REPORTE ANEXO FACTURACION
   async anexoFactura(data) {
     let doc = new PDFDocument({ margin: 50 });
@@ -176,6 +165,17 @@ class ReportsService {
       data,
       dataDetalle
     );
+    doc.end();
+    var encoder = new base64.Base64Encode();
+    var b64s = doc.pipe(encoder);
+    return await getStream(b64s);
+  }
+
+  // REPORTE REGISTRO COSTOS
+  async registroCostos() {
+    let doc = new PDFDocument({ margin: 50, bufferPages: true, });
+    await registroCostosService.generateHeader(doc);
+    await registroCostosService.generateCustomerInformation(doc);
     doc.end();
     var encoder = new base64.Base64Encode();
     var b64s = doc.pipe(encoder);

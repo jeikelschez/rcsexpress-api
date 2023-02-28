@@ -6,209 +6,217 @@ const utils = new UtilsService();
 
 class registroCostosService {
   async generateHeader(doc) {
-    doc
-      .image('./img/logo_rc.png', 50, 45, { width: 50 })
-      .fillColor('#444444')
-      .fontSize(12)
-      .font('Helvetica-Bold')
-      .text('RCS Express, S.A', 110, 95)
-      .text('R.I.F. J-31028463-6', 110, 110)
-      .text('Fecha: ' + moment().format('DD/MM/YYYY'), 640, 53)
-      .fontSize(10);
-    doc.y = 90;
-    doc.x = 590;
-    doc.text('Autorizado Por: ', {
-      align: 'right',
-      columns: 1,
-      width: 150,
-    });
-    doc.y = 105;
-    doc.x = 590;
-    doc.text('Impreso Por: ', {
-      align: 'right',
-      columns: 1,
-      width: 150,
-    });
-    doc.fontSize(19);
-    doc.y = 60;
-    doc.x = 150;
-    doc.text('REPORTE NUMERO 1', {
-      align: 'center',
-      columns: 1,
-      width: 490,
-    });
-    doc.fontSize(13);
-    doc.y = 90;
-    doc.x = 240;
-    doc.text('VALENCIA, RCS EXPRESS', {
-      align: 'center',
+    doc.image('./img/logo_rc.png', 35, 42, { width: 80 })
+    .font('Helvetica-Bold')
+    doc.fillColor('#444444')
+    doc.fontSize(18);
+    doc.y = 40;
+    doc.x = 130;
+    doc.text('Costos de Transporte Por Viaje', {
+      align: 'left',
       columns: 1,
       width: 300,
     });
-    doc.text('Desde: 12/12/2022', 270, 110);
-    doc.text('Hasta: 12/12/2022', 400, 110);
-    doc.moveDown();
-    doc.fontSize(9);
-    doc.y = 146;
-    doc.x = 63;
+    doc.fontSize(8)
+    .text('Fecha: 27/02/2022', 480, 35)
     doc.fillColor('black');
-    doc.text('DATOS DEL DOCUMENTO', {
-      paragraphGap: 5,
-      indent: 5,
-      align: 'justify',
-      columns: 1,
-    });
-    doc.fontSize(8);
-    doc.y = 166;
-    doc.x = 43;
+    doc.text('Transporte: Agente - Fabian Delgado', 130, 70)
+    .text('Ayudante: Agente - Fabian Delgado', 130, 90)
+    doc.fillColor('#444444')
+    .text('Origen: VALENCIA, RCS EXPRESS', 130, 110)
+    .text('Destino: VALENCIA, RCS EXPRESS', 130, 130)
+    .text('Observacion:', 130, 150)
     doc.fillColor('black');
-    doc.text('Guia', {
-      paragraphGap: 5,
-      indent: 5,
-      align: 'justify',
+    doc.text('Anticipo: 12.312', 300, 70)
+    .text('Anticipo: 12.321', 300, 90)
+    doc.fillColor('#444444')
+    .text('Fecha Envio: 03/10/2022', 390, 70)
+    .text('Vehiculo: A23FD123', 390, 90)
+    .text('Nro. Guia Flete: A23FD123', 390, 110)
+    .text('ID: 123', 500, 70)
+    doc.lineJoin('miter').rect(35, 180, 530, 50).stroke();
+    doc.fontSize(11)
+    doc.text('Flete sin IVA (Bs.)', 60, 192)
+    doc.text('Ventas sin IVA (Bs.)', 170, 192)
+    doc.text('Utilidad Operativa (Bs.)', 285, 192)
+    doc.text('Utilidad Operativa (Bs.)', 420, 192)
+    doc.y = 210;
+    doc.x = 60;
+    doc.text('234212312313123', {
+      align: 'left',
       columns: 1,
+      width: 100,
     });
-    doc.y = 166;
-    doc.x = 75;
-    doc.fillColor('black');
-    doc.text('Emision', {
-      paragraphGap: 5,
-      indent: 5,
-      align: 'justify',
+    doc.y = 210;
+    doc.x = 170;
+    doc.text('234212312313123', {
+      align: 'left',
       columns: 1,
+      width: 100,
     });
-    doc.y = 166;
-    doc.x = 118;
-    doc.fillColor('black');
-    doc.text('O.', {
-      paragraphGap: 5,
-      indent: 5,
-      align: 'justify',
+    doc.y = 210;
+    doc.x = 285;
+    doc.text('234212312313123', {
+      align: 'left',
       columns: 1,
+      width: 100,
     });
-    doc.y = 166;
-    doc.x = 138;
-    doc.fillColor('black');
-    doc.text('D.', {
-      paragraphGap: 5,
-      indent: 5,
-      align: 'justify',
+    doc.y = 210;
+    doc.x = 420;
+    doc.text('234212312313123', {
+      align: 'center',
       columns: 1,
+      width: 100,
     });
-    doc.y = 166;
-    doc.x = 160;
-    doc.fillColor('black');
-    doc.text('Zona D.', {
-      paragraphGap: 5,
-      indent: 5,
-      align: 'justify',
-      columns: 1,
-    });
-    doc.y = 166;
-    doc.x = 195;
-    doc.fillColor('black');
-    doc.text('Piezas.', {
-      paragraphGap: 5,
-      indent: 5,
-      align: 'justify',
-      columns: 1,
-    });
-    doc.y = 166;
-    doc.x = 226;
-    doc.fillColor('black');
-    doc.text('Kgs.', {
-      paragraphGap: 5,
-      indent: 5,
-      align: 'justify',
-      columns: 1,
-    });
-      doc.fillColor('black');
-      doc.y = 146;
-      doc.x = 346;
-      doc.fillColor('black');
-      doc.text('CLIENTE', {
-        paragraphGap: 5,
-        indent: 5,
-        align: 'justify',
-        columns: 1,
-      });
-      doc.y = 146;
-      doc.x = 590;
-      doc.fillColor('black');
-      doc.text('MODALIDAD DE PAGO', {
-        paragraphGap: 5,
-        indent: 5,
-        align: 'justify',
-        columns: 1,
-      });
-      doc.y = 166;
-      doc.x = 255;
-      doc.text('Remitente', {
-        paragraphGap: 5,
-        indent: 5,
-        align: 'justify',
-        columns: 1,
-      });
-      doc.y = 166;
-      doc.x = 384;
-      doc.fillColor('black');
-      doc.text('Destinatario', {
-        paragraphGap: 5,
-        indent: 5,
-        align: 'justify',
-        columns: 1,
-      });
-      doc.y = 166;
-      doc.x = 555;
-      doc.fillColor('black');
-      doc.text('Origen');
-      doc.y = 166;
-      doc.x = 604;
-      doc.fillColor('black');
-      doc.text('Destino');
-      doc.y = 166;
-      doc.x = 660;
-      doc.fillColor('black');
-      doc.text('Origen');
-      doc.y = 166;
-      doc.x = 705;
-      doc.fillColor('black');
-      doc.text('Destino');
-      doc.y = 189;
-      doc.x = 50;
-      doc.fillColor('black');
-      doc.fontSize(6);
-      doc.lineJoin('miter').rect(35, 140, 217, 20).stroke();
-      doc.lineJoin('miter').rect(252, 140, 293, 20).stroke();
-      doc.lineJoin('miter').rect(545, 140, 209, 20).stroke();
-      doc.lineJoin('miter').rect(35, 160, 217, 20).stroke();
-      doc.lineJoin('miter').rect(252, 160, 293, 20).stroke();
-      doc.lineJoin('miter').rect(545, 160, 105, 20).stroke();
-      doc.lineJoin('miter').rect(649, 160, 105, 20).stroke();
+    doc.text('Item', 35, 245)
+    doc.text('Nro. Guía', 65, 245)
+    doc.text('Emisión', 120, 245)
+    doc.text('Remitente', 170, 245)
+    doc.text('Destinatario', 280, 245)
+    doc.text('Dest.', 385, 245)
+    doc.text('Piezas', 420, 245)
+    doc.text('Kgs', 460, 245)
+    doc.text('Ventas sin IVA', 485, 245)
   }
 
   async generateCustomerInformation(doc) {
     var i = 0;
     var page = 0;
-    var ymin = 190;
+    var ymin = 270;
 
-    for (var item = 0; item < 20; item++) {
+    for (var item = 0; item < 100; item++) {
+      doc.fontSize(7);
+      doc.fillColor('#444444')
       doc.y = ymin + i;
-      doc.x = 33;
-      doc.text('2342', {
-        align: 'center',
+      doc.x = 45;
+      doc.text(item, {
+        align: 'left',
         columns: 1,
         width: 50,
       });
-      if (i >= 290) {
-      doc.addPage();
-      page = page + 1;
-      doc.switchToPage(page);
-      i = 0;
-      await this.generateHeader(doc);
+      doc.y = ymin + i;
+      doc.x = 70;
+      doc.text('2342123', {
+        align: 'left',
+        columns: 1,
+        width: 50,
+      });
+      doc.y = ymin + i;
+      doc.x = 125;
+      doc.text('27/02/2022', {
+        align: 'left',
+        columns: 1,
+        width: 50,
+      });
+      doc.y = ymin + i;
+      doc.x = 170;
+      doc.text('AUTOPARTES ELIMOTORS CA', {
+        align: 'left',
+        columns: 1,
+        width: 200,
+      });
+      doc.y = ymin + i;
+      doc.x = 280;
+      doc.text('AUTOPARTES ELIMOTORS CA', {
+        align: 'left',
+        columns: 1,
+        width: 200,
+      });
+      doc.y = ymin + i;
+      doc.x = 390;
+      doc.text('MRD', {
+        align: 'left',
+        columns: 1,
+        width: 50,
+      });
+      doc.y = ymin + i;
+      doc.x = 435;
+      doc.text('223', {
+        align: 'RIGHT',
+        columns: 1,
+        width: 50,
+      });
+      doc.y = ymin + i;
+      doc.x = 470;
+      doc.text('223', {
+        align: 'RIGHT',
+        columns: 1,
+        width: 50,
+      });
+      doc.y = ymin + i;
+      doc.x = 530;
+      doc.text('122.02', {
+        align: 'RIGHT',
+        columns: 1,
+        width: 50,
+      });
+      i+= 15;
+      if (i >= 440 || item >= 100) {
+        doc.fillColor('#BLACK')
+        doc.y = ymin + i + 5;
+        doc.x = 390;
+        doc.text('TOTALES:', {
+          align: 'RIGHT',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i + 5;
+        doc.x = 435;
+        doc.text('2313', {
+          align: 'RIGHT',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i + 5;
+        doc.x = 468;
+        doc.text('1232', {
+          align: 'RIGHT',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i + 5;
+        doc.x = 530;
+        doc.text('122.02', {
+          align: 'RIGHT',
+          columns: 1,
+          width: 50,
+        });
+        doc.addPage();
+        page = page + 1;
+        doc.switchToPage(page);
+        i = 0;
+        await this.generateHeader(doc);
       }
     }
-
+    doc.fillColor('#BLACK')
+    doc.y = ymin + i + 5;
+    doc.x = 390;
+    doc.text('TOTALES:', {
+      align: 'RIGHT',
+      columns: 1,
+      width: 50,
+    });
+    doc.y = ymin + i + 5;
+    doc.x = 435;
+    doc.text('2313', {
+      align: 'RIGHT',
+      columns: 1,
+      width: 50,
+    });
+    doc.y = ymin + i + 5;
+    doc.x = 468;
+    doc.text('1232', {
+      align: 'RIGHT',
+      columns: 1,
+      width: 50,
+    });
+    doc.y = ymin + i + 5;
+    doc.x = 530;
+    doc.text('122.02', {
+      align: 'RIGHT',
+      columns: 1,
+      width: 50,
+    });
     var end;
     const range = doc.bufferedPageRange();
     for (
@@ -217,16 +225,16 @@ class registroCostosService {
       i++
     ) {
       doc.switchToPage(i);
-      doc.fontSize(12);
+      doc.fontSize(8);
       doc.fillColor('#444444');
-      doc.x = 640;
-      doc.y = 71;
+      doc.x = 480;
+      doc.y = 50;
       doc.text(`Pagina ${i + 1} de ${range.count}`, {
-        align: 'right',
+        align: 'left',
         columns: 1,
         width: 100,
       });
-    }
+   }
   }
 }
 
