@@ -4,7 +4,7 @@ const { models, Sequelize } = require('../../libs/sequelize');
 const UtilsService = require('../utils.service');
 const utils = new UtilsService();
 
-class RelacionDespachoService {
+class registroCostosService {
   async generateHeader(doc) {
     doc
       .image('./img/logo_rc.png', 50, 45, { width: 50 })
@@ -187,12 +187,12 @@ class RelacionDespachoService {
       doc.lineJoin('miter').rect(649, 160, 105, 20).stroke();
   }
 
-  async generateCustomerInformation(doc, data, detalle) {
+  async generateCustomerInformation(doc) {
     var i = 0;
     var page = 0;
     var ymin = 190;
 
-    for (var item = 0; item < detalle.length; item++) {
+    for (var item = 0; item < 20; item++) {
       doc.y = ymin + i;
       doc.x = 33;
       doc.text('2342', {
@@ -200,84 +200,13 @@ class RelacionDespachoService {
         columns: 1,
         width: 50,
       });
-      doc.y = ymin + i;
-      doc.x = 75;
-      doc.text('12/12/2022', {
-        align: 'center',
-        columns: 1,
-        width: 47,
-      });
-      doc.y = ymin + i;
-      doc.x = 95;
-      doc.text('ASD', {
-        align: 'center',
-        columns: 1,
-        width: 67,
-      });
-      doc.y = ymin + i;
-      doc.x = 115;
-      doc.text('ASD', {
-        align: 'center',
-        columns: 1,
-        width: 67,
-      });
-      doc.y = ymin + i;
-      doc.x = 160;
-      doc.text('BARCELONA');
-      doc.y = ymin + i;
-      doc.x = 185;
-      doc.text('54', {
-        align: 'right',
-        columns: 1,
-        width: 40,
-      });
-
-      doc.y = ymin + i;
-      doc.x = 210;
-      doc.text('23', {
-        align: 'right',
-        columns: 1,
-        width: 40,
-      });
-      i += 9;
-      if (i >= 290 || item >= detalle.length - 1) {
-        doc.lineJoin('square').rect(35, 500, 350, 75).stroke();
-        doc.fontSize(12);
-        doc.y = 510;
-        doc.x = 140;
-        doc.fillColor('black');
-        doc.text('Autorizado para Traslado');
-        doc.y = 530;
-        doc.x = 50;
-        doc.fontSize(8);
-        doc.text('Chofer: ', {
-          align: 'left',
-          columns: 1,
-          width: 300,
-        });
-        doc.y = 545;
-        doc.x = 50;
-        doc.text('Vehiculo: ', {
-          align: 'left',
-          columns: 1,
-          width: 300,
-        });
-        if (!(item >= detalle.length - 1)) {
-          doc.addPage();
-          page = page + 1;
-          doc.switchToPage(page);
-          i = 0;
-          await this.generateHeader(doc, data);
-        }
-      }
-    }
-
-    if (i >= 290) {
+      if (i >= 290) {
       doc.addPage();
       page = page + 1;
       doc.switchToPage(page);
       i = 0;
-      await this.generateHeader(doc, data);
+      await this.generateHeader(doc);
+      }
     }
 
     var end;
@@ -301,4 +230,4 @@ class RelacionDespachoService {
   }
 }
 
-module.exports = RelacionDespachoService;
+module.exports = registroCostosService;

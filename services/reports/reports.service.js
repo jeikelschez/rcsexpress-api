@@ -11,8 +11,9 @@ const facturaPreimpresoService = new FacturaPreimpresoService();
 const AnexoFacturaService = require('./anexoFactura.service');
 const anexoFacturaService = new AnexoFacturaService();
 const RelacionDespachoService = require('./relacionDespacho.service');
-const registroCostosService = require('./registroCostos.service');
 const relacionDespachoService = new RelacionDespachoService();
+const RegistroCostosService = require('./registroCostos.service');
+const registroCostosService = new RegistroCostosService();
 
 const clienteOrigDesc =
   '(CASE WHEN (ci_rif_cte_conta_org IS NULL || ci_rif_cte_conta_org = "")' +
@@ -75,10 +76,10 @@ class ReportsService {
   }
 
   // REPORTE REGISTRO COSTOS
-  async registroCostos(data) {
+  async registroCostos() {
     let doc = new PDFDocument({ margin: 50 });
-    await anexoFacturaService.generateHeader(doc, data);
-    await anexoFacturaService.generateCustomerInformation();
+    await registroCostosService.generateHeader(doc);
+    await registroCostosService.generateCustomerInformation(doc);
     doc.end();
     var encoder = new base64.Base64Encode();
     var b64s = doc.pipe(encoder);
