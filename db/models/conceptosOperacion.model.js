@@ -24,18 +24,24 @@ const CoperacionSchema = {
     type: DataTypes.INTEGER,
     references: {
       model: TIPOS_TABLE,
-      key: 'id'
+      key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
-  }
-}
+    onDelete: 'SET NULL',
+  },
+};
 
 class Coperacion extends Model {
-
   static associate(models) {
     this.belongsTo(models.Tipos, { foreignKey: 'tipo', as: 'tipos' });
-    this.hasMany(models.Cfacturacion, { foreignKey: 'cod_concepto', as: 'conceptos' });
+    this.hasMany(models.Cfacturacion, {
+      foreignKey: 'cod_concepto',
+      as: 'conceptos',
+    });
+    this.hasMany(models.Dcostos, {
+      foreignKey: 'cod_concepto',
+      as: 'costos',
+    });
   }
 
   static config(sequelize) {
@@ -43,8 +49,8 @@ class Coperacion extends Model {
       sequelize,
       tableName: COPERACION_TABLE,
       modelName: 'Coperacion',
-      timestamps: false
-    }
+      timestamps: false,
+    };
   }
 }
 

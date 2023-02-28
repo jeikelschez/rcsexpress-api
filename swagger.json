@@ -19,12 +19,8 @@
       "description": "Ambiente de Producción"
     }
   ],
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
-  ],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
   "tags": [
     {
       "name": "Agencias",
@@ -75,8 +71,20 @@
       "description": "API para Manejar el Control Correlativo"
     },
     {
+      "name": "Costos_Transporte",
+      "description": "API para Manejar el Control de los Costos"
+    },
+    {
       "name": "Cuentas",
       "description": "API para Manejar las Cuentas Bancarias de la Organizacion"
+    },
+    {
+      "name": "Detalle_Costos",
+      "description": "API para Manejar el Detalle de Costos de la Organizacion"
+    },
+    {
+      "name": "Detalle_Costos_Transporte",
+      "description": "API para Manejar el Detalle de Costos Transporte de la Organizacion"
     },
     {
       "name": "Detalle_Movimientos",
@@ -899,7 +907,7 @@
         "tags": ["Ayudantes"],
         "summary": "Obtener todos los ayudantes",
         "description": "API para Obtener todos los ayudantes del sistema",
-        "parameters": [          
+        "parameters": [
           {
             "name": "activo",
             "in": "header",
@@ -2943,7 +2951,7 @@
                   "$ref": "#/extraSchemes/Paginate",
                   "properties": {
                     "data": {
-                      "$ref": "#/components/schemas/Control_Comisiones"                      
+                      "$ref": "#/components/schemas/Control_Comisiones"
                     }
                   }
                 }
@@ -3046,7 +3054,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Control_Comisiones"                  
+                  "$ref": "#/components/schemas/Control_Comisiones"
                 }
               }
             }
@@ -3345,7 +3353,7 @@
             "schema": {
               "type": "integer"
             }
-          }          
+          }
         ],
         "responses": {
           "200": {
@@ -4327,6 +4335,373 @@
         }
       }
     },
+    "/costos": {
+      "get": {
+        "tags": ["Costos_Transporte"],
+        "summary": "Obtener todo el Control de los Costos",
+        "description": "API para Obtener todo el Control de Costos del sistema",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "header",
+            "description": "Numero de la pagina",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "header",
+            "description": "Cantidad de registros",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "header",
+            "description": "Ordenado por",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "header",
+            "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "agencia",
+            "in": "header",
+            "description": "Codigo de la Agencia",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "desde",
+            "in": "header",
+            "description": "Fecha de Envio Desde",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "hasta",
+            "in": "header",
+            "description": "Fecha de Envio Hasta",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/extraSchemes/Paginate",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Costos_Transporte",
+                      "properties": {
+                        "detalles": {
+                          "$ref": "#/components/schemas/Detalle_Costos"
+                        },
+                        "detallest": {
+                          "$ref": "#/components/schemas/Detalle_Costos_Transporte"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Costos_Transporte"],
+        "summary": "Crear Control de los Costos",
+        "description": "API para Crear un nuevo Costo",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Costos_Transporte"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Costos_Transporte"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/costos/{id}": {
+      "get": {
+        "tags": ["Costos_Transporte"],
+        "summary": "Obtener Costo por su Id",
+        "description": "API para Retornar un Costo por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Costo",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Costos_Transporte"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Costos_Transporte"],
+        "summary": "Actualizar Costos",
+        "description": "API para Actualizar un Costo por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Costo",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Costos_Transporte"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Costos_Transporte"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Costos_Transporte"],
+        "summary": "Borrar Costo",
+        "description": "API para Borrar un Costo por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Costo",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Costos_Transporte/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/cuentas": {
       "get": {
         "tags": ["Cuentas"],
@@ -4613,6 +4988,693 @@
         }
       }
     },
+    "/dcostos": {
+      "get": {
+        "tags": ["Detalle_Costos"],
+        "summary": "Obtener todos los Detalles de un Costo",
+        "description": "API para Obtener todos los Detalles de Costos del sistema",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "header",
+            "description": "Numero de la pagina",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "header",
+            "description": "Cantidad de registros",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "header",
+            "description": "Ordenado por",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "header",
+            "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cod_costo",
+            "in": "header",
+            "description": "Codigo del Costo",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/extraSchemes/Paginate",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Detalle_Costos",
+                      "properties": {
+                        "conceptos": {
+                          "$ref": "#/components/schemas/Conceptos_Operacion"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Detalle_Costos"],
+        "summary": "Crear Detalle de Costo",
+        "description": "API para Crear un nuevo Detalle de Costo",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Detalle_Costos"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detalle_Costos"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dcostos/{id}": {
+      "get": {
+        "tags": ["Detalle_Costos"],
+        "summary": "Obtener Detalle de Costo por su Id",
+        "description": "API para Retornar un Detalle de Costo por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Detalle de Costo",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detalle_Costos"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Detalle_Costos"],
+        "summary": "Actualizar Detalle de Costo",
+        "description": "API para Actualizar un Detalle de Costo por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Detalle de Costo",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Detalle_Costos"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detalle_Costos"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Detalle_Costos"],
+        "summary": "Borrar Detalle de Costo",
+        "description": "API para Borrar un Detalle de Costo por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Detalle de Costo",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Detalle_Costos/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dcostost": {
+      "get": {
+        "tags": ["Detalle_Costos_Transporte"],
+        "summary": "Obtener todos los Detalles de un Costo de Transporte",
+        "description": "API para Obtener todos los Detalles de Costos de Transporte del sistema",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "header",
+            "description": "Numero de la pagina",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "header",
+            "description": "Cantidad de registros",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "header",
+            "description": "Ordenado por",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "header",
+            "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cod_costo",
+            "in": "header",
+            "description": "Codigo del Costo",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/extraSchemes/Paginate",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Detalle_Costos_Transporte"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Detalle_Costos_Transporte"],
+        "summary": "Crear Detalle de Costo",
+        "description": "API para Crear un nuevo Detalle de Costo de Transporte",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Detalle_Costos_Transporte"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detalle_Costos_Transporte"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dcostost/{id}": {
+      "get": {
+        "tags": ["Detalle_Costos_Transporte"],
+        "summary": "Obtener Detalle de Costo de Transporte por su Id",
+        "description": "API para Retornar un Detalle de Costo de Transporte por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Detalle de Costo de Transporte",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detalle_Costos_Transporte"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Detalle_Costos_Transporte"],
+        "summary": "Actualizar Detalle de Costo de Transporte",
+        "description": "API para Actualizar un Detalle de Costo de Transporte por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Detalle de Costo de Transporte",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Detalle_Costos_Transporte"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detalle_Costos_Transporte"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Detalle_Costos_Transporte"],
+        "summary": "Borrar Detalle de Costo de Transporte",
+        "description": "API para Borrar un Detalle de Costo de Transporte por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Detalle de Costo de Transporte",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Detalle_Costos_Transporte/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/dmovimientos": {
       "get": {
         "tags": ["Detalle_Movimientos"],
@@ -4690,7 +5752,7 @@
                     "data": {
                       "$ref": "#/components/schemas/Detalle_Movimientos",
                       "properties": {
-                        "ciudades": {
+                        "conceptos": {
                           "$ref": "#/components/schemas/Conceptos_Operacion"
                         }
                       }
@@ -6721,7 +7783,7 @@
           }
         }
       }
-    },    
+    },
     "/mmovimientos": {
       "get": {
         "tags": ["Maestro_Movimientos"],
@@ -8982,6 +10044,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "activo",
+            "in": "header",
+            "description": "Solo Proveedores activos (S)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -9274,7 +10345,7 @@
         "tags": ["Receptores"],
         "summary": "Obtener todos los receptores",
         "description": "API para Obtener todos los receptores del sistema",
-        "parameters": [          
+        "parameters": [
           {
             "name": "activo",
             "in": "header",
@@ -9961,7 +11032,7 @@
         }
       }
     },
-    "/rpermisos/{id}": {      
+    "/rpermisos/{id}": {
       "delete": {
         "tags": ["Roles_Permisos"],
         "summary": "Borrar Permisos de un Rol",
@@ -11718,10 +12789,7 @@
     "schemas": {
       "Agencias": {
         "description": "Modelo de Agencias",
-        "required": [
-          "id",
-          "nb_agencia",
-          "cod_ciudad"],
+        "required": ["id", "nb_agencia", "cod_ciudad"],
         "properties": {
           "id": {
             "type": "number",
@@ -11761,10 +12829,7 @@
       },
       "Agentes": {
         "description": "Modelo de Agentes",
-        "required": [
-          "id",
-          "nb_agente",
-          "cod_agencia"],
+        "required": ["id", "nb_agente", "cod_agencia"],
         "properties": {
           "id": {
             "type": "number",
@@ -11820,9 +12885,7 @@
       },
       "Ayudantes": {
         "description": "Modelo de Ayudantes",
-        "required": [
-          "id",
-          "nb_ayudante"],
+        "required": ["id", "nb_ayudante"],
         "properties": {
           "id": {
             "type": "number",
@@ -11851,9 +12914,7 @@
       },
       "Bancos": {
         "description": "Modelo de Bancos",
-        "required": [
-          "id",
-          "nb_banco"],
+        "required": ["id", "nb_banco"],
         "properties": {
           "id": {
             "type": "number",
@@ -11890,7 +12951,8 @@
           "tipo_persona",
           "modalidad_pago",
           "cod_agencia",
-          "cod_ciudad"],
+          "cod_ciudad"
+        ],
         "properties": {
           "id": {
             "type": "number",
@@ -11978,10 +13040,7 @@
       },
       "Clientes_Particulares": {
         "description": "Modelo de Clientes Particulares",
-        "required": [
-          "id",
-          "cod_agencia",
-          "cod_cliente"],
+        "required": ["id", "cod_agencia", "cod_cliente"],
         "properties": {
           "id": {
             "type": "number",
@@ -12027,10 +13086,7 @@
       },
       "Ciudades": {
         "description": "Modelo de Ciudades",
-        "required": [
-          "id",
-          "desc_ciudad",
-          "cod_estado"],
+        "required": ["id", "desc_ciudad", "cod_estado"],
         "properties": {
           "id": {
             "type": "number",
@@ -12068,7 +13124,8 @@
           "desc_concepto",
           "check_comision",
           "check_impuesto",
-          "cod_concepto"],
+          "cod_concepto"
+        ],
         "properties": {
           "id": {
             "type": "number",
@@ -12098,7 +13155,8 @@
           "fecha_emision",
           "tipo_comision",
           "monto_comision",
-          "estatus"],
+          "estatus"
+        ],
         "properties": {
           "id": {
             "type": "number",
@@ -12140,7 +13198,8 @@
           "control_inicio",
           "control_final",
           "tipo",
-          "cod_agencia"],
+          "cod_agencia"
+        ],
         "properties": {
           "id": {
             "type": "number",
@@ -12177,11 +13236,7 @@
       },
       "Conceptos_Operacion": {
         "description": "Modelo de Conceptos de Operación",
-        "required": [
-          "id",
-          "desc_concepto",
-          "tipo",
-          "afecta_estado"],
+        "required": ["id", "desc_concepto", "tipo", "afecta_estado"],
         "properties": {
           "id": {
             "type": "number",
@@ -12209,7 +13264,8 @@
           "tipo",
           "control_inicio",
           "control_final",
-          "cod_agencia"],
+          "cod_agencia"
+        ],
         "properties": {
           "id": {
             "type": "number",
@@ -12242,12 +13298,58 @@
           }
         }
       },
+      "Costos_Transporte": {
+        "description": "Modelo de Control de Costos",
+        "required": ["id", "cod_agencia", "fecha_envio", "tipo_transporte"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "cod_agencia": {
+            "type": "number"
+          },
+          "fecha_envio": {
+            "type": "string"
+          },
+          "tipo_transporte": {
+            "type": "string"
+          },
+          "cod_agente": {
+            "type": "number"
+          },
+          "cod_proveedor": {
+            "type": "number"
+          },
+          "guia_fact_transporte": {
+            "type": "string"
+          },
+          "destino": {
+            "type": "string"
+          },
+          "cod_transporte": {
+            "type": "number"
+          },
+          "monto_pagado": {
+            "type": "number"
+          },
+          "observacion_gnral": {
+            "type": "string"
+          },
+          "monto_anticipo": {
+            "type": "number"
+          },
+          "cod_ayudante": {
+            "type": "number"
+          },
+          "anticipo_ayudante": {
+            "type": "number"
+          }
+        }
+      },
       "Cuentas": {
         "description": "Modelo de Cuentas",
-        "required": [
-          "id",
-          "nro_cuenta",
-          "cod_banco"],
+        "required": ["id", "nro_cuenta", "cod_banco"],
         "properties": {
           "id": {
             "type": "number",
@@ -12278,13 +13380,44 @@
           }
         }
       },
+      "Detalle_Costos": {
+        "description": "Modelo de Detalle de Costos",
+        "required": ["id", "cod_costo", "cod_concepto", "monto_costo"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "cod_costo": {
+            "type": "number"
+          },
+          "cod_concepto": {
+            "type": "number"
+          },
+          "monto_costo": {
+            "type": "number"
+          }
+        }
+      },
+      "Detalle_Costos_Transporte": {
+        "description": "Modelo de Detalle de Costos de Transporte",
+        "required": ["id", "cod_costo", "cod_movimiento"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "cod_costo": {
+            "type": "number"
+          },
+          "cod_movimiento": {
+            "type": "number"
+          }
+        }
+      },
       "Detalle_Movimientos": {
         "description": "Modelo de Detalle de Movimientos",
-        "required": [
-          "id",
-          "cod_movimiento",
-          "nro_item",
-          "precio_unitario"],
+        "required": ["id", "cod_movimiento", "nro_item", "precio_unitario"],
         "properties": {
           "id": {
             "type": "number",
@@ -12330,7 +13463,8 @@
           "nombre",
           "aplica_retencion",
           "porcentaje_retencion",
-          "periodo"],
+          "periodo"
+        ],
         "properties": {
           "id": {
             "type": "number",
@@ -12358,12 +13492,7 @@
       },
       "Estados": {
         "description": "Modelo de Estados",
-        "required": [
-          "id",
-          "desc_estado",
-          "siglas",
-          "iso_3166",
-          "cod_pais"],
+        "required": ["id", "desc_estado", "siglas", "iso_3166", "cod_pais"],
         "properties": {
           "id": {
             "type": "number",
@@ -12385,13 +13514,7 @@
       },
       "Fpos": {
         "description": "Modelo de Fpos",
-        "required": [
-          "id",
-          "cod_fpo",
-          "desc_tipo",
-          "valor",
-          "f_val",
-          "f_anul"],
+        "required": ["id", "cod_fpo", "desc_tipo", "valor", "f_val", "f_anul"],
         "properties": {
           "id": {
             "type": "number",
@@ -12429,7 +13552,8 @@
           "tipo_guia",
           "cod_control_guias",
           "fecha_registro",
-          "cod_concepto"],
+          "cod_concepto"
+        ],
         "properties": {
           "id": {
             "type": "number",
@@ -12463,9 +13587,7 @@
       },
       "Historico_Dolar": {
         "description": "Modelo de Historico del Dolar",
-        "required": [
-          "fecha",
-          "valor"],
+        "required": ["fecha", "valor"],
         "properties": {
           "fecha": {
             "type": "string"
@@ -12477,11 +13599,7 @@
       },
       "Localidades": {
         "description": "Modelo de Localidades",
-        "required": [
-          "id",
-          "desc_localidad",
-          "cod_postal",
-          "cod_estado"],
+        "required": ["id", "desc_localidad", "cod_postal", "cod_estado"],
         "properties": {
           "id": {
             "type": "number",
@@ -12508,7 +13626,8 @@
           "fecha_emision",
           "cod_cliente_org",
           "modalidad_pago",
-          "saldo"],
+          "saldo"
+        ],
         "properties": {
           "id": {
             "type": "number",
@@ -12867,7 +13986,8 @@
           "sustraendo",
           "cod_seniat",
           "fecha_ini_val",
-          "fecha_fin_val"],
+          "fecha_fin_val"
+        ],
         "properties": {
           "id": {
             "type": "number",
@@ -12920,7 +14040,8 @@
           "model",
           "direct",
           "padre",
-          "order"],
+          "order"
+        ],
         "properties": {
           "name": {
             "type": "string",
@@ -12946,7 +14067,7 @@
           },
           "direct": {
             "type": "number"
-          },          
+          },
           "padre": {
             "type": "string"
           },
@@ -12960,11 +14081,7 @@
       },
       "Menus_Acciones": {
         "description": "Modelo de Maestro de Acciones del Menu",
-        "required": [
-          "id",
-          "cod_menu",
-          "accion",
-          "descripcion"],
+        "required": ["id", "cod_menu", "accion", "descripcion"],
         "properties": {
           "id": {
             "type": "number",
@@ -12983,10 +14100,7 @@
       },
       "Municipios": {
         "description": "Modelo de Municipios",
-        "required": [
-          "id",
-          "desc_municipio",
-          "cod_estado"],
+        "required": ["id", "desc_municipio", "cod_estado"],
         "properties": {
           "id": {
             "type": "number",
@@ -13002,9 +14116,7 @@
       },
       "Objetos": {
         "description": "Modelo de Objetos",
-        "required": [
-          "codigo",
-          "descripcion"],
+        "required": ["codigo", "descripcion"],
         "properties": {
           "codigo": {
             "type": "string"
@@ -13016,10 +14128,7 @@
       },
       "Paises": {
         "description": "Modelo de Paises",
-        "required": [
-          "id",
-          "desc_pais",
-          "tipo_pais"],
+        "required": ["id", "desc_pais", "tipo_pais"],
         "properties": {
           "id": {
             "type": "number",
@@ -13039,10 +14148,7 @@
       },
       "Parroquias": {
         "description": "Modelo de Parroquias",
-        "required": [
-          "id",
-          "desc_parroquia",
-          "cod_municipio"],
+        "required": ["id", "desc_parroquia", "cod_municipio"],
         "properties": {
           "id": {
             "type": "number",
@@ -13058,10 +14164,7 @@
       },
       "Permisos": {
         "description": "Modelo de Permisos",
-        "required": [
-          "id",
-          "codigo",
-          "cod_rol"],
+        "required": ["id", "codigo", "cod_rol"],
         "properties": {
           "id": {
             "type": "number",
@@ -13077,10 +14180,7 @@
       },
       "Proveedores": {
         "description": "Modelo de Proveedores",
-        "required": [
-          "id",
-          "nb_proveedor",
-          "rif_proveedor"],
+        "required": ["id", "nb_proveedor", "rif_proveedor"],
         "properties": {
           "id": {
             "type": "number",
@@ -13147,9 +14247,7 @@
       },
       "Receptores": {
         "description": "Modelo de Receptores",
-        "required": [
-          "id",
-          "nb_receptor"],
+        "required": ["id", "nb_receptor"],
         "properties": {
           "id": {
             "type": "number",
@@ -13187,10 +14285,7 @@
       },
       "Roles": {
         "description": "Modelo de Roles",
-        "required": [
-          "id",
-          "descripcion",
-          "cod_agencia"],
+        "required": ["id", "descripcion", "cod_agencia"],
         "properties": {
           "id": {
             "type": "number",
@@ -13206,10 +14301,7 @@
       },
       "Roles_Permisos": {
         "description": "Modelo de Permisos de Roles",
-        "required": [
-          "id",
-          "cod_rol",
-          "cod_menu_accion"],
+        "required": ["id", "cod_rol", "cod_menu_accion"],
         "properties": {
           "id": {
             "type": "number",
@@ -13225,9 +14317,7 @@
       },
       "Tarifas": {
         "description": "Modelo de Tarifas",
-        "required": [
-          "id",
-          "monto_tarifa"],
+        "required": ["id", "monto_tarifa"],
         "properties": {
           "id": {
             "type": "number",
@@ -13302,10 +14392,7 @@
       },
       "Tipos": {
         "description": "Maestro de Tipos",
-        "required": [
-          "codigo",
-          "descripcion",
-          "fuente"],
+        "required": ["codigo", "descripcion", "fuente"],
         "properties": {
           "codigo": {
             "type": "number",
@@ -13321,10 +14408,7 @@
       },
       "Unidades": {
         "description": "Modelo de Unidades de Transporte",
-        "required": [
-          "id",
-          "placas",
-          "descripcion"],
+        "required": ["id", "placas", "descripcion"],
         "properties": {
           "id": {
             "type": "number",
@@ -13353,7 +14437,8 @@
           "nombre",
           "activo",
           "cod_agencia",
-          "cod_rol"],
+          "cod_rol"
+        ],
         "properties": {
           "login": {
             "type": "string"
@@ -13381,11 +14466,7 @@
       },
       "Variable_Control": {
         "description": "Modelo de Variables de Control",
-        "required": [
-          "id",
-          "nombre",
-          "tipo",
-          "valor"],
+        "required": ["id", "nombre", "tipo", "valor"],
         "properties": {
           "id": {
             "type": "number",
@@ -13408,11 +14489,7 @@
       },
       "Zonas": {
         "description": "Modelo de Zonas",
-        "required": [
-          "id",
-          "nb_zona",
-          "tipo_zona",
-          "cod_agencia"],
+        "required": ["id", "nb_zona", "tipo_zona", "cod_agencia"],
         "properties": {
           "id": {
             "type": "number",
@@ -13484,10 +14561,7 @@
   },
   "extraSchemes": {
     "Login": {
-      "required": [
-        "username",
-        "password"
-      ],
+      "required": ["username", "password"],
       "properties": {
         "username": {
           "type": "string"
@@ -13518,10 +14592,7 @@
       }
     },
     "Refresh": {
-      "required": [
-        "username",
-        "token"
-      ],
+      "required": ["username", "token"],
       "properties": {
         "username": {
           "type": "string"
@@ -13533,9 +14604,7 @@
       "type": "object"
     },
     "Logout": {
-      "required": [
-        "token"
-      ],
+      "required": ["token"],
       "properties": {
         "token": {
           "type": "string"
