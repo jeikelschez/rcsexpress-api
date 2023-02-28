@@ -78,4 +78,17 @@ router.get('/relacionDespacho', authenticateJWT, async (req, res, next) => {
   }
 });
 
+router.get('/costosTransporte', authenticateJWT, async (req, res, next) => {
+  try {
+    const { data, detalle } = req.headers;
+    const pdfStream = await service.costosTransporte(data, detalle);
+    res.status(200).json({
+      message: 'PDF Generado',
+      base64: pdfStream,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

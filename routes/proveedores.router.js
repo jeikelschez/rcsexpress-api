@@ -2,25 +2,46 @@ const express = require('express');
 
 const ProveedoresService = require('./../services/proveedores.service');
 const validatorHandler = require('./../middlewares/validator.handler');
-const { createProveedoresSchema, updateProveedoresSchema, getProveedoresSchema } = require('./../schemas/proveedores.schema');
-const authenticateJWT  = require('./../middlewares/authenticate.handler');
+const {
+  createProveedoresSchema,
+  updateProveedoresSchema,
+  getProveedoresSchema,
+} = require('./../schemas/proveedores.schema');
+const authenticateJWT = require('./../middlewares/authenticate.handler');
 
 const router = express.Router();
 const service = new ProveedoresService();
 
-router.get('/',
-  authenticateJWT,
-  async (req, res, next) => {
+router.get('/', authenticateJWT, async (req, res, next) => {
   try {
-    const { page, limit, order_by, order_direction, filter, filter_value, tipo_servicio } = req.headers;
-    const proveedores = await service.find(page, limit, order_by, order_direction, filter, filter_value, tipo_servicio);
+    const {
+      page,
+      limit,
+      order_by,
+      order_direction,
+      filter,
+      filter_value,
+      tipo_servicio,
+      activo,
+    } = req.headers;
+    const proveedores = await service.find(
+      page,
+      limit,
+      order_by,
+      order_direction,
+      filter,
+      filter_value,
+      tipo_servicio,
+      activo
+    );
     res.json(proveedores);
   } catch (error) {
     next(error);
   }
 });
 
-router.get('/:id',
+router.get(
+  '/:id',
   authenticateJWT,
   validatorHandler(getProveedoresSchema, 'params'),
   async (req, res, next) => {
@@ -34,7 +55,8 @@ router.get('/:id',
   }
 );
 
-router.post('/',
+router.post(
+  '/',
   authenticateJWT,
   validatorHandler(createProveedoresSchema, 'body'),
   async (req, res, next) => {
@@ -48,7 +70,8 @@ router.post('/',
   }
 );
 
-router.put('/:id',
+router.put(
+  '/:id',
   authenticateJWT,
   validatorHandler(getProveedoresSchema, 'params'),
   validatorHandler(updateProveedoresSchema, 'body'),
@@ -64,14 +87,15 @@ router.put('/:id',
   }
 );
 
-router.delete('/:id',
+router.delete(
+  '/:id',
   authenticateJWT,
   validatorHandler(getProveedoresSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
       await service.delete(id);
-      res.status(201).json({id});
+      res.status(201).json({ id });
     } catch (error) {
       next(error);
     }

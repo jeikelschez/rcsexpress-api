@@ -21,12 +21,13 @@ class ProveedoresService {
     return newProveedor;
   }
 
-  async find(page, limit, order_by, order_direction, filter, filter_value, tipo_servicio) {
+  async find(page, limit, order_by, order_direction, filter, filter_value, tipo_servicio, activo) {
     let params2 = {};
     let filterArray = {};
     let order = [];
 
     if(tipo_servicio) params2.tipo_servicio = tipo_servicio;
+    if(activo) params2.flag_activo = 'A';
 
     if(filter && filter_value) {
       let filters = [];

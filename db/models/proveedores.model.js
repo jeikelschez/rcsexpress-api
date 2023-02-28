@@ -71,6 +71,7 @@ class Proveedores extends Model {
 
   static associate(models) {
     this.belongsTo(models.Mretenciones, { foreignKey: 'cod_tipo_retencion', as: 'retenciones' });
+    this.hasMany(models.Costos, { foreignKey: 'cod_proveedor', as: 'costos' });
   }
 
   static config(sequelize) {

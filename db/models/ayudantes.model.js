@@ -30,6 +30,7 @@ const AyudantesSchema = {
 class Ayudantes extends Model {
 
   static associate(models) {
+    this.hasMany(models.Costos, { foreignKey: 'cod_ayudante', as: 'costos' });
   }
 
   static config(sequelize) {
