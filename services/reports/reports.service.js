@@ -172,10 +172,15 @@ class ReportsService {
   }
 
   // REPORTE REGISTRO COSTOS
-  async registroCostos() {
-    let doc = new PDFDocument({ margin: 50, bufferPages: true, });
-    await registroCostosService.generateHeader(doc);
-    await registroCostosService.generateCustomerInformation(doc);
+  async registroCostos(type) {
+    let doc;
+    if (type == 4) {
+      doc = new PDFDocument({ margin: 10, bufferPages: true, layout: 'landscape'});
+    } else {
+      doc = new PDFDocument({ margin: 50, bufferPages: true, });  
+    }
+    await registroCostosService.generateHeader(doc, type);
+    await registroCostosService.generateCustomerInformation(doc, type);
     doc.end();
     var encoder = new base64.Base64Encode();
     var b64s = doc.pipe(encoder);
