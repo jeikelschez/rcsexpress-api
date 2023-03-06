@@ -39,6 +39,19 @@ router.get('/facturaPreimpreso', authenticateJWT, async (req, res, next) => {
   }
 });
 
+router.get('/registrocostos', authenticateJWT, async (req, res, next) => {
+  try {
+    const { type } = req.headers;
+    const pdfStream = await service.registroCostos(type);
+    res.status(200).json({
+      message: 'PDF Generado',
+      base64: pdfStream,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get('/anexoFactura', authenticateJWT, async (req, res, next) => {
   try {
     const { data } = req.headers;
@@ -67,8 +80,8 @@ router.get('/relacionDespacho', authenticateJWT, async (req, res, next) => {
 
 router.get('/costosTransporte', authenticateJWT, async (req, res, next) => {
   try {
-    const { data, detalle } = req.headers;
-    const pdfStream = await service.costosTransporte(data, detalle);
+    const { data } = req.headers;
+    const pdfStream = await service.costosTransporte(data);
     res.status(200).json({
       message: 'PDF Generado',
       base64: pdfStream,

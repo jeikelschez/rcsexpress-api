@@ -12,6 +12,8 @@ const AnexoFacturaService = require('./anexoFactura.service');
 const anexoFacturaService = new AnexoFacturaService();
 const RelacionDespachoService = require('./relacionDespacho.service');
 const relacionDespachoService = new RelacionDespachoService();
+const RegistroCostosService = require('./registroCostos.service');
+const registroCostosService = new RegistroCostosService();
 
 const clienteOrigDesc =
   '(CASE WHEN (ci_rif_cte_conta_org IS NULL || ci_rif_cte_conta_org = "")' +
@@ -163,6 +165,22 @@ class ReportsService {
       data,
       dataDetalle
     );
+    doc.end();
+    var encoder = new base64.Base64Encode();
+    var b64s = doc.pipe(encoder);
+    return await getStream(b64s);
+  }
+
+  // REPORTE REGISTRO COSTOS
+  async registroCostos(type) {
+    let doc;
+    if (type == 4) {
+      doc = new PDFDocument({ margin: 10, bufferPages: true, layout: 'landscape'});
+    } else {
+      doc = new PDFDocument({ margin: 50, bufferPages: true, });  
+    }
+    await registroCostosService.generateHeader(doc, type);
+    await registroCostosService.generateCustomerInformation(doc, type);
     doc.end();
     var encoder = new base64.Base64Encode();
     var b64s = doc.pipe(encoder);
