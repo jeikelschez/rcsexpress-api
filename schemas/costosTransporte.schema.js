@@ -10,11 +10,9 @@ const cod_proveedor = Joi.number().integer();
 const guia_fact_transporte = Joi.string().max(10);
 const destino = Joi.string().max(50);
 const cod_transporte = Joi.number().integer();
-const monto_pagado = Joi.number().precision(2);
 const observacion_gnral = Joi.string().max(1000);
 const monto_anticipo = Joi.number().precision(2);
 const cod_ayudante = Joi.number().integer();
-const anticipo_ayudante = Joi.number().precision(2);
 
 const createCostosSchema = Joi.object({
   cod_agencia: cod_agencia.required(),
@@ -25,11 +23,9 @@ const createCostosSchema = Joi.object({
   guia_fact_transporte: guia_fact_transporte.allow(null, ''),
   destino: destino.allow(null, ''),
   cod_transporte: cod_transporte.allow(null, ''),
-  monto_pagado: monto_pagado.allow(null, ''),
   observacion_gnral: observacion_gnral.allow(null, ''),
   monto_anticipo: monto_anticipo.allow(null, ''),
   cod_ayudante: cod_ayudante.allow(null, ''),
-  anticipo_ayudante: anticipo_ayudante.allow(null, '')
 });
 
 const updateCostosSchema = Joi.object({
@@ -42,11 +38,9 @@ const updateCostosSchema = Joi.object({
   guia_fact_transporte: guia_fact_transporte.allow(null, ''),
   destino: destino.allow(null, ''),
   cod_transporte: cod_transporte.allow(null, ''),
-  monto_pagado: monto_pagado.allow(null, ''),
   observacion_gnral: observacion_gnral.allow(null, ''),
   monto_anticipo: monto_anticipo.allow(null, ''),
   cod_ayudante: cod_ayudante.allow(null, ''),
-  anticipo_ayudante: anticipo_ayudante.allow(null, '')
 });
 
 const getCostosSchema = Joi.object({

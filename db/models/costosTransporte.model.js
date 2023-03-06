@@ -35,16 +35,10 @@ const CostosSchema = {
   destino: {
     type: DataTypes.STRING,
   },
-  monto_pagado: {
-    type: DataTypes.DECIMAL,
-  },
   observacion_gnral: {
     type: DataTypes.STRING,
   },
   monto_anticipo: {
-    type: DataTypes.DECIMAL,
-  },
-  anticipo_ayudante: {
     type: DataTypes.DECIMAL,
   },
   cod_agencia: {

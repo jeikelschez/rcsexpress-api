@@ -13330,9 +13330,6 @@
           "cod_transporte": {
             "type": "number"
           },
-          "monto_pagado": {
-            "type": "number"
-          },
           "observacion_gnral": {
             "type": "string"
           },
@@ -13340,9 +13337,6 @@
             "type": "number"
           },
           "cod_ayudante": {
-            "type": "number"
-          },
-          "anticipo_ayudante": {
             "type": "number"
           }
         }
