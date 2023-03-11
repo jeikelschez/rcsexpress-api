@@ -42,7 +42,7 @@ const CcomisionesRouter = require('./controlComisiones.router');
 const ReportsRouter = require('./reports.router');
 const CostosRouter = require('./costosTransporte.router');
 const DcostosRouter = require('./detalleCostos.router');
-const DcostostRouter = require('./detalleCostosTransporte.router');
+const DcostosgRouter = require('./detalleCostosGuias.router');
 
 function routerApi(app) {
   const router = express.Router();
@@ -88,7 +88,7 @@ function routerApi(app) {
   router.use('/reports', ReportsRouter);
   router.use('/costos', CostosRouter);
   router.use('/dcostos', DcostosRouter);
-  router.use('/dcostost', DcostostRouter);
+  router.use('/dcostosg', DcostosgRouter);
   router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 

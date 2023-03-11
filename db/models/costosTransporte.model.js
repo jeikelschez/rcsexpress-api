@@ -112,9 +112,13 @@ class Costos extends Model {
       foreignKey: 'cod_costo',
       as: 'detalles',
     });
-    this.hasMany(models.Dcostost, {
+    this.hasMany(models.Dcostosg, {
       foreignKey: 'cod_costo',
-      as: 'detallest',
+      as: 'detallesg',
+    });
+    this.belongsTo(models.Hdolar, {
+      foreignKey: 'fecha_envio',
+      as: 'dolar',
     });
   }
 

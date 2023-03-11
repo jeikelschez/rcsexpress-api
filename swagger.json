@@ -83,8 +83,8 @@
       "description": "API para Manejar el Detalle de Costos de la Organizacion"
     },
     {
-      "name": "Detalle_Costos_Transporte",
-      "description": "API para Manejar el Detalle de Costos Transporte de la Organizacion"
+      "name": "Detalle_Costos_Guias",
+      "description": "API para Manejar el Detalle de Costos Guias de la Organizacion"
     },
     {
       "name": "Detalle_Movimientos",
@@ -4417,6 +4417,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "order_doc",
+            "in": "header",
+            "description": "Ordenamiento por nro_documento (S)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -4433,8 +4442,8 @@
                         "detalles": {
                           "$ref": "#/components/schemas/Detalle_Costos"
                         },
-                        "detallest": {
-                          "$ref": "#/components/schemas/Detalle_Costos_Transporte"
+                        "detallesg": {
+                          "$ref": "#/components/schemas/Detalle_Costos_Guias"
                         }
                       }
                     }
@@ -5334,11 +5343,11 @@
         }
       }
     },
-    "/dcostost": {
+    "/dcostosg": {
       "get": {
-        "tags": ["Detalle_Costos_Transporte"],
-        "summary": "Obtener todos los Detalles de un Costo de Transporte",
-        "description": "API para Obtener todos los Detalles de Costos de Transporte del sistema",
+        "tags": ["Detalle_Costos_Guias"],
+        "summary": "Obtener todos los Detalles de Guias de un Costo de Transporte",
+        "description": "API para Obtener todos los Detalles de Guias de Costos de Transporte del sistema",
         "parameters": [
           {
             "name": "page",
@@ -5409,7 +5418,7 @@
                   "$ref": "#/extraSchemes/Paginate",
                   "properties": {
                     "data": {
-                      "$ref": "#/components/schemas/Detalle_Costos_Transporte"
+                      "$ref": "#/components/schemas/Detalle_Costos_Guias"
                     }
                   }
                 }
@@ -5429,16 +5438,16 @@
         }
       },
       "post": {
-        "tags": ["Detalle_Costos_Transporte"],
-        "summary": "Crear Detalle de Costo",
-        "description": "API para Crear un nuevo Detalle de Costo de Transporte",
+        "tags": ["Detalle_Costos_Guias"],
+        "summary": "Crear Detalle de Guias de Costo",
+        "description": "API para Crear un nuevo Detalle de Guias de Costo de Transporte",
         "requestBody": {
           "description": "Post object",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Detalle_Costos_Transporte"
+                "$ref": "#/components/schemas/Detalle_Costos_Guias"
               }
             }
           }
@@ -5449,7 +5458,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Detalle_Costos_Transporte"
+                  "$ref": "#/components/schemas/Detalle_Costos_Guias"
                 }
               }
             }
@@ -5490,16 +5499,16 @@
         }
       }
     },
-    "/dcostost/{id}": {
+    "/dcostosg/{id}": {
       "get": {
-        "tags": ["Detalle_Costos_Transporte"],
-        "summary": "Obtener Detalle de Costo de Transporte por su Id",
-        "description": "API para Retornar un Detalle de Costo de Transporte por su ID específico",
+        "tags": ["Detalle_Costos_Guias"],
+        "summary": "Obtener Detalle de Costo de Guias de Transporte por su Id",
+        "description": "API para Retornar un Detalle de Guias de Costo de Transporte por su ID específico",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Codigo del Detalle de Costo de Transporte",
+            "description": "Codigo del Detalle de Guias de Costo de Transporte",
             "required": true,
             "schema": {
               "type": "integer"
@@ -5512,7 +5521,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Detalle_Costos_Transporte"
+                  "$ref": "#/components/schemas/Detalle_Costos_Guias"
                 }
               }
             }
@@ -5540,14 +5549,14 @@
         }
       },
       "put": {
-        "tags": ["Detalle_Costos_Transporte"],
-        "summary": "Actualizar Detalle de Costo de Transporte",
-        "description": "API para Actualizar un Detalle de Costo de Transporte por su ID específico",
+        "tags": ["Detalle_Costos_Guias"],
+        "summary": "Actualizar Detalle de Guias de Costo de Transporte",
+        "description": "API para Actualizar un Detalle de Guias de Costo de Transporte por su ID específico",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Codigo del Detalle de Costo de Transporte",
+            "description": "Codigo del Detalle de Guia de Costo de Transporte",
             "required": true,
             "schema": {
               "type": "integer"
@@ -5560,7 +5569,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Detalle_Costos_Transporte"
+                "$ref": "#/components/schemas/Detalle_Costos_Guias"
               }
             }
           }
@@ -5571,7 +5580,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Detalle_Costos_Transporte"
+                  "$ref": "#/components/schemas/Detalle_Costos_Guias"
                 }
               }
             }
@@ -5622,14 +5631,14 @@
         }
       },
       "delete": {
-        "tags": ["Detalle_Costos_Transporte"],
-        "summary": "Borrar Detalle de Costo de Transporte",
-        "description": "API para Borrar un Detalle de Costo de Transporte por su ID específico",
+        "tags": ["Detalle_Costos_Guias"],
+        "summary": "Borrar Detalle de Guias de Costo de Transporte",
+        "description": "API para Borrar un Detalle de Guias de Costo de Transporte por su ID específico",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Codigo del Detalle de Costo de Transporte",
+            "description": "Codigo del Detalle de Guias de Costo de Transporte",
             "required": true,
             "schema": {
               "type": "integer"
@@ -5644,7 +5653,7 @@
                 "schema": {
                   "properties": {
                     "id": {
-                      "$ref": "#/components/schemas/Detalle_Costos_Transporte/properties/id"
+                      "$ref": "#/components/schemas/Detalle_Costos_Guias/properties/id"
                     }
                   },
                   "type": "object"
@@ -7850,9 +7859,27 @@
             }
           },
           {
+            "name": "agencia_transito",
+            "in": "header",
+            "description": "Codigo de la Agencia Transito",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
             "name": "agencia_dest",
             "in": "header",
             "description": "Codigo de la Agencia Destino",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "agencia_dest_transito",
+            "in": "header",
+            "description": "Codigo de la Agencia Transito Destino",
             "required": false,
             "schema": {
               "type": "integer"
@@ -13393,8 +13420,8 @@
           }
         }
       },
-      "Detalle_Costos_Transporte": {
-        "description": "Modelo de Detalle de Costos de Transporte",
+      "Detalle_Costos_Guias": {
+        "description": "Modelo de Detalle de Guias de Costos de Transporte",
         "required": ["id", "cod_costo", "cod_movimiento"],
         "properties": {
           "id": {
@@ -13962,6 +13989,10 @@
             "readOnly": true
           },
           "cliente_dest_desc": {
+            "type": "string",
+            "readOnly": true
+          },
+          "siglas_dest": {
             "type": "string",
             "readOnly": true
           }

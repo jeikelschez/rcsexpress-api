@@ -21,7 +21,8 @@ class CostosTransporteService {
     filter_value,
     agencia,
     desde,
-    hasta
+    hasta,
+    order_doc
   ) {
     let params2 = {};
     let filterArray = {};
@@ -62,7 +63,20 @@ class CostosTransporteService {
 
     let params = { ...params2, ...filterArray };
 
-    if (order_by && order_direction) {
+    if (order_doc) {
+      order = [
+        [
+          'fecha_envio',
+          'ASC',
+        ],
+        [
+          { model: models.Dcostosg, as: 'detallesg' },
+          { model: models.Mmovimientos, as: 'movimientos' },
+          'fecha_emision',
+          'ASC',
+        ],
+      ];
+    } else if (order_by && order_direction) {
       order.push([order_by, order_direction]);
     }
 
@@ -74,13 +88,22 @@ class CostosTransporteService {
         as: 'detalles',
       },
       {
-        model: models.Dcostost,
-        as: 'detallest',
+        model: models.Dcostosg,
+        as: 'detallesg',
         include: {
           model: models.Mmovimientos,
           as: 'movimientos',
-          attributes: ['id', 'monto_subtotal'],
+          attributes: [
+            'id',
+            'nro_documento',
+            'fecha_emision',
+            'monto_subtotal',
+          ],
         },
+      },
+      {
+        model: models.Hdolar,
+        as: 'dolar',
       },
     ];
 
@@ -96,7 +119,18 @@ class CostosTransporteService {
   }
 
   async findOne(id) {
-    const costo = await models.Costos.findByPk(id);
+    const costo = await models.Costos.findByPk(id, {
+      include: [
+        {
+          model: models.Dcostos,
+          as: 'detalles',
+        },
+        {
+          model: models.Dcostosg,
+          as: 'detallesg',
+        },
+      ],
+    });
     if (!costo) {
       throw boom.notFound('Costo no existe');
     }

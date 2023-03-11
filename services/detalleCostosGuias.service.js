@@ -4,12 +4,12 @@ const { models, Sequelize } = require('../libs/sequelize');
 const UtilsService = require('./utils.service');
 const utils = new UtilsService();
 
-class DcostostService {
+class DcostosgService {
   constructor() {}
 
   async create(data) {
-    const newDcostot = await models.Dcostost.create(data);
-    return newDcostot;
+    const newDcostog = await models.Dcostosg.create(data);
+    return newDcostog;
   }
 
   async find(
@@ -57,7 +57,7 @@ class DcostostService {
     ];
 
     return await utils.paginate(
-      models.Dcostost,
+      models.Dcostosg,
       page,
       limit,
       params,
@@ -68,30 +68,30 @@ class DcostostService {
   }
 
   async findOne(id) {
-    const dCostot = await models.Dcostost.findByPk(id);
-    if (!dCostot) {
-      throw boom.notFound('Detalle de Costos Transporte no existe');
+    const dCostog = await models.Dcostosg.findByPk(id);
+    if (!dCostog) {
+      throw boom.notFound('Detalle de Costos Guias no existe');
     }
-    return dCosto;
+    return dCostog;
   }
 
   async update(id, changes) {
-    const dCostot = await models.Dcostost.findByPk(id);
-    if (!dCostot) {
-      throw boom.notFound('Detalle de Costos Transporte no existe');
+    const dCostog = await models.Dcostosg.findByPk(id);
+    if (!dCostog) {
+      throw boom.notFound('Detalle de Costos Guias no existe');
     }
-    const rta = await dCostot.update(changes);
+    const rta = await dCostog.update(changes);
     return rta;
   }
 
   async delete(id) {
-    const dCostot = await models.Dcostost.findByPk(id);
-    if (!dCostot) {
-      throw boom.notFound('Detalle de Costos Transporte no existe');
+    const dCostog = await models.Dcostosg.findByPk(id);
+    if (!dCostog) {
+      throw boom.notFound('Detalle de Costos Guias no existe');
     }
-    await dCostot.destroy();
+    await dCostog.destroy();
     return { id };
   }
 }
 
-module.exports = DcostostService;
+module.exports = DcostosgService;

@@ -28,6 +28,11 @@ const clienteDestDesc =
   ' AND `Mmovimientos`.ci_rif_cte_conta_dest = clientes_particulares.rif_ci' +
   ' AND clientes_particulares.estatus = "A" LIMIT 1)' +
   ' END)';
+const siglasDest =
+  '(SELECT siglas' +
+  ' FROM agencias ' +
+  ' JOIN ciudades ON agencias.cod_ciudad = ciudades.id ' +
+  ' WHERE `Mmovimientos`.cod_agencia_dest = agencias.id)';  
 
 class MmovimientosService {
   constructor() {}
@@ -45,7 +50,9 @@ class MmovimientosService {
     filter,
     filter_value,
     agencia,
+    agencia_transito,
     agencia_dest,
+    agencia_dest_transito,
     nro_documento,
     tipo,
     tipo_in,
@@ -73,14 +80,47 @@ class MmovimientosService {
     include_zona
   ) {
     let params2 = {};
+    let params3 = {};
     let filterArray = {};
     let order = [];
     let include = [];
 
-    if (agencia) params2.cod_agencia = agencia;
+    if (agencia) {
+      params2.cod_agencia = agencia.split(',');
+    }
+
+    if (agencia) {
+      if (agencia_transito) {
+        params3 = {
+          [Sequelize.Op.or]: [
+            {
+              cod_agencia: agencia.split(','),
+            },
+            {
+              cod_agencia_transito: agencia.split(','),
+            },
+          ],
+        };
+      } else {
+        params2.cod_agencia_dest = agencia_dest.split(',');
+      }
+    }
 
     if (agencia_dest) {
-      params2.cod_agencia_dest = agencia_dest.split(',');
+      if (agencia_dest_transito) {
+        params3 = {
+          [Sequelize.Op.or]: [
+            {
+              cod_agencia_dest: agencia_dest.split(','),
+            },
+            {
+              cod_agencia_transito: agencia_dest.split(','),
+            },
+          ],
+        };
+      } else {
+        params2.cod_agencia_dest = agencia_dest.split(',');
+      }
     }
 
     if (nro_documento) params2.nro_documento = nro_documento;
@@ -173,31 +213,33 @@ class MmovimientosService {
       };
     }
 
-    let params = { ...params2, ...filterArray };
+    let params = { ...params3, ...params2, ...filterArray };
 
     let attributes = {
       include: [
         [Sequelize.literal(clienteOrigDesc), 'cliente_orig_desc'],
         [Sequelize.literal(clienteDestDesc), 'cliente_dest_desc'],
+        [Sequelize.literal(siglasDest), 'siglas_dest'],
+
       ],
     };
 
-    if(include_zona) {
+    if (include_zona) {
       include = ['zonas_dest'];
     }
-    
+
     if (order_pe) {
       order.push(['cod_agencia', 'ASC']);
       order.push(['cod_agencia_dest', 'ASC']);
       order.push(['nro_documento', 'ASC']);
       order.push(['fecha_emision', 'ASC']);
-    } else if(order_by) {
+    } else if (order_by) {
       if (order_by.includes(',')) {
         order = JSON.parse(order_by);
       } else if (order_by && order_direction) {
         order.push([order_by, order_direction]);
       }
-    }   
+    }
 
     return await utils.paginate(
       models.Mmovimientos,

@@ -586,7 +586,7 @@ class Mmovimientos extends Model {
       foreignKey: 'cod_movimiento',
       as: 'comisiones',
     });
-    this.hasMany(models.Dcostost, {
+    this.hasMany(models.Dcostosg, {
       foreignKey: 'cod_movimiento',
       as: 'detalles_costo',
     });

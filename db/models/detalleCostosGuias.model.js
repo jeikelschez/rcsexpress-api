@@ -3,9 +3,9 @@ const { Model, DataTypes, Sequelize } = require('sequelize');
 const { COSTOS_TABLE } = require('./costosTransporte.model');
 const { MMOVIMIENTOS_TABLE } = require('./maestroMovimientos.model');
 
-const DCOSTOST_TABLE = 'detalle_costos_transporte';
+const DCOSTOSG_TABLE = 'detalle_costos_guias';
 
-const DcostostSchema = {
+const DcostosgSchema = {
   id: {
     allowNull: false,
     autoIncrement: true,
@@ -33,7 +33,7 @@ const DcostostSchema = {
   },
 };
 
-class Dcostost extends Model {
+class Dcostosg extends Model {
   static associate(models) {
     this.belongsTo(models.Costos, { foreignKey: 'cod_costo', as: 'costos' });
     this.belongsTo(models.Mmovimientos, {
@@ -45,11 +45,11 @@ class Dcostost extends Model {
   static config(sequelize) {
     return {
       sequelize,
-      tableName: DCOSTOST_TABLE,
-      modelName: 'Dcostost',
+      tableName: DCOSTOSG_TABLE,
+      modelName: 'Dcostosg',
       timestamps: false,
     };
   }
 }
 
-module.exports = { Dcostost, DcostostSchema, DCOSTOST_TABLE };
+module.exports = { Dcostosg, DcostosgSchema, DCOSTOSG_TABLE };

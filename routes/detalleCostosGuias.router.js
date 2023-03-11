@@ -1,16 +1,16 @@
 const express = require('express');
 
-const DcostostService = require('../services/detalleCostosTransporte.service');
+const DcostosgService = require('../services/detalleCostosGuias.service');
 const validatorHandler = require('../middlewares/validator.handler');
 const {
-  createDcostostSchema,
-  updateDcostostSchema,
-  getDcostostSchema,
-} = require('../schemas/detalleCostosTransporte.schema');
+  createDcostosgSchema,
+  updateDcostosgSchema,
+  getDcostosgSchema,
+} = require('../schemas/detalleCostosGuias.schema');
 const authenticateJWT = require('../middlewares/authenticate.handler');
 
 const router = express.Router();
-const service = new DcostostService();
+const service = new DcostosgService();
 
 router.get('/', authenticateJWT, async (req, res, next) => {
   try {
@@ -23,7 +23,7 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       filter_value,
       cod_costo,
     } = req.headers;
-    const dCostost = await service.find(
+    const dCostosg = await service.find(
       page,
       limit,
       order_by,
@@ -32,7 +32,7 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       filter_value,
       cod_costo
     );
-    res.json(dCostost);
+    res.json(dCostosg);
   } catch (error) {
     next(error);
   }
@@ -41,12 +41,12 @@ router.get('/', authenticateJWT, async (req, res, next) => {
 router.get(
   '/:id',
   authenticateJWT,
-  validatorHandler(getDcostostSchema, 'params'),
+  validatorHandler(getDcostosgSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const dCostot = await service.findOne(id);
-      res.json(dCostot);
+      const dCostog = await service.findOne(id);
+      res.json(dCostog);
     } catch (error) {
       next(error);
     }
@@ -56,12 +56,12 @@ router.get(
 router.post(
   '/',
   authenticateJWT,
-  validatorHandler(createDcostostSchema, 'body'),
+  validatorHandler(createDcostosgSchema, 'body'),
   async (req, res, next) => {
     try {
       const body = req.body;
-      const newDcostot = await service.create(body);
-      res.status(201).json(newDcostot);
+      const newDcostog = await service.create(body);
+      res.status(201).json(newDcostog);
     } catch (error) {
       next(error);
     }
@@ -71,14 +71,14 @@ router.post(
 router.put(
   '/:id',
   authenticateJWT,
-  validatorHandler(getDcostostSchema, 'params'),
-  validatorHandler(updateDcostostSchema, 'body'),
+  validatorHandler(getDcostosgSchema, 'params'),
+  validatorHandler(updateDcostosgSchema, 'body'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
       const body = req.body;
-      const dCostot = await service.update(id, body);
-      res.json(dCostot);
+      const dCostog = await service.update(id, body);
+      res.json(dCostog);
     } catch (error) {
       next(error);
     }
@@ -88,7 +88,7 @@ router.put(
 router.delete(
   '/:id',
   authenticateJWT,
-  validatorHandler(getDcostostSchema, 'params'),
+  validatorHandler(getDcostosgSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
