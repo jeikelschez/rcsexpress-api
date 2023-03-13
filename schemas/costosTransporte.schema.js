@@ -7,7 +7,6 @@ const fecha_envio = Joi.date();
 const tipo_transporte = Joi.string().max(2);
 const cod_agente = Joi.number().integer();
 const cod_proveedor = Joi.number().integer();
-const guia_fact_transporte = Joi.string().max(10);
 const destino = Joi.string().max(50);
 const cod_transporte = Joi.number().integer();
 const observacion_gnral = Joi.string().max(1000);
@@ -20,7 +19,6 @@ const createCostosSchema = Joi.object({
   tipo_transporte: tipo_transporte.required(),
   cod_agente: cod_agente.allow(null, ''),
   cod_proveedor: cod_proveedor.allow(null, ''),
-  guia_fact_transporte: guia_fact_transporte.allow(null, ''),
   destino: destino.allow(null, ''),
   cod_transporte: cod_transporte.allow(null, ''),
   observacion_gnral: observacion_gnral.allow(null, ''),
@@ -35,7 +33,6 @@ const updateCostosSchema = Joi.object({
   tipo_transporte: tipo_transporte,
   cod_agente: cod_agente.allow(null, ''),
   cod_proveedor: cod_proveedor.allow(null, ''),
-  guia_fact_transporte: guia_fact_transporte.allow(null, ''),
   destino: destino.allow(null, ''),
   cod_transporte: cod_transporte.allow(null, ''),
   observacion_gnral: observacion_gnral.allow(null, ''),

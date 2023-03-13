@@ -29,9 +29,6 @@ const CostosSchema = {
     allowNull: false,
     type: DataTypes.STRING,
   },
-  guia_fact_transporte: {
-    type: DataTypes.STRING,
-  },
   destino: {
     type: DataTypes.STRING,
   },

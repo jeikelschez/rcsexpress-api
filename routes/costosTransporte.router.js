@@ -24,7 +24,9 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       agencia,
       desde,
       hasta,
-      order_doc
+      agente,
+      transporte,
+      order_doc,
     } = req.headers;
     const costos = await service.find(
       page,
@@ -36,6 +38,8 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       agencia,
       desde,
       hasta,
+      agente,
+      transporte,
       order_doc
     );
     res.json(costos);

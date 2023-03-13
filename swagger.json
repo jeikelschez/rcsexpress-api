@@ -4419,6 +4419,24 @@
             }
           },
           {
+            "name": "agente",
+            "in": "header",
+            "description": "Codigo del Agente",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "transporte",
+            "in": "header",
+            "description": "Codigo del Transporte",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
             "name": "order_doc",
             "in": "header",
             "description": "Ordenamiento por nro_documento (S)",
@@ -13347,9 +13365,6 @@
           },
           "cod_proveedor": {
             "type": "number"
-          },
-          "guia_fact_transporte": {
-            "type": "string"
           },
           "destino": {
             "type": "string"

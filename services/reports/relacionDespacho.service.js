@@ -362,17 +362,17 @@ class RelacionDespachoService {
       );
       if (find_dolar >= 0) valor_dolar = hDolar[find_dolar].valor;
 
-      if(valor_dolar > 0) {
+      if (valor_dolar > 0) {
         monto_dolar = (
           utils.parseFloatN(detalle[item].monto_total) /
           utils.parseFloatN(valor_dolar)
         ).toFixed(2);
-      }      
+      }
 
       total_dolar += utils.parseFloatN(monto_dolar);
       total_declarado += utils.parseFloatN(detalle[item].monto_ref_cte_sin_imp);
 
-      if(valor_dolar > 0) {
+      if (valor_dolar > 0) {
         declarado_dolar = (
           utils.parseFloatN(detalle[item].monto_ref_cte_sin_imp) /
           utils.parseFloatN(valor_dolar)
@@ -700,13 +700,13 @@ class RelacionDespachoService {
       total_declarado_group += utils.parseFloatN(
         detalle[item].monto_ref_cte_sin_imp
       );
-      if(valor_dolar > 0) {
+      if (valor_dolar > 0) {
         declarado_dolar_group = (
           utils.parseFloatN(detalle[item].monto_ref_cte_sin_imp) /
           utils.parseFloatN(valor_dolar)
         ).toFixed(2);
       }
-      
+
       total_declarado_dolar_group += utils.parseFloatN(declarado_dolar_group);
 
       doc.y = ymin + i;
@@ -739,7 +739,11 @@ class RelacionDespachoService {
       });
       doc.y = ymin + i;
       doc.x = 160;
-      doc.text(utils.truncate(detalle[item]['zonas_dest.nb_zona'], 14));
+      doc.text(
+        detalle[item]['zonas_dest.nb_zona']
+          ? detalle[item]['zonas_dest.nb_zona'].substring(0, 14)
+          : ''
+      );
       doc.y = ymin + i;
       doc.x = 185;
       doc.text(detalle[item].nro_piezas, {
@@ -777,19 +781,29 @@ class RelacionDespachoService {
       if (data.dolar) {
         doc.y = ymin + i;
         doc.x = 260;
-        doc.text(utils.truncate(detalle[item].cliente_orig_desc, 30), {
-          align: 'left',
-          columns: 1,
-          width: 150,
-        });
-        doc.y = ymin + i;
-        doc.x = 370;
-        if (detalle[item].cliente_dest_desc) {
-          doc.text(utils.truncate(detalle[item].cliente_dest_desc, 27), {
+        doc.text(
+          detalle[item].cliente_orig_desc
+            ? detalle[item].cliente_orig_desc.substring(0, 30)
+            : '',
+          {
             align: 'left',
             columns: 1,
             width: 150,
-          });
+          }
+        );
+        doc.y = ymin + i;
+        doc.x = 370;
+        if (detalle[item].cliente_dest_desc) {
+          doc.text(
+            detalle[item].cliente_dest_desc
+              ? detalle[item].cliente_dest_desc.substring(0, 27)
+              : '',
+            {
+              align: 'left',
+              columns: 1,
+              width: 150,
+            }
+          );
         }
 
         if (data.visible == 'V') {
@@ -900,19 +914,29 @@ class RelacionDespachoService {
       } else {
         doc.y = ymin + i;
         doc.x = 260;
-        doc.text(utils.truncate(detalle[item].cliente_orig_desc, 30), {
-          align: 'left',
-          columns: 1,
-          width: 150,
-        });
-        doc.y = ymin + i;
-        doc.x = 390;
-        if (detalle[item].cliente_dest_desc) {
-          doc.text(utils.truncate(detalle[item].cliente_dest_desc, 30), {
+        doc.text(
+          detalle[item].cliente_orig_desc
+            ? detalle[item].cliente_orig_desc.substring(0, 30)
+            : '',
+          {
             align: 'left',
             columns: 1,
             width: 150,
-          });
+          }
+        );
+        doc.y = ymin + i;
+        doc.x = 390;
+        if (detalle[item].cliente_dest_desc) {
+          doc.text(
+            detalle[item].cliente_dest_desc
+              ? detalle[item].cliente_dest_desc.substring(0, 30)
+              : '',
+            {
+              align: 'left',
+              columns: 1,
+              width: 150,
+            }
+          );
         }
 
         if (data.visible == 'V') {
@@ -1004,11 +1028,17 @@ class RelacionDespachoService {
           doc.y = 530;
           doc.x = 425;
           doc.fontSize(9);
-          doc.text('Chofer: ' + utils.truncate(data.receptor.nb_receptor, 20), {
-            align: 'left',
-            columns: 1,
-            width: 300,
-          });
+          doc.text(
+            'Chofer: ' +
+              (data.receptor.nb_receptor
+                ? data.receptor.nb_receptor.substring(0, 20)
+                : ''),
+            {
+              align: 'left',
+              columns: 1,
+              width: 300,
+            }
+          );
           doc.y = 530;
           doc.x = 590;
           doc.text('CI: ' + data.receptor.cedula_receptor, {

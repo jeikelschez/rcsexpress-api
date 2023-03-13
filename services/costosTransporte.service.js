@@ -22,6 +22,8 @@ class CostosTransporteService {
     agencia,
     desde,
     hasta,
+    agente,
+    transporte,
     order_doc
   ) {
     let params2 = {};
@@ -29,6 +31,8 @@ class CostosTransporteService {
     let order = [];
 
     if (agencia) params2.cod_agencia = agencia;
+    if (agente) params2.cod_agente = agente;
+    if (transporte) params2.cod_transporte = transporte;
 
     if (desde) {
       params2.fecha_envio = {

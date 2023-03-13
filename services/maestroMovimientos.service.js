@@ -86,23 +86,19 @@ class MmovimientosService {
     let include = [];
 
     if (agencia) {
-      params2.cod_agencia = agencia.split(',');
-    }
-
-    if (agencia) {
       if (agencia_transito) {
         params3 = {
           [Sequelize.Op.or]: [
             {
-              cod_agencia: agencia.split(','),
+              cod_agencia: agencia,
             },
             {
-              cod_agencia_transito: agencia.split(','),
+              cod_agencia_transito: agencia,
             },
           ],
         };
       } else {
-        params2.cod_agencia_dest = agencia_dest.split(',');
+        params2.cod_agencia = agencia;
       }
     }
 
