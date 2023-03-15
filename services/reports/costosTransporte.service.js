@@ -5,9 +5,9 @@ const UtilsService = require('../utils.service');
 const utils = new UtilsService();
 
 class registroCostosService {
-  async generateHeader(doc, type) {
-    switch (type) {
-      case '1':
+  async generateHeader(doc, tipo) {
+    switch (tipo) {
+      case 'DE':
         doc.image('./img/logo_rc.png', 35, 42, { width: 80 })
         doc.font('Helvetica-Bold')
         doc.fillColor('#444444')
@@ -95,7 +95,7 @@ class registroCostosService {
         doc.text('Ventas sin IVA', 485, 245)
       break;
 
-      case '2':
+      case 'GE':
         doc.image('./img/logo_rc.png', 35, 42, { width: 70 })
         doc.font('Helvetica-Bold')
         doc.fillColor('#444444')
@@ -162,7 +162,7 @@ class registroCostosService {
         doc.text('Costo Distrib.p/Dest. (Bs.)', 450, 245)
       break;
 
-      case '3':
+      case 'RE':
         doc.image('./img/logo_rc.png', 35, 42, { width: 70 })
         doc.font('Helvetica-Bold')
         doc.fillColor('#444444')
@@ -262,12 +262,12 @@ class registroCostosService {
     }
   }
 
-  async generateCustomerInformation(doc, type) {
+  async generateCustomerInformation(doc, tipo) {
     var i = 0;
     var page = 0;
     var ymin = 270;
-    switch (type) {
-    case '1':  
+    switch (tipo) {
+    case 'DE':  
       for (var item = 0; item < 100; item++) {
         doc.fontSize(7);
         doc.fillColor('#444444')
@@ -402,7 +402,7 @@ class registroCostosService {
         width: 50,
       });
     break;
-    case '2':
+    case 'GE':
       for (var item = 0; item < 100; item++) {
         doc.fontSize(9);
         doc.fillColor('#444444')
@@ -511,7 +511,7 @@ class registroCostosService {
           page = page + 1;
           doc.switchToPage(page);
           i = 0;
-          await this.generateHeader(doc, type);
+          await this.generateHeader(doc, tipo);
         }
       }
       doc.fillColor('#BLACK')
@@ -544,7 +544,7 @@ class registroCostosService {
         width: 50,
       });
     break;
-    case '3':
+    case 'RE':
       for (var item = 0; item < 100; item++) {
         doc.fontSize(9);
         doc.fillColor('#444444')
@@ -653,7 +653,7 @@ class registroCostosService {
           page = page + 1;
           doc.switchToPage(page);
           i = 0;
-          await this.generateHeader(doc, type);
+          await this.generateHeader(doc, tipo);
         }
       }
       doc.fillColor('#BLACK')

@@ -12,8 +12,8 @@ const AnexoFacturaService = require('./anexoFactura.service');
 const anexoFacturaService = new AnexoFacturaService();
 const RelacionDespachoService = require('./relacionDespacho.service');
 const relacionDespachoService = new RelacionDespachoService();
-const RegistroCostosService = require('./registroCostos.service');
-const registroCostosService = new RegistroCostosService();
+const CostosTransporteService = require('./costosTransporte.service');
+const costosTransporteService = new CostosTransporteService();
 
 const clienteOrigDesc =
   '(CASE WHEN (ci_rif_cte_conta_org IS NULL || ci_rif_cte_conta_org = "")' +
@@ -84,7 +84,7 @@ class ReportsService {
         tipo_doc_principal: 'FA',
         nro_doc_principal: data.nro_documento,
         nro_ctrl_doc_ppal: data.nro_control,
-        cod_ag_doc_ppal: data.cod_agencia
+        cod_ag_doc_ppal: data.cod_agencia,
       },
       include: [
         {
@@ -92,7 +92,7 @@ class ReportsService {
           as: 'agencias',
           include: {
             model: models.Ciudades,
-            as: 'ciudades'
+            as: 'ciudades',
           },
         },
         {
@@ -100,18 +100,14 @@ class ReportsService {
           as: 'agencias_dest',
           include: {
             model: models.Ciudades,
-            as: 'ciudades'
-          }        
-        }
+            as: 'ciudades',
+          },
+        },
       ],
       raw: true,
     });
     await anexoFacturaService.generateHeader(doc, data, detalle);
-    await anexoFacturaService.generateCustomerInformation(
-      doc,
-      data,
-      detalle
-    );
+    await anexoFacturaService.generateCustomerInformation(doc, data, detalle);
     doc.end();
     var encoder = new base64.Base64Encode();
     var b64s = doc.pipe(encoder);
@@ -121,12 +117,16 @@ class ReportsService {
   // REPORTE RELACION DESPACHO
   async relacionDespacho(data, detalle) {
     data = JSON.parse(data);
-    let doc = new PDFDocument({ margin: 10, bufferPages: true, layout: 'landscape'});
+    let doc = new PDFDocument({
+      margin: 10,
+      bufferPages: true,
+      layout: 'landscape',
+    });
     let dataDetalle = await models.Mmovimientos.findAll({
       where: {
         nro_documento: {
           [Sequelize.Op.in]: detalle.split(','),
-        }
+        },
       },
       include: [
         {
@@ -134,7 +134,7 @@ class ReportsService {
           as: 'agencias',
           include: {
             model: models.Ciudades,
-            as: 'ciudades'
+            as: 'ciudades',
           },
         },
         {
@@ -142,13 +142,13 @@ class ReportsService {
           as: 'agencias_dest',
           include: {
             model: models.Ciudades,
-            as: 'ciudades'
-          }        
+            as: 'ciudades',
+          },
         },
         {
           model: models.Zonas,
-          as: 'zonas_dest'
-        }
+          as: 'zonas_dest',
+        },
       ],
       attributes: {
         include: [
@@ -171,16 +171,21 @@ class ReportsService {
     return await getStream(b64s);
   }
 
-  // REPORTE REGISTRO COSTOS
-  async registroCostos(type) {
+  // REPORTE COSTOS TRANSPORTE
+  async costosTransporte(data, tipo) {
     let doc;
-    if (type == 4) {
-      doc = new PDFDocument({ margin: 10, bufferPages: true, layout: 'landscape'});
+    console.log(tipo)
+    if (tipo == 'DI' || tipo == 'CO') {
+      doc = new PDFDocument({
+        margin: 10,
+        bufferPages: true,
+        layout: 'landscape',
+      });
     } else {
-      doc = new PDFDocument({ margin: 50, bufferPages: true, });  
+      doc = new PDFDocument({ margin: 50, bufferPages: true });
     }
-    await registroCostosService.generateHeader(doc, type);
-    await registroCostosService.generateCustomerInformation(doc, type);
+    await costosTransporteService.generateHeader(doc, tipo);
+    await costosTransporteService.generateCustomerInformation(doc, tipo);
     doc.end();
     var encoder = new base64.Base64Encode();
     var b64s = doc.pipe(encoder);
