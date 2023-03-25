@@ -80,8 +80,14 @@ router.get('/relacionDespacho', authenticateJWT, async (req, res, next) => {
 
 router.get('/costosTransporte', authenticateJWT, async (req, res, next) => {
   try {
-    const { data, tipo } = req.headers;
-    const pdfStream = await service.costosTransporte(data, tipo);
+    const { id, tipo, agencia, neta, dolar } = req.headers;
+    const pdfStream = await service.costosTransporte(
+      id,
+      tipo,
+      agencia,
+      neta,
+      dolar
+    );
     res.status(200).json({
       message: 'PDF Generado',
       base64: pdfStream,
