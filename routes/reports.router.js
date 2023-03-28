@@ -80,14 +80,38 @@ router.get('/relacionDespacho', authenticateJWT, async (req, res, next) => {
 
 router.get('/costosTransporte', authenticateJWT, async (req, res, next) => {
   try {
-    const { id, tipo, agencia, neta, dolar } = req.headers;
-    const pdfStream = await service.costosTransporte(
-      id,
-      tipo,
-      agencia,
-      neta,
-      dolar
-    );
+    const { id, tipo, agencia, desde, hasta, neta, dolar } = req.headers;
+    let pdfStream;
+
+    if (tipo == 'DE' || tipo == 'RE') {
+      pdfStream = await service.costosTransporteDetalle(
+        id,
+        tipo,
+        agencia,
+        neta,
+        dolar
+      );
+    } else if (tipo == 'GE'){
+      pdfStream = await service.costosTransporteGeneral(
+        id,
+        tipo,
+        agencia,        
+        desde,
+        hasta,
+        neta,
+        dolar
+      );
+    } else {
+      pdfStream = await service.costosTransporteDiario(
+        id,
+        tipo,
+        agencia,        
+        desde,
+        neta,
+        dolar
+      );
+    }
+
     res.status(200).json({
       message: 'PDF Generado',
       base64: pdfStream,
