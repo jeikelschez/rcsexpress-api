@@ -101,6 +101,16 @@ router.get('/costosTransporte', authenticateJWT, async (req, res, next) => {
         neta,
         dolar
       );
+    } else if (tipo == 'CO'){
+      pdfStream = await service.costosTransporteGeneral(
+        id,
+        tipo,
+        agencia,        
+        desde,
+        hasta,
+        neta,
+        dolar
+      );
     } else {
       pdfStream = await service.costosTransporteDiario(
         id,

@@ -331,35 +331,75 @@ class registroCostosService {
         doc.image('./img/logo_rc.png', 35, 42, { width: 70 });
         doc.font('Helvetica-Bold');
         doc.fillColor('#444444');
-        doc
-          .fontSize(12)
-          .text('Fecha: ' + moment().format('DD/MM/YYYY'), 650, 30);
-        doc.text('Ruta VLN: ___________________', 550, 75);
-        doc.text('Ruta VLN: ___________________', 550, 95);
-        doc.text('Hidroca: _____________________', 550, 115);
-        doc.text('Hidroca: _____________________', 550, 135);
-        doc.fontSize(20);
-        doc.y = 120;
-        doc.x = 180;
-        doc.text('Relación de Transporte Diario', {
+        doc.fontSize(16);
+        doc.y = 80;
+        doc.x = 170;
+        doc.text('Reporte de Comisiones por Transporte', {
           align: 'left',
           columns: 1,
-          width: 300,
+          width: 400,
         });
-        doc.fontSize(26);
-        doc.y = 50;
-        doc.x = 180;
-        doc.text('Fecha', {
+        doc.fontSize(12);
+        doc.text('Desde: 10/10/2022', 200, 110);
+        doc.text('Hasta: 10/10/2022', 320, 110);
+        doc.fontSize(8);
+        doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 480, 35);
+        doc.y = 190;
+        doc.x = 50;
+        doc.fontSize(9);
+        doc.y = 165;
+        doc.x = 30;
+        doc.text('Fecha Envio', {
           align: 'left',
           columns: 1,
-          width: 300,
+          width: 50,
         });
-        doc.y = 75;
-        doc.x = 180;
-        doc.text(data.desde, {
+        doc.y = 165;
+        doc.x = 70;
+        doc.text('Codigo Agente', {
           align: 'left',
           columns: 1,
-          width: 300,
+          width: 50,
+        });
+        doc.text('Agente', 115, 170);
+        doc.text('Destino', 200, 170);
+        doc.y = 165;
+        doc.x = 280;
+        doc.text('Placas Vehiculo', {
+          align: 'left',
+          columns: 1,
+          width: 50,
+        });
+        doc.text('Kilos', 330, 170);
+        doc.text('Piezas', 360, 170);
+        doc.text('Guias', 397, 170);
+        doc.y = 165;
+        doc.x = 435;
+        doc.text('Monto Comision', {
+          align: 'left',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = 165;
+        doc.x = 485;
+        doc.text('Valor Bulto', {
+          align: 'left',
+          columns: 1,
+          width: 30,
+        });
+        doc.y = 165;
+        doc.x = 520;
+        doc.text('Valor Guia', {
+          align: 'left',
+          columns: 1,
+          width: 30,
+        });
+        doc.y = 165;
+        doc.x = 550;
+        doc.text('Venta sin IVA', {
+          align: 'left',
+          columns: 1,
+          width: 30,
         });
         break;
     }
@@ -917,28 +957,95 @@ class registroCostosService {
         }
         break;
       case 'CO':
-        ymin = 160;
-        for (var item = 0; item < data.costos.length; item++) {
-          doc.fillColor('#444444');
-          doc
-            .lineJoin('miter')
-            .rect(35, ymin + i, 720, 70)
-            .stroke();
-          doc.fontSize(10);
-          doc.text('Origen: VALENCIA, RCS EXPRESS, S.A.', 50, ymin + i + 13);
-          doc.text('Chofer: VALENCIA, RCS EXPRESS, S.A.', 50, ymin + i + 33);
-          doc.text('Ayudante: VALENCIA, RCS EXPRESS, S.A.', 50, ymin + i + 51);
-          doc.text('Destinos: VALENCIA, RCS EXPRESS, S.A.', 270, ymin + i + 13);
-          doc.text('Anticipo: VALENCIA, RCS EXPRESS, S.A.', 270, ymin + i + 33);
-          doc.text('Anticipo: VALENCIA, RCS EXPRESS, S.A.', 270, ymin + i + 51);
-          doc.text('Vehiculo: VALENCIA, RCS EXPRESS, S.A.', 490, ymin + i + 13);
-          doc.text(
-            'Observacion: VALENCIA, RCS EXPRESS, S.A.',
-            490,
-            ymin + i + 51
-          );
-          i += 80;
-          if (i >= 350 || item >= 100) {
+        ymin = 195;
+        for (var item = 0; item < 50; item++) {
+          doc.fillColor('#BLACK');
+          doc.y = ymin + i + 5;
+          doc.x = 30;
+          doc.text('12313', {
+            align: 'left',
+            columns: 1,
+            width: 65,
+          });
+          doc.y = ymin + i + 5;
+          doc.x = 70;
+          doc.text('12323', {
+            align: 'left',
+            columns: 1,
+            width: 65,
+          });
+          doc.y = ymin + i + 5;
+          doc.x = 115;
+          doc.text('12312342343123', {
+            align: 'left',
+            columns: 1,
+            width: 85,
+          });
+          doc.y = ymin + i + 5;
+          doc.x = 200;
+          doc.text('12312342343123', {
+            align: 'left',
+            columns: 1,
+            width: 80,
+          });
+          doc.y = ymin + i + 5;
+          doc.x = 280;
+          doc.text('123131', {
+            align: 'left',
+            columns: 1,
+            width: 80,
+          });
+          doc.y = ymin + i + 5;
+          doc.x = 330;
+          doc.text('123', {
+            align: 'left',
+            columns: 1,
+            width: 65,
+          });
+          doc.y = ymin + i + 5;
+          doc.x = 360;
+          doc.text('123', {
+            align: 'left',
+            columns: 1,
+            width: 65,
+          });
+          doc.y = ymin + i + 5;
+          doc.x = 397;
+          doc.text('123', {
+            align: 'left',
+            columns: 1,
+            width: 65,
+          });
+          doc.y = ymin + i + 5;
+          doc.x = 435;
+          doc.text('123', {
+            align: 'left',
+            columns: 1,
+            width: 65,
+          });
+          doc.y = ymin + i + 5;
+          doc.x = 485;
+          doc.text('123', {
+            align: 'left',
+            columns: 1,
+            width: 65,
+          });
+          doc.y = ymin + i + 5;
+          doc.x = 520;
+          doc.text('123', {
+            align: 'left',
+            columns: 1,
+            width: 65,
+          });
+          doc.y = ymin + i + 5;
+          doc.x = 550;
+          doc.text('123', {
+            align: 'left',
+            columns: 1,
+            width: 65,
+          });
+          i= i + 20;
+          if (i >= 530 || item >= 100) {
             doc.addPage();
             page = page + 1;
             doc.switchToPage(page);
@@ -946,9 +1053,64 @@ class registroCostosService {
             await this.generateHeader(doc, data);
           }
         }
-        break;
+        doc.y = ymin + i + 5;
+        doc.x = 280;
+        doc.text('TOTALES:', {
+          align: 'left',
+          columns: 1,
+          width: 80,
+        });
+        doc.y = ymin + i + 5;
+        doc.x = 330;
+        doc.text('123', {
+          align: 'left',
+          columns: 1,
+          width: 65,
+        });
+        doc.y = ymin + i + 5;
+        doc.x = 360;
+        doc.text('123', {
+          align: 'left',
+          columns: 1,
+          width: 65,
+        });
+        doc.y = ymin + i + 5;
+        doc.x = 397;
+        doc.text('123', {
+          align: 'left',
+          columns: 1,
+          width: 65,
+        });
+        doc.y = ymin + i + 5;
+        doc.x = 435;
+        doc.text('123', {
+          align: 'left',
+          columns: 1,
+          width: 65,
+        });
+        doc.y = ymin + i + 5;
+        doc.x = 485;
+        doc.text('123', {
+          align: 'left',
+          columns: 1,
+          width: 65,
+        });
+        doc.y = ymin + i + 5;
+        doc.x = 520;
+        doc.text('123', {
+          align: 'left',
+          columns: 1,
+          width: 65,
+        });
+        doc.y = ymin + i + 5;
+        doc.x = 550;
+        doc.text('123', {
+          align: 'left',
+          columns: 1,
+          width: 65,
+        });
+      break;
     }
-
     var end;
     const range = doc.bufferedPageRange();
     for (
