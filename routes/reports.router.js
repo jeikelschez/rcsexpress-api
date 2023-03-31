@@ -91,32 +91,23 @@ router.get('/costosTransporte', authenticateJWT, async (req, res, next) => {
         neta,
         dolar
       );
-    } else if (tipo == 'GE'){
+    } else if (tipo == 'GE') {
       pdfStream = await service.costosTransporteGeneral(
-        id,
         tipo,
-        agencia,        
+        agencia,
         desde,
         hasta,
         neta,
         dolar
       );
-    } else if (tipo == 'CO'){
-      pdfStream = await service.costosTransporteGeneral(
-        id,
-        tipo,
-        agencia,        
-        desde,
-        hasta,
-        neta,
-        dolar
-      );
+    } else if (tipo == 'DI') {
+      pdfStream = await service.costosTransporteDiario(tipo, desde, dolar);
     } else {
-      pdfStream = await service.costosTransporteDiario(
-        id,
+      pdfStream = await service.costosTransporteComisiones(
         tipo,
-        agencia,        
+        agencia,
         desde,
+        hasta,
         neta,
         dolar
       );

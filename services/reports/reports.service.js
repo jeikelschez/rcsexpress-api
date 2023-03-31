@@ -73,6 +73,12 @@ const montoDolarDesc =
   ' THEN 0 ELSE ROUND(movimientos.monto_subtotal /' +
   ' (SELECT valor FROM historico_dolar' +
   ' WHERE historico_dolar.fecha = movimientos.fecha_emision), 2) END';
+const montoDolarCostoDesc =
+  'CASE WHEN ((SELECT valor FROM historico_dolar' +
+  ' WHERE historico_dolar.fecha = `Costos`.fecha_envio) = 0)' +
+  ' THEN 0 ELSE ROUND(`Costos`.monto_anticipo /' +
+  ' (SELECT valor FROM historico_dolar' +
+  ' WHERE historico_dolar.fecha = `Costos`.fecha_envio), 2) END';
 const totalDolarDesc =
   'SUM(CASE WHEN ((SELECT valor FROM historico_dolar' +
   ' WHERE historico_dolar.fecha = movimientos.fecha_emision) = 0)' +
@@ -367,7 +373,7 @@ class ReportsService {
   }
 
   // REPORTE COSTOS TRANSPORTE GENERAL
-  async costosTransporteGeneral(id, tipo, agencia, desde, hasta, neta, dolar) {
+  async costosTransporteGeneral(tipo, agencia, desde, hasta, neta, dolar) {
     let doc;
 
     let costos = await models.Costos.findAll({
@@ -447,6 +453,7 @@ class ReportsService {
     let totalCostos = 0;
     let porcCosto = 0;
     let porcUtilidad = 0;
+
     for (var i = 0; i < detalle.length; i++) {
       totalCostos += utils.parseFloatN(detalle[i]['detalles.monto_costo']);
     }
@@ -483,15 +490,27 @@ class ReportsService {
     return await getStream(b64s);
   }
 
-  // REPORTE COSTOS TRANSPORTE GENERAL
-  async costosTransporteDiario(id, tipo, agencia, desde, neta, dolar) {
+  // REPORTE COSTOS TRANSPORTE DIARIO
+  async costosTransporteDiario(tipo, desde, dolar) {
     let doc;
 
     let costos = await models.Costos.findAll({
       where: {
-        fecha_envio: moment(desde, 'DD/MM/YYYY').format('YYYY-MM-DD')
+        fecha_envio: moment(desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
       },
+      attributes: [
+        'id',
+        'fecha_envio',
+        'destino',
+        'monto_anticipo',
+        'observacion_gnral',
+        [Sequelize.literal(montoDolarCostoDesc), 'monto_dolar'],
+      ],
       include: [
+        {
+          model: models.Agencias,
+          as: 'agencias',
+        },
         {
           model: models.Agentes,
           as: 'agentes',
@@ -512,11 +531,39 @@ class ReportsService {
       raw: true,
     });
 
-    console.log(costos)
+    let totalAnticipo = 0;
+    let totalDolar = 0;
+    for (var i = 0; i < costos.length; i++) {
+      totalAnticipo += utils.parseFloatN(costos[i].monto_anticipo);
+      totalDolar += utils.parseFloatN(costos[i].monto_dolar);
+    }
 
+    let data = [];
+    data.desde = desde;
+    data.costos = costos;
+    data.tipo = tipo;
+    data.dolar = dolar;
+    data.totalAnticipo = totalAnticipo;
+    data.totalDolar = totalDolar;
 
+    doc = new PDFDocument({
+      margin: 10,
+      bufferPages: true,
+      layout: 'landscape',
+    });
+    await costosTransporteService.generateHeader(doc, data);
+    await costosTransporteService.generateCustomerInformation(doc, data);
+    doc.end();
+    var encoder = new base64.Base64Encode();
+    var b64s = doc.pipe(encoder);
+    return await getStream(b64s);
+  }
 
-    /*let detalle = await models.Costos.findAll({
+  // REPORTE COSTOS TRANSPORTE COMISIONES
+  async costosTransporteComisiones(tipo, agencia, desde, hasta, neta, dolar) {
+    let doc;
+
+    let costos = await models.Costos.findAll({
       where: {
         fecha_envio: {
           [Sequelize.Op.between]: [
@@ -527,20 +574,40 @@ class ReportsService {
       },
       include: [
         {
-          model: models.Dcostos,
-          as: 'detalles',
+          model: models.Agentes,
+          as: 'agentes',
+        },
+        {
+          model: models.Dcostosg,
+          as: 'detallesg',
+          required: true,
+          include: [            
+            {
+              model: models.Mmovimientos,
+              as: 'movimientos',              
+              include: {
+                model: models.Agencias,
+                as: 'agencias_dest',
+                include: {
+                  model: models.Ciudades,
+                  as: 'ciudades',
+                },
+              },
+            },
+          ],
         },
       ],
+      group: '`Costos`.id',
+      order: [['fecha_envio', 'ASC']],
       raw: true,
-    });*/
+    });
+
+    console.log(costos.length)
 
     let totalGuias = 0;
     let totalCostos = 0;
     let porcCosto = 0;
     let porcUtilidad = 0;
-    /*for (var i = 0; i < detalle.length; i++) {
-      totalCostos += utils.parseFloatN(detalle[i]['detalles.monto_costo']);
-    }*/
 
     for (var i = 0; i < costos.length; i++) {
       totalGuias += utils.parseFloatN(
@@ -555,8 +622,9 @@ class ReportsService {
 
     let data = [];
     data.costos = costos;
-    data.tipo = tipo;
     data.desde = desde;
+    data.hasta = hasta;
+    data.tipo = tipo;
     data.agencia = agencia;
     data.neta = neta;
     data.dolar = dolar;
@@ -567,10 +635,10 @@ class ReportsService {
     data.porcUtilidad = porcUtilidad.toFixed(2);
 
     doc = new PDFDocument({
-        margin: 10,
-        bufferPages: true,
-        layout: 'landscape',
-      });
+      margin: 10,
+      bufferPages: true,
+      layout: 'landscape',
+    });
     await costosTransporteService.generateHeader(doc, data);
     await costosTransporteService.generateCustomerInformation(doc, data);
     doc.end();

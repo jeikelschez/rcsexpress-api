@@ -311,7 +311,7 @@ class registroCostosService {
           columns: 1,
           width: 300,
         });
-        doc.fontSize(26);
+        doc.fontSize(22);
         doc.y = 50;
         doc.x = 180;
         doc.text('Fecha', {
@@ -340,8 +340,8 @@ class registroCostosService {
           width: 400,
         });
         doc.fontSize(12);
-        doc.text('Desde: 10/10/2022', 200, 110);
-        doc.text('Hasta: 10/10/2022', 320, 110);
+        doc.text('Desde: ' + data.desde, 200, 110);
+        doc.text('Hasta: ' + data.hasta, 320, 110);
         doc.fontSize(8);
         doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 480, 35);
         doc.y = 190;
@@ -354,14 +354,7 @@ class registroCostosService {
           columns: 1,
           width: 50,
         });
-        doc.y = 165;
-        doc.x = 70;
-        doc.text('Codigo Agente', {
-          align: 'left',
-          columns: 1,
-          width: 50,
-        });
-        doc.text('Agente', 115, 170);
+        doc.text('Agente', 120, 170);
         doc.text('Destino', 200, 170);
         doc.y = 165;
         doc.x = 280;
@@ -934,18 +927,55 @@ class registroCostosService {
             .rect(35, ymin + i, 720, 70)
             .stroke();
           doc.fontSize(10);
-          doc.text('Origen: VALENCIA, RCS EXPRESS, S.A.', 50, ymin + i + 13);
-          doc.text('Chofer: VALENCIA, RCS EXPRESS, S.A.', 50, ymin + i + 33);
-          doc.text('Ayudante: VALENCIA, RCS EXPRESS, S.A.', 50, ymin + i + 51);
-          doc.text('Destinos: VALENCIA, RCS EXPRESS, S.A.', 270, ymin + i + 13);
-          doc.text('Anticipo: VALENCIA, RCS EXPRESS, S.A.', 270, ymin + i + 33);
-          doc.text('Anticipo: VALENCIA, RCS EXPRESS, S.A.', 270, ymin + i + 51);
-          doc.text('Vehiculo: VALENCIA, RCS EXPRESS, S.A.', 490, ymin + i + 13);
           doc.text(
-            'Observacion: VALENCIA, RCS EXPRESS, S.A.',
-            490,
-            ymin + i + 51
+            'Origen: ' + data.costos[item]['agencias.nb_agencia'],
+            50,
+            ymin + i + 13
           );
+          doc.text(
+            'Chofer: ' + data.costos[item]['agentes.persona_responsable'],
+            50,
+            ymin + i + 33
+          );
+          let ayudante =
+            data.costos[item]['ayudantes.nb_ayudante'] == null
+              ? ''
+              : data.costos[item]['ayudantes.nb_ayudante'];
+          doc.text('Ayudante: ' + ayudante, 50, ymin + i + 51);
+          doc.text(
+            'Destinos: ' + data.costos[item].destino,
+            270,
+            ymin + i + 13
+          );
+          doc.text(
+            'Anticipo: ' + data.costos[item].monto_anticipo,
+            270,
+            ymin + i + 33
+          );
+          doc.y = ymin + i + 13;
+          doc.x = 490;
+          doc.text(
+            'Vehiculo: ' +
+              data.costos[item]['unidades.placas'] +
+              ' - Vehículo: ' +
+              data.costos[item]['unidades.descripcion'],
+            {
+              align: 'left',
+              columns: 1,
+              width: 250,
+            }
+          );
+          let observacion =
+            data.costos[item].observacion_gnral == null
+              ? ''
+              : data.costos[item].observacion_gnral;
+          doc.y = ymin + i + 43;
+          doc.x = 490;
+          doc.text('Observacion: ' + observacion, {
+            align: 'left',
+            columns: 1,
+            width: 250,
+          });
           i += 80;
           if (i >= 350 || item >= 100) {
             doc.addPage();
@@ -955,28 +985,48 @@ class registroCostosService {
             await this.generateHeader(doc, data);
           }
         }
+        doc.font('Helvetica-Bold');
+        doc.fontSize(18);
+        doc.fillColor('#BLACK');
+        doc.y = ymin + i + 10;
+        doc.x = 450;
+        doc.text('Total Anticipo:', {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+        doc.fontSize(12);
+        doc.y = ymin + i + 12;
+        doc.x = 520;
+        doc.text(utils.formatNumber(data.totalAnticipo), {
+          align: 'right',
+          columns: 1,
+          width: 150,
+        });
+        if (data.dolar == 'true') {
+          doc.y = ymin + i + 12;
+          doc.x = 590;
+          doc.text(utils.formatNumber(data.totalDolar) + '$', {
+            align: 'right',
+            columns: 1,
+            width: 150,
+          });
+        }
         break;
       case 'CO':
         ymin = 195;
-        for (var item = 0; item < 50; item++) {
+        for (var item = 0; item < data.costos.length; item++) {
           doc.fillColor('#BLACK');
           doc.y = ymin + i + 5;
           doc.x = 30;
-          doc.text('12313', {
-            align: 'left',
-            columns: 1,
-            width: 65,
-          });
-          doc.y = ymin + i + 5;
-          doc.x = 70;
-          doc.text('12323', {
+          doc.text(moment(data.costos[item].fecha_envio).format('DD/MM/YYYY'), {
             align: 'left',
             columns: 1,
             width: 65,
           });
           doc.y = ymin + i + 5;
           doc.x = 115;
-          doc.text('12312342343123', {
+          doc.text(data.costos[item]['agentes.persona_responsable'], {
             align: 'left',
             columns: 1,
             width: 85,
@@ -1044,7 +1094,7 @@ class registroCostosService {
             columns: 1,
             width: 65,
           });
-          i= i + 20;
+          i = i + 20;
           if (i >= 530 || item >= 100) {
             doc.addPage();
             page = page + 1;
@@ -1109,7 +1159,7 @@ class registroCostosService {
           columns: 1,
           width: 65,
         });
-      break;
+        break;
     }
     var end;
     const range = doc.bufferedPageRange();
