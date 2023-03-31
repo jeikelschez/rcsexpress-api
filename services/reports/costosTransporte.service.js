@@ -333,62 +333,62 @@ class registroCostosService {
         doc.fillColor('#444444');
         doc.fontSize(16);
         doc.y = 80;
-        doc.x = 170;
+        doc.x = 270;
         doc.text('Reporte de Comisiones por Transporte', {
           align: 'left',
           columns: 1,
           width: 400,
         });
         doc.fontSize(12);
-        doc.text('Desde: ' + data.desde, 200, 110);
-        doc.text('Hasta: ' + data.hasta, 320, 110);
-        doc.fontSize(8);
-        doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 480, 35);
+        doc.text('Desde: ' + data.desde, 300, 110);
+        doc.text('Hasta: ' + data.hasta, 420, 110);
+        doc.fontSize(12);
+        doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 650, 30);
         doc.y = 190;
         doc.x = 50;
         doc.fontSize(9);
-        doc.y = 165;
+        doc.y = 170;
         doc.x = 30;
         doc.text('Fecha Envio', {
           align: 'left',
           columns: 1,
-          width: 50,
+          width: 100,
         });
-        doc.text('Agente', 120, 170);
-        doc.text('Destino', 200, 170);
+        doc.text('Agente', 100, 170);
+        doc.text('Destino', 230, 170);
         doc.y = 165;
-        doc.x = 280;
+        doc.x = 360;
         doc.text('Placas Vehiculo', {
           align: 'left',
           columns: 1,
           width: 50,
         });
-        doc.text('Kilos', 330, 170);
-        doc.text('Piezas', 360, 170);
-        doc.text('Guias', 397, 170);
+        doc.text('Kilos', 420, 170);
+        doc.text('Piezas', 460, 170);
+        doc.text('Guias', 500, 170);
         doc.y = 165;
-        doc.x = 435;
+        doc.x = 545;
         doc.text('Monto Comision', {
           align: 'left',
           columns: 1,
           width: 50,
         });
         doc.y = 165;
-        doc.x = 485;
+        doc.x = 600;
         doc.text('Valor Bulto', {
           align: 'left',
           columns: 1,
           width: 30,
         });
         doc.y = 165;
-        doc.x = 520;
+        doc.x = 650;
         doc.text('Valor Guia', {
           align: 'left',
           columns: 1,
           width: 30,
         });
         doc.y = 165;
-        doc.x = 550;
+        doc.x = 700;
         doc.text('Venta sin IVA', {
           align: 'left',
           columns: 1,
@@ -1025,77 +1025,77 @@ class registroCostosService {
             width: 65,
           });
           doc.y = ymin + i + 5;
-          doc.x = 115;
+          doc.x = 100;
           doc.text(data.costos[item]['agentes.persona_responsable'], {
             align: 'left',
             columns: 1,
-            width: 85,
+            width: 120,
           });
           doc.y = ymin + i + 5;
-          doc.x = 200;
+          doc.x = 230;
           doc.text('12312342343123', {
             align: 'left',
             columns: 1,
-            width: 80,
+            width: 120,
           });
           doc.y = ymin + i + 5;
-          doc.x = 280;
+          doc.x = 360;
           doc.text('123131', {
             align: 'left',
             columns: 1,
             width: 80,
           });
           doc.y = ymin + i + 5;
-          doc.x = 330;
+          doc.x = 420;
           doc.text('123', {
             align: 'left',
             columns: 1,
             width: 65,
           });
           doc.y = ymin + i + 5;
-          doc.x = 360;
+          doc.x = 460;
           doc.text('123', {
             align: 'left',
             columns: 1,
             width: 65,
           });
           doc.y = ymin + i + 5;
-          doc.x = 397;
+          doc.x = 500;
           doc.text('123', {
             align: 'left',
             columns: 1,
             width: 65,
           });
           doc.y = ymin + i + 5;
-          doc.x = 435;
+          doc.x = 545;
           doc.text('123', {
             align: 'left',
             columns: 1,
             width: 65,
           });
           doc.y = ymin + i + 5;
-          doc.x = 485;
+          doc.x = 600;
           doc.text('123', {
             align: 'left',
             columns: 1,
             width: 65,
           });
           doc.y = ymin + i + 5;
-          doc.x = 520;
+          doc.x = 650;
           doc.text('123', {
             align: 'left',
             columns: 1,
             width: 65,
           });
           doc.y = ymin + i + 5;
-          doc.x = 550;
+          doc.x = 700;
           doc.text('123', {
             align: 'left',
             columns: 1,
             width: 65,
           });
-          i = i + 20;
-          if (i >= 530 || item >= 100) {
+          i = i + 25;
+          if (i >= 350 || item >= data.costos.length) {
             doc.addPage();
             page = page + 1;
             doc.switchToPage(page);
@@ -1104,56 +1104,56 @@ class registroCostosService {
           }
         }
         doc.y = ymin + i + 5;
-        doc.x = 280;
+        doc.x = 360;
         doc.text('TOTALES:', {
           align: 'left',
           columns: 1,
           width: 80,
         });
         doc.y = ymin + i + 5;
-        doc.x = 330;
+        doc.x = 420;
         doc.text('123', {
           align: 'left',
           columns: 1,
           width: 65,
         });
         doc.y = ymin + i + 5;
-        doc.x = 360;
+        doc.x = 460;
         doc.text('123', {
           align: 'left',
           columns: 1,
           width: 65,
         });
         doc.y = ymin + i + 5;
-        doc.x = 397;
+        doc.x = 500;
         doc.text('123', {
           align: 'left',
           columns: 1,
           width: 65,
         });
         doc.y = ymin + i + 5;
-        doc.x = 435;
+        doc.x = 545;
         doc.text('123', {
           align: 'left',
           columns: 1,
           width: 65,
         });
         doc.y = ymin + i + 5;
-        doc.x = 485;
+        doc.x = 600;
         doc.text('123', {
           align: 'left',
           columns: 1,
           width: 65,
         });
         doc.y = ymin + i + 5;
-        doc.x = 520;
+        doc.x = 650;
         doc.text('123', {
           align: 'left',
           columns: 1,
           width: 65,
         });
         doc.y = ymin + i + 5;
-        doc.x = 550;
+        doc.x = 700;
         doc.text('123', {
           align: 'left',
           columns: 1,
@@ -1169,7 +1169,7 @@ class registroCostosService {
       i++
     ) {
       doc.switchToPage(i);
-      if (data.tipo == 'DI') {
+      if (data.tipo == 'DI'|| data.tipo == 'CO') {
         doc.fontSize(12);
         doc.fillColor('#444444');
         doc.x = 650;
