@@ -91,6 +91,9 @@ const totalDolarDesc2 =
   ' THEN 0 ELSE ROUND(`detallesg->movimientos`.monto_subtotal /' +
   ' (SELECT valor FROM historico_dolar' +
   ' WHERE historico_dolar.fecha = `detallesg->movimientos`.fecha_emision), 2) END)';
+const totalComisionDesc =
+  'ROUND(SUM(COALESCE(`detallesg->movimientos`.base_comision_vta_rcl * ' + 
+  '`agentes`.porc_comision_entrega / 100 , 0)),2)';  
 
 class ReportsService {
   constructor() {}
@@ -578,21 +581,38 @@ class ReportsService {
           as: 'agentes',
         },
         {
+          model: models.Unidades,
+          as: 'unidades',
+        },
+        {
           model: models.Dcostosg,
           as: 'detallesg',
           required: true,
-          include: [            
+          include: [
             {
               model: models.Mmovimientos,
-              as: 'movimientos',              
-              include: {
-                model: models.Agencias,
-                as: 'agencias_dest',
-                include: {
-                  model: models.Ciudades,
-                  as: 'ciudades',
-                },
-              },
+              as: 'movimientos',
+              attributes: [
+                [
+                  Sequelize.fn('count', Sequelize.col('nro_documento')),
+                  'total_guias',
+                ],
+                [
+                  Sequelize.fn('sum', Sequelize.col('nro_piezas')),
+                  'total_pzas',
+                ],
+                [Sequelize.fn('sum', Sequelize.col('peso_kgs')), 'total_kgs'],
+                [
+                  Sequelize.fn('sum', Sequelize.col('carga_neta')),
+                  'total_neta',
+                ],
+                [
+                  Sequelize.fn('sum', Sequelize.col('monto_subtotal')),
+                  'total_monto',
+                ], 
+                [Sequelize.literal(totalComisionDesc), 'total_comision'],               
+                [Sequelize.literal(totalDolarDesc2), 'total_dolar'],
+              ],
             },
           ],
         },
@@ -602,37 +622,11 @@ class ReportsService {
       raw: true,
     });
 
-    console.log(costos.length)
-
-    let totalGuias = 0;
-    let totalCostos = 0;
-    let porcCosto = 0;
-    let porcUtilidad = 0;
-
-    for (var i = 0; i < costos.length; i++) {
-      totalGuias += utils.parseFloatN(
-        costos[i]['detallesg.movimientos.total_monto']
-      );
-    }
-
-    if (totalGuias > 0) {
-      porcCosto = (totalCostos / totalGuias) * 100;
-      porcUtilidad = ((totalGuias - totalCostos) / totalGuias) * 100;
-    }
-
     let data = [];
     data.costos = costos;
     data.desde = desde;
     data.hasta = hasta;
     data.tipo = tipo;
-    data.agencia = agencia;
-    data.neta = neta;
-    data.dolar = dolar;
-    data.totalCostos = totalCostos.toFixed(2);
-    data.totalGuias = totalGuias.toFixed(2);
-    data.utilidad = (totalGuias - totalCostos).toFixed(2);
-    data.porcCosto = porcCosto.toFixed(2);
-    data.porcUtilidad = porcUtilidad.toFixed(2);
 
     doc = new PDFDocument({
       margin: 10,

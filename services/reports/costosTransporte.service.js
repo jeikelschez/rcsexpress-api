@@ -342,7 +342,6 @@ class registroCostosService {
         doc.fontSize(12);
         doc.text('Desde: ' + data.desde, 300, 110);
         doc.text('Hasta: ' + data.hasta, 420, 110);
-        doc.fontSize(12);
         doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 650, 30);
         doc.y = 190;
         doc.x = 50;
@@ -354,46 +353,56 @@ class registroCostosService {
           columns: 1,
           width: 100,
         });
-        doc.text('Agente', 100, 170);
-        doc.text('Destino', 230, 170);
+        doc.text('Agente', 130, 170);
+        doc.text('Destino', 270, 170);
         doc.y = 165;
-        doc.x = 360;
-        doc.text('Placas Vehiculo', {
-          align: 'left',
+        doc.x = 350;
+        doc.text('Placas Vehículo', {
+          align: 'center',
           columns: 1,
           width: 50,
         });
-        doc.text('Kilos', 420, 170);
-        doc.text('Piezas', 460, 170);
-        doc.text('Guias', 500, 170);
+        doc.text(data.neta == 'true' ? 'Neta' : 'Kgs.', 437, 170);
+        doc.text('Pzas', 470, 170);
+        doc.text('Guías', 500, 170);
         doc.y = 165;
-        doc.x = 545;
-        doc.text('Monto Comision', {
-          align: 'left',
+        doc.x = 530;
+        doc.text('Monto Comisión', {
+          align: 'center',
           columns: 1,
           width: 50,
         });
         doc.y = 165;
-        doc.x = 600;
+        doc.x = 582;
         doc.text('Valor Bulto', {
-          align: 'left',
+          align: 'center',
           columns: 1,
           width: 30,
         });
         doc.y = 165;
-        doc.x = 650;
-        doc.text('Valor Guia', {
-          align: 'left',
+        doc.x = 620;
+        doc.text('Valor Guía', {
+          align: 'center',
           columns: 1,
           width: 30,
         });
         doc.y = 165;
-        doc.x = 700;
+        doc.x = 673;
         doc.text('Venta sin IVA', {
-          align: 'left',
+          align: 'center',
           columns: 1,
           width: 30,
         });
+        doc.y = 165;
+        doc.x = 717;
+        if (data.dolar == 'true') {
+          doc.text('Venta $', {
+            align: 'center',
+            columns: 1,
+            width: 40,
+          });
+        }
+        doc.fontSize(8);
         break;
     }
   }
@@ -406,7 +415,11 @@ class registroCostosService {
     let total_pzas = 0;
     let total_kgs = 0;
     let total_neta = 0;
+    let total_monto = 0;
     let total_dolar = 0;
+    let total_comision = 0;
+    let total_vbultos = 0;
+    let total_vguias = 0;
 
     switch (data.tipo) {
       case 'DE':
@@ -1014,87 +1027,160 @@ class registroCostosService {
         }
         break;
       case 'CO':
-        ymin = 195;
+        ymin = 185;
         for (var item = 0; item < data.costos.length; item++) {
           doc.fillColor('#BLACK');
           doc.y = ymin + i + 5;
-          doc.x = 30;
+          doc.x = 33;
           doc.text(moment(data.costos[item].fecha_envio).format('DD/MM/YYYY'), {
             align: 'left',
             columns: 1,
             width: 65,
           });
           doc.y = ymin + i + 5;
-          doc.x = 100;
+          doc.x = 90;
           doc.text(data.costos[item]['agentes.persona_responsable'], {
             align: 'left',
             columns: 1,
-            width: 120,
+            width: 140,
           });
           doc.y = ymin + i + 5;
-          doc.x = 230;
-          doc.text('12312342343123', {
-            align: 'left',
+          doc.x = 210;
+          doc.text(data.costos[item].destino, {
+            align: 'center',
             columns: 1,
-            width: 120,
+            width: 150,
           });
           doc.y = ymin + i + 5;
           doc.x = 360;
-          doc.text('123131', {
+          doc.text(data.costos[item]['unidades.placas'], {
             align: 'left',
             columns: 1,
-            width: 80,
+            width: 60,
           });
           doc.y = ymin + i + 5;
-          doc.x = 420;
-          doc.text('123', {
-            align: 'left',
-            columns: 1,
-            width: 65,
-          });
+          doc.x = 400;
+          doc.text(
+            data.neta == 'true'
+              ? utils.formatNumber(
+                  data.costos[item]['detallesg.movimientos.total_neta']
+                )
+              : utils.formatNumber(
+                  data.costos[item]['detallesg.movimientos.total_kgs']
+                ),
+            {
+              align: 'right',
+              columns: 1,
+              width: 60,
+            }
+          );
           doc.y = ymin + i + 5;
-          doc.x = 460;
-          doc.text('123', {
-            align: 'left',
+          doc.x = 465;
+          doc.text(data.costos[item]['detallesg.movimientos.total_pzas'], {
+            align: 'center',
             columns: 1,
-            width: 65,
+            width: 35,
           });
           doc.y = ymin + i + 5;
           doc.x = 500;
-          doc.text('123', {
-            align: 'left',
+          doc.text(data.costos[item]['detallesg.movimientos.total_guias'], {
+            align: 'center',
             columns: 1,
-            width: 65,
+            width: 30,
           });
           doc.y = ymin + i + 5;
-          doc.x = 545;
-          doc.text('123', {
-            align: 'left',
+          doc.x = 520;
+          doc.text(
+            utils.formatNumber(
+              data.costos[item]['detallesg.movimientos.total_comision']
+            ),
+            {
+              align: 'right',
+              columns: 1,
+              width: 50,
+            }
+          );
+
+          let valorBulto =
+            utils.parseFloatN(
+              data.costos[item]['detallesg.movimientos.total_comision']
+            ) /
+            utils.parseFloatN(
+              data.costos[item]['detallesg.movimientos.total_pzas']
+            );
+          let valorGuia =
+            utils.parseFloatN(
+              data.costos[item]['detallesg.movimientos.total_comision']
+            ) /
+            utils.parseFloatN(
+              data.costos[item]['detallesg.movimientos.total_guias']
+            );
+
+          total_guias += utils.parseFloatN(
+            data.costos[item]['detallesg.movimientos.total_guias']
+          );
+          total_pzas += utils.parseFloatN(
+            data.costos[item]['detallesg.movimientos.total_pzas']
+          );
+          total_kgs += utils.parseFloatN(
+            data.costos[item]['detallesg.movimientos.total_kgs']
+          );
+          total_neta += utils.parseFloatN(
+            data.costos[item]['detallesg.movimientos.total_neta']
+          );
+          total_monto += utils.parseFloatN(
+            data.costos[item]['detallesg.movimientos.total_monto']
+          );
+          total_dolar += utils.parseFloatN(
+            data.costos[item]['detallesg.movimientos.total_dolar']
+          );
+          total_comision += utils.parseFloatN(
+            data.costos[item]['detallesg.movimientos.total_comision']
+          );
+          total_vbultos += utils.parseFloatN(valorBulto);
+          total_vguias += utils.parseFloatN(valorGuia);
+
+          doc.y = ymin + i + 5;
+          doc.x = 570;
+          doc.text(utils.formatNumber(valorBulto.toFixed(2)), {
+            align: 'right',
             columns: 1,
-            width: 65,
+            width: 40,
           });
           doc.y = ymin + i + 5;
-          doc.x = 600;
-          doc.text('123', {
-            align: 'left',
+          doc.x = 610;
+          doc.text(utils.formatNumber(valorGuia.toFixed(2)), {
+            align: 'right',
             columns: 1,
-            width: 65,
+            width: 40,
           });
           doc.y = ymin + i + 5;
           doc.x = 650;
-          doc.text('123', {
-            align: 'left',
-            columns: 1,
-            width: 65,
-          });
-          doc.y = ymin + i + 5;
-          doc.x = 700;
-          doc.text('123', {
-            align: 'left',
-            columns: 1,
-            width: 65,
-          });
-          i = i + 25;
+          doc.text(
+            utils.formatNumber(
+              data.costos[item]['detallesg.movimientos.total_monto']
+            ),
+            {
+              align: 'right',
+              columns: 1,
+              width: 60,
+            }
+          );
+          if (data.dolar == 'true') {
+            doc.y = ymin + i + 5;
+            doc.x = 715;
+            doc.text(
+              utils.formatNumber(
+                data.costos[item]['detallesg.movimientos.total_dolar']
+              ),
+              {
+                align: 'right',
+                columns: 1,
+                width: 40,
+              }
+            );
+          }
+          i = i + 13;
           if (i >= 350 || item >= data.costos.length) {
             doc.addPage();
             page = page + 1;
@@ -1111,54 +1197,68 @@ class registroCostosService {
           width: 80,
         });
         doc.y = ymin + i + 5;
-        doc.x = 420;
-        doc.text('123', {
-          align: 'left',
-          columns: 1,
-          width: 65,
-        });
+        doc.x = 400;
+        doc.text(
+          data.neta == 'true'
+            ? utils.formatNumber(total_neta)
+            : utils.formatNumber(total_kgs),
+          {
+            align: 'right',
+            columns: 1,
+            width: 60,
+          }
+        );
         doc.y = ymin + i + 5;
-        doc.x = 460;
-        doc.text('123', {
-          align: 'left',
+        doc.x = 465;
+        doc.text(total_pzas, {
+          align: 'center',
           columns: 1,
-          width: 65,
+          width: 35,
         });
         doc.y = ymin + i + 5;
         doc.x = 500;
-        doc.text('123', {
-          align: 'left',
+        doc.text(total_guias, {
+          align: 'center',
           columns: 1,
-          width: 65,
+          width: 30,
         });
         doc.y = ymin + i + 5;
-        doc.x = 545;
-        doc.text('123', {
-          align: 'left',
+        doc.x = 520;
+        doc.text(utils.formatNumber(total_comision), {
+          align: 'right',
           columns: 1,
-          width: 65,
+          width: 50,
         });
         doc.y = ymin + i + 5;
-        doc.x = 600;
-        doc.text('123', {
-          align: 'left',
+        doc.x = 570;
+        doc.text(utils.formatNumber(total_vbultos), {
+          align: 'right',
           columns: 1,
-          width: 65,
+          width: 40,
+        });
+        doc.y = ymin + i + 5;
+        doc.x = 610;
+        doc.text(utils.formatNumber(total_vguias), {
+          align: 'right',
+          columns: 1,
+          width: 40,
         });
         doc.y = ymin + i + 5;
         doc.x = 650;
-        doc.text('123', {
-          align: 'left',
+        doc.text(utils.formatNumber(total_monto), {
+          align: 'right',
           columns: 1,
-          width: 65,
+          width: 60,
         });
-        doc.y = ymin + i + 5;
-        doc.x = 700;
-        doc.text('123', {
-          align: 'left',
-          columns: 1,
-          width: 65,
-        });
+        if (data.dolar == 'true') {
+          doc.y = ymin + i + 5;
+          doc.x = 715;
+          doc.text(utils.formatNumber(total_dolar), {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          });
+        }
         break;
     }
     var end;
@@ -1169,7 +1269,7 @@ class registroCostosService {
       i++
     ) {
       doc.switchToPage(i);
-      if (data.tipo == 'DI'|| data.tipo == 'CO') {
+      if (data.tipo == 'DI' || data.tipo == 'CO') {
         doc.fontSize(12);
         doc.fillColor('#444444');
         doc.x = 650;
