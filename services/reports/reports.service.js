@@ -18,6 +18,8 @@ const RelacionDespachoService = require('./relacionDespacho.service');
 const relacionDespachoService = new RelacionDespachoService();
 const CostosTransporteService = require('./costosTransporte.service');
 const costosTransporteService = new CostosTransporteService();
+const ReporteCostos = require('./reporteCostos.service');
+const reporteCostos = new ReporteCostos();
 
 const clienteOrigDesc =
   '(CASE WHEN (ci_rif_cte_conta_org IS NULL || ci_rif_cte_conta_org = "")' +
@@ -635,6 +637,21 @@ class ReportsService {
     });
     await costosTransporteService.generateHeader(doc, data);
     await costosTransporteService.generateCustomerInformation(doc, data);
+    doc.end();
+    var encoder = new base64.Base64Encode();
+    var b64s = doc.pipe(encoder);
+    return await getStream(b64s);
+  }
+
+  // REPORTE COSTOS
+
+  async reporteCostos(data) {
+    let doc = new PDFDocument({
+      margin: 50,
+      bufferPages: true,
+    });
+    await reporteCostos.generateHeader(doc, data);
+    await reporteCostos.generateCustomerInformation(doc, data);
     doc.end();
     var encoder = new base64.Base64Encode();
     var b64s = doc.pipe(encoder);

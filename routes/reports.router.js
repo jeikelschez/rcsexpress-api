@@ -78,6 +78,19 @@ router.get('/relacionDespacho', authenticateJWT, async (req, res, next) => {
   }
 });
 
+router.get('/reporteCostos', authenticateJWT, async (req, res, next) => {
+  try {
+    const { data } = req.headers;
+    const pdfStream = await service.reporteCostos(data);
+    res.status(200).json({
+      message: 'PDF Generado',
+      base64: pdfStream,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get('/costosTransporte', authenticateJWT, async (req, res, next) => {
   try {
     const { id, tipo, agencia, desde, hasta, neta, dolar } = req.headers;
