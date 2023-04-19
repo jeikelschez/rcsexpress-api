@@ -644,14 +644,13 @@ class ReportsService {
   }
 
   // REPORTE COSTOS
-
-  async reporteCostos(data) {
+  async reporteCostos(tipo, data) {
     let doc = new PDFDocument({
       margin: 50,
       bufferPages: true,
     });
-    await reporteCostos.generateHeader(doc, data);
-    await reporteCostos.generateCustomerInformation(doc, data);
+    await reporteCostos.generateHeader(doc, tipo, data);
+    await reporteCostos.generateCustomerInformation(doc, tipo, data);
     doc.end();
     var encoder = new base64.Base64Encode();
     var b64s = doc.pipe(encoder);
