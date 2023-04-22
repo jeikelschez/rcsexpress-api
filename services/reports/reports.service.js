@@ -94,8 +94,12 @@ const totalDolarDesc2 =
   ' (SELECT valor FROM historico_dolar' +
   ' WHERE historico_dolar.fecha = `detallesg->movimientos`.fecha_emision), 2) END)';
 const totalComisionDesc =
-  'ROUND(SUM(COALESCE(`detallesg->movimientos`.base_comision_vta_rcl * ' + 
-  '`agentes`.porc_comision_entrega / 100 , 0)),2)';  
+  'ROUND(SUM(COALESCE(`detallesg->movimientos`.base_comision_vta_rcl * ' +
+  '`agentes`.porc_comision_entrega / 100 , 0)),2)';
+const totalExterno =
+  'SUM(CASE WHEN `Costos`.`tipo_transporte` = "E" THEN `monto_costo` ELSE 0 END)';
+const totalInterno =
+  'SUM(CASE WHEN `Costos`.`tipo_transporte` = "I" THEN `monto_costo` ELSE 0 END)';
 
 class ReportsService {
   constructor() {}
@@ -565,7 +569,7 @@ class ReportsService {
   }
 
   // REPORTE COSTOS TRANSPORTE COMISIONES
-  async costosTransporteComisiones(tipo, agencia, desde, hasta, neta, dolar) {
+  async costosTransporteComisiones(tipo, desde, hasta) {
     let doc;
 
     let costos = await models.Costos.findAll({
@@ -611,8 +615,8 @@ class ReportsService {
                 [
                   Sequelize.fn('sum', Sequelize.col('monto_subtotal')),
                   'total_monto',
-                ], 
-                [Sequelize.literal(totalComisionDesc), 'total_comision'],               
+                ],
+                [Sequelize.literal(totalComisionDesc), 'total_comision'],
                 [Sequelize.literal(totalDolarDesc2), 'total_dolar'],
               ],
             },
@@ -645,8 +649,99 @@ class ReportsService {
 
   // REPORTE COSTOS
   async reporteCostos(tipo, data) {
+    data = JSON.parse(data);
+    
+    if(tipo == 'RCT') {
+      let detallesg = await models.Costos.findAll({
+        where: {
+          fecha_envio: {
+            [Sequelize.Op.between]: [
+              moment(data.fecha_desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+              moment(data.fecha_hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+            ],
+          },
+        },
+        include: [
+          {
+            model: models.Dcostosg,
+            as: 'detallesg',
+            required: true,
+            include: [
+              {
+                model: models.Mmovimientos,
+                as: 'movimientos',
+                attributes: [
+                  [
+                    Sequelize.fn('count', Sequelize.col('nro_documento')),
+                    'total_guias',
+                  ],
+                  [
+                    Sequelize.fn('sum', Sequelize.col('nro_piezas')),
+                    'total_pzas',
+                  ],
+                  [Sequelize.fn('sum', Sequelize.col('peso_kgs')), 'total_kgs'],
+                  [
+                    Sequelize.fn('sum', Sequelize.col('carga_neta')),
+                    'total_neta',
+                  ],
+                  [
+                    Sequelize.fn('sum', Sequelize.col('monto_subtotal')),
+                    'total_monto',
+                  ],
+                  [Sequelize.literal(totalDolarDesc2), 'total_dolar'],
+                ],
+              },
+            ],
+          },
+        ],
+        group: '`Costos`.fecha_envio',
+        order: [['fecha_envio', 'ASC']],
+        raw: true,
+      });
+  
+      for (var i = 0; i < detallesg.length; i++) {
+        let costos = await models.Costos.findAll({
+          where: {
+            fecha_envio: detallesg[i].fecha_envio,
+          },
+          include: [
+            {
+              model: models.Dcostos,
+              as: 'detalles',
+              attributes: [
+                [
+                  Sequelize.fn('sum', Sequelize.col('monto_costo')),
+                  'total_costo',
+                ],
+                [Sequelize.literal(totalExterno), 'total_externo'],
+                [Sequelize.literal(totalInterno), 'total_interno'],
+              ],
+            },
+          ],
+          group: '`Costos`.fecha_envio',
+          order: [['fecha_envio', 'ASC']],
+          raw: true,
+        });
+        detallesg[i].total_costo =
+          costos[0]['detalles.total_costo'] == null
+            ? 0
+            : costos[0]['detalles.total_costo'];
+        detallesg[i].total_externo =
+          costos[0]['detalles.total_externo'] == null
+            ? 0
+            : costos[0]['detalles.total_externo'];
+        detallesg[i].total_interno =
+          costos[0]['detalles.total_interno'] == null
+            ? 0
+            : costos[0]['detalles.total_interno'];
+      }
+  
+      data.detallesg = detallesg;
+
+    }
+    
     let doc = new PDFDocument({
-      margin: 50,
+      margin: 20,
       bufferPages: true,
     });
     await reporteCostos.generateHeader(doc, tipo, data);

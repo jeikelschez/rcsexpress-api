@@ -118,11 +118,8 @@ router.get('/costosTransporte', authenticateJWT, async (req, res, next) => {
     } else {
       pdfStream = await service.costosTransporteComisiones(
         tipo,
-        agencia,
         desde,
         hasta,
-        neta,
-        dolar
       );
     }
 
