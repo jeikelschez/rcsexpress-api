@@ -45,9 +45,131 @@ class registroCostosService {
         doc.text('% Costo', 485, 185);
         doc.text('% Utilidad', 540, 185);
         break;
+        case '2':
+        doc.image('./img/logo_rc.png', 35, 42, { width: 80 });
+        doc.font('Helvetica-Bold');
+        doc.fillColor('#444444');
+        doc.fontSize(18);
+        doc.y = 90;
+        doc.x = 205;
+        doc.text('Costos de Transporte Diario', {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+        doc.fontSize(12);
+        doc.y = 130;
+        doc.x = 210;
+        doc.text('Desde: ' + data.fecha_desde, {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+        doc.y = 130;
+        doc.x = 330;
+        doc.text('Hasta: ' + data.fecha_hasta, {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+        doc.fontSize(9);
+        doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 480, 35);
+        doc.text('Fecha', 35, 185);
+        doc.text('Transporte', 85, 185);
+        doc.text('Nro. Fact', 160, 185);
+        doc.text('Costos (Bs.)', 210, 185);
+        doc.text('Vehiculo', 275, 185);
+        doc.text('Origen', 320, 185);
+        doc.text('Dest.', 360, 185);
+        doc.text('Ventas (Bs.)', 390, 185);
+        doc.text('Utilidad (Bs.)', 445, 185);
+        doc.text('% Costo', 505, 185);
+        doc.text('% Utilidad', 545, 185);
+        break; 
+        case '3':
+          doc.image('./img/logo_rc.png', 35, 42, { width: 70 });
+          doc.font('Helvetica-Bold');
+          doc.fillColor('#444444');
+          doc.fontSize(18);
+          doc.y = 100;
+          doc.x = 190;
+          doc.text('Resumen de Costos de Transporte', {
+            align: 'left',
+            columns: 1,
+            width: 300,
+          });
+          doc.fontSize(12);
+          doc.y = 130;
+          doc.x = 215;
+          doc.text('Desde: 01/01/2022', {
+            align: 'left',
+            columns: 1,
+            width: 300,
+          });
+          doc.y = 130;
+          doc.x = 330;
+          doc.text('Hasta: 01/01/2022', {
+            align: 'left',
+            columns: 1,
+            width: 300,
+          });
+          doc.lineJoin('miter').rect(35, 160, 530, 50).stroke();
+          doc.fontSize(10);
+          doc.text('Flete O Viatico sin IVA (Bs.)', 50, 172);
+          doc.text('Ventas sin IVA (Bs.)', 190, 172);
+          doc.text('Utilidad Operativa (Bs.)', 295, 172);
+          doc.text('% Costo', 425, 172);
+          doc.text('% Utilidad', 490, 172);
+          doc.text('Distribución del Costo de Transporte Segun Destino', 35, 223);
+          doc.fontSize(8);
+          doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 480, 35);
+          doc.y = 190;
+          doc.x = 60;
+          doc.text('Prueba', {
+            align: 'center',
+            columns: 1,
+            width: 100,
+          });
+          doc.y = 190;
+          doc.x = 185;
+          doc.text('Prueba', {
+            align: 'center',
+            columns: 1,
+            width: 100,
+          });
+          doc.y = 190;
+          doc.x = 300;
+          doc.text('Prueba', {
+            align: 'center',
+            columns: 1,
+            width: 100,
+          });
+          doc.y = 190;
+          doc.x = 425;
+          doc.text('Prueba', {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = 190;
+          doc.x = 495;
+          doc.text('Prueba', {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+          doc.fontSize(9);
+          doc.text('Destino', 40, 245);
+          doc.text('Cant. Guías', 90, 245);
+          doc.text('Nro. Piezas', 150, 245);
+          doc.text('Kgs', 212, 245);
+          doc.text('Ventas sin IVA', 245, 245);
+          doc.text('% Costo p/Dest.', 325, 245);
+          doc.text('Costo Distrib.p/Dest. (Bs.)', 410, 245);
+        break;
       default:
         doc.image('./img/logo_rc.png', 155, 170, { width: 300 });
-        break;
+      break;
     }
   }
 
@@ -217,26 +339,280 @@ class registroCostosService {
           columns: 1,
           width: 35,
         });
-        var end;
-        const range = doc.bufferedPageRange();
-        for (
-          i = range.start, end = range.start + range.count, range.start <= end;
-          i < end;
-          i++
-        ) {
-          doc.switchToPage(i);
+      break;
+      case '2':
+        var i = 0;
+        var page = 0;
+        var ymin;
+        ymin = 210;
+        for (var item = 0; item < 10; item++) {
           doc.fontSize(8);
           doc.fillColor('#444444');
-          doc.x = 455;
-          doc.y = 50;
-          doc.text(`Pagina ${i + 1} de ${range.count}`, {
+          doc.y = ymin + i;
+          doc.x = 35;
+          doc.text(
+            '12/10/2022',
+            {
+              align: 'left',
+              columns: 1,
+              width: 50,
+            }
+          );
+          doc.y = ymin + i;
+          doc.x = 85;
+          doc.text('PRUEBAAAAAA', {
+            align: 'left',
+            columns: 1,
+            width: 65,
+          });
+          doc.y = ymin + i;
+          doc.x = 160;
+          doc.text('PRUEBA', {
+            align: 'left',
+            columns: 1,
+            width: 45,
+          });
+          doc.y = ymin + i;
+          doc.x = 210;
+          doc.text('PRUEBA', {
             align: 'right',
             columns: 1,
-            width: 100,
+            width: 55,
           });
+          doc.y = ymin + i;
+          doc.x = 270;
+          doc.text('PRUEBA', {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          });
+          doc.y = ymin + i;
+          doc.x = 320;
+          doc.text('PRUEBA', {
+            align: 'left',
+            columns: 1,
+            width: 30,
+          });
+          doc.y = ymin + i;
+          doc.x = 360;
+          doc.text('PRUEBA', {
+            align: 'left',
+            columns: 1,
+            width: 30,
+          });
+          doc.y = ymin + i;
+          doc.x = 390;
+          doc.text('PRUEBA', {
+            align: 'right',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = ymin + i;
+          doc.x = 445;
+          doc.text('PRUEBA', {
+            align: 'right',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = ymin + i;
+          doc.x = 510;
+          doc.text('PRUEBA', {
+            align: 'right',
+            columns: 1,
+            width: 35,
+          });
+          doc.y = ymin + i;
+          doc.x = 555;
+          doc.text('PRUEBA', {
+            align: 'right',
+            columns: 1,
+            width: 35,
+          });
+          i += 20;
+          if (i >= 480) {
+            doc.fillColor('#BLACK');
+            doc.addPage();
+            page = page + 1;
+            doc.switchToPage(page);
+            i = 0;
+            await this.generateHeader(doc);
+          }
         }
-      default:
-        break;
+        doc.fillColor('#BLACK');
+        doc.y = ymin + i + 5;
+        doc.x = 30;
+        doc.text('TOTALES:', {
+          align: 'center',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i + 5;
+        doc.x = 210;
+        doc.text('PRUEBA', {
+          align: 'right',
+          columns: 1,
+          width: 55,
+        });
+        doc.y = ymin + i + 5;
+        doc.x = 390;
+        doc.text('PRUEBA', {
+          align: 'right',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i + 5;
+        doc.x = 445;
+        doc.text('PRUEBA', {
+          align: 'right',
+          columns: 1,
+          width: 50,
+        });
+        doc.text('NOTA: Los montos expresados son sin IVA.', 35, ymin + i + 25);
+      break;
+      case '3':
+        var i = 0;
+        var page = 0;
+        var ymin;
+        ymin = 270;
+        for (var item = 0; item < 10; item++) {
+          doc.fontSize(9);
+          doc.fillColor('#444444');
+          doc.y = ymin + i;
+          doc.x = 40;
+          doc.text('123',
+            {
+              align: 'center',
+              columns: 1,
+              width: 35,
+            }
+          );
+          doc.y = ymin + i;
+          doc.x = 90;
+          doc.text('1231311231', {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = ymin + i;
+          doc.x = 145;
+          doc.text('123131122', {
+            align: 'right',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = ymin + i;
+          doc.x = 200;
+          doc.text('12313',
+            {
+              align: 'center',
+              columns: 1,
+              width: 40,
+            }
+          );
+          doc.y = ymin + i;
+          doc.x = 255;
+          doc.text('123131123',
+            {
+              align: 'right',
+              columns: 1,
+              width: 50,
+            }
+          );
+          doc.y = ymin + i;
+          doc.x = 310;
+          doc.text('123131123', {
+            align: 'right',
+            columns: 1,
+            width: 80,
+          });
+          doc.y = ymin + i;
+          doc.x = 405;
+          doc.text('12313112', {
+            align: 'right',
+            columns: 1,
+            width: 110,
+          });
+          i += 15;
+          if (i >= 440 || item >= 100) {
+            doc.addPage();
+            page = page + 1;
+            doc.switchToPage(page);
+            i = 0;
+            await this.generateHeader(doc, data);
+          }
+        }
+        doc.fillColor('#BLACK');
+        doc.y = ymin + i + 15;
+        doc.x = 35;
+        doc.text('TOTAL GENERAL:', {
+          align: 'left',
+          columns: 1,
+          width: 50,
+        });doc.y = ymin + i + 15;
+        doc.x = 90;
+        doc.text('123123', {
+          align: 'center',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i + 15;
+        doc.x = 145;
+        doc.text('1231', {
+          align: 'right',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i + 15;
+        doc.x = 200;
+        doc.text('12312',
+          {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          }
+        );
+        doc.y = ymin + i + 15;
+        doc.x = 240;
+        doc.text('1233112',
+          {
+            align: 'right',
+            columns: 1,
+            width: 65,
+          }
+        );
+        doc.y = ymin + i + 15;
+        doc.x = 310;
+        doc.text('123133', {
+          align: 'right',
+          columns: 1,
+          width: 80,
+        });
+        doc.y = ymin + i + 15;
+        doc.x = 405;
+        doc.text('123131', {
+          align: 'right',
+          columns: 1,
+          width: 110,
+        });
+      break;
+    }
+    var end;
+    const range = doc.bufferedPageRange();
+    for (
+      i = range.start, end = range.start + range.count, range.start <= end;
+      i < end;
+      i++
+    ) {
+      doc.switchToPage(i);
+      doc.fontSize(8);
+      doc.fillColor('#444444');
+      doc.x = 446;
+      doc.y = 50;
+      doc.text(`Pagina ${i + 1} de ${range.count}`, {
+        align: 'right',
+        columns: 1,
+        width: 100,
+      });
     }
   }
 }
