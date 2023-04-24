@@ -4,7 +4,426 @@ const { models, Sequelize } = require('../../libs/sequelize');
 const UtilsService = require('../utils.service');
 const utils = new UtilsService();
 
-class registroCostosService {
+const clienteOrigDesc =
+  '(CASE WHEN (ci_rif_cte_conta_org IS NULL || ci_rif_cte_conta_org = "")' +
+  ' THEN (SELECT nb_cliente' +
+  ' FROM clientes ' +
+  ' WHERE `movimientos`.cod_cliente_org = clientes.id)' +
+  ' ELSE (SELECT nb_cliente' +
+  ' FROM clientes_particulares' +
+  ' WHERE `movimientos`.cod_agencia = clientes_particulares.cod_agencia' +
+  ' AND `movimientos`.cod_cliente_org = clientes_particulares.cod_cliente' +
+  ' AND `movimientos`.ci_rif_cte_conta_org = clientes_particulares.rif_ci' +
+  ' AND clientes_particulares.estatus = "A" LIMIT 1)' +
+  ' END)';
+const clienteDestDesc =
+  '(CASE WHEN (ci_rif_cte_conta_dest IS NULL || ci_rif_cte_conta_dest = "")' +
+  ' THEN (SELECT nb_cliente' +
+  ' FROM clientes ' +
+  ' WHERE `movimientos`.cod_cliente_dest = clientes.id)' +
+  ' ELSE (SELECT nb_cliente' +
+  ' FROM clientes_particulares' +
+  ' WHERE `movimientos`.cod_agencia_dest = clientes_particulares.cod_agencia' +
+  ' AND `movimientos`.cod_cliente_dest = clientes_particulares.cod_cliente' +
+  ' AND `movimientos`.ci_rif_cte_conta_dest = clientes_particulares.rif_ci' +
+  ' AND clientes_particulares.estatus = "A" LIMIT 1)' +
+  ' END)';
+const montoDolarDesc =
+  'CASE WHEN ((SELECT valor FROM historico_dolar' +
+  ' WHERE historico_dolar.fecha = movimientos.fecha_emision) = 0)' +
+  ' THEN 0 ELSE ROUND(movimientos.monto_subtotal /' +
+  ' (SELECT valor FROM historico_dolar' +
+  ' WHERE historico_dolar.fecha = movimientos.fecha_emision), 2) END';
+const montoDolarCostoDesc =
+  'CASE WHEN ((SELECT valor FROM historico_dolar' +
+  ' WHERE historico_dolar.fecha = `Costos`.fecha_envio) = 0)' +
+  ' THEN 0 ELSE ROUND(`Costos`.monto_anticipo /' +
+  ' (SELECT valor FROM historico_dolar' +
+  ' WHERE historico_dolar.fecha = `Costos`.fecha_envio), 2) END';
+const totalDolarDesc =
+  'SUM(CASE WHEN ((SELECT valor FROM historico_dolar' +
+  ' WHERE historico_dolar.fecha = movimientos.fecha_emision) = 0)' +
+  ' THEN 0 ELSE ROUND(movimientos.monto_subtotal /' +
+  ' (SELECT valor FROM historico_dolar' +
+  ' WHERE historico_dolar.fecha = movimientos.fecha_emision), 2) END)';
+const totalComisionDesc =
+  'ROUND(SUM(COALESCE(`detallesg->movimientos`.base_comision_vta_rcl * ' +
+  '`agentes`.porc_comision_entrega / 100 , 0)),2)';
+const totalDolarDesc2 =
+  'SUM(CASE WHEN ((SELECT valor FROM historico_dolar' +
+  ' WHERE historico_dolar.fecha = `detallesg->movimientos`.fecha_emision) = 0)' +
+  ' THEN 0 ELSE ROUND(`detallesg->movimientos`.monto_subtotal /' +
+  ' (SELECT valor FROM historico_dolar' +
+  ' WHERE historico_dolar.fecha = `detallesg->movimientos`.fecha_emision), 2) END)';
+
+class CostosTransporteService {
+  async mainReport(doc, id, tipo, agencia, desde, hasta, neta, dolar) {
+    let costos = [];
+    let data = [];
+    let detallesg = [];
+    let totalGuias = 0;
+    let totalCostos = 0;
+    let porcCosto = 0;
+    let porcUtilidad = 0;
+
+    switch (tipo) {
+      case 'DE':
+      case 'RE':
+        let order = [];
+        let group = '';
+        costos = await models.Costos.findByPk(id, {
+          include: [
+            {
+              model: models.Agentes,
+              as: 'agentes',
+            },
+            {
+              model: models.Proveedores,
+              as: 'proveedores',
+            },
+            {
+              model: models.Ayudantes,
+              as: 'ayudantes',
+            },
+            {
+              model: models.Unidades,
+              as: 'unidades',
+            },
+          ],
+          raw: true,
+        });
+
+        let detalles = await models.Dcostos.findAll({
+          where: {
+            cod_costo: costos.id,
+          },
+          raw: true,
+        });
+
+        let attributes = [
+          'id',
+          'nro_documento',
+          'fecha_emision',
+          'monto_subtotal',
+          'nro_piezas',
+          'peso_kgs',
+          'carga_neta',
+          'cod_cliente_org',
+          [Sequelize.literal(clienteOrigDesc), 'cliente_orig_desc'],
+          [Sequelize.literal(clienteDestDesc), 'cliente_dest_desc'],
+        ];
+
+        if (tipo == 'DE') {
+          order = [['movimientos', 'nro_documento', 'ASC']];
+          attributes.push([Sequelize.literal(montoDolarDesc), 'monto_dolar']);
+        } else {
+          group = 'movimientos.cod_cliente_dest';
+          order = [['movimientos', 'cod_cliente_dest', 'ASC']];
+          attributes.push([
+            Sequelize.fn('count', Sequelize.col('nro_documento')),
+            'total_guias',
+          ]);
+          attributes.push([
+            Sequelize.fn('sum', Sequelize.col('nro_piezas')),
+            'total_pzas',
+          ]);
+          attributes.push([
+            Sequelize.fn('sum', Sequelize.col('peso_kgs')),
+            'total_kgs',
+          ]);
+          attributes.push([
+            Sequelize.fn('sum', Sequelize.col('carga_neta')),
+            'total_neta',
+          ]);
+          attributes.push([
+            Sequelize.fn('sum', Sequelize.col('monto_subtotal')),
+            'total_monto',
+          ]);
+          attributes.push([Sequelize.literal(totalDolarDesc), 'total_dolar']);
+        }
+
+        detallesg = await models.Dcostosg.findAll({
+          where: {
+            cod_costo: costos.id,
+          },
+          include: [
+            {
+              model: models.Mmovimientos,
+              as: 'movimientos',
+              attributes: attributes,
+              include: {
+                model: models.Agencias,
+                as: 'agencias_dest',
+                include: {
+                  model: models.Ciudades,
+                  as: 'ciudades',
+                },
+              },
+            },
+          ],
+          order: order,
+          group: group,
+          raw: true,
+        });
+
+        for (var i = 0; i < detalles.length; i++)
+          totalCostos += utils.parseFloatN(detalles[i].monto_costo);
+        for (var i = 0; i < detallesg.length; i++) {
+          if (tipo == 'DE') {
+            totalGuias += utils.parseFloatN(
+              detallesg[i]['movimientos.monto_subtotal']
+            );
+          } else {
+            totalGuias += utils.parseFloatN(
+              detallesg[i]['movimientos.total_monto']
+            );
+          }
+        }
+
+        if (totalGuias > 0) {
+          porcCosto = (totalCostos / totalGuias) * 100;
+          porcUtilidad = ((totalGuias - totalCostos) / totalGuias) * 100;
+        }
+
+        data.costos = costos;
+        data.tipo = tipo;
+        data.agencia = agencia;
+        data.neta = neta;
+        data.dolar = dolar;
+        data.totalCostos = totalCostos.toFixed(2);
+        data.totalGuias = totalGuias.toFixed(2);
+        data.utilidad = (totalGuias - totalCostos).toFixed(2);
+        data.porcCosto = porcCosto.toFixed(2);
+        data.porcUtilidad = porcUtilidad.toFixed(2);
+        data.detalle = detallesg;
+        break;
+      case 'GE':
+        costos = await models.Costos.findAll({
+          where: {
+            fecha_envio: {
+              [Sequelize.Op.between]: [
+                moment(desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+                moment(hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+              ],
+            },
+          },
+          include: [
+            {
+              model: models.Dcostosg,
+              as: 'detallesg',
+              required: true,
+              include: [
+                {
+                  model: models.Mmovimientos,
+                  as: 'movimientos',
+                  attributes: [
+                    [
+                      Sequelize.fn('count', Sequelize.col('nro_documento')),
+                      'total_guias',
+                    ],
+                    [
+                      Sequelize.fn('sum', Sequelize.col('nro_piezas')),
+                      'total_pzas',
+                    ],
+                    [
+                      Sequelize.fn('sum', Sequelize.col('peso_kgs')),
+                      'total_kgs',
+                    ],
+                    [
+                      Sequelize.fn('sum', Sequelize.col('carga_neta')),
+                      'total_neta',
+                    ],
+                    [
+                      Sequelize.fn('sum', Sequelize.col('monto_subtotal')),
+                      'total_monto',
+                    ],
+                    [Sequelize.literal(totalDolarDesc2), 'total_dolar'],
+                  ],
+                  include: {
+                    model: models.Agencias,
+                    as: 'agencias_dest',
+                    include: {
+                      model: models.Ciudades,
+                      as: 'ciudades',
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+          group: 'detallesg.movimientos.cod_agencia_dest',
+          order: [['detallesg', 'movimientos', 'cod_agencia_dest', 'ASC']],
+          raw: true,
+        });
+
+        let detalle = await models.Costos.findAll({
+          where: {
+            fecha_envio: {
+              [Sequelize.Op.between]: [
+                moment(desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+                moment(hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+              ],
+            },
+          },
+          include: [
+            {
+              model: models.Dcostos,
+              as: 'detalles',
+            },
+          ],
+          raw: true,
+        });
+
+        for (var i = 0; i < detalle.length; i++) {
+          totalCostos += utils.parseFloatN(detalle[i]['detalles.monto_costo']);
+        }
+
+        for (var i = 0; i < costos.length; i++) {
+          totalGuias += utils.parseFloatN(
+            costos[i]['detallesg.movimientos.total_monto']
+          );
+        }
+
+        if (totalGuias > 0) {
+          porcCosto = (totalCostos / totalGuias) * 100;
+          porcUtilidad = ((totalGuias - totalCostos) / totalGuias) * 100;
+        }
+
+        data.costos = costos;
+        data.tipo = tipo;
+        data.agencia = agencia;
+        data.neta = neta;
+        data.dolar = dolar;
+        data.totalCostos = totalCostos.toFixed(2);
+        data.totalGuias = totalGuias.toFixed(2);
+        data.utilidad = (totalGuias - totalCostos).toFixed(2);
+        data.porcCosto = porcCosto.toFixed(2);
+        data.porcUtilidad = porcUtilidad.toFixed(2);
+        break;
+      case 'DI':
+        costos = await models.Costos.findAll({
+          where: {
+            fecha_envio: moment(desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+          },
+          attributes: [
+            'id',
+            'fecha_envio',
+            'destino',
+            'monto_anticipo',
+            'observacion_gnral',
+            [Sequelize.literal(montoDolarCostoDesc), 'monto_dolar'],
+          ],
+          include: [
+            {
+              model: models.Agencias,
+              as: 'agencias',
+            },
+            {
+              model: models.Agentes,
+              as: 'agentes',
+            },
+            {
+              model: models.Proveedores,
+              as: 'proveedores',
+            },
+            {
+              model: models.Ayudantes,
+              as: 'ayudantes',
+            },
+            {
+              model: models.Unidades,
+              as: 'unidades',
+            },
+          ],
+          raw: true,
+        });
+
+        let totalAnticipo = 0;
+        let totalDolar = 0;
+        for (var i = 0; i < costos.length; i++) {
+          totalAnticipo += utils.parseFloatN(costos[i].monto_anticipo);
+          totalDolar += utils.parseFloatN(costos[i].monto_dolar);
+        }
+
+        data.desde = desde;
+        data.costos = costos;
+        data.tipo = tipo;
+        data.dolar = dolar;
+        data.totalAnticipo = totalAnticipo;
+        data.totalDolar = totalDolar;
+        break;
+      case 'CO':
+        costos = await models.Costos.findAll({
+          where: {
+            fecha_envio: {
+              [Sequelize.Op.between]: [
+                moment(desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+                moment(hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+              ],
+            },
+          },
+          include: [
+            {
+              model: models.Agentes,
+              as: 'agentes',
+            },
+            {
+              model: models.Unidades,
+              as: 'unidades',
+            },
+            {
+              model: models.Dcostosg,
+              as: 'detallesg',
+              required: true,
+              include: [
+                {
+                  model: models.Mmovimientos,
+                  as: 'movimientos',
+                  attributes: [
+                    [
+                      Sequelize.fn('count', Sequelize.col('nro_documento')),
+                      'total_guias',
+                    ],
+                    [
+                      Sequelize.fn('sum', Sequelize.col('nro_piezas')),
+                      'total_pzas',
+                    ],
+                    [
+                      Sequelize.fn('sum', Sequelize.col('peso_kgs')),
+                      'total_kgs',
+                    ],
+                    [
+                      Sequelize.fn('sum', Sequelize.col('carga_neta')),
+                      'total_neta',
+                    ],
+                    [
+                      Sequelize.fn('sum', Sequelize.col('monto_subtotal')),
+                      'total_monto',
+                    ],
+                    [Sequelize.literal(totalComisionDesc), 'total_comision'],
+                    [Sequelize.literal(totalDolarDesc2), 'total_dolar'],
+                  ],
+                },
+              ],
+            },
+          ],
+          group: '`Costos`.id',
+          order: [['fecha_envio', 'ASC']],
+          raw: true,
+        });
+
+        data.costos = costos;
+        data.desde = desde;
+        data.hasta = hasta;
+        data.tipo = tipo;
+        data.neta = neta;
+        data.dolar = dolar;
+        break;
+    }
+    await this.generateHeader(doc, data);
+    await this.generateCustomerInformation(doc, data);
+  }
+
   async generateHeader(doc, data) {
     let agente = '';
     let ayudante = '';
@@ -407,7 +826,7 @@ class registroCostosService {
     }
   }
 
-  async generateCustomerInformation(doc, data, detalles) {
+  async generateCustomerInformation(doc, data) {
     var i = 0;
     var page = 0;
     var ymin;
@@ -424,7 +843,7 @@ class registroCostosService {
     switch (data.tipo) {
       case 'DE':
         ymin = 270;
-        for (var item = 0; item < detalles.length; item++) {
+        for (var item = 0; item < data.detalle.length; item++) {
           doc.fontSize(7);
           doc.fillColor('#444444');
           doc.y = ymin + i;
@@ -436,7 +855,7 @@ class registroCostosService {
           });
           doc.y = ymin + i;
           doc.x = 57;
-          doc.text(detalles[item]['movimientos.nro_documento'], {
+          doc.text(data.detalle[item]['movimientos.nro_documento'], {
             align: 'left',
             columns: 1,
             width: 50,
@@ -444,7 +863,7 @@ class registroCostosService {
           doc.y = ymin + i;
           doc.x = 100;
           doc.text(
-            moment(detalles[item]['movimientos.fecha_emision']).format(
+            moment(data.detalle[item]['movimientos.fecha_emision']).format(
               'DD/MM/YYYY'
             ),
             {
@@ -455,7 +874,7 @@ class registroCostosService {
           );
           doc.y = ymin + i;
           doc.x = 145;
-          doc.text(detalles[item]['movimientos.cliente_orig_desc'].trim(), {
+          doc.text(data.detalle[item]['movimientos.cliente_orig_desc'].trim(), {
             align: 'left',
             columns: 1,
             width: 123,
@@ -463,8 +882,8 @@ class registroCostosService {
           doc.y = ymin + i;
           doc.x = 268;
           doc.text(
-            detalles[item]['movimientos.cliente_dest_desc'] != null
-              ? detalles[item]['movimientos.cliente_dest_desc'].trim()
+            data.detalle[item]['movimientos.cliente_dest_desc'] != null
+              ? data.detalle[item]['movimientos.cliente_dest_desc'].trim()
               : '',
             {
               align: 'left',
@@ -475,7 +894,7 @@ class registroCostosService {
           doc.y = ymin + i;
           doc.x = 390;
           doc.text(
-            detalles[item]['movimientos.agencias_dest.ciudades.siglas'],
+            data.detalle[item]['movimientos.agencias_dest.ciudades.siglas'],
             {
               align: 'center',
               columns: 1,
@@ -483,17 +902,17 @@ class registroCostosService {
             }
           );
           total_pzas += utils.parseFloatN(
-            detalles[item]['movimientos.nro_piezas']
+            data.detalle[item]['movimientos.nro_piezas']
           );
           total_kgs += utils.parseFloatN(
-            detalles[item]['movimientos.peso_kgs']
+            data.detalle[item]['movimientos.peso_kgs']
           );
           total_neta += utils.parseFloatN(
-            detalles[item]['movimientos.carga_neta']
+            data.detalle[item]['movimientos.carga_neta']
           );
           doc.y = ymin + i;
           doc.x = 413;
-          doc.text(detalles[item]['movimientos.nro_piezas'], {
+          doc.text(data.detalle[item]['movimientos.nro_piezas'], {
             align: 'right',
             columns: 1,
             width: 20,
@@ -502,8 +921,8 @@ class registroCostosService {
           doc.x = 440;
           doc.text(
             data.neta == 'true'
-              ? utils.formatNumber(detalles[item]['movimientos.carga_neta'])
-              : utils.formatNumber(detalles[item]['movimientos.peso_kgs']),
+              ? utils.formatNumber(data.detalle[item]['movimientos.carga_neta'])
+              : utils.formatNumber(data.detalle[item]['movimientos.peso_kgs']),
             {
               align: 'right',
               columns: 1,
@@ -513,7 +932,9 @@ class registroCostosService {
           doc.y = ymin + i;
           doc.x = 465;
           doc.text(
-            utils.formatNumber(detalles[item]['movimientos.monto_subtotal']),
+            utils.formatNumber(
+              data.detalle[item]['movimientos.monto_subtotal']
+            ),
             {
               align: 'right',
               columns: 1,
@@ -522,12 +943,12 @@ class registroCostosService {
           );
           if (data.dolar == 'true') {
             total_dolar += utils.parseFloatN(
-              detalles[item]['movimientos.monto_dolar']
+              data.detalle[item]['movimientos.monto_dolar']
             );
             doc.y = ymin + i;
             doc.x = 520;
             doc.text(
-              utils.formatNumber(detalles[item]['movimientos.monto_dolar']),
+              utils.formatNumber(data.detalle[item]['movimientos.monto_dolar']),
               {
                 align: 'right',
                 columns: 1,
@@ -592,13 +1013,13 @@ class registroCostosService {
         break;
       case 'RE':
         ymin = 280;
-        for (var item = 0; item < detalles.length; item++) {
+        for (var item = 0; item < data.detalle.length; item++) {
           doc.fontSize(9);
           doc.fillColor('#444444');
           doc.y = ymin + i;
           doc.x = 35;
           doc.text(
-            detalles[item]['movimientos.agencias_dest.ciudades.siglas'],
+            data.detalle[item]['movimientos.agencias_dest.ciudades.siglas'],
             {
               align: 'center',
               columns: 1,
@@ -607,36 +1028,36 @@ class registroCostosService {
           );
 
           total_guias += utils.parseFloatN(
-            detalles[item]['movimientos.total_guias']
+            data.detalle[item]['movimientos.total_guias']
           );
           total_pzas += utils.parseFloatN(
-            detalles[item]['movimientos.total_pzas']
+            data.detalle[item]['movimientos.total_pzas']
           );
           total_kgs += utils.parseFloatN(
-            detalles[item]['movimientos.total_kgs']
+            data.detalle[item]['movimientos.total_kgs']
           );
           total_neta += utils.parseFloatN(
-            detalles[item]['movimientos.total_neta']
+            data.detalle[item]['movimientos.total_neta']
           );
 
           doc.y = ymin + i;
           doc.x = 80;
-          doc.text(detalles[item]['movimientos.total_guias'], {
+          doc.text(data.detalle[item]['movimientos.total_guias'], {
             align: 'right',
             columns: 1,
             width: 50,
           });
           doc.y = ymin + i;
           doc.x = 145;
-          doc.text(detalles[item]['movimientos.total_pzas'], {
+          doc.text(data.detalle[item]['movimientos.total_pzas'], {
             align: 'right',
             columns: 1,
             width: 30,
           });
           let peso_kgs =
             data.neta == 'true'
-              ? detalles[item]['movimientos.total_neta']
-              : detalles[item]['movimientos.total_kgs'];
+              ? data.detalle[item]['movimientos.total_neta']
+              : data.detalle[item]['movimientos.total_kgs'];
           doc.y = ymin + i;
           doc.x = 185;
           doc.text(utils.formatNumber(peso_kgs), {
@@ -647,7 +1068,7 @@ class registroCostosService {
           doc.y = ymin + i;
           doc.x = 225;
           doc.text(
-            utils.formatNumber(detalles[item]['movimientos.total_monto']),
+            utils.formatNumber(data.detalle[item]['movimientos.total_monto']),
             {
               align: 'right',
               columns: 1,
@@ -655,7 +1076,7 @@ class registroCostosService {
             }
           );
           let porcCosto =
-            utils.parseFloatN(detalles[item]['movimientos.total_monto']) /
+            utils.parseFloatN(data.detalle[item]['movimientos.total_monto']) /
             data.totalGuias;
           let porcCostoDest = porcCosto * data.totalCostos;
           doc.y = ymin + i;
@@ -674,12 +1095,12 @@ class registroCostosService {
           });
           if (data.dolar == 'true') {
             total_dolar += utils.parseFloatN(
-              detalles[item]['movimientos.total_dolar']
+              data.detalle[item]['movimientos.total_dolar']
             );
             doc.y = ymin + i;
             doc.x = 520;
             doc.text(
-              utils.formatNumber(detalles[item]['movimientos.total_dolar']),
+              utils.formatNumber(data.detalle[item]['movimientos.total_dolar']),
               {
                 align: 'right',
                 columns: 1,
@@ -1294,4 +1715,4 @@ class registroCostosService {
   }
 }
 
-module.exports = registroCostosService;
+module.exports = CostosTransporteService;

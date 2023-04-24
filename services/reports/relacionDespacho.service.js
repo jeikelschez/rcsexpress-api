@@ -4,7 +4,75 @@ const { models, Sequelize } = require('../../libs/sequelize');
 const UtilsService = require('../utils.service');
 const utils = new UtilsService();
 
+const clienteOrigDesc =
+  '(CASE WHEN (ci_rif_cte_conta_org IS NULL || ci_rif_cte_conta_org = "")' +
+  ' THEN (SELECT nb_cliente' +
+  ' FROM clientes ' +
+  ' WHERE `Mmovimientos`.cod_cliente_org = clientes.id)' +
+  ' ELSE (SELECT nb_cliente' +
+  ' FROM clientes_particulares' +
+  ' WHERE `Mmovimientos`.cod_agencia = clientes_particulares.cod_agencia' +
+  ' AND `Mmovimientos`.cod_cliente_org = clientes_particulares.cod_cliente' +
+  ' AND `Mmovimientos`.ci_rif_cte_conta_org = clientes_particulares.rif_ci' +
+  ' AND clientes_particulares.estatus = "A" LIMIT 1)' +
+  ' END)';
+const clienteDestDesc =
+  '(CASE WHEN (ci_rif_cte_conta_dest IS NULL || ci_rif_cte_conta_dest = "")' +
+  ' THEN (SELECT nb_cliente' +
+  ' FROM clientes ' +
+  ' WHERE `Mmovimientos`.cod_cliente_dest = clientes.id)' +
+  ' ELSE (SELECT nb_cliente' +
+  ' FROM clientes_particulares' +
+  ' WHERE `Mmovimientos`.cod_agencia_dest = clientes_particulares.cod_agencia' +
+  ' AND `Mmovimientos`.cod_cliente_dest = clientes_particulares.cod_cliente' +
+  ' AND `Mmovimientos`.ci_rif_cte_conta_dest = clientes_particulares.rif_ci' +
+  ' AND clientes_particulares.estatus = "A" LIMIT 1)' +
+  ' END)';
+
 class RelacionDespachoService {
+  async mainReport(doc, data, detalle) {
+    data = JSON.parse(data);
+    let dataDetalle = await models.Mmovimientos.findAll({
+      where: {
+        nro_documento: {
+          [Sequelize.Op.in]: detalle.split(','),
+        },
+      },
+      include: [
+        {
+          model: models.Agencias,
+          as: 'agencias',
+          include: {
+            model: models.Ciudades,
+            as: 'ciudades',
+          },
+        },
+        {
+          model: models.Agencias,
+          as: 'agencias_dest',
+          include: {
+            model: models.Ciudades,
+            as: 'ciudades',
+          },
+        },
+        {
+          model: models.Zonas,
+          as: 'zonas_dest',
+        },
+      ],
+      attributes: {
+        include: [
+          [Sequelize.literal(clienteOrigDesc), 'cliente_orig_desc'],
+          [Sequelize.literal(clienteDestDesc), 'cliente_dest_desc'],
+        ],
+      },
+      order: JSON.parse(data.sortBy),
+      raw: true,
+    });
+    await this.generateHeader(doc, data);
+    await this.generateCustomerInformation(doc, data, dataDetalle);
+  }
+
   async generateHeader(doc, data) {
     doc
       .image('./img/logo_rc.png', 50, 45, { width: 50 })

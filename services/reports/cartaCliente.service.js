@@ -13,6 +13,19 @@ const nroDocumentoDesc =
   ' END)';
 
 class CartaClienteService {
+  async mainReport(doc, data, cliente, contacto, cargo, ciudad, usuario) {
+    await this.generateHeader(doc);
+    await this.generateCustomerInformation(
+      doc,
+      data,
+      cliente,
+      contacto,
+      cargo,
+      ciudad,
+      usuario
+    );
+  }
+
   async generateHeader(doc) {
     moment.locale('es');
     doc

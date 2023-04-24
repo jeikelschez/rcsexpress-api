@@ -4,6 +4,10 @@ const UtilsService = require('./../utils.service');
 const utils = new UtilsService();
 
 class FacturaPreimpresoService {
+  async mainReport(doc, data) {
+    await this.generateData(doc, JSON.parse(data));
+  }
+
   async generateData(doc, data) {
     let cliente_orig;
 

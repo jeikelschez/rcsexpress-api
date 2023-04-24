@@ -5,6 +5,39 @@ const UtilsService = require('./../utils.service');
 const utils = new UtilsService();
 
 class AnexoFacturaService {
+  async mainReport(doc, data) {
+    data = JSON.parse(data);
+    let detalle = await models.Mmovimientos.findAll({
+      where: {
+        tipo_doc_principal: 'FA',
+        nro_doc_principal: data.nro_documento,
+        nro_ctrl_doc_ppal: data.nro_control,
+        cod_ag_doc_ppal: data.cod_agencia,
+      },
+      include: [
+        {
+          model: models.Agencias,
+          as: 'agencias',
+          include: {
+            model: models.Ciudades,
+            as: 'ciudades',
+          },
+        },
+        {
+          model: models.Agencias,
+          as: 'agencias_dest',
+          include: {
+            model: models.Ciudades,
+            as: 'ciudades',
+          },
+        },
+      ],
+      raw: true,
+    });
+    await this.generateHeader(doc, data, detalle);
+    await this.generateCustomerInformation(doc, data, detalle);
+  }
+
   async generateHeader(doc, data, detalle) {
     let cliente_orig;
 

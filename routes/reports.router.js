@@ -78,10 +78,18 @@ router.get('/relacionDespacho', authenticateJWT, async (req, res, next) => {
   }
 });
 
-router.get('/reporteCostos', authenticateJWT, async (req, res, next) => {
+router.get('/costosTransporte', authenticateJWT, async (req, res, next) => {
   try {
-    const { tipo, data } = req.headers;
-    const pdfStream = await service.reporteCostos(tipo, data);
+    const { id, tipo, agencia, desde, hasta, neta, dolar } = req.headers;
+    const pdfStream = await service.costosTransporte(
+      id,
+      tipo,
+      agencia,
+      desde,
+      hasta,
+      neta,
+      dolar
+    );
     res.status(200).json({
       message: 'PDF Generado',
       base64: pdfStream,
@@ -91,38 +99,10 @@ router.get('/reporteCostos', authenticateJWT, async (req, res, next) => {
   }
 });
 
-router.get('/costosTransporte', authenticateJWT, async (req, res, next) => {
+router.get('/reporteCostos', authenticateJWT, async (req, res, next) => {
   try {
-    const { id, tipo, agencia, desde, hasta, neta, dolar } = req.headers;
-    let pdfStream;
-
-    if (tipo == 'DE' || tipo == 'RE') {
-      pdfStream = await service.costosTransporteDetalle(
-        id,
-        tipo,
-        agencia,
-        neta,
-        dolar
-      );
-    } else if (tipo == 'GE') {
-      pdfStream = await service.costosTransporteGeneral(
-        tipo,
-        agencia,
-        desde,
-        hasta,
-        neta,
-        dolar
-      );
-    } else if (tipo == 'DI') {
-      pdfStream = await service.costosTransporteDiario(tipo, desde, dolar);
-    } else {
-      pdfStream = await service.costosTransporteComisiones(
-        tipo,
-        desde,
-        hasta,
-      );
-    }
-
+    const { tipo, data } = req.headers;
+    const pdfStream = await service.reporteCostos(tipo, data);
     res.status(200).json({
       message: 'PDF Generado',
       base64: pdfStream,
