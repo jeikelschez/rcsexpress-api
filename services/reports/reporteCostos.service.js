@@ -165,7 +165,7 @@ class ReporteCostosService {
 
   async generateHeader(doc, tipo, data) {
     switch (tipo) {
-      case '1':
+      case 'RCT':
         doc.image('./img/logo_rc.png', 35, 42, { width: 80 });
         doc.font('Helvetica-Bold');
         doc.fillColor('#444444');
@@ -454,7 +454,7 @@ class ReporteCostosService {
       doc.text('% Costo', 470, 170);
       doc.text('% Utilidad', 515, 170);
       break;
-      case 'RCT':
+      case '6':
       doc.image('./img/logo_rc.png', 35, 42, { width: 70 });
       doc.font('Helvetica-Bold');
       doc.fillColor('#444444');
@@ -481,27 +481,22 @@ class ReporteCostosService {
         columns: 1,
         width: 300,
       });
-      doc.y = 137;
+      doc.y = 140;
       doc.x = 220;
-      doc.text('Transporte:', {
+      doc.text('Ayudante: Mario Sanchez', {
         align: 'center',
         columns: 1,
         width: 200,
       });
-      doc.fontSize(9);
+      doc.fontSize(10);
       doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 470, 35);
       doc.text('Fecha', 40, 170);
       doc.text('Anticipo (Bs.)', 85, 170);
-      doc.text('Fletes', 155, 170);
-      doc.text('Kgs', 190, 170);
-      doc.text('Piezas', 220, 170);
-      doc.text('Vehiculo', 255, 170);
-      doc.text('Origen', 300, 170);
-      doc.text('Dest.', 335, 170);
-      doc.text('Ventas (Bs.)', 365, 170);
-      doc.text('Utilidad', 425, 170);
-      doc.text('% Costo', 470, 170);
-      doc.text('% Utilidad', 515, 170);
+      doc.text('Fletes', 170, 170);
+      doc.text('Chofer', 230, 170);
+      doc.text('Vehiculo', 340, 170);
+      doc.text('Dest.', 460, 170);
+      doc.text('Ventas (Bs.)', 515, 170);
       break;
       default:
         doc.image('./img/logo_rc.png', 155, 170, { width: 300 });
@@ -517,7 +512,7 @@ class ReporteCostosService {
     let totalPorcCosto = 0;
     let totalPorcUtilidad = 0;
     switch (tipo) {
-      case '1':
+      case 'RCT':
         var i = 0;
         var page = 0;
         var ymin;
@@ -1270,6 +1265,123 @@ class ReporteCostosService {
           align: 'right',
           columns: 1,
           width: 35,
+        });
+      break;
+      case '6':
+      var i = 0;
+      var page = 0;
+      var ymin;
+      ymin = 200;
+      for (var item = 0; item < 10; item++) {
+        doc.fontSize(9);
+        doc.fillColor('#444444');
+        doc.y = ymin + i;
+        doc.x = 40;
+        doc.text('12/10/2022', {
+          align: 'left',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i;
+        doc.x = 85;
+        doc.text('123112313133', {
+          align: 'right',
+          columns: 1,
+          width: 60,
+        });
+        doc.y = ymin + i;
+        doc.x = 150;
+        doc.text('121231231', {
+          align: 'right',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i;
+        doc.x = 200;
+        doc.text('1231231312', {
+          align: 'right',
+          columns: 1,
+          width: 65,
+        });
+        doc.y = ymin + i;
+        doc.x = 270;
+        doc.text('1231231312', {
+          align: 'right',
+          columns: 1,
+          width: 110,
+        });
+        doc.y = ymin + i;
+        doc.x = 385;
+        doc.text('234234234232', {
+          align: 'right',
+          columns: 1,
+          width: 100,
+        });
+        doc.y = ymin + i;
+        doc.x = 500;
+        doc.text('1112312231233', {
+          align: 'right',
+          columns: 1,
+          width: 70,
+        });
+        i += 15;
+        if (i >= 440 || item >= 100) {
+          doc.addPage();
+          page = page + 1;
+          doc.switchToPage(page);
+          i = 0;
+          await this.generateHeader(doc, tipo, data);
+        }
+      }
+      doc.fillColor('#BLACK');
+      doc.y = ymin + i + 15;
+      doc.x = 40;
+      doc.text('TOTAL:', {
+        align: 'left',
+        columns: 1,
+        width: 50,
+      });
+      doc.y = ymin + i + 15;
+        doc.x = 85;
+        doc.text('12311231', {
+          align: 'right',
+          columns: 1,
+          width: 60,
+        });
+        doc.y = ymin + i + 15;
+        doc.x = 150;
+        doc.text('12123123123', {
+          align: 'right',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i + 15;
+        doc.x = 200;
+        doc.text('12312313', {
+          align: 'right',
+          columns: 1,
+          width: 65,
+        });
+        doc.y = ymin + i + 15;
+        doc.x = 270;
+        doc.text('12312313', {
+          align: 'right',
+          columns: 1,
+          width: 110,
+        });
+        doc.y = ymin + i + 15;
+        doc.x = 385;
+        doc.text('23423434234', {
+          align: 'right',
+          columns: 1,
+          width: 100,
+        });
+        doc.y = ymin + i + 15;
+        doc.x = 500;
+        doc.text('11123123112123132312323', {
+          align: 'right',
+          columns: 1,
+          width: 70,
         });
       break;
       default:
