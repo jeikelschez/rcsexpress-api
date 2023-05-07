@@ -498,9 +498,133 @@ class ReporteCostosService {
       doc.text('Dest.', 460, 170);
       doc.text('Ventas (Bs.)', 515, 170);
       break;
+      case '7':
+      doc.image('./img/logo_rc.png', 35, 42, { width: 70 });
+      doc.font('Helvetica-Bold');
+      doc.fillColor('#444444');
+      doc.fontSize(16);
+      doc.y = 90;
+      doc.x = 140;
+      doc.text('Guias Pendientes por Asociar a Costos de Transporte', {
+        align: 'left',
+        columns: 1,
+        width: 500,
+      });
+      doc.fontSize(12);
+      doc.y = 115;
+      doc.x = 180;
+      doc.text('Emitidas Desde: 01/01/2022', {
+        align: 'left',
+        columns: 1,
+        width: 300,
+      });
+      doc.y = 115;
+      doc.x = 350;
+      doc.text('Hasta: 01/01/2022', {
+        align: 'left',
+        columns: 1,
+        width: 300,
+      });
+      doc.fontSize(10);
+      doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 470, 35);
+      doc.text('Item', 40, 170);
+      doc.text('Nro. Guía', 70, 170);
+      doc.text('Emisión', 120, 170);
+      doc.text('Remitente', 165, 170);
+      doc.text('Destinatario', 270, 170);
+      doc.text('Origen', 370, 170);
+      doc.text('Dest.', 410, 170);
+      doc.text('Piezas', 440, 170);
+      doc.text('Kgs', 480, 170);
+      doc.text('Venta sin IVA', 510, 170);
+      break;
+      case '8':
+      doc.image('./img/logo_rc.png', 35, 42, { width: 70 });
+      doc.font('Helvetica-Bold');
+      doc.fillColor('#444444');
+      doc.fontSize(16);
+      doc.y = 90;
+      doc.x = 146;
+      doc.text('Costo de Transporte Interno por Vehiculo', {
+        align: 'center',
+        columns: 1,
+        width: 350,
+      });
+      doc.fontSize(12);
+      doc.y = 115;
+      doc.x = 215;
+      doc.text('Desde: 01/01/2022', {
+        align: 'left',
+        columns: 1,
+        width: 300,
+      });
+      doc.y = 115;
+      doc.x = 330;
+      doc.text('Hasta: 01/01/2022', {
+        align: 'left',
+        columns: 1,
+        width: 300,
+      });
+      doc.y = 140;
+      doc.x = 220;
+      doc.text('Vehiculo: ASDGQWESD', {
+        align: 'center',
+        columns: 1,
+        width: 200,
+      });
+      doc.fontSize(10);
+      doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 470, 35);
+      doc.text('Fecha', 40, 170);
+      doc.text('Anticipo (Bs.)', 85, 170);
+      doc.text('Fletes', 170, 170);
+      doc.text('Agente', 230, 170);
+      doc.text('Origen', 350, 170);
+      doc.text('Dest.', 395, 170);
+      doc.text('Ventas (Bs.)', 430, 170);
+      doc.text('Utilidad (Bs.)', 500, 170);
+      break;
+      case '9':
+      doc.image('./img/logo_rc.png', 35, 42, { width: 70 });
+      doc.font('Helvetica-Bold');
+      doc.fillColor('#444444');
+      doc.fontSize(16);
+      doc.y = 90;
+      doc.x = 130;
+      doc.text('Costo de Transporte Interno por Vehiculo Y Agente', {
+        align: 'center',
+        columns: 1,
+        width: 400,
+      });
+      doc.fontSize(12);
+      doc.y = 120;
+      doc.x = 215;
+      doc.text('Desde: 01/01/2022', {
+        align: 'left',
+        columns: 1,
+        width: 300,
+      });
+      doc.y = 120;
+      doc.x = 330;
+      doc.text('Hasta: 01/01/2022', {
+        align: 'left',
+        columns: 1,
+        width: 300,
+      });
+      doc.fontSize(10);
+      doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 470, 35);
+      doc.text('Fecha', 40, 170);
+      doc.text('Anticipo (Bs.)', 85, 170);
+      doc.text('Fletes', 170, 170);
+      doc.text('Origen', 210, 170);
+      doc.text('Dest.', 255, 170);
+      doc.text('Ventas (Bs.)', 295, 170);
+      doc.text('Utilidad (Bs.)', 370, 170);
+      doc.text('% Costo', 450, 170);
+      doc.text('% Utilidad', 510, 170);
+      break;
       default:
         doc.image('./img/logo_rc.png', 155, 170, { width: 300 });
-        break;
+      break;
     }
   }
 
@@ -1379,6 +1503,378 @@ class ReporteCostosService {
         doc.y = ymin + i + 15;
         doc.x = 500;
         doc.text('11123123112123132312323', {
+          align: 'right',
+          columns: 1,
+          width: 70,
+        });
+      break;
+      case '7':
+      var i = 0;
+      var page = 0;
+      var ymin;
+      ymin = 200;
+      for (var item = 0; item < 10; item++) {
+        doc.fontSize(9);
+        doc.fillColor('#444444');
+        doc.y = ymin + i;
+        doc.x = 40;
+        doc.text(item, {
+          align: 'left',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i;
+        doc.x = 70;
+        doc.text('123112', {
+          align: 'left',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i;
+        doc.x = 120;
+        doc.text('1231123', {
+          align: 'left',
+          columns: 1,
+          width: 45,
+        });
+        doc.y = ymin + i;
+        doc.x = 165;
+        doc.text('12312123131312331', {
+          align: 'left',
+          columns: 1,
+          width: 100,
+        });
+        doc.y = ymin + i;
+        doc.x = 270;
+        doc.text('123121231231233123', {
+          align: 'left',
+          columns: 1,
+          width: 100,
+        });
+        doc.y = ymin + i;
+        doc.x = 373;
+        doc.text('23423', {
+          align: 'left',
+          columns: 1,
+          width: 30,
+        });
+        doc.y = ymin + i;
+        doc.x = 410;
+        doc.text('23423', {
+          align: 'left',
+          columns: 1,
+          width: 30,
+        });
+        doc.y = ymin + i;
+        doc.x = 440;
+        doc.text('111', {
+          align: 'right',
+          columns: 1,
+          width: 30,
+        });
+        doc.y = ymin + i;
+        doc.x = 470;
+        doc.text('11', {
+          align: 'right',
+          columns: 1,
+          width: 30,
+        });
+        doc.y = ymin + i;
+        doc.x = 510;
+        doc.text('11123123123', {
+          align: 'right',
+          columns: 1,
+          width: 60,
+        });
+        i += 15;
+        if (i >= 440 || item >= 100) {
+          doc.addPage();
+          page = page + 1;
+          doc.switchToPage(page);
+          i = 0;
+          await this.generateHeader(doc, tipo, data);
+        }
+      }
+      doc.fillColor('#BLACK');
+      doc.y = ymin + i + 10;
+      doc.x = 360;
+      doc.text('TOTAL GENERAL:', {
+        align: 'left',
+        columns: 1,
+        width: 100,
+      });
+      doc.y = ymin + i + 10;
+      doc.x = 440;
+      doc.text('111', {
+        align: 'right',
+        columns: 1,
+        width: 30,
+      });
+      doc.y = ymin + i + 10;
+      doc.x = 470;
+      doc.text('11', {
+        align: 'right',
+        columns: 1,
+        width: 30,
+      });
+      doc.y = ymin + i + 10;
+      doc.x = 510;
+      doc.text('11123123123', {
+        align: 'right',
+        columns: 1,
+        width: 60,
+      });
+      break;
+      case '8':
+      var i = 0;
+      var page = 0;
+      var ymin;
+      ymin = 200;
+      for (var item = 0; item < 10; item++) {
+        doc.fontSize(9);
+        doc.fillColor('#444444');
+        doc.y = ymin + i;
+        doc.x = 40;
+        doc.text('12/10/2022', {
+          align: 'left',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i;
+        doc.x = 85;
+        doc.text('123112313133', {
+          align: 'right',
+          columns: 1,
+          width: 65,
+        });
+        doc.y = ymin + i;
+        doc.x = 160;
+        doc.text('12123131', {
+          align: 'right',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i;
+        doc.x = 230;
+        doc.text('12311231313123212313', {
+          align: 'left',
+          columns: 1,
+          width: 110,
+        });
+        doc.y = ymin + i;
+        doc.x = 350;
+        doc.text('123', {
+          align: 'center',
+          columns: 1,
+          width: 30,
+        });
+        doc.y = ymin + i;
+        doc.x = 390;
+        doc.text('123', {
+          align: 'center',
+          columns: 1,
+          width: 30,
+        });
+        doc.y = ymin + i;
+        doc.x = 420;
+        doc.text('1112312233', {
+          align: 'right',
+          columns: 1,
+          width: 70,
+        });
+        doc.y = ymin + i;
+        doc.x = 490;
+        doc.text('1112312233', {
+          align: 'right',
+          columns: 1,
+          width: 70,
+        });
+        i += 15;
+        if (i >= 440 || item >= 100) {
+          doc.addPage();
+          page = page + 1;
+          doc.switchToPage(page);
+          i = 0;
+          await this.generateHeader(doc, tipo, data);
+        }
+      }
+      doc.fillColor('#BLACK');
+      doc.y = ymin + i + 10;
+        doc.x = 40;
+        doc.text('TOTAL:', {
+          align: 'left',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i + 25;
+        doc.x = 40;
+        doc.text('NOTA: Los montos expresados sin IVA', {
+          align: 'left',
+          columns: 1,
+          width: 200,
+        });
+        doc.y = ymin + i + 10;
+        doc.x = 85;
+        doc.text('123112313133', {
+          align: 'right',
+          columns: 1,
+          width: 65,
+        });
+        doc.y = ymin + i + 10;
+        doc.x = 160;
+        doc.text('12123131', {
+          align: 'right',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i + 10;
+        doc.x = 230;
+        doc.text('12311231313123212313', {
+          align: 'left',
+          columns: 1,
+          width: 110,
+        });
+        doc.y = ymin + i + 10;
+        doc.x = 350;
+        doc.text('123', {
+          align: 'center',
+          columns: 1,
+          width: 30,
+        });
+        doc.y = ymin + i + 10;
+        doc.x = 390;
+        doc.text('123', {
+          align: 'center',
+          columns: 1,
+          width: 30,
+        });
+        doc.y = ymin + i + 10;
+        doc.x = 420;
+        doc.text('1112312233', {
+          align: 'right',
+          columns: 1,
+          width: 70,
+        });
+        doc.y = ymin + i + 10;
+        doc.x = 490;
+        doc.text('1112312233', {
+          align: 'right',
+          columns: 1,
+          width: 70,
+        });
+      break;
+      case '9':
+      var i = 0;
+      var page = 0;
+      var ymin;
+      ymin = 200;
+      for (var item = 0; item < 10; item++) {
+        doc.fontSize(9);
+        doc.fillColor('#444444');
+        doc.y = ymin + i;
+        doc.x = 40;
+        doc.text('12/10/2022', {
+          align: 'left',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i;
+        doc.x = 85;
+        doc.text('123112313133', {
+          align: 'right',
+          columns: 1,
+          width: 65,
+        });
+        doc.y = ymin + i;
+        doc.x = 150;
+        doc.text('12123131', {
+          align: 'right',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i;
+        doc.x = 210;
+        doc.text('123', {
+          align: 'center',
+          columns: 1,
+          width: 30,
+        });
+        doc.y = ymin + i;
+        doc.x = 252;
+        doc.text('123', {
+          align: 'center',
+          columns: 1,
+          width: 30,
+        });
+        doc.y = ymin + i;
+        doc.x = 290;
+        doc.text('121231313', {
+          align: 'right',
+          columns: 1,
+          width: 70,
+        });
+        doc.y = ymin + i;
+        doc.x = 370;
+        doc.text('121231312312312312312313', {
+          align: 'right',
+          columns: 1,
+          width: 70,
+        });
+        doc.y = ymin + i;
+        doc.x = 450;
+        doc.text('1112312233', {
+          align: 'right',
+          columns: 1,
+          width: 40,
+        });
+        doc.y = ymin + i;
+        doc.x = 515;
+        doc.text('1112312233', {
+          align: 'right',
+          columns: 1,
+          width: 40,
+        });
+        i += 15;
+        if (i >= 440 || item >= 100) {
+          doc.addPage();
+          page = page + 1;
+          doc.switchToPage(page);
+          i = 0;
+          await this.generateHeader(doc, tipo, data);
+        }
+      }
+      doc.fillColor('#BLACK');
+      doc.y = ymin + i + 10;
+        doc.x = 40;
+        doc.text('TOTALES:', {
+          align: 'left',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i + 10;
+        doc.x = 85;
+        doc.text('123112313133', {
+          align: 'right',
+          columns: 1,
+          width: 65,
+        });
+        doc.y = ymin + i + 10;
+        doc.x = 150;
+        doc.text('12123131', {
+          align: 'right',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i + 10;
+        doc.x = 290;
+        doc.text('121231313', {
+          align: 'right',
+          columns: 1,
+          width: 70,
+        });
+        doc.y = ymin + i + 10;
+        doc.x = 370;
+        doc.text('121231312312312312312313', {
           align: 'right',
           columns: 1,
           width: 70,
