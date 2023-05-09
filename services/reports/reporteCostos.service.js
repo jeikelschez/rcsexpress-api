@@ -16,6 +16,8 @@ class ReporteCostosService {
   async mainReport(doc, tipo, data) {
     data = JSON.parse(data);
     let detallesg = [];
+    let costos = [];
+    let totalGuias = 0;
 
     switch (tipo) {
       case 'RCT':
@@ -153,17 +155,332 @@ class ReporteCostosService {
           raw: true,
         });
         break;
+      case 'DTC':
+        detallesg = await models.Costos.findAll({
+          where: {
+            fecha_envio: {
+              [Sequelize.Op.between]: [
+                moment(data.fecha_desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+                moment(data.fecha_hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+              ],
+            },
+          },
+          include: [
+            {
+              model: models.Dcostosg,
+              as: 'detallesg',
+              required: true,
+              include: [
+                {
+                  model: models.Mmovimientos,
+                  as: 'movimientos',
+                  attributes: [
+                    'cod_agencia_dest',
+                    [
+                      Sequelize.fn('count', Sequelize.col('nro_documento')),
+                      'total_guias',
+                    ],
+                    [
+                      Sequelize.fn('sum', Sequelize.col('nro_piezas')),
+                      'total_pzas',
+                    ],
+                    [
+                      Sequelize.fn('sum', Sequelize.col('peso_kgs')),
+                      'total_kgs',
+                    ],
+                    [
+                      Sequelize.fn('sum', Sequelize.col('carga_neta')),
+                      'total_neta',
+                    ],
+                    [
+                      Sequelize.fn('sum', Sequelize.col('monto_subtotal')),
+                      'total_monto',
+                    ],
+                  ],
+                  include: [
+                    {
+                      model: models.Agencias,
+                      as: 'agencias_dest',
+                      include: [
+                        {
+                          model: models.Ciudades,
+                          as: 'ciudades',
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+          group: 'detallesg.movimientos.cod_agencia_dest',
+          order: [['detallesg', 'movimientos', 'cod_agencia_dest', 'ASC']],
+          raw: true,
+        });
+
+        costos = await models.Costos.findAll({
+          where: {
+            fecha_envio: {
+              [Sequelize.Op.between]: [
+                moment(data.fecha_desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+                moment(data.fecha_hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+              ],
+            },
+          },
+          include: [
+            {
+              model: models.Dcostos,
+              as: 'detalles',
+              required: true,
+              attributes: [
+                [
+                  Sequelize.fn('sum', Sequelize.col('monto_costo')),
+                  'total_costo',
+                ],
+              ],
+            },
+          ],
+          raw: true,
+        });
+
+        totalGuias = 0;
+        for (var i = 0; i < detallesg.length; i++) {
+          totalGuias += utils.parseFloatN(
+            detallesg[i]['detallesg.movimientos.total_monto']
+          );
+        }
+
+        data.costos = costos;
+        data.totalGuias = totalGuias.toFixed(2);
+        break;
+      case 'DRC':
+        detallesg = await models.Costos.findAll({
+          where: {
+            fecha_envio: {
+              [Sequelize.Op.between]: [
+                moment(data.fecha_desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+                moment(data.fecha_hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+              ],
+            },
+          },
+          attributes: [],
+          include: [
+            {
+              model: models.Dcostosg,
+              as: 'detallesg',
+              required: true,
+              attributes: [],
+              include: [
+                {
+                  model: models.Mmovimientos,
+                  as: 'movimientos',
+                  attributes: [
+                    'cod_agencia_dest',
+                    [
+                      Sequelize.fn('count', Sequelize.col('nro_documento')),
+                      'total_guias',
+                    ],
+                    [
+                      Sequelize.fn('sum', Sequelize.col('nro_piezas')),
+                      'total_pzas',
+                    ],
+                    [
+                      Sequelize.fn('sum', Sequelize.col('peso_kgs')),
+                      'total_kgs',
+                    ],
+                    [
+                      Sequelize.fn('sum', Sequelize.col('carga_neta')),
+                      'total_neta',
+                    ],
+                    [
+                      Sequelize.fn('sum', Sequelize.col('monto_subtotal')),
+                      'total_monto',
+                    ],
+                  ],
+                  include: [
+                    {
+                      model: models.Agencias,
+                      as: 'agencias_dest',
+                      attributes: ['id'],
+                      include: [
+                        {
+                          model: models.Ciudades,
+                          as: 'ciudades',
+                          attributes: ['siglas'],
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+          group: 'detallesg.movimientos.cod_agencia_dest',
+          order: [['detallesg', 'movimientos', 'cod_agencia_dest', 'ASC']],
+          raw: true,
+        });
+
+        costos = await models.Costos.findAll({
+          where: {
+            fecha_envio: {
+              [Sequelize.Op.between]: [
+                moment(data.fecha_desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+                moment(data.fecha_hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+              ],
+            },
+          },
+          include: [
+            {
+              model: models.Dcostos,
+              as: 'detalles',
+              attributes: [
+                'id',
+                [
+                  Sequelize.fn('sum', Sequelize.col('monto_costo')),
+                  'total_costo',
+                ],
+              ],
+            },
+          ],
+          group: 'id',
+          order: [['id', 'ASC']],
+          raw: true,
+        });
+
+        let costosGroup = await models.Costos.findAll({
+          where: {
+            fecha_envio: {
+              [Sequelize.Op.between]: [
+                moment(data.fecha_desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+                moment(data.fecha_hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+              ],
+            },
+          },
+          attributes: ['id'],
+          include: [
+            {
+              model: models.Dcostosg,
+              as: 'detallesg',
+              required: true,
+              attributes: [],
+              include: [
+                {
+                  model: models.Mmovimientos,
+                  as: 'movimientos',
+                  attributes: [
+                    [
+                      Sequelize.fn('sum', Sequelize.col('monto_subtotal')),
+                      'total_monto_all',
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          group: 'id',
+          order: [['id', 'ASC']],
+          raw: true,
+        });
+
+        let guiasCosto = await models.Costos.findAll({
+          where: {
+            fecha_envio: {
+              [Sequelize.Op.between]: [
+                moment(data.fecha_desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+                moment(data.fecha_hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+              ],
+            },
+          },
+          attributes: ['id'],
+          include: [
+            {
+              model: models.Dcostosg,
+              as: 'detallesg',
+              required: true,
+              include: [
+                {
+                  model: models.Mmovimientos,
+                  as: 'movimientos',
+                  attributes: [
+                    'cod_agencia_dest',
+                    [
+                      Sequelize.fn('sum', Sequelize.col('monto_subtotal')),
+                      'total_monto',
+                    ],
+                  ],
+                  include: [
+                    {
+                      model: models.Agencias,
+                      as: 'agencias_dest',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+          group: ['id', 'detallesg.movimientos.cod_agencia_dest'],
+          order: [
+            ['id', 'ASC'],
+            ['detallesg', 'movimientos', 'cod_agencia_dest', 'ASC'],
+          ],
+          raw: true,
+        });
+
+        let costoTotal = 0;
+        for (var i = 0; i < detallesg.length; i++) {
+          let costo_cdad = 0;          
+          for (var j = 0; j < costos.length; j++) {
+            let findCosto = costosGroup.findIndex(
+              (item) => item.id == costos[j].id
+            );            
+            
+            let find = guiasCosto.findIndex(
+              (item) => (item.id == costos[j].id) && (item['detallesg.movimientos.agencias_dest.id'] ==
+              detallesg[i]['detallesg.movimientos.agencias_dest.id'])
+            );
+
+            let monto_pcdad = 0;
+            if (
+              find >= 0 &&
+              costosGroup[findCosto]['detallesg.movimientos.total_monto_all'] > 0
+              && costos[j]['detalles.total_costo'] > 0
+            ) {
+              monto_pcdad =
+                (guiasCosto[[find]]['detallesg.movimientos.total_monto'] /
+                costosGroup[findCosto]['detallesg.movimientos.total_monto_all']) *
+                  costos[j]['detalles.total_costo'];                  
+              costo_cdad += monto_pcdad;
+            }
+          }
+          detallesg[i].costoCiudad = costo_cdad.toFixed(2);
+          costoTotal += costo_cdad;
+        }
+
+        totalGuias = 0;
+        for (var i = 0; i < detallesg.length; i++) {
+          totalGuias += utils.parseFloatN(
+            detallesg[i]['detallesg.movimientos.total_monto']
+          );
+        }
+
+        data.costos = costos;
+        data.costoTotal = costoTotal.toFixed(2);
+        data.totalGuias = totalGuias.toFixed(2);
+        break;
       default:
         break;
     }
-
     data.detallesg = detallesg;
-
     await this.generateHeader(doc, tipo, data);
     await this.generateCustomerInformation(doc, tipo, data);
   }
 
   async generateHeader(doc, tipo, data) {
+    let totalCostos = 0;
+    let totalGuias = 0;
+    let utilidad = 0;
+    let porcCosto = 0;
+    let porcUtilidad = 0;
     switch (tipo) {
       case 'RCT':
         doc.image('./img/logo_rc.png', 35, 42, { width: 80 });
@@ -247,25 +564,28 @@ class ReporteCostosService {
         doc.image('./img/logo_rc.png', 35, 42, { width: 70 });
         doc.font('Helvetica-Bold');
         doc.fillColor('#444444');
-        doc.fontSize(18);
+        doc.fontSize(14);
         doc.y = 100;
-        doc.x = 190;
-        doc.text('Resumen de Costos de Transporte', {
-          align: 'left',
-          columns: 1,
-          width: 300,
-        });
+        doc.x = 145;
+        doc.text(
+          'Distribución Prorrateada del Costo de Transporte por Ciudad',
+          {
+            align: 'left',
+            columns: 1,
+            width: 500,
+          }
+        );
         doc.fontSize(12);
         doc.y = 130;
         doc.x = 215;
-        doc.text('Desde: 01/01/2022', {
+        doc.text('Desde: ' + data.fecha_desde, {
           align: 'left',
           columns: 1,
           width: 300,
         });
         doc.y = 130;
         doc.x = 330;
-        doc.text('Hasta: 01/01/2022', {
+        doc.text('Desde: ' + data.fecha_hasta, {
           align: 'left',
           columns: 1,
           width: 300,
@@ -275,42 +595,51 @@ class ReporteCostosService {
         doc.text('Flete O Viatico sin IVA (Bs.)', 50, 172);
         doc.text('Ventas sin IVA (Bs.)', 190, 172);
         doc.text('Utilidad Operativa (Bs.)', 295, 172);
-        doc.text('% Costo', 425, 172);
-        doc.text('% Utilidad', 490, 172);
+        doc.text('% Costo', 430, 172);
+        doc.text('% Utilidad', 495, 172);
         doc.text('Distribución del Costo de Transporte Segun Destino', 35, 223);
         doc.fontSize(8);
         doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 480, 35);
+
+        totalCostos = data.costos[0]['detalles.total_costo'];
+        totalGuias = data.totalGuias;
+        utilidad = data.totalGuias - data.costos[0]['detalles.total_costo'];
+        if (totalGuias > 0) {
+          porcCosto = (totalCostos / totalGuias) * 100;
+          porcUtilidad = ((totalGuias - totalCostos) / totalGuias) * 100;
+        }
+
         doc.y = 190;
         doc.x = 60;
-        doc.text('Prueba', {
+        doc.text(utils.formatNumber(totalCostos), {
           align: 'center',
           columns: 1,
           width: 100,
         });
         doc.y = 190;
         doc.x = 185;
-        doc.text('Prueba', {
+        doc.text(utils.formatNumber(totalGuias), {
           align: 'center',
           columns: 1,
           width: 100,
         });
         doc.y = 190;
         doc.x = 300;
-        doc.text('Prueba', {
+        doc.text(utils.formatNumber(utilidad), {
           align: 'center',
           columns: 1,
           width: 100,
         });
         doc.y = 190;
         doc.x = 425;
-        doc.text('Prueba', {
+        doc.text(utils.formatNumber(porcCosto) + '%', {
           align: 'center',
           columns: 1,
           width: 50,
         });
         doc.y = 190;
         doc.x = 495;
-        doc.text('Prueba', {
+        doc.text(utils.formatNumber(porcUtilidad) + '%', {
           align: 'center',
           columns: 1,
           width: 50,
@@ -319,34 +648,34 @@ class ReporteCostosService {
         doc.text('Destino', 40, 245);
         doc.text('Cant. Guías', 90, 245);
         doc.text('Nro. Piezas', 150, 245);
-        doc.text('Kgs', 212, 245);
-        doc.text('Ventas sin IVA', 245, 245);
-        doc.text('% Costo p/Dest.', 325, 245);
-        doc.text('Costo Distrib.p/Dest. (Bs.)', 410, 245);
+        doc.text('Kgs', 220, 245);
+        doc.text('Ventas sin IVA', 260, 245);
+        doc.text('% Costo p/Dest.', 340, 245);
+        doc.text('Costo Distrib.p/Dest. (Bs.)', 430, 245);
         break;
-      case '4':
+      case 'DRC':
         doc.image('./img/logo_rc.png', 35, 42, { width: 70 });
         doc.font('Helvetica-Bold');
         doc.fillColor('#444444');
-        doc.fontSize(16);
-        doc.y = 90;
-        doc.x = 135;
+        doc.fontSize(14);
+        doc.y = 100;
+        doc.x = 145;
         doc.text('Distribución Real del Costo de Transporte por Ciudad', {
           align: 'left',
           columns: 1,
           width: 500,
         });
         doc.fontSize(12);
-        doc.y = 120;
+        doc.y = 130;
         doc.x = 215;
-        doc.text('Desde: 01/01/2022', {
+        doc.text('Desde: ' + data.fecha_desde, {
           align: 'left',
           columns: 1,
           width: 300,
         });
-        doc.y = 120;
+        doc.y = 130;
         doc.x = 330;
-        doc.text('Hasta: 01/01/2022', {
+        doc.text('Desde: ' + data.fecha_hasta, {
           align: 'left',
           columns: 1,
           width: 300,
@@ -356,42 +685,51 @@ class ReporteCostosService {
         doc.text('Flete O Viatico sin IVA (Bs.)', 50, 172);
         doc.text('Ventas sin IVA (Bs.)', 190, 172);
         doc.text('Utilidad Operativa (Bs.)', 295, 172);
-        doc.text('% Costo', 425, 172);
-        doc.text('% Utilidad', 490, 172);
-        doc.text('Costos de Transporte segun Envio:', 35, 223);
+        doc.text('% Costo', 430, 172);
+        doc.text('% Utilidad', 495, 172);
+        doc.text('Distribución del Costo de Transporte Segun Destino', 35, 223);
         doc.fontSize(8);
         doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 480, 35);
+
+        totalCostos = data.costoTotal;
+        totalGuias = data.totalGuias;
+        utilidad = data.totalGuias - totalCostos;
+        if (totalGuias > 0) {
+          porcCosto = (totalCostos / totalGuias) * 100;
+          porcUtilidad = ((totalGuias - totalCostos) / totalGuias) * 100;
+        }
+
         doc.y = 190;
         doc.x = 60;
-        doc.text('Prueba', {
+        doc.text(utils.formatNumber(totalCostos), {
           align: 'center',
           columns: 1,
           width: 100,
         });
         doc.y = 190;
         doc.x = 185;
-        doc.text('Prueba', {
+        doc.text(utils.formatNumber(totalGuias), {
           align: 'center',
           columns: 1,
           width: 100,
         });
         doc.y = 190;
         doc.x = 300;
-        doc.text('Prueba', {
+        doc.text(utils.formatNumber(utilidad), {
           align: 'center',
           columns: 1,
           width: 100,
         });
         doc.y = 190;
         doc.x = 425;
-        doc.text('Prueba', {
+        doc.text(utils.formatNumber(porcCosto) + '%', {
           align: 'center',
           columns: 1,
           width: 50,
         });
         doc.y = 190;
         doc.x = 495;
-        doc.text('Prueba', {
+        doc.text(utils.formatNumber(porcUtilidad) + '%', {
           align: 'center',
           columns: 1,
           width: 50,
@@ -399,105 +737,105 @@ class ReporteCostosService {
         doc.fontSize(9);
         doc.text('Destino', 40, 245);
         doc.text('Cant. Guías', 90, 245);
-        doc.text('Piezas', 150, 245);
-        doc.text('Kgs', 212, 245);
-        doc.text('Ventas sin IVA', 245, 245);
-        doc.text('% Costo p/Dest.', 325, 245);
-        doc.text('Costo Distrib.p/Dest. (Bs.)', 410, 245);
+        doc.text('Nro. Piezas', 150, 245);
+        doc.text('Kgs', 220, 245);
+        doc.text('Ventas sin IVA', 260, 245);
+        doc.text('% Costo p/Dest.', 340, 245);
+        doc.text('Costo Distrib.p/Dest. (Bs.)', 430, 245);
         break;
       case '5':
-      doc.image('./img/logo_rc.png', 35, 42, { width: 70 });
-      doc.font('Helvetica-Bold');
-      doc.fillColor('#444444');
-      doc.fontSize(16);
-      doc.y = 90;
-      doc.x = 146;
-      doc.text('Costo de Transporte Interno', {
-        align: 'center',
-        columns: 1,
-        width: 350,
-      });
-      doc.fontSize(12);
-      doc.y = 115;
-      doc.x = 215;
-      doc.text('Desde: 01/01/2022', {
-        align: 'left',
-        columns: 1,
-        width: 300,
-      });
-      doc.y = 115;
-      doc.x = 330;
-      doc.text('Hasta: 01/01/2022', {
-        align: 'left',
-        columns: 1,
-        width: 300,
-      });
-      doc.y = 137;
-      doc.x = 220;
-      doc.text('Transporte:', {
-        align: 'center',
-        columns: 1,
-        width: 200,
-      });
-      doc.fontSize(9);
-      doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 470, 35);
-      doc.text('Fecha', 40, 170);
-      doc.text('Anticipo (Bs.)', 85, 170);
-      doc.text('Fletes', 155, 170);
-      doc.text('Kgs', 190, 170);
-      doc.text('Piezas', 220, 170);
-      doc.text('Vehiculo', 255, 170);
-      doc.text('Origen', 300, 170);
-      doc.text('Dest.', 335, 170);
-      doc.text('Ventas (Bs.)', 365, 170);
-      doc.text('Utilidad', 425, 170);
-      doc.text('% Costo', 470, 170);
-      doc.text('% Utilidad', 515, 170);
-      break;
+        doc.image('./img/logo_rc.png', 35, 42, { width: 70 });
+        doc.font('Helvetica-Bold');
+        doc.fillColor('#444444');
+        doc.fontSize(16);
+        doc.y = 90;
+        doc.x = 146;
+        doc.text('Costo de Transporte Interno', {
+          align: 'center',
+          columns: 1,
+          width: 350,
+        });
+        doc.fontSize(12);
+        doc.y = 115;
+        doc.x = 215;
+        doc.text('Desde: 01/01/2022', {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+        doc.y = 115;
+        doc.x = 330;
+        doc.text('Hasta: 01/01/2022', {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+        doc.y = 137;
+        doc.x = 220;
+        doc.text('Transporte:', {
+          align: 'center',
+          columns: 1,
+          width: 200,
+        });
+        doc.fontSize(9);
+        doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 470, 35);
+        doc.text('Fecha', 40, 170);
+        doc.text('Anticipo (Bs.)', 85, 170);
+        doc.text('Fletes', 155, 170);
+        doc.text('Kgs', 190, 170);
+        doc.text('Piezas', 220, 170);
+        doc.text('Vehiculo', 255, 170);
+        doc.text('Origen', 300, 170);
+        doc.text('Dest.', 335, 170);
+        doc.text('Ventas (Bs.)', 365, 170);
+        doc.text('Utilidad', 425, 170);
+        doc.text('% Costo', 470, 170);
+        doc.text('% Utilidad', 515, 170);
+        break;
       case '6':
-      doc.image('./img/logo_rc.png', 35, 42, { width: 70 });
-      doc.font('Helvetica-Bold');
-      doc.fillColor('#444444');
-      doc.fontSize(16);
-      doc.y = 90;
-      doc.x = 146;
-      doc.text('Costo de Transporte Interno', {
-        align: 'center',
-        columns: 1,
-        width: 350,
-      });
-      doc.fontSize(12);
-      doc.y = 115;
-      doc.x = 215;
-      doc.text('Desde: 01/01/2022', {
-        align: 'left',
-        columns: 1,
-        width: 300,
-      });
-      doc.y = 115;
-      doc.x = 330;
-      doc.text('Hasta: 01/01/2022', {
-        align: 'left',
-        columns: 1,
-        width: 300,
-      });
-      doc.y = 140;
-      doc.x = 220;
-      doc.text('Ayudante: Mario Sanchez', {
-        align: 'center',
-        columns: 1,
-        width: 200,
-      });
-      doc.fontSize(10);
-      doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 470, 35);
-      doc.text('Fecha', 40, 170);
-      doc.text('Anticipo (Bs.)', 85, 170);
-      doc.text('Fletes', 170, 170);
-      doc.text('Chofer', 230, 170);
-      doc.text('Vehiculo', 340, 170);
-      doc.text('Dest.', 460, 170);
-      doc.text('Ventas (Bs.)', 515, 170);
-      break;
+        doc.image('./img/logo_rc.png', 35, 42, { width: 70 });
+        doc.font('Helvetica-Bold');
+        doc.fillColor('#444444');
+        doc.fontSize(16);
+        doc.y = 90;
+        doc.x = 146;
+        doc.text('Costo de Transporte Interno', {
+          align: 'center',
+          columns: 1,
+          width: 350,
+        });
+        doc.fontSize(12);
+        doc.y = 115;
+        doc.x = 215;
+        doc.text('Desde: 01/01/2022', {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+        doc.y = 115;
+        doc.x = 330;
+        doc.text('Hasta: 01/01/2022', {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+        doc.y = 140;
+        doc.x = 220;
+        doc.text('Ayudante: Mario Sanchez', {
+          align: 'center',
+          columns: 1,
+          width: 200,
+        });
+        doc.fontSize(10);
+        doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 470, 35);
+        doc.text('Fecha', 40, 170);
+        doc.text('Anticipo (Bs.)', 85, 170);
+        doc.text('Fletes', 170, 170);
+        doc.text('Chofer', 230, 170);
+        doc.text('Vehiculo', 340, 170);
+        doc.text('Dest.', 460, 170);
+        doc.text('Ventas (Bs.)', 515, 170);
+        break;
       default:
         doc.image('./img/logo_rc.png', 155, 170, { width: 300 });
         break;
@@ -511,6 +849,10 @@ class ReporteCostosService {
     let totalInterno = 0;
     let totalPorcCosto = 0;
     let totalPorcUtilidad = 0;
+    let totalGuias = 0;
+    let totalPzas = 0;
+    let totalKgs = 0;
+
     switch (tipo) {
       case 'RCT':
         var i = 0;
@@ -848,59 +1190,105 @@ class ReporteCostosService {
         var page = 0;
         var ymin;
         ymin = 270;
-        for (var item = 0; item < 10; item++) {
+        for (var item = 0; item < data.detallesg.length; item++) {
           doc.fontSize(9);
           doc.fillColor('#444444');
           doc.y = ymin + i;
           doc.x = 40;
-          doc.text('123', {
-            align: 'center',
-            columns: 1,
-            width: 35,
-          });
+          doc.text(
+            data.detallesg[item][
+              'detallesg.movimientos.agencias_dest.ciudades.siglas'
+            ],
+            {
+              align: 'center',
+              columns: 1,
+              width: 35,
+            }
+          );
           doc.y = ymin + i;
           doc.x = 90;
-          doc.text('1231311231', {
+          doc.text(data.detallesg[item]['detallesg.movimientos.total_guias'], {
             align: 'center',
             columns: 1,
             width: 50,
           });
           doc.y = ymin + i;
-          doc.x = 145;
-          doc.text('123131122', {
-            align: 'right',
-            columns: 1,
-            width: 50,
-          });
-          doc.y = ymin + i;
-          doc.x = 200;
-          doc.text('12313', {
+          doc.x = 150;
+          doc.text(data.detallesg[item]['detallesg.movimientos.total_pzas'], {
             align: 'center',
             columns: 1,
-            width: 40,
-          });
-          doc.y = ymin + i;
-          doc.x = 255;
-          doc.text('123131123', {
-            align: 'right',
-            columns: 1,
             width: 50,
           });
           doc.y = ymin + i;
-          doc.x = 310;
-          doc.text('123131123', {
+          doc.x = 208;
+          doc.text(
+            utils.formatNumber(
+              data.detallesg[item]['detallesg.movimientos.total_kgs']
+            ),
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+          doc.y = ymin + i;
+          doc.x = 265;
+          doc.text(
+            utils.formatNumber(
+              data.detallesg[item]['detallesg.movimientos.total_monto']
+            ),
+            {
+              align: 'right',
+              columns: 1,
+              width: 60,
+            }
+          );
+
+          totalGuias += utils.parseFloatN(
+            data.detallesg[item]['detallesg.movimientos.total_guias']
+          );
+          totalPzas += utils.parseFloatN(
+            data.detallesg[item]['detallesg.movimientos.total_pzas']
+          );
+          totalKgs += utils.parseFloatN(
+            data.detallesg[item]['detallesg.movimientos.total_kgs']
+          );
+          totalVenta += utils.parseFloatN(
+            data.detallesg[item]['detallesg.movimientos.total_monto']
+          );
+
+          let porcCosto = 0;
+          if (data.totalGuias > 0) {
+            porcCosto =
+              (data.detallesg[item]['detallesg.movimientos.total_monto'] /
+                data.totalGuias) *
+              100;
+          }
+
+          totalPorcCosto += porcCosto;
+          totalCosto +=
+            (porcCosto / 100) * data.costos[0]['detalles.total_costo'];
+
+          doc.y = ymin + i;
+          doc.x = 330;
+          doc.text(utils.formatNumber(porcCosto) + '%', {
             align: 'right',
             columns: 1,
             width: 80,
           });
           doc.y = ymin + i;
-          doc.x = 405;
-          doc.text('12313112', {
-            align: 'right',
-            columns: 1,
-            width: 110,
-          });
-          i += 15;
+          doc.x = 430;
+          doc.text(
+            utils.formatNumber(
+              (porcCosto / 100) * data.costos[0]['detalles.total_costo']
+            ),
+            {
+              align: 'right',
+              columns: 1,
+              width: 110,
+            }
+          );
+          i += 13;
           if (i >= 440 || item >= 100) {
             doc.addPage();
             page = page + 1;
@@ -919,429 +1307,474 @@ class ReporteCostosService {
         });
         doc.y = ymin + i + 15;
         doc.x = 90;
-        doc.text('123123', {
+        doc.text(totalGuias, {
           align: 'center',
           columns: 1,
           width: 50,
         });
         doc.y = ymin + i + 15;
-        doc.x = 145;
-        doc.text('1231', {
-          align: 'right',
-          columns: 1,
-          width: 50,
-        });
-        doc.y = ymin + i + 15;
-        doc.x = 200;
-        doc.text('12312', {
-          align: 'right',
-          columns: 1,
-          width: 40,
-        });
-        doc.y = ymin + i + 15;
-        doc.x = 240;
-        doc.text('1233112', {
-          align: 'right',
-          columns: 1,
-          width: 65,
-        });
-        doc.y = ymin + i + 15;
-        doc.x = 310;
-        doc.text('123133', {
-          align: 'right',
-          columns: 1,
-          width: 80,
-        });
-        doc.y = ymin + i + 15;
-        doc.x = 405;
-        doc.text('123131', {
-          align: 'right',
-          columns: 1,
-          width: 110,
-        });
-        break;
-      case '4':
-        var i = 0;
-        var page = 0;
-        var ymin;
-        ymin = 270;
-        for (var item = 0; item < 10; item++) {
-          doc.fontSize(9);
-          doc.fillColor('#444444');
-          doc.y = ymin + i;
-          doc.x = 40;
-          doc.text('123', {
-            align: 'center',
-            columns: 1,
-            width: 35,
-          });
-          doc.y = ymin + i;
-          doc.x = 90;
-          doc.text('12313131', {
-            align: 'center',
-            columns: 1,
-            width: 50,
-          });
-          doc.y = ymin + i;
-          doc.x = 145;
-          doc.text('123131122', {
-            align: 'right',
-            columns: 1,
-            width: 50,
-          });
-          doc.y = ymin + i;
-          doc.x = 200;
-          doc.text('12313', {
-            align: 'center',
-            columns: 1,
-            width: 40,
-          });
-          doc.y = ymin + i;
-          doc.x = 255;
-          doc.text('123131123', {
-            align: 'right',
-            columns: 1,
-            width: 50,
-          });
-          doc.y = ymin + i;
-          doc.x = 310;
-          doc.text('123131123', {
-            align: 'right',
-            columns: 1,
-            width: 80,
-          });
-          doc.y = ymin + i;
-          doc.x = 405;
-          doc.text('12313112', {
-            align: 'right',
-            columns: 1,
-            width: 110,
-          });
-          i += 15;
-          if (i >= 440 || item >= 100) {
-            doc.addPage();
-            page = page + 1;
-            doc.switchToPage(page);
-            i = 0;
-            await this.generateHeader(doc, tipo, data);
-          }
-        }
-        doc.fillColor('#BLACK');
-        doc.y = ymin + i + 15;
-        doc.x = 35;
-        doc.text('TOTAL GENERAL:', {
-          align: 'left',
-          columns: 1,
-          width: 50,
-        });
-        doc.y = ymin + i + 47;
-        doc.x = 35;
-        doc.text('NOTA: Los costos reflejados se originan del prorrateo del costo por viaje según ingresos por ciudad.');
-        doc.y = ymin + i + 15;
-        doc.x = 90;
-        doc.text('123123', {
+        doc.x = 150;
+        doc.text(totalPzas, {
           align: 'center',
           columns: 1,
           width: 50,
         });
         doc.y = ymin + i + 15;
-        doc.x = 145;
-        doc.text('1231', {
+        doc.x = 198;
+        doc.text(utils.formatNumber(totalKgs), {
           align: 'right',
           columns: 1,
           width: 50,
         });
         doc.y = ymin + i + 15;
-        doc.x = 190;
-        doc.text('12312', {
-          align: 'right',
-          columns: 1,
-          width: 40,
-        });
-        doc.y = ymin + i + 15;
-        doc.x = 240;
-        doc.text('1233112', {
-          align: 'right',
-          columns: 1,
-          width: 65,
-        });
-        doc.y = ymin + i + 15;
-        doc.x = 310;
-        doc.text('123133', {
-          align: 'right',
-          columns: 1,
-          width: 80,
-        });
-        doc.y = ymin + i + 15;
-        doc.x = 405;
-        doc.text('123131', {
-          align: 'right',
-          columns: 1,
-          width: 110,
-        });
-        break;
-      case '5':
-      var i = 0;
-      var page = 0;
-      var ymin;
-      ymin = 200;
-      for (var item = 0; item < 10; item++) {
-        doc.fontSize(9);
-        doc.fillColor('#444444');
-        doc.y = ymin + i;
-        doc.x = 40;
-        doc.text('12/10/2022', {
-          align: 'left',
-          columns: 1,
-          width: 50,
-        });
-        doc.y = ymin + i;
-        doc.x = 95;
-        doc.text('1231123', {
-          align: 'right',
-          columns: 1,
-          width: 50,
-        });
-        doc.y = ymin + i;
-        doc.x = 150;
-        doc.text('1223', {
-          align: 'right',
-          columns: 1,
-          width: 30,
-        });
-        doc.y = ymin + i;
-        doc.x = 185;
-        doc.text('1233', {
-          align: 'right',
-          columns: 1,
-          width: 30,
-        });
-        doc.y = ymin + i;
-        doc.x = 220;
-        doc.text('12123', {
-          align: 'right',
-          columns: 1,
-          width: 30,
-        });
-        doc.y = ymin + i;
-        doc.x = 255;
-        doc.text('1231123', {
-          align: 'right',
-          columns: 1,
-          width: 40,
-        });
-        doc.y = ymin + i;
-        doc.x = 300;
-        doc.text('1123', {
-          align: 'right',
-          columns: 1,
-          width: 30,
-        });
-        doc.y = ymin + i;
-        doc.x = 332;
-        doc.text('1233', {
-          align: 'right',
-          columns: 1,
-          width: 25,
-        });
-        doc.y = ymin + i;
-        doc.x = 365;
-        doc.text('1231123', {
-          align: 'right',
-          columns: 1,
-          width: 50,
-        });
-        doc.y = ymin + i;
-        doc.x = 420;
-        doc.text('1231123', {
-          align: 'right',
-          columns: 1,
-          width: 40,
-        });
-        doc.y = ymin + i;
-        doc.x = 475;
-        doc.text('12123', {
-          align: 'right',
-          columns: 1,
-          width: 35,
-        });
-        doc.y = ymin + i;
-        doc.x = 525;
-        doc.text('12323', {
-          align: 'right',
-          columns: 1,
-          width: 35,
-        });
-        i += 15;
-        if (i >= 440 || item >= 100) {
-          doc.addPage();
-          page = page + 1;
-          doc.switchToPage(page);
-          i = 0;
-          await this.generateHeader(doc, tipo, data);
-        }
-      }
-      doc.fillColor('#BLACK');
-      doc.y = ymin + i + 15;
-      doc.x = 40;
-      doc.text('TOTAL:', {
-        align: 'left',
-        columns: 1,
-        width: 50,
-      });
-      doc.y = ymin + i + 15;
-        doc.x = 95;
-        doc.text('1231123', {
-          align: 'right',
-          columns: 1,
-          width: 50,
-        });
-        doc.y = ymin + i + 15;
-        doc.x = 150;
-        doc.text('1223', {
-          align: 'right',
-          columns: 1,
-          width: 30,
-        });
-        doc.y = ymin + i + 15;
-        doc.x = 185;
-        doc.text('1233', {
-          align: 'right',
-          columns: 1,
-          width: 30,
-        });
-        doc.y = ymin + i + 15;
-        doc.x = 220;
-        doc.text('12123', {
-          align: 'right',
-          columns: 1,
-          width: 30,
-        });
-        doc.y = ymin + i + 15;
-        doc.x = 255;
-        doc.text('1231123', {
-          align: 'right',
-          columns: 1,
-          width: 40,
-        });
-        doc.y = ymin + i + 15;
-        doc.x = 300;
-        doc.text('1123', {
-          align: 'right',
-          columns: 1,
-          width: 30,
-        });
-        doc.y = ymin + i + 15;
-        doc.x = 332;
-        doc.text('1233', {
-          align: 'right',
-          columns: 1,
-          width: 25,
-        });
-        doc.y = ymin + i + 15;
-        doc.x = 365;
-        doc.text('1231123', {
-          align: 'right',
-          columns: 1,
-          width: 50,
-        });
-        doc.y = ymin + i + 15;
-        doc.x = 420;
-        doc.text('1231123', {
-          align: 'right',
-          columns: 1,
-          width: 40,
-        });
-        doc.y = ymin + i + 15;
-        doc.x = 475;
-        doc.text('12123', {
-          align: 'right',
-          columns: 1,
-          width: 35,
-        });
-        doc.y = ymin + i + 15;
-        doc.x = 525;
-        doc.text('12323', {
-          align: 'right',
-          columns: 1,
-          width: 35,
-        });
-      break;
-      case '6':
-      var i = 0;
-      var page = 0;
-      var ymin;
-      ymin = 200;
-      for (var item = 0; item < 10; item++) {
-        doc.fontSize(9);
-        doc.fillColor('#444444');
-        doc.y = ymin + i;
-        doc.x = 40;
-        doc.text('12/10/2022', {
-          align: 'left',
-          columns: 1,
-          width: 50,
-        });
-        doc.y = ymin + i;
-        doc.x = 85;
-        doc.text('123112313133', {
+        doc.x = 265;
+        doc.text(utils.formatNumber(totalVenta), {
           align: 'right',
           columns: 1,
           width: 60,
         });
-        doc.y = ymin + i;
-        doc.x = 150;
-        doc.text('121231231', {
+        doc.y = ymin + i + 15;
+        doc.x = 330;
+        doc.text(utils.formatNumber(totalPorcCosto) + '%', {
           align: 'right',
           columns: 1,
-          width: 50,
+          width: 80,
         });
-        doc.y = ymin + i;
-        doc.x = 200;
-        doc.text('1231231312', {
-          align: 'right',
-          columns: 1,
-          width: 65,
-        });
-        doc.y = ymin + i;
-        doc.x = 270;
-        doc.text('1231231312', {
+        doc.y = ymin + i + 15;
+        doc.x = 430;
+        doc.text(utils.formatNumber(totalCosto), {
           align: 'right',
           columns: 1,
           width: 110,
         });
-        doc.y = ymin + i;
-        doc.x = 385;
-        doc.text('234234234232', {
-          align: 'right',
-          columns: 1,
-          width: 100,
-        });
-        doc.y = ymin + i;
-        doc.x = 500;
-        doc.text('1112312231233', {
-          align: 'right',
-          columns: 1,
-          width: 70,
-        });
-        i += 15;
-        if (i >= 440 || item >= 100) {
-          doc.addPage();
-          page = page + 1;
-          doc.switchToPage(page);
-          i = 0;
-          await this.generateHeader(doc, tipo, data);
+        doc.y = ymin + i + 47;
+        doc.x = 35;
+        doc.text(
+          'NOTA: Los costos reflejados es un prorrateo de acuerdo a los ingresos totales y a los costos totales de transporte'
+        );
+        break;
+      case 'DRC':
+        var i = 0;
+        var page = 0;
+        var ymin;
+        ymin = 270;
+        for (var item = 0; item < data.detallesg.length; item++) {
+          doc.fontSize(9);
+          doc.fillColor('#444444');
+          doc.y = ymin + i;
+          doc.x = 40;
+          doc.text(
+            data.detallesg[item][
+              'detallesg.movimientos.agencias_dest.ciudades.siglas'
+            ],
+            {
+              align: 'center',
+              columns: 1,
+              width: 35,
+            }
+          );
+          doc.y = ymin + i;
+          doc.x = 90;
+          doc.text(data.detallesg[item]['detallesg.movimientos.total_guias'], {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = ymin + i;
+          doc.x = 150;
+          doc.text(data.detallesg[item]['detallesg.movimientos.total_pzas'], {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = ymin + i;
+          doc.x = 208;
+          doc.text(
+            utils.formatNumber(
+              data.detallesg[item]['detallesg.movimientos.total_kgs']
+            ),
+            {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            }
+          );
+          doc.y = ymin + i;
+          doc.x = 265;
+          doc.text(
+            utils.formatNumber(
+              data.detallesg[item]['detallesg.movimientos.total_monto']
+            ),
+            {
+              align: 'right',
+              columns: 1,
+              width: 60,
+            }
+          );
+
+          totalGuias += utils.parseFloatN(
+            data.detallesg[item]['detallesg.movimientos.total_guias']
+          );
+          totalPzas += utils.parseFloatN(
+            data.detallesg[item]['detallesg.movimientos.total_pzas']
+          );
+          totalKgs += utils.parseFloatN(
+            data.detallesg[item]['detallesg.movimientos.total_kgs']
+          );
+          totalVenta += utils.parseFloatN(
+            data.detallesg[item]['detallesg.movimientos.total_monto']
+          );
+
+          let porcCosto = 0;
+          if (data.costoTotal > 0) {
+            porcCosto =
+              (data.detallesg[item].costoCiudad / data.costoTotal) * 100;
+          }
+
+          totalPorcCosto += porcCosto;
+          totalCosto += (porcCosto / 100) * data.costoTotal;
+
+          doc.y = ymin + i;
+          doc.x = 330;
+          doc.text(utils.formatNumber(porcCosto) + '%', {
+            align: 'right',
+            columns: 1,
+            width: 80,
+          });
+          doc.y = ymin + i;
+          doc.x = 430;
+          doc.text(utils.formatNumber((porcCosto / 100) * data.costoTotal), {
+            align: 'right',
+            columns: 1,
+            width: 110,
+          });
+          i += 13;
+          if (i >= 440 || item >= 100) {
+            doc.addPage();
+            page = page + 1;
+            doc.switchToPage(page);
+            i = 0;
+            await this.generateHeader(doc, tipo, data);
+          }
         }
-      }
-      doc.fillColor('#BLACK');
-      doc.y = ymin + i + 15;
-      doc.x = 40;
-      doc.text('TOTAL:', {
-        align: 'left',
-        columns: 1,
-        width: 50,
-      });
-      doc.y = ymin + i + 15;
+        doc.fillColor('#BLACK');
+        doc.y = ymin + i + 15;
+        doc.x = 35;
+        doc.text('TOTAL GENERAL:', {
+          align: 'left',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i + 15;
+        doc.x = 90;
+        doc.text(totalGuias, {
+          align: 'center',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i + 15;
+        doc.x = 150;
+        doc.text(totalPzas, {
+          align: 'center',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i + 15;
+        doc.x = 198;
+        doc.text(utils.formatNumber(totalKgs), {
+          align: 'right',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i + 15;
+        doc.x = 265;
+        doc.text(utils.formatNumber(totalVenta), {
+          align: 'right',
+          columns: 1,
+          width: 60,
+        });
+        doc.y = ymin + i + 15;
+        doc.x = 330;
+        doc.text(utils.formatNumber(totalPorcCosto) + '%', {
+          align: 'right',
+          columns: 1,
+          width: 80,
+        });
+        doc.y = ymin + i + 15;
+        doc.x = 430;
+        doc.text(utils.formatNumber(data.costoTotal), {
+          align: 'right',
+          columns: 1,
+          width: 110,
+        });
+        doc.y = ymin + i + 47;
+        doc.x = 35;
+        doc.text(
+          'NOTA: Los costos reflejados se originan del prorrateo del costo por viaje según ingresos por ciudad.'
+        );
+        break;
+      case '5':
+        var i = 0;
+        var page = 0;
+        var ymin;
+        ymin = 200;
+        for (var item = 0; item < 10; item++) {
+          doc.fontSize(9);
+          doc.fillColor('#444444');
+          doc.y = ymin + i;
+          doc.x = 40;
+          doc.text('12/10/2022', {
+            align: 'left',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = ymin + i;
+          doc.x = 95;
+          doc.text('1231123', {
+            align: 'right',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = ymin + i;
+          doc.x = 150;
+          doc.text('1223', {
+            align: 'right',
+            columns: 1,
+            width: 30,
+          });
+          doc.y = ymin + i;
+          doc.x = 185;
+          doc.text('1233', {
+            align: 'right',
+            columns: 1,
+            width: 30,
+          });
+          doc.y = ymin + i;
+          doc.x = 220;
+          doc.text('12123', {
+            align: 'right',
+            columns: 1,
+            width: 30,
+          });
+          doc.y = ymin + i;
+          doc.x = 255;
+          doc.text('1231123', {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          });
+          doc.y = ymin + i;
+          doc.x = 300;
+          doc.text('1123', {
+            align: 'right',
+            columns: 1,
+            width: 30,
+          });
+          doc.y = ymin + i;
+          doc.x = 332;
+          doc.text('1233', {
+            align: 'right',
+            columns: 1,
+            width: 25,
+          });
+          doc.y = ymin + i;
+          doc.x = 365;
+          doc.text('1231123', {
+            align: 'right',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = ymin + i;
+          doc.x = 420;
+          doc.text('1231123', {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          });
+          doc.y = ymin + i;
+          doc.x = 475;
+          doc.text('12123', {
+            align: 'right',
+            columns: 1,
+            width: 35,
+          });
+          doc.y = ymin + i;
+          doc.x = 525;
+          doc.text('12323', {
+            align: 'right',
+            columns: 1,
+            width: 35,
+          });
+          i += 15;
+          if (i >= 440 || item >= 100) {
+            doc.addPage();
+            page = page + 1;
+            doc.switchToPage(page);
+            i = 0;
+            await this.generateHeader(doc, tipo, data);
+          }
+        }
+        doc.fillColor('#BLACK');
+        doc.y = ymin + i + 15;
+        doc.x = 40;
+        doc.text('TOTAL:', {
+          align: 'left',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i + 15;
+        doc.x = 95;
+        doc.text('1231123', {
+          align: 'right',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i + 15;
+        doc.x = 150;
+        doc.text('1223', {
+          align: 'right',
+          columns: 1,
+          width: 30,
+        });
+        doc.y = ymin + i + 15;
+        doc.x = 185;
+        doc.text('1233', {
+          align: 'right',
+          columns: 1,
+          width: 30,
+        });
+        doc.y = ymin + i + 15;
+        doc.x = 220;
+        doc.text('12123', {
+          align: 'right',
+          columns: 1,
+          width: 30,
+        });
+        doc.y = ymin + i + 15;
+        doc.x = 255;
+        doc.text('1231123', {
+          align: 'right',
+          columns: 1,
+          width: 40,
+        });
+        doc.y = ymin + i + 15;
+        doc.x = 300;
+        doc.text('1123', {
+          align: 'right',
+          columns: 1,
+          width: 30,
+        });
+        doc.y = ymin + i + 15;
+        doc.x = 332;
+        doc.text('1233', {
+          align: 'right',
+          columns: 1,
+          width: 25,
+        });
+        doc.y = ymin + i + 15;
+        doc.x = 365;
+        doc.text('1231123', {
+          align: 'right',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i + 15;
+        doc.x = 420;
+        doc.text('1231123', {
+          align: 'right',
+          columns: 1,
+          width: 40,
+        });
+        doc.y = ymin + i + 15;
+        doc.x = 475;
+        doc.text('12123', {
+          align: 'right',
+          columns: 1,
+          width: 35,
+        });
+        doc.y = ymin + i + 15;
+        doc.x = 525;
+        doc.text('12323', {
+          align: 'right',
+          columns: 1,
+          width: 35,
+        });
+        break;
+      case '6':
+        var i = 0;
+        var page = 0;
+        var ymin;
+        ymin = 200;
+        for (var item = 0; item < 10; item++) {
+          doc.fontSize(9);
+          doc.fillColor('#444444');
+          doc.y = ymin + i;
+          doc.x = 40;
+          doc.text('12/10/2022', {
+            align: 'left',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = ymin + i;
+          doc.x = 85;
+          doc.text('123112313133', {
+            align: 'right',
+            columns: 1,
+            width: 60,
+          });
+          doc.y = ymin + i;
+          doc.x = 150;
+          doc.text('121231231', {
+            align: 'right',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = ymin + i;
+          doc.x = 200;
+          doc.text('1231231312', {
+            align: 'right',
+            columns: 1,
+            width: 65,
+          });
+          doc.y = ymin + i;
+          doc.x = 270;
+          doc.text('1231231312', {
+            align: 'right',
+            columns: 1,
+            width: 110,
+          });
+          doc.y = ymin + i;
+          doc.x = 385;
+          doc.text('234234234232', {
+            align: 'right',
+            columns: 1,
+            width: 100,
+          });
+          doc.y = ymin + i;
+          doc.x = 500;
+          doc.text('1112312231233', {
+            align: 'right',
+            columns: 1,
+            width: 70,
+          });
+          i += 15;
+          if (i >= 440 || item >= 100) {
+            doc.addPage();
+            page = page + 1;
+            doc.switchToPage(page);
+            i = 0;
+            await this.generateHeader(doc, tipo, data);
+          }
+        }
+        doc.fillColor('#BLACK');
+        doc.y = ymin + i + 15;
+        doc.x = 40;
+        doc.text('TOTAL:', {
+          align: 'left',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i + 15;
         doc.x = 85;
         doc.text('12311231', {
           align: 'right',
@@ -1383,7 +1816,7 @@ class ReporteCostosService {
           columns: 1,
           width: 70,
         });
-      break;
+        break;
       default:
         break;
     }
