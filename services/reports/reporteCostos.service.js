@@ -11,6 +11,8 @@ const totalInterno =
 const totalCosto =
   '(SELECT SUM(`detalles`.`monto_costo`) FROM `detalle_costos` AS `detalles`' +
   ' WHERE `Costos`.`id` = `detalles`.`cod_costo`)';
+const valorDolar =
+  '(select IFNULL(valor, 0) from historico_dolar hd where hd.fecha = `Costos`.`fecha_envio`)';
 
 class ReporteCostosService {
   async mainReport(doc, tipo, data) {
@@ -428,27 +430,32 @@ class ReporteCostosService {
 
         let costoTotal = 0;
         for (var i = 0; i < detallesg.length; i++) {
-          let costo_cdad = 0;          
+          let costo_cdad = 0;
           for (var j = 0; j < costos.length; j++) {
             let findCosto = costosGroup.findIndex(
               (item) => item.id == costos[j].id
-            );            
-            
+            );
+
             let find = guiasCosto.findIndex(
-              (item) => (item.id == costos[j].id) && (item['detallesg.movimientos.agencias_dest.id'] ==
-              detallesg[i]['detallesg.movimientos.agencias_dest.id'])
+              (item) =>
+                item.id == costos[j].id &&
+                item['detallesg.movimientos.agencias_dest.id'] ==
+                  detallesg[i]['detallesg.movimientos.agencias_dest.id']
             );
 
             let monto_pcdad = 0;
             if (
               find >= 0 &&
-              costosGroup[findCosto]['detallesg.movimientos.total_monto_all'] > 0
-              && costos[j]['detalles.total_costo'] > 0
+              costosGroup[findCosto]['detallesg.movimientos.total_monto_all'] >
+                0 &&
+              costos[j]['detalles.total_costo'] > 0
             ) {
               monto_pcdad =
                 (guiasCosto[[find]]['detallesg.movimientos.total_monto'] /
-                costosGroup[findCosto]['detallesg.movimientos.total_monto_all']) *
-                  costos[j]['detalles.total_costo'];                  
+                  costosGroup[findCosto][
+                    'detallesg.movimientos.total_monto_all'
+                  ]) *
+                costos[j]['detalles.total_costo'];
               costo_cdad += monto_pcdad;
             }
           }
@@ -466,6 +473,117 @@ class ReporteCostosService {
         data.costos = costos;
         data.costoTotal = costoTotal.toFixed(2);
         data.totalGuias = totalGuias.toFixed(2);
+        break;
+      case 'CTP':
+        detallesg = await models.Costos.findAll({
+          where: {
+            fecha_envio: {
+              [Sequelize.Op.between]: [
+                moment(data.fecha_desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+                moment(data.fecha_hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+              ],
+            },
+            cod_agente: data.agente,
+          },
+          attributes: [
+            'fecha_envio',
+            'monto_anticipo',
+            'destino',
+            [Sequelize.literal(valorDolar), 'valor_dolar'],
+          ],
+          include: [
+            {
+              model: models.Dcostosg,
+              as: 'detallesg',
+              required: true,
+              attributes: [],
+              include: [
+                {
+                  model: models.Mmovimientos,
+                  as: 'movimientos',
+                  attributes: [
+                    [
+                      Sequelize.fn('count', Sequelize.col('nro_documento')),
+                      'total_guias',
+                    ],
+                    [
+                      Sequelize.fn('sum', Sequelize.col('nro_piezas')),
+                      'total_pzas',
+                    ],
+                    [
+                      Sequelize.fn('sum', Sequelize.col('peso_kgs')),
+                      'total_kgs',
+                    ],
+                    [
+                      Sequelize.fn('sum', Sequelize.col('carga_neta')),
+                      'total_neta',
+                    ],
+                    [
+                      Sequelize.fn('sum', Sequelize.col('monto_subtotal')),
+                      'total_monto',
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              model: models.Agencias,
+              as: 'agencias',
+              attributes: ['id'],
+              include: [
+                {
+                  model: models.Ciudades,
+                  as: 'ciudades',
+                  attributes: ['siglas'],
+                },
+              ],
+            },
+            {
+              model: models.Unidades,
+              as: 'unidades',
+              attributes: ['placas'],
+            },
+          ],
+          group: ['Costos.id', 'cod_agente'],
+          order: [
+            ['id', 'ASC'],
+            ['cod_agente', 'ASC'],
+          ],
+          raw: true,
+        });
+
+        for (var i = 0; i < detallesg.length; i++) {
+          let costos = await models.Costos.findAll({
+            where: {
+              fecha_envio: detallesg[i].fecha_envio,
+              cod_agente: data.agente,
+            },
+            attributes: ['id'],
+            include: [
+              {
+                model: models.Dcostos,
+                as: 'detalles',
+                attributes: [
+                  'id',
+                  [
+                    Sequelize.fn('sum', Sequelize.col('monto_costo')),
+                    'total_costo',
+                  ],
+                ],
+              },
+            ],
+            group: ['Costos.id', 'cod_agente'],
+            order: [
+              ['id', 'ASC'],
+              ['cod_agente', 'ASC'],
+            ],
+            raw: true,
+          });
+          detallesg[i].total_costo =
+            costos[0]['detalles.total_costo'] == null
+              ? 0
+              : costos[0]['detalles.total_costo'];
+        }
         break;
       default:
         break;
@@ -743,7 +861,7 @@ class ReporteCostosService {
         doc.text('% Costo p/Dest.', 340, 245);
         doc.text('Costo Distrib.p/Dest. (Bs.)', 430, 245);
         break;
-      case '5':
+      case 'CTP':
         doc.image('./img/logo_rc.png', 35, 42, { width: 70 });
         doc.font('Helvetica-Bold');
         doc.fillColor('#444444');
@@ -755,42 +873,49 @@ class ReporteCostosService {
           columns: 1,
           width: 350,
         });
-        doc.fontSize(12);
+        doc.fontSize(10);
         doc.y = 115;
-        doc.x = 215;
-        doc.text('Desde: 01/01/2022', {
+        doc.x = 225;
+        doc.text('Desde: ' + data.fecha_desde, {
           align: 'left',
           columns: 1,
           width: 300,
         });
         doc.y = 115;
-        doc.x = 330;
-        doc.text('Hasta: 01/01/2022', {
+        doc.x = 340;
+        doc.text('Hasta: ' + data.fecha_hasta, {
           align: 'left',
           columns: 1,
           width: 300,
         });
         doc.y = 137;
-        doc.x = 220;
-        doc.text('Transporte:', {
-          align: 'center',
-          columns: 1,
-          width: 200,
-        });
-        doc.fontSize(9);
+        doc.x = 120;
+        doc.text(
+          'Transporte: ' +
+            (data.nombreAgente ? data.nombreAgente : data.nombreProveedor),
+          {
+            align: 'center',
+            columns: 1,
+            width: 400,
+          }
+        );
+
+        doc.fontSize(7);
         doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 470, 35);
         doc.text('Fecha', 40, 170);
-        doc.text('Anticipo (Bs.)', 85, 170);
-        doc.text('Fletes', 155, 170);
-        doc.text('Kgs', 190, 170);
-        doc.text('Piezas', 220, 170);
-        doc.text('Vehiculo', 255, 170);
-        doc.text('Origen', 300, 170);
-        doc.text('Dest.', 335, 170);
-        doc.text('Ventas (Bs.)', 365, 170);
-        doc.text('Utilidad', 425, 170);
-        doc.text('% Costo', 470, 170);
-        doc.text('% Utilidad', 515, 170);
+        doc.text('Antic. (Bs.)', 75, 170);
+        if (data.dolar == true) doc.text('Antic. ($)', 120, 170);
+        doc.text('Fletes', 160, 170);
+        doc.text(data.neta == 'N' ? 'Neta' : 'Kgs', 195, 170);
+        doc.text('Pzas', 220, 170);
+        doc.text('Vehiculo', 247, 170);
+        doc.text('Origen', 283, 170);
+        doc.text('Destino', 315, 170);
+        doc.text('Ventas (Bs.)', 350, 170);
+        if (data.dolar == true) doc.text('Ventas ($)', 400, 170);
+        doc.text('Utilidad', 445, 170);
+        doc.text('% Costo', 490, 170);
+        doc.text('% Utilidad', 525, 170);
         break;
       case '6':
         doc.image('./img/logo_rc.png', 35, 42, { width: 70 });
@@ -836,6 +961,130 @@ class ReporteCostosService {
         doc.text('Dest.', 460, 170);
         doc.text('Ventas (Bs.)', 515, 170);
         break;
+      case '7':
+        doc.image('./img/logo_rc.png', 35, 42, { width: 70 });
+        doc.font('Helvetica-Bold');
+        doc.fillColor('#444444');
+        doc.fontSize(16);
+        doc.y = 90;
+        doc.x = 140;
+        doc.text('Guias Pendientes por Asociar a Costos de Transporte', {
+          align: 'left',
+          columns: 1,
+          width: 500,
+        });
+        doc.fontSize(12);
+        doc.y = 115;
+        doc.x = 180;
+        doc.text('Emitidas Desde: 01/01/2022', {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+        doc.y = 115;
+        doc.x = 350;
+        doc.text('Hasta: 01/01/2022', {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+        doc.fontSize(10);
+        doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 470, 35);
+        doc.text('Item', 40, 170);
+        doc.text('Nro. Guía', 70, 170);
+        doc.text('Emisión', 120, 170);
+        doc.text('Remitente', 165, 170);
+        doc.text('Destinatario', 270, 170);
+        doc.text('Origen', 370, 170);
+        doc.text('Dest.', 410, 170);
+        doc.text('Piezas', 440, 170);
+        doc.text('Kgs', 480, 170);
+        doc.text('Venta sin IVA', 510, 170);
+        break;
+      case '8':
+        doc.image('./img/logo_rc.png', 35, 42, { width: 70 });
+        doc.font('Helvetica-Bold');
+        doc.fillColor('#444444');
+        doc.fontSize(16);
+        doc.y = 90;
+        doc.x = 146;
+        doc.text('Costo de Transporte Interno por Vehiculo', {
+          align: 'center',
+          columns: 1,
+          width: 350,
+        });
+        doc.fontSize(12);
+        doc.y = 115;
+        doc.x = 215;
+        doc.text('Desde: 01/01/2022', {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+        doc.y = 115;
+        doc.x = 330;
+        doc.text('Hasta: 01/01/2022', {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+        doc.y = 140;
+        doc.x = 220;
+        doc.text('Vehiculo: ASDGQWESD', {
+          align: 'center',
+          columns: 1,
+          width: 200,
+        });
+        doc.fontSize(10);
+        doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 470, 35);
+        doc.text('Fecha', 40, 170);
+        doc.text('Anticipo (Bs.)', 85, 170);
+        doc.text('Fletes', 170, 170);
+        doc.text('Agente', 230, 170);
+        doc.text('Origen', 350, 170);
+        doc.text('Dest.', 395, 170);
+        doc.text('Ventas (Bs.)', 430, 170);
+        doc.text('Utilidad (Bs.)', 500, 170);
+        break;
+      case '9':
+        doc.image('./img/logo_rc.png', 35, 42, { width: 70 });
+        doc.font('Helvetica-Bold');
+        doc.fillColor('#444444');
+        doc.fontSize(16);
+        doc.y = 90;
+        doc.x = 130;
+        doc.text('Costo de Transporte Interno por Vehiculo Y Agente', {
+          align: 'center',
+          columns: 1,
+          width: 400,
+        });
+        doc.fontSize(12);
+        doc.y = 120;
+        doc.x = 215;
+        doc.text('Desde: 01/01/2022', {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+        doc.y = 120;
+        doc.x = 330;
+        doc.text('Hasta: 01/01/2022', {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+        doc.fontSize(10);
+        doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 470, 35);
+        doc.text('Fecha', 40, 170);
+        doc.text('Anticipo (Bs.)', 85, 170);
+        doc.text('Fletes', 170, 170);
+        doc.text('Origen', 210, 170);
+        doc.text('Dest.', 255, 170);
+        doc.text('Ventas (Bs.)', 295, 170);
+        doc.text('Utilidad (Bs.)', 370, 170);
+        doc.text('% Costo', 450, 170);
+        doc.text('% Utilidad', 510, 170);
+        break;
       default:
         doc.image('./img/logo_rc.png', 155, 170, { width: 300 });
         break;
@@ -852,6 +1101,9 @@ class ReporteCostosService {
     let totalGuias = 0;
     let totalPzas = 0;
     let totalKgs = 0;
+    let totalAnticipo = 0;
+    let totalAnticipoDolar = 0;
+    let totalGuiasDolar = 0;
 
     switch (tipo) {
       case 'RCT':
@@ -1513,99 +1765,161 @@ class ReporteCostosService {
           'NOTA: Los costos reflejados se originan del prorrateo del costo por viaje según ingresos por ciudad.'
         );
         break;
-      case '5':
+      case 'CTP':
         var i = 0;
         var page = 0;
         var ymin;
-        ymin = 200;
-        for (var item = 0; item < 10; item++) {
-          doc.fontSize(9);
+        ymin = 195;
+        for (var item = 0; item < data.detallesg.length; item++) {
+          doc.fontSize(7);
           doc.fillColor('#444444');
           doc.y = ymin + i;
-          doc.x = 40;
-          doc.text('12/10/2022', {
-            align: 'left',
-            columns: 1,
-            width: 50,
-          });
+          doc.x = 35;
+          doc.text(
+            moment(data.detallesg[item].fecha_envio).format('DD/MM/YYYY'),
+            {
+              align: 'left',
+              columns: 1,
+              width: 50,
+            }
+          );
+
+          totalAnticipo += utils.parseFloatN(
+            data.detallesg[item].monto_anticipo
+          );
+
           doc.y = ymin + i;
-          doc.x = 95;
-          doc.text('1231123', {
+          doc.x = 75;
+          doc.text(utils.formatNumber(data.detallesg[item].monto_anticipo), {
             align: 'right',
             columns: 1,
-            width: 50,
+            width: 40,
           });
+
+          if (data.dolar == true) {
+            let anticipoDolar =
+              utils.parseFloatN(data.detallesg[item].monto_anticipo) /
+              utils.parseFloatN(data.detallesg[item].valor_dolar);
+            totalAnticipoDolar += utils.parseFloatN(anticipoDolar);
+            doc.y = ymin + i;
+            doc.x = 107;
+            doc.text(utils.formatNumber(anticipoDolar.toFixed(2)), {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            });
+          }
+
+          let montoCosto = data.detallesg[item].total_costo;
+          totalCosto += utils.parseFloatN(montoCosto);
           doc.y = ymin + i;
           doc.x = 150;
-          doc.text('1223', {
+          doc.text(utils.formatNumber(montoCosto), {
             align: 'right',
             columns: 1,
             width: 30,
           });
+
+          let monto_kgs =
+            data.neta == 'N'
+              ? data.detallesg[item]['detallesg.movimientos.total_neta']
+              : data.detallesg[item]['detallesg.movimientos.total_kgs'];
+          totalKgs += utils.parseFloatN(monto_kgs);
           doc.y = ymin + i;
           doc.x = 185;
-          doc.text('1233', {
+          doc.text(utils.formatNumber(monto_kgs), {
+            align: 'right',
+            columns: 1,
+            width: 30,
+          });
+
+          totalPzas += utils.parseFloatN(data.detallesg[item]['detallesg.movimientos.total_pzas']);
+          doc.y = ymin + i;
+          doc.x = 210;
+          doc.text(data.detallesg[item]['detallesg.movimientos.total_pzas'], {
             align: 'right',
             columns: 1,
             width: 30,
           });
           doc.y = ymin + i;
-          doc.x = 220;
-          doc.text('12123', {
-            align: 'right',
+          doc.x = 245;
+          doc.text(data.detallesg[item]['unidades.placas'], {
+            align: 'center',
+            columns: 1,
+            width: 35,
+          });
+          doc.y = ymin + i;
+          doc.x = 280;
+          doc.text(data.detallesg[item]['agencias.ciudades.siglas'], {
+            align: 'center',
             columns: 1,
             width: 30,
           });
           doc.y = ymin + i;
-          doc.x = 255;
-          doc.text('1231123', {
-            align: 'right',
-            columns: 1,
-            width: 40,
-          });
-          doc.y = ymin + i;
-          doc.x = 300;
-          doc.text('1123', {
-            align: 'right',
-            columns: 1,
-            width: 30,
-          });
-          doc.y = ymin + i;
-          doc.x = 332;
-          doc.text('1233', {
-            align: 'right',
-            columns: 1,
-            width: 25,
-          });
-          doc.y = ymin + i;
-          doc.x = 365;
-          doc.text('1231123', {
-            align: 'right',
+          doc.x = 305;
+          doc.text(data.detallesg[item].destino, {
+            align: 'center',
             columns: 1,
             width: 50,
           });
+
+          let montoVenta = data.detallesg[item]['detallesg.movimientos.total_monto'];
+          totalGuias += utils.parseFloatN(montoVenta);
           doc.y = ymin + i;
-          doc.x = 420;
-          doc.text('1231123', {
+          doc.x = 345;
+          doc.text(
+            utils.formatNumber(montoVenta),
+            {
+              align: 'right',
+              columns: 1,
+              width: 50,
+            }
+          );
+
+          if (data.dolar == true) {
+            let guiasDolar = montoVenta /
+              utils.parseFloatN(data.detallesg[item].valor_dolar);
+            totalGuiasDolar += utils.parseFloatN(guiasDolar);
+            doc.y = ymin + i;
+            doc.x = 395;
+            doc.text(utils.formatNumber(guiasDolar), {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            });
+          }
+
+          let porcCosto = 0;
+          let porcUtilidad = 0;
+          let utilidadBs =
+            utils.parseFloatN(montoVenta) - utils.parseFloatN(montoCosto);
+          if (montoVenta > 0) {
+            porcCosto = (montoCosto / montoVenta) * 100;
+            porcUtilidad = ((montoVenta - montoCosto) / montoVenta) * 100;
+          }
+
+          doc.y = ymin + i;
+          doc.x = 440;
+          doc.text(utils.formatNumber(utilidadBs), {
             align: 'right',
             columns: 1,
             width: 40,
           });
           doc.y = ymin + i;
-          doc.x = 475;
-          doc.text('12123', {
+          doc.x = 485;
+          doc.text(utils.formatNumber(porcCosto) + '%', {
             align: 'right',
             columns: 1,
             width: 35,
           });
           doc.y = ymin + i;
           doc.x = 525;
-          doc.text('12323', {
+          doc.text(utils.formatNumber(porcUtilidad) + '%', {
             align: 'right',
             columns: 1,
             width: 35,
           });
-          i += 15;
+          i += 20;
           if (i >= 440 || item >= 100) {
             doc.addPage();
             page = page + 1;
@@ -1623,78 +1937,88 @@ class ReporteCostosService {
           width: 50,
         });
         doc.y = ymin + i + 15;
-        doc.x = 95;
-        doc.text('1231123', {
+        doc.x = 75;
+        doc.text(utils.formatNumber(totalAnticipo), {
           align: 'right',
           columns: 1,
-          width: 50,
+          width: 40,
         });
+
+        if (data.dolar == true) {
+          doc.y = ymin + i + 15;
+          doc.x = 107;
+          doc.text(utils.formatNumber(totalAnticipoDolar), {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          });
+        }
+
         doc.y = ymin + i + 15;
         doc.x = 150;
-        doc.text('1223', {
+        doc.text(utils.formatNumber(totalCosto), {
           align: 'right',
           columns: 1,
           width: 30,
         });
         doc.y = ymin + i + 15;
         doc.x = 185;
-        doc.text('1233', {
+        doc.text(utils.formatNumber(totalKgs), {
           align: 'right',
           columns: 1,
           width: 30,
         });
         doc.y = ymin + i + 15;
-        doc.x = 220;
-        doc.text('12123', {
+        doc.x = 210;
+        doc.text(totalPzas, {
           align: 'right',
           columns: 1,
           width: 30,
         });
         doc.y = ymin + i + 15;
-        doc.x = 255;
-        doc.text('1231123', {
-          align: 'right',
-          columns: 1,
-          width: 40,
-        });
-        doc.y = ymin + i + 15;
-        doc.x = 300;
-        doc.text('1123', {
-          align: 'right',
-          columns: 1,
-          width: 30,
-        });
-        doc.y = ymin + i + 15;
-        doc.x = 332;
-        doc.text('1233', {
-          align: 'right',
-          columns: 1,
-          width: 25,
-        });
-        doc.y = ymin + i + 15;
-        doc.x = 365;
-        doc.text('1231123', {
+        doc.x = 345;
+        doc.text(utils.formatNumber(totalGuias), {
           align: 'right',
           columns: 1,
           width: 50,
         });
+
+        if (data.dolar == true) {
+          doc.y = ymin + i + 15;
+          doc.x = 395;
+          doc.text(utils.formatNumber(totalGuiasDolar), {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          });
+        }
+
+        let totalPorcCosto = 0;
+        let totalPorcUtilidad = 0;
+        let totalUtilidadBs =
+          utils.parseFloatN(totalGuias) - utils.parseFloatN(totalCosto);
+        if (totalGuias > 0) {
+          totalPorcCosto = (totalCosto / totalGuias) * 100;
+          totalPorcUtilidad = ((totalGuias - totalCosto) / totalGuias) * 100;
+        }
+
         doc.y = ymin + i + 15;
-        doc.x = 420;
-        doc.text('1231123', {
+        doc.x = 440;
+        doc.text(utils.formatNumber(totalUtilidadBs), {
           align: 'right',
           columns: 1,
           width: 40,
         });
         doc.y = ymin + i + 15;
-        doc.x = 475;
-        doc.text('12123', {
+        doc.x = 485;
+        doc.text(utils.formatNumber(totalPorcCosto) + '%', {
           align: 'right',
           columns: 1,
           width: 35,
         });
         doc.y = ymin + i + 15;
         doc.x = 525;
-        doc.text('12323', {
+        doc.text(utils.formatNumber(totalPorcUtilidad) + '%', {
           align: 'right',
           columns: 1,
           width: 35,
@@ -1812,6 +2136,378 @@ class ReporteCostosService {
         doc.y = ymin + i + 15;
         doc.x = 500;
         doc.text('11123123112123132312323', {
+          align: 'right',
+          columns: 1,
+          width: 70,
+        });
+        break;
+      case '7':
+        var i = 0;
+        var page = 0;
+        var ymin;
+        ymin = 200;
+        for (var item = 0; item < 10; item++) {
+          doc.fontSize(9);
+          doc.fillColor('#444444');
+          doc.y = ymin + i;
+          doc.x = 40;
+          doc.text(item, {
+            align: 'left',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = ymin + i;
+          doc.x = 70;
+          doc.text('123112', {
+            align: 'left',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = ymin + i;
+          doc.x = 120;
+          doc.text('1231123', {
+            align: 'left',
+            columns: 1,
+            width: 45,
+          });
+          doc.y = ymin + i;
+          doc.x = 165;
+          doc.text('12312123131312331', {
+            align: 'left',
+            columns: 1,
+            width: 100,
+          });
+          doc.y = ymin + i;
+          doc.x = 270;
+          doc.text('123121231231233123', {
+            align: 'left',
+            columns: 1,
+            width: 100,
+          });
+          doc.y = ymin + i;
+          doc.x = 373;
+          doc.text('23423', {
+            align: 'left',
+            columns: 1,
+            width: 30,
+          });
+          doc.y = ymin + i;
+          doc.x = 410;
+          doc.text('23423', {
+            align: 'left',
+            columns: 1,
+            width: 30,
+          });
+          doc.y = ymin + i;
+          doc.x = 440;
+          doc.text('111', {
+            align: 'right',
+            columns: 1,
+            width: 30,
+          });
+          doc.y = ymin + i;
+          doc.x = 470;
+          doc.text('11', {
+            align: 'right',
+            columns: 1,
+            width: 30,
+          });
+          doc.y = ymin + i;
+          doc.x = 510;
+          doc.text('11123123123', {
+            align: 'right',
+            columns: 1,
+            width: 60,
+          });
+          i += 15;
+          if (i >= 440 || item >= 100) {
+            doc.addPage();
+            page = page + 1;
+            doc.switchToPage(page);
+            i = 0;
+            await this.generateHeader(doc, tipo, data);
+          }
+        }
+        doc.fillColor('#BLACK');
+        doc.y = ymin + i + 10;
+        doc.x = 360;
+        doc.text('TOTAL GENERAL:', {
+          align: 'left',
+          columns: 1,
+          width: 100,
+        });
+        doc.y = ymin + i + 10;
+        doc.x = 440;
+        doc.text('111', {
+          align: 'right',
+          columns: 1,
+          width: 30,
+        });
+        doc.y = ymin + i + 10;
+        doc.x = 470;
+        doc.text('11', {
+          align: 'right',
+          columns: 1,
+          width: 30,
+        });
+        doc.y = ymin + i + 10;
+        doc.x = 510;
+        doc.text('11123123123', {
+          align: 'right',
+          columns: 1,
+          width: 60,
+        });
+        break;
+      case '8':
+        var i = 0;
+        var page = 0;
+        var ymin;
+        ymin = 200;
+        for (var item = 0; item < 10; item++) {
+          doc.fontSize(9);
+          doc.fillColor('#444444');
+          doc.y = ymin + i;
+          doc.x = 40;
+          doc.text('12/10/2022', {
+            align: 'left',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = ymin + i;
+          doc.x = 85;
+          doc.text('123112313133', {
+            align: 'right',
+            columns: 1,
+            width: 65,
+          });
+          doc.y = ymin + i;
+          doc.x = 160;
+          doc.text('12123131', {
+            align: 'right',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = ymin + i;
+          doc.x = 230;
+          doc.text('12311231313123212313', {
+            align: 'left',
+            columns: 1,
+            width: 110,
+          });
+          doc.y = ymin + i;
+          doc.x = 350;
+          doc.text('123', {
+            align: 'center',
+            columns: 1,
+            width: 30,
+          });
+          doc.y = ymin + i;
+          doc.x = 390;
+          doc.text('123', {
+            align: 'center',
+            columns: 1,
+            width: 30,
+          });
+          doc.y = ymin + i;
+          doc.x = 420;
+          doc.text('1112312233', {
+            align: 'right',
+            columns: 1,
+            width: 70,
+          });
+          doc.y = ymin + i;
+          doc.x = 490;
+          doc.text('1112312233', {
+            align: 'right',
+            columns: 1,
+            width: 70,
+          });
+          i += 15;
+          if (i >= 440 || item >= 100) {
+            doc.addPage();
+            page = page + 1;
+            doc.switchToPage(page);
+            i = 0;
+            await this.generateHeader(doc, tipo, data);
+          }
+        }
+        doc.fillColor('#BLACK');
+        doc.y = ymin + i + 10;
+        doc.x = 40;
+        doc.text('TOTAL:', {
+          align: 'left',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i + 25;
+        doc.x = 40;
+        doc.text('NOTA: Los montos expresados sin IVA', {
+          align: 'left',
+          columns: 1,
+          width: 200,
+        });
+        doc.y = ymin + i + 10;
+        doc.x = 85;
+        doc.text('123112313133', {
+          align: 'right',
+          columns: 1,
+          width: 65,
+        });
+        doc.y = ymin + i + 10;
+        doc.x = 160;
+        doc.text('12123131', {
+          align: 'right',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i + 10;
+        doc.x = 230;
+        doc.text('12311231313123212313', {
+          align: 'left',
+          columns: 1,
+          width: 110,
+        });
+        doc.y = ymin + i + 10;
+        doc.x = 350;
+        doc.text('123', {
+          align: 'center',
+          columns: 1,
+          width: 30,
+        });
+        doc.y = ymin + i + 10;
+        doc.x = 390;
+        doc.text('123', {
+          align: 'center',
+          columns: 1,
+          width: 30,
+        });
+        doc.y = ymin + i + 10;
+        doc.x = 420;
+        doc.text('1112312233', {
+          align: 'right',
+          columns: 1,
+          width: 70,
+        });
+        doc.y = ymin + i + 10;
+        doc.x = 490;
+        doc.text('1112312233', {
+          align: 'right',
+          columns: 1,
+          width: 70,
+        });
+        break;
+      case '9':
+        var i = 0;
+        var page = 0;
+        var ymin;
+        ymin = 200;
+        for (var item = 0; item < 10; item++) {
+          doc.fontSize(9);
+          doc.fillColor('#444444');
+          doc.y = ymin + i;
+          doc.x = 40;
+          doc.text('12/10/2022', {
+            align: 'left',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = ymin + i;
+          doc.x = 85;
+          doc.text('123112313133', {
+            align: 'right',
+            columns: 1,
+            width: 65,
+          });
+          doc.y = ymin + i;
+          doc.x = 150;
+          doc.text('12123131', {
+            align: 'right',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = ymin + i;
+          doc.x = 210;
+          doc.text('123', {
+            align: 'center',
+            columns: 1,
+            width: 30,
+          });
+          doc.y = ymin + i;
+          doc.x = 252;
+          doc.text('123', {
+            align: 'center',
+            columns: 1,
+            width: 30,
+          });
+          doc.y = ymin + i;
+          doc.x = 290;
+          doc.text('121231313', {
+            align: 'right',
+            columns: 1,
+            width: 70,
+          });
+          doc.y = ymin + i;
+          doc.x = 370;
+          doc.text('121231312312312312312313', {
+            align: 'right',
+            columns: 1,
+            width: 70,
+          });
+          doc.y = ymin + i;
+          doc.x = 450;
+          doc.text('1112312233', {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          });
+          doc.y = ymin + i;
+          doc.x = 515;
+          doc.text('1112312233', {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          });
+          i += 15;
+          if (i >= 440 || item >= 100) {
+            doc.addPage();
+            page = page + 1;
+            doc.switchToPage(page);
+            i = 0;
+            await this.generateHeader(doc, tipo, data);
+          }
+        }
+        doc.fillColor('#BLACK');
+        doc.y = ymin + i + 10;
+        doc.x = 40;
+        doc.text('TOTALES:', {
+          align: 'left',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i + 10;
+        doc.x = 85;
+        doc.text('123112313133', {
+          align: 'right',
+          columns: 1,
+          width: 65,
+        });
+        doc.y = ymin + i + 10;
+        doc.x = 150;
+        doc.text('12123131', {
+          align: 'right',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i + 10;
+        doc.x = 290;
+        doc.text('121231313', {
+          align: 'right',
+          columns: 1,
+          width: 70,
+        });
+        doc.y = ymin + i + 10;
+        doc.x = 370;
+        doc.text('121231312312312312312313', {
           align: 'right',
           columns: 1,
           width: 70,
