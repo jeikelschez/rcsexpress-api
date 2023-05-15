@@ -108,6 +108,14 @@ class ReportsService {
       margin: 20,
       bufferPages: true,
     });
+
+    if (tipo == 'CTA') {
+      doc = new PDFDocument({
+        margin: 10,
+        bufferPages: true,
+        layout: 'landscape',
+      });
+    }
     await reporteCostosService.mainReport(doc, tipo, data);
     doc.end();
     var encoder = new base64.Base64Encode();
