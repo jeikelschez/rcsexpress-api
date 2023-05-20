@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const routerApi = require('./routes');
+const fs = require('fs');
 
 const { logErrors, errorHandler, boomErrorHandler, ormErrorHandler } = require('./middlewares/error.handler');
 
@@ -13,6 +14,21 @@ app.use(cors());
 
 app.get('/', (req, res) => {
   res.send('Hola mi server en express');
+});
+
+app.get('/reporte', (req, res) => {
+    const filePath = `./services/reports/pdf/documento.pdf`;
+
+    fs.readFile(filePath, (err, file) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send('No se pudo descargar el archivo');
+        }
+
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'inline; filename="js.pdf"');
+        res.send(file);
+    });
 });
 
 routerApi(app);
