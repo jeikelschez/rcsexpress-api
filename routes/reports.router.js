@@ -2,9 +2,21 @@ const express = require('express');
 
 const ReportsService = require('./../services/reports/reports.service');
 const authenticateJWT = require('./../middlewares/authenticate.handler');
+const fs = require('fs');
 
 const router = express.Router();
 const service = new ReportsService();
+
+router.get('/loadPDF/:report', (req, res) => {
+  const { report } = req.params;
+  const filePath = './services/reports/pdf/' + report;
+  fs.readFile(filePath, (err, file) => {
+    if (err) return res.status(500).send('No se pudo descargar el archivo');
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'inline; filename="js.pdf"');
+    res.send(file);
+  });
+});
 
 router.get('/cartaCliente', authenticateJWT, async (req, res, next) => {
   try {
@@ -102,10 +114,10 @@ router.get('/costosTransporte', authenticateJWT, async (req, res, next) => {
 router.get('/reporteCostos', authenticateJWT, async (req, res, next) => {
   try {
     const { tipo, data } = req.headers;
-    const pdfStream = await service.reporteCostos(tipo, data);
+    const pdfPath = await service.reporteCostos(tipo, data);
     res.status(200).json({
       message: 'PDF Generado',
-      base64: pdfStream,
+      pdfPath: pdfPath,
     });
   } catch (error) {
     next(error);

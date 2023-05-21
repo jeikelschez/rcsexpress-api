@@ -2,6 +2,7 @@ const PDFDocument = require('pdfkit');
 const getStream = require('get-stream');
 const base64 = require('base64-stream');
 const fs = require('fs');
+const reportsPath = './services/reports/pdf/';
 
 const CartaClienteService = require('./cartaCliente.service');
 const cartaClienteService = new CartaClienteService();
@@ -105,11 +106,12 @@ class ReportsService {
 
   // REPORTE COSTOS
   async reporteCostos(tipo, data) {
+    let resPath = 'reporteCostos' + tipo + '.pdf';
     let doc = new PDFDocument({
       margin: 20,
       bufferPages: true,
     });
-    doc.pipe(fs.createWriteStream('./services/reports/pdf/documento.pdf'))
+    doc.pipe(fs.createWriteStream(reportsPath + resPath))
     if (tipo == 'CTA') {
       doc = new PDFDocument({
         margin: 10,
@@ -119,6 +121,7 @@ class ReportsService {
     }
     await reporteCostosService.mainReport(doc, tipo, data);
     doc.end();
+    return resPath;
   }
 }
 
