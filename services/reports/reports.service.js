@@ -106,19 +106,21 @@ class ReportsService {
 
   // REPORTE COSTOS
   async reporteCostos(tipo, data) {
+    if(!tipo || tipo == 'undefined') return 'reporteBase.pdf';
     let resPath = 'reporteCostos' + tipo + '.pdf';
     let doc = new PDFDocument({
       margin: 20,
       bufferPages: true,
     });
-    doc.pipe(fs.createWriteStream(reportsPath + resPath))
-    if (tipo == 'CTA') {
+    if (tipo == 'CTA' || tipo == 'RVV') {
       doc = new PDFDocument({
         margin: 10,
         bufferPages: true,
         layout: 'landscape',
       });
     }
+
+    doc.pipe(fs.createWriteStream(reportsPath + resPath));    
     await reporteCostosService.mainReport(doc, tipo, data);
     doc.end();
     return resPath;

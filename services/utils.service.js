@@ -43,14 +43,14 @@ class UtilsService {
     return page * limit - limit;
   }
 
-  truncate(data, num){
-    var string = ''
-    for(let i=0; i<num; i++) {
-      string += data[i]
-      if (i >= data.length - 1) 
-        {
-          i = num + 1
-        }
+  truncate(data, num) {
+    var string = '';
+    if(!data) return "";
+    for (let i = 0; i < num; i++) {
+      string += data[i];
+      if (i >= data.length - 1) {
+        i = num + 1;
+      }
     }
     return string;
   }

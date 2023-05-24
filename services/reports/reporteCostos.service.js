@@ -13,6 +13,32 @@ const totalCosto =
   ' WHERE `Costos`.`id` = `detalles`.`cod_costo`)';
 const valorDolar =
   '(select IFNULL(valor, 0) from historico_dolar hd where hd.fecha = `Costos`.`fecha_envio`)';
+const clienteOrigDesc =
+  '(CASE WHEN (ci_rif_cte_conta_org IS NULL || ci_rif_cte_conta_org = "")' +
+  ' THEN (SELECT nb_cliente' +
+  ' FROM clientes ' +
+  ' WHERE `Mmovimientos`.cod_cliente_org = clientes.id)' +
+  ' ELSE (SELECT nb_cliente' +
+  ' FROM clientes_particulares' +
+  ' WHERE `Mmovimientos`.cod_agencia = clientes_particulares.cod_agencia' +
+  ' AND `Mmovimientos`.cod_cliente_org = clientes_particulares.cod_cliente' +
+  ' AND `Mmovimientos`.ci_rif_cte_conta_org = clientes_particulares.rif_ci' +
+  ' AND clientes_particulares.estatus = "A" LIMIT 1)' +
+  ' END)';
+const clienteDestDesc =
+  '(CASE WHEN (ci_rif_cte_conta_dest IS NULL || ci_rif_cte_conta_dest = "")' +
+  ' THEN (SELECT nb_cliente' +
+  ' FROM clientes ' +
+  ' WHERE `Mmovimientos`.cod_cliente_dest = clientes.id)' +
+  ' ELSE (SELECT nb_cliente' +
+  ' FROM clientes_particulares' +
+  ' WHERE `Mmovimientos`.cod_agencia_dest = clientes_particulares.cod_agencia' +
+  ' AND `Mmovimientos`.cod_cliente_dest = clientes_particulares.cod_cliente' +
+  ' AND `Mmovimientos`.ci_rif_cte_conta_dest = clientes_particulares.rif_ci' +
+  ' AND clientes_particulares.estatus = "A" LIMIT 1)' +
+  ' END)';
+const agenteDesc =
+  "CONCAT(TRIM(persona_responsable), ' - C.I.', TRIM(rif_ci_agente))";
 
 class ReporteCostosService {
   async mainReport(doc, tipo, data) {
@@ -701,6 +727,169 @@ class ReporteCostosService {
               : costos[0]['detalles.total_costo'];
         }
         break;
+      case 'GPC':
+        detallesg = await models.Mmovimientos.findAll({
+          where: {
+            fecha_emision: {
+              [Sequelize.Op.between]: [
+                moment(data.fecha_desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+                moment(data.fecha_hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+              ],
+            },
+            estatus_administra: {
+              [Sequelize.Op.ne]: 'A',
+            },
+            t_de_documento: 'GC',
+            '$detalles_costo.id$': null,
+          },
+          attributes: [
+            'id',
+            'nro_documento',
+            'fecha_emision',
+            'nro_piezas',
+            'peso_kgs',
+            'monto_subtotal',
+            [Sequelize.literal(clienteOrigDesc), 'cliente_orig_desc'],
+            [Sequelize.literal(clienteDestDesc), 'cliente_dest_desc'],
+          ],
+          include: [
+            {
+              model: models.Dcostosg,
+              as: 'detalles_costo',
+              attributes: [],
+            },
+            {
+              model: models.Agencias,
+              as: 'agencias',
+              attributes: ['id'],
+              include: [
+                {
+                  model: models.Ciudades,
+                  as: 'ciudades',
+                  attributes: ['siglas'],
+                },
+              ],
+            },
+            {
+              model: models.Agencias,
+              as: 'agencias_dest',
+              attributes: ['id'],
+              include: [
+                {
+                  model: models.Ciudades,
+                  as: 'ciudades',
+                  attributes: ['siglas'],
+                },
+              ],
+            },
+          ],
+          order: [
+            ['fecha_emision', 'ASC'],
+            ['nro_documento', 'ASC'],
+          ],
+          raw: true,
+        });
+        break;
+      case 'RVV':
+        detallesg = await models.Costos.findAll({
+          where: {
+            fecha_envio: {
+              [Sequelize.Op.between]: [
+                moment(data.fecha_desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+                moment(data.fecha_hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+              ],
+            },
+            cod_transporte: data.transporte,
+          },
+          attributes: [
+            'fecha_envio',
+            'monto_anticipo',
+            'destino',
+            [Sequelize.literal(valorDolar), 'valor_dolar'],
+          ],
+          include: [
+            {
+              model: models.Dcostosg,
+              as: 'detallesg',
+              required: true,
+              attributes: [],
+              include: [
+                {
+                  model: models.Mmovimientos,
+                  as: 'movimientos',
+                  attributes: [
+                    [
+                      Sequelize.fn('sum', Sequelize.col('monto_subtotal')),
+                      'total_monto',
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              model: models.Agencias,
+              as: 'agencias',
+              attributes: ['id'],
+              include: [
+                {
+                  model: models.Ciudades,
+                  as: 'ciudades',
+                  attributes: ['siglas'],
+                },
+              ],
+            },
+            {
+              model: models.Unidades,
+              as: 'unidades',
+              attributes: ['placas', 'descripcion'],
+            },
+            {
+              model: models.Agentes,
+              as: 'agentes',
+              attributes: ['persona_responsable'],
+            },
+          ],
+          group: ['Costos.id', 'cod_transporte'],
+          order: [
+            ['id', 'ASC'],
+            ['cod_transporte', 'ASC'],
+          ],
+          raw: true,
+        });
+
+        for (var i = 0; i < detallesg.length; i++) {
+          let costos = await models.Costos.findAll({
+            where: {
+              fecha_envio: detallesg[i].fecha_envio,
+              cod_transporte: data.transporte,
+            },
+            attributes: ['id'],
+            include: [
+              {
+                model: models.Dcostos,
+                as: 'detalles',
+                attributes: [
+                  'id',
+                  [
+                    Sequelize.fn('sum', Sequelize.col('monto_costo')),
+                    'total_costo',
+                  ],
+                ],
+              },
+            ],
+            group: ['Costos.id', 'cod_transporte'],
+            order: [
+              ['id', 'ASC'],
+              ['cod_transporte', 'ASC'],
+            ],
+            raw: true,
+          });
+          detallesg[i].total_costo =
+            costos[0]['detalles.total_costo'] == null
+              ? 0
+              : costos[0]['detalles.total_costo'];
+        }
+        break;
       default:
         break;
     }
@@ -1081,13 +1270,13 @@ class ReporteCostosService {
         doc.text('% Costo', 690, 170);
         doc.text('% Utilidad', 730, 170);
         break;
-      case '7':
+      case 'GPC':
         doc.image('./img/logo_rc.png', 35, 42, { width: 70 });
         doc.font('Helvetica-Bold');
         doc.fillColor('#444444');
-        doc.fontSize(16);
+        doc.fontSize(14);
         doc.y = 90;
-        doc.x = 140;
+        doc.x = 170;
         doc.text('Guias Pendientes por Asociar a Costos de Transporte', {
           align: 'left',
           columns: 1,
@@ -1095,15 +1284,15 @@ class ReporteCostosService {
         });
         doc.fontSize(12);
         doc.y = 115;
-        doc.x = 180;
-        doc.text('Emitidas Desde: 01/01/2022', {
+        doc.x = 200;
+        doc.text('Emitidas Desde: ' + data.fecha_desde, {
           align: 'left',
           columns: 1,
           width: 300,
         });
         doc.y = 115;
-        doc.x = 350;
-        doc.text('Hasta: 01/01/2022', {
+        doc.x = 380;
+        doc.text('Hasta: ' + data.fecha_hasta, {
           align: 'left',
           columns: 1,
           width: 300,
@@ -1114,96 +1303,62 @@ class ReporteCostosService {
         doc.text('Nro. Guía', 70, 170);
         doc.text('Emisión', 120, 170);
         doc.text('Remitente', 165, 170);
-        doc.text('Destinatario', 270, 170);
+        doc.text('Destinatario', 265, 170);
         doc.text('Origen', 370, 170);
         doc.text('Dest.', 410, 170);
-        doc.text('Piezas', 440, 170);
+        doc.text('Pzas', 440, 170);
         doc.text('Kgs', 480, 170);
-        doc.text('Venta sin IVA', 510, 170);
+        doc.text('Ventas', 530, 170);
         break;
-      case '8':
+      case 'RVV':
         doc.image('./img/logo_rc.png', 35, 42, { width: 70 });
         doc.font('Helvetica-Bold');
         doc.fillColor('#444444');
         doc.fontSize(16);
-        doc.y = 90;
-        doc.x = 146;
+        doc.y = 80;
+        doc.x = 270;
         doc.text('Costo de Transporte Interno por Vehiculo', {
           align: 'center',
           columns: 1,
           width: 350,
         });
         doc.fontSize(12);
-        doc.y = 115;
-        doc.x = 215;
-        doc.text('Desde: 01/01/2022', {
-          align: 'left',
-          columns: 1,
-          width: 300,
-        });
-        doc.y = 115;
+        doc.y = 105;
         doc.x = 330;
-        doc.text('Hasta: 01/01/2022', {
+        doc.text('Desde: ' + data.fecha_desde, {
           align: 'left',
           columns: 1,
           width: 300,
         });
-        doc.y = 140;
-        doc.x = 220;
-        doc.text('Vehiculo: ASDGQWESD', {
+        doc.y = 105;
+        doc.x = 450;
+        doc.text('Hasta: ' + data.fecha_hasta, {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+        doc.y = 125;
+        doc.x = 180;
+        doc.text('Vehiculo: ' + data.nombreTransporte, {
           align: 'center',
           columns: 1,
-          width: 200,
+          width: 500,
         });
         doc.fontSize(10);
-        doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 470, 35);
+        doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 680, 35);
         doc.text('Fecha', 40, 170);
-        doc.text('Anticipo (Bs.)', 85, 170);
-        doc.text('Fletes', 170, 170);
-        doc.text('Agente', 230, 170);
-        doc.text('Origen', 350, 170);
-        doc.text('Dest.', 395, 170);
-        doc.text('Ventas (Bs.)', 430, 170);
-        doc.text('Utilidad (Bs.)', 500, 170);
-        break;
-      case '9':
-        doc.image('./img/logo_rc.png', 35, 42, { width: 70 });
-        doc.font('Helvetica-Bold');
-        doc.fillColor('#444444');
-        doc.fontSize(16);
-        doc.y = 90;
-        doc.x = 130;
-        doc.text('Costo de Transporte Interno por Vehiculo Y Agente', {
-          align: 'center',
-          columns: 1,
-          width: 400,
-        });
-        doc.fontSize(12);
-        doc.y = 120;
-        doc.x = 215;
-        doc.text('Desde: 01/01/2022', {
-          align: 'left',
-          columns: 1,
-          width: 300,
-        });
-        doc.y = 120;
-        doc.x = 330;
-        doc.text('Hasta: 01/01/2022', {
-          align: 'left',
-          columns: 1,
-          width: 300,
-        });
-        doc.fontSize(10);
-        doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 470, 35);
-        doc.text('Fecha', 40, 170);
-        doc.text('Anticipo (Bs.)', 85, 170);
-        doc.text('Fletes', 170, 170);
-        doc.text('Origen', 210, 170);
-        doc.text('Dest.', 255, 170);
-        doc.text('Ventas (Bs.)', 295, 170);
-        doc.text('Utilidad (Bs.)', 370, 170);
-        doc.text('% Costo', 450, 170);
-        doc.text('% Utilidad', 510, 170);
+        doc.text('Antic. (Bs.)', 80, 170);
+        if (data.dolar == true) doc.text('Antic. ($)', 140, 170);
+        doc.text('Fletes', 200, 170);
+        doc.text('Agente', 270, 170);
+        doc.text('Origen', 355, 170);
+        doc.text('Destino', 410, 170);
+        doc.text('Ventas (Bs.)', 460, 170);
+        if (data.dolar == true) doc.text('Ventas ($)', 525, 170);
+        doc.text('Util (Bs.)', 580, 170);
+        if (data.dolar == true) doc.text('Util ($)', 630, 170);
+        doc.text('% Costo', 670, 170);
+        doc.text('% Utilidad', 720, 170);
         break;
       default:
         doc.image('./img/logo_rc.png', 155, 170, { width: 300 });
@@ -1226,6 +1381,7 @@ class ReporteCostosService {
     let totalGuiasDolar = 0;
     let totalCostoDolar = 0;
     let totalUtilidadBs = 0;
+    let totalUtilidadDolar = 0;
 
     switch (tipo) {
       case 'RCT':
@@ -1663,7 +1819,7 @@ class ReporteCostosService {
             }
           );
           i += 13;
-          if (i >= 440 || item >= 100) {
+          if (i >= 440) {
             doc.addPage();
             page = page + 1;
             doc.switchToPage(page);
@@ -1823,7 +1979,7 @@ class ReporteCostosService {
             width: 110,
           });
           i += 13;
-          if (i >= 440 || item >= 100) {
+          if (i >= 440) {
             doc.addPage();
             page = page + 1;
             doc.switchToPage(page);
@@ -2042,7 +2198,7 @@ class ReporteCostosService {
             width: 35,
           });
           i += 20;
-          if (i >= 440 || item >= 100) {
+          if (i >= 440) {
             doc.addPage();
             page = page + 1;
             doc.switchToPage(page);
@@ -2270,7 +2426,7 @@ class ReporteCostosService {
           });
 
           i += 25;
-          if (i >= 440 || item >= 100) {
+          if (i >= 440) {
             doc.addPage();
             page = page + 1;
             doc.switchToPage(page);
@@ -2352,86 +2508,94 @@ class ReporteCostosService {
           width: 40,
         });
         break;
-      case '7':
+      case 'GPC':
         var i = 0;
         var page = 0;
         var ymin;
         ymin = 200;
-        for (var item = 0; item < 10; item++) {
-          doc.fontSize(9);
+        for (var item = 0; item < data.detallesg.length; item++) {
+          doc.fontSize(7);
           doc.fillColor('#444444');
           doc.y = ymin + i;
-          doc.x = 40;
-          doc.text(item, {
-            align: 'left',
+          doc.x = 25;
+          doc.text(item + 1, {
+            align: 'right',
             columns: 1,
-            width: 50,
+            width: 30,
           });
           doc.y = ymin + i;
           doc.x = 70;
-          doc.text('123112', {
+          doc.text(data.detallesg[item].nro_documento, {
             align: 'left',
             columns: 1,
             width: 50,
           });
           doc.y = ymin + i;
           doc.x = 120;
-          doc.text('1231123', {
-            align: 'left',
-            columns: 1,
-            width: 45,
-          });
+          doc.text(
+            moment(data.detallesg[item].fecha_emision).format('DD/MM/YYYY'),
+            {
+              align: 'left',
+              columns: 1,
+              width: 45,
+            }
+          );
           doc.y = ymin + i;
           doc.x = 165;
-          doc.text('12312123131312331', {
+          doc.text(utils.truncate(data.detallesg[item].cliente_orig_desc, 30), {
             align: 'left',
             columns: 1,
             width: 100,
           });
           doc.y = ymin + i;
-          doc.x = 270;
-          doc.text('123121231231233123', {
+          doc.x = 265;
+          doc.text(utils.truncate(data.detallesg[item].cliente_dest_desc, 30), {
             align: 'left',
             columns: 1,
             width: 100,
           });
           doc.y = ymin + i;
           doc.x = 373;
-          doc.text('23423', {
-            align: 'left',
+          doc.text(data.detallesg[item]['agencias.ciudades.siglas'], {
+            align: 'center',
             columns: 1,
             width: 30,
           });
           doc.y = ymin + i;
           doc.x = 410;
-          doc.text('23423', {
-            align: 'left',
+          doc.text(data.detallesg[item]['agencias_dest.ciudades.siglas'], {
+            align: 'center',
             columns: 1,
             width: 30,
           });
+
+          totalPzas += utils.parseFloatN(data.detallesg[item].nro_piezas);
+          totalKgs += utils.parseFloatN(data.detallesg[item].peso_kgs);
+          totalVenta += utils.parseFloatN(data.detallesg[item].monto_subtotal);
+
           doc.y = ymin + i;
           doc.x = 440;
-          doc.text('111', {
+          doc.text(data.detallesg[item].nro_piezas, {
             align: 'right',
             columns: 1,
-            width: 30,
+            width: 20,
           });
           doc.y = ymin + i;
-          doc.x = 470;
-          doc.text('11', {
+          doc.x = 480;
+          doc.text(utils.formatNumber(data.detallesg[item].peso_kgs), {
             align: 'right',
             columns: 1,
             width: 30,
           });
           doc.y = ymin + i;
           doc.x = 510;
-          doc.text('11123123123', {
+          doc.text(utils.formatNumber(data.detallesg[item].monto_subtotal), {
             align: 'right',
             columns: 1,
             width: 60,
           });
-          i += 15;
-          if (i >= 440 || item >= 100) {
+          i += 22;
+          if (i >= 520) {
             doc.addPage();
             page = page + 1;
             doc.switchToPage(page);
@@ -2449,92 +2613,174 @@ class ReporteCostosService {
         });
         doc.y = ymin + i + 10;
         doc.x = 440;
-        doc.text('111', {
+        doc.text(totalPzas, {
           align: 'right',
           columns: 1,
-          width: 30,
+          width: 20,
         });
         doc.y = ymin + i + 10;
-        doc.x = 470;
-        doc.text('11', {
+        doc.x = 480;
+        doc.text(utils.formatNumber(totalKgs), {
           align: 'right',
           columns: 1,
           width: 30,
         });
         doc.y = ymin + i + 10;
         doc.x = 510;
-        doc.text('11123123123', {
+        doc.text(utils.formatNumber(totalVenta), {
           align: 'right',
           columns: 1,
           width: 60,
         });
         break;
-      case '8':
+      case 'RVV':
         var i = 0;
         var page = 0;
         var ymin;
-        ymin = 200;
-        for (var item = 0; item < 10; item++) {
-          doc.fontSize(9);
+        ymin = 195;
+        for (var item = 0; item < data.detallesg.length; item++) {
+          doc.fontSize(8);
           doc.fillColor('#444444');
           doc.y = ymin + i;
-          doc.x = 40;
-          doc.text('12/10/2022', {
-            align: 'left',
-            columns: 1,
-            width: 50,
-          });
+          doc.x = 30;
+          doc.text(
+            moment(data.detallesg[item].fecha_envio).format('DD/MM/YYYY'),
+            {
+              align: 'center',
+              columns: 1,
+              width: 50,
+            }
+          );
+
+          totalAnticipo += utils.parseFloatN(
+            data.detallesg[item].monto_anticipo
+          );
+
           doc.y = ymin + i;
-          doc.x = 85;
-          doc.text('123112313133', {
+          doc.x = 70;
+          doc.text(utils.formatNumber(data.detallesg[item].monto_anticipo), {
             align: 'right',
             columns: 1,
-            width: 65,
+            width: 60,
           });
+
+          if (data.dolar == true) {
+            let anticipoDolar =
+              utils.parseFloatN(data.detallesg[item].monto_anticipo) /
+              utils.parseFloatN(data.detallesg[item].valor_dolar);
+            totalAnticipoDolar += utils.parseFloatN(anticipoDolar);
+            doc.y = ymin + i;
+            doc.x = 140;
+            doc.text(utils.formatNumber(anticipoDolar.toFixed(2)), {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            });
+          }
+
+          let montoCosto = data.detallesg[item].total_costo;
+          totalCosto += utils.parseFloatN(montoCosto);
           doc.y = ymin + i;
-          doc.x = 160;
-          doc.text('12123131', {
+          doc.x = 145;
+          doc.text(utils.formatNumber(montoCosto), {
             align: 'right',
             columns: 1,
-            width: 50,
+            width: 80,
           });
+
           doc.y = ymin + i;
-          doc.x = 230;
-          doc.text('12311231313123212313', {
-            align: 'left',
+          doc.x = 240;
+          doc.text(data.detallesg[item]['agentes.persona_responsable'], {
+            align: 'center',
             columns: 1,
-            width: 110,
+            width: 100,
           });
           doc.y = ymin + i;
-          doc.x = 350;
-          doc.text('123', {
+          doc.x = 360;
+          doc.text(data.detallesg[item]['agencias.ciudades.siglas'], {
             align: 'center',
             columns: 1,
             width: 30,
           });
           doc.y = ymin + i;
-          doc.x = 390;
-          doc.text('123', {
+          doc.x = 400;
+          doc.text(data.detallesg[item].destino, {
             align: 'center',
             columns: 1,
-            width: 30,
+            width: 60,
           });
+
+          let montoVenta =
+            data.detallesg[item]['detallesg.movimientos.total_monto'];
+          totalGuias += utils.parseFloatN(montoVenta);
           doc.y = ymin + i;
-          doc.x = 420;
-          doc.text('1112312233', {
+          doc.x = 455;
+          doc.text(utils.formatNumber(montoVenta), {
             align: 'right',
             columns: 1,
-            width: 70,
+            width: 50,
           });
+
+          if (data.dolar == true) {
+            let guiasDolar =
+              montoVenta / utils.parseFloatN(data.detallesg[item].valor_dolar);
+            totalGuiasDolar += utils.parseFloatN(guiasDolar);
+            doc.y = ymin + i;
+            doc.x = 525;
+            doc.text(utils.formatNumber(guiasDolar), {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            });
+          }
+
+          let porcCosto = 0;
+          let porcUtilidad = 0;
+          let utilidadBs =
+            utils.parseFloatN(montoVenta) - utils.parseFloatN(montoCosto);
+          if (montoVenta > 0) {
+            porcCosto = (montoCosto / montoVenta) * 100;
+            porcUtilidad = ((montoVenta - montoCosto) / montoVenta) * 100;
+          }
+
           doc.y = ymin + i;
-          doc.x = 490;
-          doc.text('1112312233', {
+          doc.x = 570;
+          doc.text(utils.formatNumber(utilidadBs), {
             align: 'right',
             columns: 1,
-            width: 70,
+            width: 50,
           });
-          i += 15;
-          if (i >= 440 || item >= 100) {
+
+          if (data.dolar == true) {
+            let utilidadDolar =
+              utilidadBs / utils.parseFloatN(data.detallesg[item].valor_dolar);
+            totalUtilidadDolar += utils.parseFloatN(utilidadDolar);
+            doc.y = ymin + i;
+            doc.x = 620;
+            doc.text(utils.formatNumber(utilidadDolar), {
+              align: 'right',
+              columns: 1,
+              width: 40,
+            });
+          }
+
+          doc.y = ymin + i;
+          doc.x = 670;
+          doc.text(utils.formatNumber(porcCosto) + '%', {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          });
+          doc.y = ymin + i;
+          doc.x = 725;
+          doc.text(utils.formatNumber(porcUtilidad) + '%', {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          });
+
+          i += 20;
+          if (i >= 440) {
             doc.addPage();
             page = page + 1;
             doc.switchToPage(page);
@@ -2543,209 +2789,124 @@ class ReporteCostosService {
           }
         }
         doc.fillColor('#BLACK');
-        doc.y = ymin + i + 10;
+        doc.y = ymin + i + 15;
         doc.x = 40;
         doc.text('TOTAL:', {
           align: 'left',
           columns: 1,
           width: 50,
         });
-        doc.y = ymin + i + 25;
+        doc.y = ymin + i + 35;
         doc.x = 40;
         doc.text('NOTA: Los montos expresados sin IVA', {
           align: 'left',
           columns: 1,
           width: 200,
         });
-        doc.y = ymin + i + 10;
-        doc.x = 85;
-        doc.text('123112313133', {
+
+        doc.y = ymin + i + 15;
+        doc.x = 70;
+        doc.text(utils.formatNumber(totalAnticipo), {
           align: 'right',
           columns: 1,
-          width: 65,
+          width: 60,
         });
-        doc.y = ymin + i + 10;
-        doc.x = 160;
-        doc.text('12123131', {
-          align: 'right',
-          columns: 1,
-          width: 50,
-        });
-        doc.y = ymin + i + 10;
-        doc.x = 230;
-        doc.text('12311231313123212313', {
-          align: 'left',
-          columns: 1,
-          width: 110,
-        });
-        doc.y = ymin + i + 10;
-        doc.x = 350;
-        doc.text('123', {
-          align: 'center',
-          columns: 1,
-          width: 30,
-        });
-        doc.y = ymin + i + 10;
-        doc.x = 390;
-        doc.text('123', {
-          align: 'center',
-          columns: 1,
-          width: 30,
-        });
-        doc.y = ymin + i + 10;
-        doc.x = 420;
-        doc.text('1112312233', {
-          align: 'right',
-          columns: 1,
-          width: 70,
-        });
-        doc.y = ymin + i + 10;
-        doc.x = 490;
-        doc.text('1112312233', {
-          align: 'right',
-          columns: 1,
-          width: 70,
-        });
-        break;
-      case '9':
-        var i = 0;
-        var page = 0;
-        var ymin;
-        ymin = 200;
-        for (var item = 0; item < 10; item++) {
-          doc.fontSize(9);
-          doc.fillColor('#444444');
-          doc.y = ymin + i;
-          doc.x = 40;
-          doc.text('12/10/2022', {
-            align: 'left',
-            columns: 1,
-            width: 50,
-          });
-          doc.y = ymin + i;
-          doc.x = 85;
-          doc.text('123112313133', {
-            align: 'right',
-            columns: 1,
-            width: 65,
-          });
-          doc.y = ymin + i;
-          doc.x = 150;
-          doc.text('12123131', {
-            align: 'right',
-            columns: 1,
-            width: 50,
-          });
-          doc.y = ymin + i;
-          doc.x = 210;
-          doc.text('123', {
-            align: 'center',
-            columns: 1,
-            width: 30,
-          });
-          doc.y = ymin + i;
-          doc.x = 252;
-          doc.text('123', {
-            align: 'center',
-            columns: 1,
-            width: 30,
-          });
-          doc.y = ymin + i;
-          doc.x = 290;
-          doc.text('121231313', {
-            align: 'right',
-            columns: 1,
-            width: 70,
-          });
-          doc.y = ymin + i;
-          doc.x = 370;
-          doc.text('121231312312312312312313', {
-            align: 'right',
-            columns: 1,
-            width: 70,
-          });
-          doc.y = ymin + i;
-          doc.x = 450;
-          doc.text('1112312233', {
+
+        if (data.dolar == true) {
+          doc.y = ymin + i + 15;
+          doc.x = 140
+          doc.text(utils.formatNumber(totalAnticipoDolar), {
             align: 'right',
             columns: 1,
             width: 40,
           });
-          doc.y = ymin + i;
-          doc.x = 515;
-          doc.text('1112312233', {
-            align: 'right',
-            columns: 1,
-            width: 40,
-          });
-          i += 15;
-          if (i >= 440 || item >= 100) {
-            doc.addPage();
-            page = page + 1;
-            doc.switchToPage(page);
-            i = 0;
-            await this.generateHeader(doc, tipo, data);
-          }
         }
-        doc.fillColor('#BLACK');
-        doc.y = ymin + i + 10;
-        doc.x = 40;
-        doc.text('TOTALES:', {
-          align: 'left',
-          columns: 1,
-          width: 50,
-        });
-        doc.y = ymin + i + 10;
-        doc.x = 85;
-        doc.text('123112313133', {
+
+        doc.y = ymin + i + 15;
+        doc.x = 145;
+        doc.text(utils.formatNumber(totalCosto), {
           align: 'right',
           columns: 1,
-          width: 65,
+          width: 80,
         });
-        doc.y = ymin + i + 10;
-        doc.x = 150;
-        doc.text('12123131', {
+
+        doc.y = ymin + i + 15;
+        doc.x = 455;
+        doc.text(utils.formatNumber(totalGuias), {
           align: 'right',
           columns: 1,
           width: 50,
         });
-        doc.y = ymin + i + 10;
-        doc.x = 290;
-        doc.text('121231313', {
+
+        if (data.dolar == true) {
+          doc.y = ymin + i + 15;
+          doc.x = 525
+          doc.text(utils.formatNumber(totalGuiasDolar), {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          });
+        }
+
+        totalUtilidadBs =
+          utils.parseFloatN(totalGuias) - utils.parseFloatN(totalCosto);
+        if (totalGuias > 0) {
+          totalPorcCosto = (totalCosto / totalGuias) * 100;
+          totalPorcUtilidad = ((totalGuias - totalCosto) / totalGuias) * 100;
+        }
+
+        doc.y = ymin + i + 15;
+        doc.x = 570;
+        doc.text(utils.formatNumber(totalUtilidadBs), {
           align: 'right',
           columns: 1,
-          width: 70,
+          width: 50,
         });
-        doc.y = ymin + i + 10;
-        doc.x = 370;
-        doc.text('121231312312312312312313', {
+        if (data.dolar == true) {
+          doc.y = ymin + i + 15;
+          doc.x = 620
+          doc.text(utils.formatNumber(totalUtilidadDolar), {
+            align: 'right',
+            columns: 1,
+            width: 40,
+          });
+        }
+
+        doc.y = ymin + i + 15;
+        doc.x = 670;
+        doc.text(utils.formatNumber(totalPorcCosto) + '%', {
           align: 'right',
           columns: 1,
-          width: 70,
+          width: 40,
+        });
+        doc.y = ymin + i + 15;
+        doc.x = 725;
+        doc.text(utils.formatNumber(totalPorcUtilidad) + '%', {
+          align: 'right',
+          columns: 1,
+          width: 40,
         });
         break;
       default:
         break;
     }
-    if (tipo) {
-      var end;
-      const range = doc.bufferedPageRange();
-      for (
-        i = range.start, end = range.start + range.count, range.start <= end;
-        i < end;
-        i++
-      ) {
-        doc.switchToPage(i);
-        doc.fontSize(8);
-        doc.fillColor('#444444');
-        doc.x = tipo == 'CTA' ? 646 : 446;
-        doc.y = 50;
-        doc.text(`Pagina ${i + 1} de ${range.count}`, {
-          align: 'right',
-          columns: 1,
-          width: 100,
-        });
-      }
+    var end;
+    const range = doc.bufferedPageRange();
+    for (
+      i = range.start, end = range.start + range.count, range.start <= end;
+      i < end;
+      i++
+    ) {
+      doc.switchToPage(i);
+      doc.fontSize(8);
+      doc.fillColor('#444444');
+      doc.x = tipo == 'CTA' || tipo == 'RVV' ? 646 : 446;
+      doc.y = 50;
+      doc.text(`Pagina ${i + 1} de ${range.count}`, {
+        align: 'right',
+        columns: 1,
+        width: 100,
+      });
     }
   }
 }
