@@ -109,6 +109,18 @@ router.get('/reporteCostos', authenticateJWT, async (req, res, next) => {
     });
   } catch (error) {
     next(error);
+  }});
+
+router.get('/reporteVentas', authenticateJWT, async (req, res, next) => {
+  try {
+    const { tipo, data } = req.headers;
+    const pdfStream = await service.reporteVentas(tipo, data);
+    res.status(200).json({
+      message: 'PDF Generado',
+      base64: pdfStream,
+    });
+  } catch (error) {
+    next(error);
   }
 });
 

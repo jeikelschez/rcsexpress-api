@@ -15,6 +15,8 @@ const CostosTransporteService = require('./costosTransporte.service');
 const costosTransporteService = new CostosTransporteService();
 const ReporteCostosService = require('./reporteCostos.service');
 const reporteCostosService = new ReporteCostosService();
+const ReporteVentasService = require('./reporteVentas.service');
+const reporteVentasService = new ReporteVentasService();
 
 class ReportsService {
   constructor() {}
@@ -118,6 +120,24 @@ class ReportsService {
       });
     }
     await reporteCostosService.mainReport(doc, tipo, data);
+    doc.end();
+  }
+
+  // REPORTE VENTAS
+  async reporteVentas(tipo, data) {
+    let doc = new PDFDocument({
+      margin: 20,
+      bufferPages: true,
+    });
+    doc.pipe(fs.createWriteStream('./services/reports/pdf/documento.pdf'))
+    if (tipo == 'CTA') {
+      doc = new PDFDocument({
+        margin: 10,
+        bufferPages: true,
+        layout: 'landscape',
+      });
+    }
+    await reporteVentasService.mainReport(doc, tipo, data);
     doc.end();
   }
 }
