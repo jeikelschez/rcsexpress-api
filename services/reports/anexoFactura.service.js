@@ -34,8 +34,11 @@ class AnexoFacturaService {
       ],
       raw: true,
     });
+
+    if (detalle.length == 0) return false;
     await this.generateHeader(doc, data, detalle);
     await this.generateCustomerInformation(doc, data, detalle);
+    return true;
   }
 
   async generateHeader(doc, data, detalle) {

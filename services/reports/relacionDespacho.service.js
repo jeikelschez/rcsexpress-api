@@ -71,6 +71,7 @@ class RelacionDespachoService {
     });
     await this.generateHeader(doc, data);
     await this.generateCustomerInformation(doc, data, dataDetalle);
+    return true;
   }
 
   async generateHeader(doc, data) {

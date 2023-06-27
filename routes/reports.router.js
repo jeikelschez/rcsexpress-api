@@ -21,7 +21,7 @@ router.get('/loadPDF/:report', (req, res) => {
 router.get('/cartaCliente', authenticateJWT, async (req, res, next) => {
   try {
     const { data, cliente, contacto, cargo, ciudad, usuario } = req.headers;
-    const pdfStream = await service.cartaCliente(
+    const response = await service.cartaCliente(
       data,
       cliente,
       contacto,
@@ -31,7 +31,8 @@ router.get('/cartaCliente', authenticateJWT, async (req, res, next) => {
     );
     res.status(200).json({
       message: 'PDF Generado',
-      base64: pdfStream,
+      pdfPath: response.resPath,
+      validDoc: response.validDoc,
     });
   } catch (error) {
     next(error);
@@ -41,23 +42,11 @@ router.get('/cartaCliente', authenticateJWT, async (req, res, next) => {
 router.get('/facturaPreimpreso', authenticateJWT, async (req, res, next) => {
   try {
     const { data } = req.headers;
-    const pdfStream = await service.facturaPreimpreso(data);
+    const response = await service.facturaPreimpreso(data);
     res.status(200).json({
       message: 'PDF Generado',
-      base64: pdfStream,
-    });
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.get('/registrocostos', authenticateJWT, async (req, res, next) => {
-  try {
-    const { type } = req.headers;
-    const pdfStream = await service.registroCostos(type);
-    res.status(200).json({
-      message: 'PDF Generado',
-      base64: pdfStream,
+      pdfPath: response.resPath,
+      validDoc: response.validDoc,
     });
   } catch (error) {
     next(error);
@@ -67,10 +56,11 @@ router.get('/registrocostos', authenticateJWT, async (req, res, next) => {
 router.get('/anexoFactura', authenticateJWT, async (req, res, next) => {
   try {
     const { data } = req.headers;
-    const pdfStream = await service.anexoFactura(data);
+    const response = await service.anexoFactura(data);
     res.status(200).json({
       message: 'PDF Generado',
-      base64: pdfStream,
+      pdfPath: response.resPath,
+      validDoc: response.validDoc,
     });
   } catch (error) {
     next(error);
@@ -80,10 +70,11 @@ router.get('/anexoFactura', authenticateJWT, async (req, res, next) => {
 router.get('/relacionDespacho', authenticateJWT, async (req, res, next) => {
   try {
     const { data, detalle } = req.headers;
-    const pdfStream = await service.relacionDespacho(data, detalle);
+    const response = await service.relacionDespacho(data, detalle);
     res.status(200).json({
       message: 'PDF Generado',
-      base64: pdfStream,
+      pdfPath: response.resPath,
+      validDoc: response.validDoc,
     });
   } catch (error) {
     next(error);
@@ -93,7 +84,7 @@ router.get('/relacionDespacho', authenticateJWT, async (req, res, next) => {
 router.get('/costosTransporte', authenticateJWT, async (req, res, next) => {
   try {
     const { id, tipo, agencia, desde, hasta, neta, dolar } = req.headers;
-    const pdfStream = await service.costosTransporte(
+    const response = await service.costosTransporte(
       id,
       tipo,
       agencia,
@@ -104,7 +95,8 @@ router.get('/costosTransporte', authenticateJWT, async (req, res, next) => {
     );
     res.status(200).json({
       message: 'PDF Generado',
-      base64: pdfStream,
+      pdfPath: response.resPath,
+      validDoc: response.validDoc,
     });
   } catch (error) {
     next(error);
@@ -114,22 +106,25 @@ router.get('/costosTransporte', authenticateJWT, async (req, res, next) => {
 router.get('/reporteCostos', authenticateJWT, async (req, res, next) => {
   try {
     const { tipo, data } = req.headers;
-    const pdfPath = await service.reporteCostos(tipo, data);
+    const response = await service.reporteCostos(tipo, data);
     res.status(200).json({
       message: 'PDF Generado',
-      pdfPath: pdfPath,
+      pdfPath: response.resPath,
+      validDoc: response.validDoc,
     });
   } catch (error) {
     next(error);
-  }});
+  }
+});
 
 router.get('/reporteVentas', authenticateJWT, async (req, res, next) => {
-  try {    
+  try {
     const { tipo, data } = req.headers;
-    const pdfStream = await service.reporteVentas(tipo, data);
+    const response = await service.reporteVentas(tipo, data);
     res.status(200).json({
       message: 'PDF Generado',
-      base64: pdfStream,
+      pdfPath: response.resPath,
+      validDoc: response.validDoc,
     });
   } catch (error) {
     next(error);

@@ -82,6 +82,8 @@ class ReporteCostosService {
           raw: true,
         });
 
+        if (detallesg.length == 0) return false;
+
         for (var i = 0; i < detallesg.length; i++) {
           let costos = await models.Costos.findAll({
             where: {
@@ -182,6 +184,7 @@ class ReporteCostosService {
           ],
           raw: true,
         });
+        if (detallesg.length == 0) return false;
         break;
       case 'DTC':
         detallesg = await models.Costos.findAll({
@@ -245,6 +248,8 @@ class ReporteCostosService {
           order: [['detallesg', 'movimientos', 'cod_agencia_dest', 'ASC']],
           raw: true,
         });
+
+        if (detallesg.length == 0) return false;
 
         costos = await models.Costos.findAll({
           where: {
@@ -347,6 +352,8 @@ class ReporteCostosService {
           order: [['detallesg', 'movimientos', 'cod_agencia_dest', 'ASC']],
           raw: true,
         });
+
+        if (detallesg.length == 0) return false;
 
         costos = await models.Costos.findAll({
           where: {
@@ -578,6 +585,8 @@ class ReporteCostosService {
           raw: true,
         });
 
+        if (detallesg.length == 0) return false;
+
         for (var i = 0; i < detallesg.length; i++) {
           let costos = await models.Costos.findAll({
             where: {
@@ -694,6 +703,8 @@ class ReporteCostosService {
           raw: true,
         });
 
+        if (detallesg.length == 0) return false;
+
         for (var i = 0; i < detallesg.length; i++) {
           let costos = await models.Costos.findAll({
             where: {
@@ -789,6 +800,7 @@ class ReporteCostosService {
           ],
           raw: true,
         });
+        if (detallesg.length == 0) return false;
         break;
       case 'RVV':
         detallesg = await models.Costos.findAll({
@@ -857,6 +869,8 @@ class ReporteCostosService {
           raw: true,
         });
 
+        if (detallesg.length == 0) return false;
+
         for (var i = 0; i < detallesg.length; i++) {
           let costos = await models.Costos.findAll({
             where: {
@@ -889,13 +903,16 @@ class ReporteCostosService {
               ? 0
               : costos[0]['detalles.total_costo'];
         }
+        if (detallesg.length == 0) return false;
         break;
       default:
         break;
     }
+    
     data.detallesg = detallesg;
     await this.generateHeader(doc, tipo, data);
     await this.generateCustomerInformation(doc, tipo, data);
+    return true;
   }
 
   async generateHeader(doc, tipo, data) {

@@ -166,6 +166,8 @@ class CostosTransporteService {
           raw: true,
         });
 
+        if (detallesg.length == 0) return false;
+
         for (var i = 0; i < detalles.length; i++)
           totalCostos += utils.parseFloatN(detalles[i].monto_costo);
         for (var i = 0; i < detallesg.length; i++) {
@@ -422,6 +424,7 @@ class CostosTransporteService {
     }
     await this.generateHeader(doc, data);
     await this.generateCustomerInformation(doc, data);
+    return true;
   }
 
   async generateHeader(doc, data) {

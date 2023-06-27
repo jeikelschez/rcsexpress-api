@@ -1,6 +1,4 @@
 const PDFDocument = require('pdfkit');
-const getStream = require('get-stream');
-const base64 = require('base64-stream');
 const fs = require('fs');
 const reportsPath = './services/reports/pdf/';
 
@@ -24,10 +22,12 @@ class ReportsService {
 
   // REPORTE EMITIR CARTA CLIENTE
   async cartaCliente(data, cliente, contacto, cargo, ciudad, usuario) {
+    let resPath = 'cartaCliente.pdf';
     let doc = new PDFDocument({
       margin: 50,
       bufferPages: true,
     });
+    doc.pipe(fs.createWriteStream(reportsPath + resPath));
     await cartaClienteService.mainReport(
       doc,
       data,
@@ -38,50 +38,49 @@ class ReportsService {
       usuario
     );
     doc.end();
-    var encoder = new base64.Base64Encode();
-    var b64s = doc.pipe(encoder);
-    return await getStream(b64s);
+    return { validDoc: true, resPath: resPath };
   }
 
   // REPORTE FACTURACION
   async facturaPreimpreso(data) {
+    let resPath = 'facturaPreimpreso.pdf';
     let doc = new PDFDocument({
       size: [500, 841],
       margin: 20,
     });
+    doc.pipe(fs.createWriteStream(reportsPath + resPath));
     await facturaPreimpresoService.mainReport(doc, data);
     doc.end();
-    var encoder = new base64.Base64Encode();
-    var b64s = doc.pipe(encoder);
-    return await getStream(b64s);
+    return { validDoc: true, resPath: resPath };
   }
 
   // REPORTE ANEXO FACTURACION
   async anexoFactura(data) {
+    let resPath = 'anexoFactura.pdf';
     let doc = new PDFDocument({ margin: 50 });
-    await anexoFacturaService.mainReport(doc, data);
+    doc.pipe(fs.createWriteStream(reportsPath + resPath));
+    let validDoc = await anexoFacturaService.mainReport(doc, data);
     doc.end();
-    var encoder = new base64.Base64Encode();
-    var b64s = doc.pipe(encoder);
-    return await getStream(b64s);
+    return { validDoc: validDoc, resPath: resPath };
   }
 
   // REPORTE RELACION DESPACHO
   async relacionDespacho(data, detalle) {
+    let resPath = 'relacionDespacho.pdf';
     let doc = new PDFDocument({
       margin: 10,
       bufferPages: true,
       layout: 'landscape',
     });
-    await relacionDespachoService.mainReport(doc, data, detalle);
+    doc.pipe(fs.createWriteStream(reportsPath + resPath));
+    let validDoc = await relacionDespachoService.mainReport(doc, data, detalle);
     doc.end();
-    var encoder = new base64.Base64Encode();
-    var b64s = doc.pipe(encoder);
-    return await getStream(b64s);
+    return { validDoc: validDoc, resPath: resPath };
   }
 
   // REPORTE COSTOS TRANSPORTE
   async costosTransporte(id, tipo, agencia, desde, hasta, neta, dolar) {
+    let resPath = 'costosTransporte' + tipo + '.pdf';
     let doc = new PDFDocument({ margin: 50, bufferPages: true });
     if (tipo == 'DI' || tipo == 'CO') {
       doc = new PDFDocument({
@@ -90,7 +89,9 @@ class ReportsService {
         layout: 'landscape',
       });
     }
-    await costosTransporteService.mainReport(
+
+    doc.pipe(fs.createWriteStream(reportsPath + resPath));
+    let validDoc = await costosTransporteService.mainReport(
       doc,
       id,
       tipo,
@@ -100,15 +101,16 @@ class ReportsService {
       neta,
       dolar
     );
+    resPath = validDoc ? resPath : 'reporteBase.pdf';
     doc.end();
-    var encoder = new base64.Base64Encode();
-    var b64s = doc.pipe(encoder);
-    return await getStream(b64s);
+    return { validDoc: validDoc, resPath: resPath };
   }
 
   // REPORTE COSTOS
   async reporteCostos(tipo, data) {
-    if(!tipo || tipo == 'undefined') return 'reporteBase.pdf';
+    if (!tipo || tipo == 'undefined')
+      return { validDoc: true, resPath: 'reporteBase.pdf' };
+
     let resPath = 'reporteCostos' + tipo + '.pdf';
     let doc = new PDFDocument({
       margin: 20,
@@ -122,32 +124,36 @@ class ReportsService {
       });
     }
 
-    doc.pipe(fs.createWriteStream(reportsPath + resPath));    
-    await reporteCostosService.mainReport(doc, tipo, data);
+    doc.pipe(fs.createWriteStream(reportsPath + resPath));
+    let validDoc = await reporteCostosService.mainReport(doc, tipo, data);
+    resPath = validDoc ? resPath : 'reporteBase.pdf';
     doc.end();
-    return resPath;
+    return { validDoc: validDoc, resPath: resPath };
   }
 
   // REPORTE VENTAS
   async reporteVentas(tipo, data) {
-    if(!tipo || tipo == 'undefined') return 'reporteBase.pdf';
+    if (!tipo || tipo == 'undefined')
+      return { validDoc: true, resPath: 'reporteBase.pdf' };
+
     let resPath = 'reporteVentas' + tipo + '.pdf';
     let doc = new PDFDocument({
-      margin: 20,
+      margin: 10,
       bufferPages: true,
+      layout: 'landscape',
     });
-    if (tipo == 'VG') {
+    if (tipo == 'XX') {
       doc = new PDFDocument({
-        margin: 10,
+        margin: 20,
         bufferPages: true,
-        layout: 'landscape',
       });
     }
 
-    doc.pipe(fs.createWriteStream(reportsPath + resPath));    
-    await reporteVentasService.mainReport(doc, tipo, data);
+    doc.pipe(fs.createWriteStream(reportsPath + resPath));
+    let validDoc = await reporteVentasService.mainReport(doc, tipo, data);
+    resPath = validDoc ? resPath : 'reporteBase.pdf';
     doc.end();
-    return resPath;
+    return { validDoc: validDoc, resPath: resPath };
   }
 }
 
