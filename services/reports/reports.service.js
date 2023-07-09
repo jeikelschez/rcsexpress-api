@@ -142,7 +142,13 @@ class ReportsService {
       bufferPages: true,
       layout: 'landscape',
     });
-    if (tipo == 'XX') {
+    if (
+      tipo == 'GC' ||
+      tipo == 'FA' ||
+      tipo == 'FPO' ||
+      tipo == 'NC' ||
+      tipo == 'ND'
+    ) {
       doc = new PDFDocument({
         margin: 20,
         bufferPages: true,
