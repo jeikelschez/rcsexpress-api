@@ -43,6 +43,8 @@ const ReportsRouter = require('./reports.router');
 const CostosRouter = require('./costosTransporte.router');
 const DcostosRouter = require('./detalleCostos.router');
 const DcostosgRouter = require('./detalleCostosGuias.router');
+const McobranzasRouter = require('./maestroCobranzas.router');
+const DcobranzasRouter = require('./detalleCobranzas.router');
 
 function routerApi(app) {
   const router = express.Router();
@@ -89,6 +91,8 @@ function routerApi(app) {
   router.use('/costos', CostosRouter);
   router.use('/dcostos', DcostosRouter);
   router.use('/dcostosg', DcostosgRouter);
+  router.use('/mcobranzas', McobranzasRouter);
+  router.use('/dcobranzas', DcobranzasRouter);
   router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 

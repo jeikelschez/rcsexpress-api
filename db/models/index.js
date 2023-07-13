@@ -38,6 +38,8 @@ const { Ccomisiones, CcomisionesSchema } = require('./controlComisiones.model');
 const { Costos, CostosSchema } = require('./costosTransporte.model');
 const { Dcostos, DcostosSchema } = require('./detalleCostos.model');
 const { Dcostosg, DcostosgSchema } = require('./detalleCostosGuias.model');
+const { Mcobranzas, McobranzasSchema } = require('./maestroCobranzas.model');
+const { Dcobranzas, DcobranzasSchema } = require('./detalleCobranzas.model');
 
 function setupModels(sequelize) {
   Bancos.init(BancosSchema, Bancos.config(sequelize));
@@ -80,6 +82,8 @@ function setupModels(sequelize) {
   Costos.init(CostosSchema, Costos.config(sequelize));
   Dcostos.init(DcostosSchema, Dcostos.config(sequelize));
   Dcostosg.init(DcostosgSchema, Dcostosg.config(sequelize));
+  Mcobranzas.init(McobranzasSchema, Mcobranzas.config(sequelize));
+  Dcobranzas.init(DcobranzasSchema, Dcobranzas.config(sequelize));
 
   Paises.associate(sequelize.models);
   Estados.associate(sequelize.models);
@@ -114,6 +118,8 @@ function setupModels(sequelize) {
   Costos.associate(sequelize.models);
   Dcostos.associate(sequelize.models);
   Dcostosg.associate(sequelize.models);
+  Mcobranzas.associate(sequelize.models);
+  Dcobranzas.associate(sequelize.models);
 
   Usuarios.hooks(sequelize.models);
 }

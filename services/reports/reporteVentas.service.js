@@ -74,6 +74,7 @@ const tipo_factura = [
   { label: 'Prepago', value: 'FP' },
   { label: 'Otros Ing.', value: 'FO' },
   { label: 'Fact. Guía', value: 'FC' },
+  { label: '', value: null },
 ];
 
 class ReporteVentasService {
@@ -539,6 +540,7 @@ class ReporteVentasService {
         break;
       case 'GC':
       case 'FA':
+      case 'DE':
         where = {
           fecha_emision: {
             [Sequelize.Op.between]: [
@@ -550,8 +552,12 @@ class ReporteVentasService {
 
         if (tipo == 'GC') {
           where.t_de_documento = 'GC';
-        } else {
+        } else if (tipo == 'FA') {
           where.t_de_documento = 'FA';
+        } else if (tipo == 'DE') {
+          where.t_de_documento = {
+            [Sequelize.Op.in]: ['FA', 'NC', 'ND'],
+          };
         }
 
         if (data.cliente) {
@@ -572,7 +578,7 @@ class ReporteVentasService {
                 ],
               },
             ];
-          } else {
+          } else if (tipo == 'FA') {
             where.cod_cliente_org = data.cliente;
           }
         } else if (data.agencia) {
@@ -761,6 +767,55 @@ class ReporteVentasService {
           ],
           raw: true,
         });
+        if (ventas.length == 0) return false;
+        break;
+      case 'CG':
+        where = {
+          fecha_emision: {
+            [Sequelize.Op.between]: [
+              moment(data.fecha_desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+              moment(data.fecha_hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+            ],
+          },
+          t_de_documento: 'FA',
+        };
+
+        if (data.agencia) where.cod_agencia = data.agencia;
+
+        ventas = await models.Mmovimientos.findAll({
+          where: where,
+          attributes: [
+            'id',
+            'cod_agencia',
+            'fecha_emision',
+            'nro_documento',
+            'modalidad_pago',
+            'pagado_en',
+            'monto_subtotal',
+            'monto_impuesto',
+            'monto_total',
+            'saldo',
+            'tipo_doc_principal',
+            'serie_doc_principal',
+            'nro_doc_principal',
+            'estatus_administra',
+            'estatus_operativo',
+            'fecha_anulacion',
+            'nro_control',
+            'serie_documento',
+            'nro_control_new',
+            'tipo_factura',
+            [Sequelize.literal(clienteOrigDesc), 'cliente_orig_desc'],
+            [Sequelize.literal(montoFpo), 'monto_fpo'],
+          ],
+          order: [
+            ['fecha_emision', 'ASC'],
+            ['serie_documento', 'ASC'],
+            ['nro_control', 'ASC'],
+          ],
+          raw: true,
+        });
+        ventas = ventas.filter((venta) => venta.monto_fpo > 0);
         if (ventas.length == 0) return false;
         break;
       default:
@@ -1036,6 +1091,7 @@ class ReporteVentasService {
         break;
       case 'GC':
       case 'FA':
+      case 'DE':
         doc.image('./img/logo_rc.png', 35, 25, { width: 80 });
         doc.fontSize(9);
         doc.text('RCS EXPRESS, S.A', 35, 155);
@@ -1048,6 +1104,7 @@ class ReporteVentasService {
         if (tipo == 'FA') tittle = 'Facturas';
         if (data.estatus_admin != 'A') tittle += ' Emitidas';
         else tittle += ' Anuladas';
+        if (tipo == 'DE') tittle = 'Documentos Emitidos';
         doc.y = 100;
         doc.x = 140;
         doc.text(tittle, {
@@ -1107,13 +1164,13 @@ class ReporteVentasService {
           } else {
             doc.text('Fecha', 30, 190);
             doc.text('Nro Ctrl.', 65, 190);
-            doc.text('Nro Fact.', 108, 190);
+            doc.text(tipo == 'FA' ? 'Nro Fact.' : 'Nro Doc.', 108, 190);
             doc.text('Cliente', 195, 190);
-            doc.text('Tipo Fact.', 275, 190);
+            doc.text(tipo == 'FA' ? 'Tipo Fact.' : 'Tipo Doc.', 275, 190);
             doc.text('F. Pago', 325, 190);
             doc.text('Sub-Total', 365, 190);
             doc.text('Impuesto', 415, 190);
-            doc.text('Total Fact.', 465, 190);
+            doc.text(tipo == 'FA' ? 'Total Fact.' : 'Total Doc.', 465, 190);
             doc.text('Saldo', 520, 190);
             doc.text('Estatus', 558, 190);
           }
@@ -1193,61 +1250,66 @@ class ReporteVentasService {
         break;
       case 'NC':
       case 'ND':
-          doc.image('./img/logo_rc.png', 35, 25, { width: 80 });
-          doc.fontSize(9);
-          doc.text('RCS EXPRESS, S.A', 35, 155);
-          doc.text('RIF. J-31028463-6', 35, 170);
-          doc.font('Helvetica-Bold');
-          doc.fillColor('#444444');
-          doc.fontSize(18);
-  
-          doc.y = 100;
+        doc.image('./img/logo_rc.png', 35, 25, { width: 80 });
+        doc.fontSize(9);
+        doc.text('RCS EXPRESS, S.A', 35, 155);
+        doc.text('RIF. J-31028463-6', 35, 170);
+        doc.font('Helvetica-Bold');
+        doc.fillColor('#444444');
+        doc.fontSize(18);
+
+        doc.y = 100;
+        doc.x = 140;
+        doc.text(
+          tipo == 'NC'
+            ? 'Notas de Crédito Emitidas'
+            : 'Notas de Débito Emitidas',
+          {
+            align: 'center',
+            columns: 1,
+            width: 400,
+          }
+        );
+
+        doc.fontSize(12);
+        doc.y = 125;
+        doc.x = 230;
+        doc.text('Desde: ' + data.fecha_desde, {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+        doc.y = 125;
+        doc.x = 347;
+        doc.text('Hasta: ' + data.fecha_hasta, {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+
+        if (data.agencia) {
+          doc.y = 145;
           doc.x = 140;
-          doc.text(tipo == 'NC' ? 'Notas de Crédito Emitidas' : 'Notas de Débito Emitidas', {
+          doc.text('Agencia: ' + data.ventas[0]['agencias.nb_agencia'], {
             align: 'center',
             columns: 1,
             width: 400,
           });
-  
-          doc.fontSize(12);
-          doc.y = 125;
-          doc.x = 230;
-          doc.text('Desde: ' + data.fecha_desde, {
-            align: 'left',
-            columns: 1,
-            width: 300,
-          });
-          doc.y = 125;
-          doc.x = 347;
-          doc.text('Hasta: ' + data.fecha_hasta, {
-            align: 'left',
-            columns: 1,
-            width: 300,
-          });
-  
-          if (data.agencia) {
-            doc.y = 145;
-            doc.x = 140;
-            doc.text('Agencia: ' + data.ventas[0]['agencias.nb_agencia'], {
-              align: 'center',
-              columns: 1,
-              width: 400,
-            });
-          }
-  
-          doc.fontSize(9);
-          doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 510, 35);
-          doc.text('Fecha', 30, 190);
-          doc.text('Nro Ctrl.', 70, 190);
-          doc.text('Nro Nota', 120, 190);
-          doc.text('Cliente', 220, 190);
-          doc.text('Documento Principal', 324, 175);
-          doc.text('Nro Ctrl.', 325, 190);
-          doc.text('Nro Doc.', 380, 190);
-          doc.text('Sub-Total', 435, 190);
-          doc.text('Impuesto', 490, 190);
-          doc.text('Total Nota', 545, 190);
-          break;  
+        }
+
+        doc.fontSize(9);
+        doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 510, 35);
+        doc.text('Fecha', 30, 190);
+        doc.text('Nro Ctrl.', 70, 190);
+        doc.text('Nro Nota', 120, 190);
+        doc.text('Cliente', 220, 190);
+        doc.text('Documento Principal', 324, 175);
+        doc.text('Nro Ctrl.', 325, 190);
+        doc.text('Nro Doc.', 380, 190);
+        doc.text('Sub-Total', 435, 190);
+        doc.text('Impuesto', 490, 190);
+        doc.text('Total Nota', 545, 190);
+        break;
       default:
         break;
     }
@@ -2520,6 +2582,7 @@ class ReporteVentasService {
         break;
       case 'GC':
       case 'FA':
+      case 'DE':
         var i = 0;
         var page = 0;
         var ymin;
@@ -3624,11 +3687,7 @@ class ReporteVentasService {
             if (item > 0) i += 20;
             doc.fontSize(12);
             doc.font('Helvetica-Bold');
-            doc.text(
-              data.ventas[item]['agencias.nb_agencia'],
-              35,
-              ymin + i
-            );
+            doc.text(data.ventas[item]['agencias.nb_agencia'], 35, ymin + i);
             i += 20;
           }
 
@@ -3692,23 +3751,26 @@ class ReporteVentasService {
 
           doc.y = ymin + i;
           doc.x = 170;
-          doc.text(
-            utils.truncate(data.ventas[item].cliente_orig_desc, 34),
-            {
-              align: 'left',
-              columns: 1,
-              width: 150,
-            }
-          );
+          doc.text(utils.truncate(data.ventas[item].cliente_orig_desc, 34), {
+            align: 'left',
+            columns: 1,
+            width: 150,
+          });
 
           let nroFactOrig = '';
           if (data.ventas[item].estatus_administra != 'A') {
-            if (data.ventas[item].serie_doc_principal) 
+            if (data.ventas[item].serie_doc_principal)
               nroFactOrig += data.ventas[item].serie_doc_principal + '-';
             if (data.ventas[item].nro_ctrl_doc_ppal_new) {
-              nroFactOrig += data.ventas[item].nro_ctrl_doc_ppal_new.padStart(9, "00-000000");
+              nroFactOrig += data.ventas[item].nro_ctrl_doc_ppal_new.padStart(
+                9,
+                '00-000000'
+              );
             } else if (!data.ventas[item].nro_ctrl_doc_ppal) {
-              nroFactOrig += data.ventas[item].nro_ctrl_doc_ppal_new.padStart(4, "0000");
+              nroFactOrig += data.ventas[item].nro_ctrl_doc_ppal_new.padStart(
+                4,
+                '0000'
+              );
             } else {
               nroFactOrig += data.ventas[item].nro_doc_principal;
             }
@@ -3717,10 +3779,13 @@ class ReporteVentasService {
           let nroDocOrig = '';
           if (data.ventas[item].estatus_administra != 'A') {
             nroDocOrig += data.ventas[item].tipo_doc_principal + ' ';
-            if (data.ventas[item].serie_doc_principal) 
+            if (data.ventas[item].serie_doc_principal)
               nroDocOrig += data.ventas[item].serie_doc_principal + '-';
             if (data.ventas[item].nro_ctrl_doc_ppal) {
-              nroDocOrig += data.ventas[item].nro_ctrl_doc_ppal.padStart(4, "0000");            
+              nroDocOrig += data.ventas[item].nro_ctrl_doc_ppal.padStart(
+                4,
+                '0000'
+              );
             } else {
               nroDocOrig += data.ventas[item].nro_doc_principal;
             }
@@ -3740,7 +3805,6 @@ class ReporteVentasService {
             columns: 1,
             width: 50,
           });
-
 
           let montoSubtotal = 0;
           let montoImpuesto = 0;
@@ -3926,7 +3990,9 @@ class ReporteVentasService {
         tipo == 'FA' ||
         tipo == 'FPO' ||
         tipo == 'NC' ||
-        tipo == 'ND'
+        tipo == 'ND' ||
+        tipo == 'DE' ||
+        tipo == 'CG'
           ? 485
           : 646;
       doc.y = 50;

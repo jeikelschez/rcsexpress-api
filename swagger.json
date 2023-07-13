@@ -79,6 +79,10 @@
       "description": "API para Manejar las Cuentas Bancarias de la Organizacion"
     },
     {
+      "name": "Detalle_Cobranzas",
+      "description": "API para Manejar el Detalle de Cobranzas de la Organizacion"
+    },
+    {
       "name": "Detalle_Costos",
       "description": "API para Manejar el Detalle de Costos de la Organizacion"
     },
@@ -113,6 +117,10 @@
     {
       "name": "Localidades",
       "description": "API para Manejar las Localidades de la Organizacion"
+    },
+    {
+      "name": "Maestro_Cobranzas",
+      "description": "API para Manejar el Maestro de Cobranzas de la Organizacion"
     },
     {
       "name": "Maestro_Retenciones",
@@ -5015,6 +5023,347 @@
         }
       }
     },
+    "/dcobranzas": {
+      "get": {
+        "tags": ["Detalle_Cobranzas"],
+        "summary": "Obtener todos los Detalles de una Cobranza",
+        "description": "API para Obtener todos los Detalles de Cobranzas del sistema",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "header",
+            "description": "Numero de la pagina",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "header",
+            "description": "Cantidad de registros",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "header",
+            "description": "Ordenado por",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "header",
+            "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cod_cobranza",
+            "in": "header",
+            "description": "Codigo de la Cobranza",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/extraSchemes/Paginate",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Detalle_Cobranzas"                      
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Detalle_Cobranzas"],
+        "summary": "Crear Detalle de Cobranza",
+        "description": "API para Crear un nuevo Detalle de Cobranza",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Detalle_Cobranzas"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detalle_Cobranzas"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dcobranzas/{id}": {
+      "get": {
+        "tags": ["Detalle_Cobranzas"],
+        "summary": "Obtener Detalle de Cobranza por su Id",
+        "description": "API para Retornar un Detalle de Cobranza por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Detalle de Cobranza",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detalle_Cobranzas"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Detalle_Cobranzas"],
+        "summary": "Actualizar Detalle de Cobranza",
+        "description": "API para Actualizar un Detalle de Cobranza por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Detalle de Cobranza",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Detalle_Cobranzas"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Detalle_Cobranzas"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Detalle_Cobranzas"],
+        "summary": "Borrar Detalle de Cobranza",
+        "description": "API para Borrar un Detalle de Cobranza por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Detalle de Cobranza",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Detalle_Cobranzas/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/dcostos": {
       "get": {
         "tags": ["Detalle_Costos"],
@@ -7784,6 +8133,338 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Localidades"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mcobranzas": {
+      "get": {
+        "tags": ["Maestro_Cobranzas"],
+        "summary": "Obtener todo el maestro de Cobranzas",
+        "description": "API para Obtener el maestro de Cobranzas del sistema",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "header",
+            "description": "Numero de la pagina",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "header",
+            "description": "Cantidad de registros",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "header",
+            "description": "Ordenado por",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "header",
+            "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/extraSchemes/Paginate",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Maestro_Cobranzas"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Maestro_Cobranzas"],
+        "summary": "Crear concepto de Cobranza",
+        "description": "API para Crear un nuevo concepto de Cobranza",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Maestro_Cobranzas"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Maestro_Cobranzas"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mcobranzas/{id}": {
+      "get": {
+        "tags": ["Maestro_Cobranzas"],
+        "summary": "Obtener concepto de Cobranza por su Id",
+        "description": "API para Retornar un concepto de Cobranza por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Cobranza",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Maestro_Cobranzas"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Maestro_Cobranzas"],
+        "summary": "Actualizar concepto de Cobranza",
+        "description": "API para Actualizar un concepto de Cobranza por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Cobranza",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Maestro_Cobranzas"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Maestro_Cobranzas"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Maestro_Cobranzas"],
+        "summary": "Borrar concepto de Cobranza",
+        "description": "API para Borrar un concepto de Cobranza por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Cobranza",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Maestro_Cobranzas/properties/id"
+                    }
+                  },
+                  "type": "object"
                 }
               }
             }
@@ -13416,6 +14097,46 @@
           }
         }
       },
+      "Detalle_Cobranzas": {
+        "description": "Modelo de Detalle de Cobranzas",
+        "required": ["id", "cod_agencia", "cod_cobranza", "cod_movimiento", "fecha_emision"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "cod_agencia": {
+            "type": "number"
+          },
+          "cod_cobranza": {
+            "type": "number"
+          },
+          "cod_movimiento": {
+            "type": "number"
+          },
+          "fecha_emision": {
+            "type": "string"
+          },
+          "monto_pagado": {
+            "type": "number"
+          },
+          "iva_retenido": {
+            "type": "number"
+          },
+          "islr_retenido": {
+            "type": "number"
+          },
+          "cod_banco": {
+            "type": "number"
+          },
+          "nro_cuenta": {
+            "type": "string"
+          },
+          "cod_cliente": {
+            "type": "number"
+          }
+        }
+      },
       "Detalle_Costos": {
         "description": "Modelo de Detalle de Costos",
         "required": ["id", "cod_costo", "cod_concepto", "monto_costo"],
@@ -13649,6 +14370,48 @@
           },
           "cod_estado": {
             "type": "number"
+          }
+        }
+      },
+      "Maestro_Cobranzas": {
+        "description": "Modelo de Maestro de Cobranzas",
+        "required": [
+          "id",
+          "cod_agencia",
+          "fecha_deposito",
+          "monto_cobrado"
+        ],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "cod_agencia": {
+            "type": "number"
+          },
+          "nro_deposito": {
+            "type": "number"
+          },
+          "fecha_deposito": {
+            "type": "string"
+          },
+          "monto_cobrado": {
+            "type": "number"
+          },
+          "cod_cuenta": {
+            "type": "number"
+          },
+          "monto_retenido": {
+            "type": "number"
+          },
+          "monto_deposito": {
+            "type": "number"
+          },
+          "ingreso_caja": {
+            "type": "number"
+          },
+          "id_cobranza": {
+            "type": "string"
           }
         }
       },

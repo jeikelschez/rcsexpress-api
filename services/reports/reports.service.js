@@ -147,7 +147,9 @@ class ReportsService {
       tipo == 'FA' ||
       tipo == 'FPO' ||
       tipo == 'NC' ||
-      tipo == 'ND'
+      tipo == 'ND' ||
+      tipo == 'DE' ||
+      tipo == 'CG'
     ) {
       doc = new PDFDocument({
         margin: 20,

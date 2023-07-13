@@ -41,6 +41,7 @@ class Cuentas extends Model {
   static associate(models) {
     this.belongsTo(models.Bancos, { foreignKey: 'cod_banco', as: 'bancos' });
     this.hasMany(models.Ccomisiones, { foreignKey: 'cod_cuenta', as: 'comisiones' });
+    this.hasMany(models.Mcobranzas, { foreignKey: 'cod_cuenta', as: 'cobranzas' });
   }
 
   static config(sequelize) {
