@@ -149,7 +149,8 @@ class ReportsService {
       tipo == 'NC' ||
       tipo == 'ND' ||
       tipo == 'DE' ||
-      tipo == 'CG'
+      tipo == 'CG' ||
+      tipo == 'CD'
     ) {
       doc = new PDFDocument({
         margin: 20,

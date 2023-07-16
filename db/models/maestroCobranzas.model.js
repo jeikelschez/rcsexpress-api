@@ -69,6 +69,10 @@ class Mcobranzas extends Model {
       foreignKey: 'cod_cuenta',
       as: 'cuentas',
     });
+    this.hasMany(models.Dcobranzas, {
+      foreignKey: 'cod_cobranza',
+      as: 'detalles',
+    });
   }
 
   static config(sequelize) {

@@ -16,6 +16,18 @@ const clienteOrigDesc =
   ' AND `Mmovimientos`.ci_rif_cte_conta_org = clientes_particulares.rif_ci' +
   ' AND clientes_particulares.estatus = "A" LIMIT 1)' +
   ' END)';
+const clienteOrigDesc2 =
+  '(CASE WHEN (ci_rif_cte_conta_org IS NULL || ci_rif_cte_conta_org = "")' +
+  ' THEN (SELECT nb_cliente' +
+  ' FROM clientes ' +
+  ' WHERE `detalles->movimientos`.cod_cliente_org = clientes.id)' +
+  ' ELSE (SELECT nb_cliente' +
+  ' FROM clientes_particulares' +
+  ' WHERE `detalles->movimientos`.cod_agencia = clientes_particulares.cod_agencia' +
+  ' AND `detalles->movimientos`.cod_cliente_org = clientes_particulares.cod_cliente' +
+  ' AND `detalles->movimientos`.ci_rif_cte_conta_org = clientes_particulares.rif_ci' +
+  ' AND clientes_particulares.estatus = "A" LIMIT 1)' +
+  ' END)';
 const clienteDestDesc =
   '(CASE WHEN (ci_rif_cte_conta_dest IS NULL || ci_rif_cte_conta_dest = "")' +
   ' THEN (SELECT nb_cliente' +
@@ -771,23 +783,135 @@ class ReporteVentasService {
         break;
       case 'CG':
         where = {
+          fecha_deposito: {
+            [Sequelize.Op.between]: [
+              moment(data.fecha_desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+              moment(data.fecha_hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+            ],
+          },
+        };
+
+        if (data.agencia) where.cod_agencia = data.agencia;
+
+        ventas = await models.Mcobranzas.findAll({
+          where: where,
+          attributes: [
+            'id',
+            'cod_agencia',
+            'nro_deposito',
+            'fecha_deposito',
+            'monto_cobrado',
+            'cod_cuenta',
+            'monto_retenido',
+            'monto_deposito',
+            'ingreso_caja',
+            [Sequelize.literal(clienteOrigDesc2), 'cliente_orig_desc'],
+          ],
+          include: [
+            {
+              model: models.Agencias,
+              as: 'agencias',
+              attributes: ['nb_agencia'],
+            },
+            {
+              model: models.Cuentas,
+              as: 'cuentas',
+              attributes: ['nro_cuenta'],
+              include: [
+                {
+                  model: models.Bancos,
+                  as: 'bancos',
+                  attributes: ['nb_banco'],
+                },
+              ],
+            },
+            {
+              model: models.Dcobranzas,
+              as: 'detalles',
+              attributes: ['monto_pagado'],
+              include: [
+                {
+                  model: models.Mmovimientos,
+                  as: 'movimientos',
+                  attributes: [
+                    't_de_documento',
+                    'nro_documento',
+                    'monto_total',
+                    'saldo',
+                    'serie_doc_principal',
+                    'nro_ctrl_doc_ppal_new',
+                    'nro_ctrl_doc_ppal',
+                    'modalidad_pago',
+                    'pagado_en',
+                  ],
+                  include: [
+                    {
+                      model: models.Agencias,
+                      as: 'agencias',
+                      attributes: ['nb_agencia'],
+                      include: [
+                        {
+                          model: models.Ciudades,
+                          as: 'ciudades',
+                          attributes: ['siglas'],
+                        },
+                      ],
+                    },
+                    {
+                      model: models.Agencias,
+                      as: 'agencias_dest',
+                      attributes: ['id'],
+                      include: [
+                        {
+                          model: models.Ciudades,
+                          as: 'ciudades',
+                          attributes: ['siglas'],
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+          order: [
+            ['cod_agencia', 'ASC'],
+            ['id', 'ASC'],
+          ],
+          raw: true,
+        });
+        if (ventas.length == 0) return false;
+        break;
+      case 'CD':
+        where = {
           fecha_emision: {
             [Sequelize.Op.between]: [
               moment(data.fecha_desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
               moment(data.fecha_hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
             ],
           },
-          t_de_documento: 'FA',
+          t_de_documento: {
+            [Sequelize.Op.in]: ['FA', 'GC'],
+          },
+          estatus_administra: {
+            [Sequelize.Op.ne]: 'A',
+          },
+          pagado_en: 'D',
         };
 
-        if (data.agencia) where.cod_agencia = data.agencia;
+        if (data.agencia) where.cod_agencia_dest = data.agencia;
+        if (data.cliente) where.cod_cliente_dest = data.cliente;
+        if (data.estatus_admin) where.estatus_administra = data.estatus_admin;
+        if (data.tipo_doc) where.t_de_documento = data.tipo_doc;
 
         ventas = await models.Mmovimientos.findAll({
           where: where,
           attributes: [
             'id',
             'cod_agencia',
+            'cod_agencia_dest',
             'fecha_emision',
+            't_de_documento',
             'nro_documento',
             'modalidad_pago',
             'pagado_en',
@@ -798,24 +922,31 @@ class ReporteVentasService {
             'tipo_doc_principal',
             'serie_doc_principal',
             'nro_doc_principal',
+            'nro_ctrl_doc_ppal_new',
+            'nro_ctrl_doc_ppal',
             'estatus_administra',
-            'estatus_operativo',
-            'fecha_anulacion',
-            'nro_control',
-            'serie_documento',
-            'nro_control_new',
-            'tipo_factura',
-            [Sequelize.literal(clienteOrigDesc), 'cliente_orig_desc'],
-            [Sequelize.literal(montoFpo), 'monto_fpo'],
+            [Sequelize.literal(clienteDestDesc), 'cliente_dest_desc'],
+          ],
+          include: [
+            {
+              model: models.Agencias,
+              as: 'agencias',
+              attributes: ['nb_agencia'],
+            },
+            {
+              model: models.Agencias,
+              as: 'agencias_dest',
+              attributes: ['nb_agencia'],
+            },
           ],
           order: [
+            ['cod_agencia_dest', 'ASC'],
+            ['cod_agencia', 'ASC'],
+            ['cod_cliente_org', 'ASC'],
             ['fecha_emision', 'ASC'],
-            ['serie_documento', 'ASC'],
-            ['nro_control', 'ASC'],
           ],
           raw: true,
         });
-        ventas = ventas.filter((venta) => venta.monto_fpo > 0);
         if (ventas.length == 0) return false;
         break;
       default:
@@ -1310,6 +1441,117 @@ class ReporteVentasService {
         doc.text('Impuesto', 490, 190);
         doc.text('Total Nota', 545, 190);
         break;
+      case 'CG':
+        doc.image('./img/logo_rc.png', 35, 25, { width: 80 });
+        doc.fontSize(9);
+        doc.text('RCS EXPRESS, S.A', 35, 155);
+        doc.text('RIF. J-31028463-6', 35, 170);
+        doc.font('Helvetica-Bold');
+        doc.fillColor('#444444');
+        doc.fontSize(18);
+
+        doc.y = 100;
+        doc.x = 140;
+        doc.text('Cobranza Efectuada', {
+          align: 'center',
+          columns: 1,
+          width: 400,
+        });
+
+        doc.fontSize(12);
+        doc.y = 125;
+        doc.x = 230;
+        doc.text('Desde: ' + data.fecha_desde, {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+        doc.y = 125;
+        doc.x = 347;
+        doc.text('Hasta: ' + data.fecha_hasta, {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+
+        if (data.agencia) {
+          doc.y = 145;
+          doc.x = 140;
+          doc.text('Agencia: ' + data.ventas[0]['agencias.nb_agencia'], {
+            align: 'center',
+            columns: 1,
+            width: 400,
+          });
+        }
+
+        doc.fontSize(9);
+        doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 510, 35);
+        doc.text('F. Emision', 30, 190);
+        doc.text('Nro Doc.', 82, 190);
+        doc.text('Doc. Ppal.', 125, 190);
+        doc.text('Cliente', 230, 190);
+        doc.text('Org / Dest', 320, 190);
+        doc.text('Forma Pago', 375, 190);
+        doc.text('Total Doc.', 440, 190);
+        doc.text('Cobrado', 500, 190);
+        doc.text('Saldo', 560, 190);
+        break;
+      case 'CD':
+        doc.image('./img/logo_rc.png', 35, 25, { width: 80 });
+        doc.fontSize(9);
+        doc.text('RCS EXPRESS, S.A', 35, 155);
+        doc.text('RIF. J-31028463-6', 35, 170);
+        doc.font('Helvetica-Bold');
+        doc.fillColor('#444444');
+        doc.fontSize(18);
+
+        doc.y = 100;
+        doc.x = 140;
+        doc.text('Cobro en Destino', {
+          align: 'center',
+          columns: 1,
+          width: 400,
+        });
+
+        doc.fontSize(12);
+        doc.y = 125;
+        doc.x = 230;
+        doc.text('Desde: ' + data.fecha_desde, {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+        doc.y = 125;
+        doc.x = 347;
+        doc.text('Hasta: ' + data.fecha_hasta, {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+
+        if (data.agencia) {
+          doc.y = 145;
+          doc.x = 140;
+          doc.text('Agencia: ' + data.ventas[0]['agencias.nb_agencia'], {
+            align: 'center',
+            columns: 1,
+            width: 400,
+          });
+        }
+
+        doc.fontSize(9);
+        doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 510, 35);
+        doc.text('Fecha', 30, 190);
+        doc.text('Nro Doc.', 68, 190);
+        doc.text('Nro Doc. P.', 118, 190);
+        doc.text('Cliente Destinatario', 205, 190);
+        doc.text('F. Pago', 325, 190);
+        doc.text('Sub-Total', 365, 190);
+        doc.text('Impuesto', 415, 190);
+        doc.text('Total Doc.', 465, 190);
+        doc.text('Saldo', 520, 190);
+        doc.text('Estatus', 558, 190);
+        break;
       default:
         break;
     }
@@ -1329,6 +1571,7 @@ class ReporteVentasService {
     let totalOtrosDolar = 0;
     let totalMontoOtros = 0;
     let totalVentaDolar = 0;
+    let totalCobrado = 0;
     let subTotalNroPiezas = 0;
     let subTotalPesoKgs = 0;
     let subTotalContadoOrig = 0;
@@ -1347,6 +1590,7 @@ class ReporteVentasService {
     let subTotalSubtotal = 0;
     let subTotalImpuesto = 0;
     let subTotalSaldo = 0;
+    let subTotalCobrado = 0;
 
     switch (tipo) {
       case 'VG':
@@ -2813,7 +3057,7 @@ class ReporteVentasService {
               subTotalMontoVenta += utils.parseFloatN(montoTotal);
 
               i += 20;
-              if (i >= 550) {
+              if (i >= 520) {
                 doc.fillColor('#BLACK');
                 doc.addPage();
                 page = page + 1;
@@ -3123,7 +3367,7 @@ class ReporteVentasService {
               subTotalSaldo += utils.parseFloatN(montoSaldo);
 
               i += 15;
-              if (i >= 550) {
+              if (i >= 520) {
                 doc.fillColor('#BLACK');
                 doc.addPage();
                 page = page + 1;
@@ -3413,7 +3657,7 @@ class ReporteVentasService {
             totalMontoVenta += utils.parseFloatN(data.ventas[item].monto_total);
 
             i += 15;
-            if (i >= 550) {
+            if (i >= 520) {
               doc.fillColor('#BLACK');
               doc.addPage();
               page = page + 1;
@@ -3620,7 +3864,7 @@ class ReporteVentasService {
           totalSaldo += utils.parseFloatN(montoSaldo);
 
           i += 15;
-          if (i >= 550) {
+          if (i >= 520) {
             doc.fillColor('#BLACK');
             doc.addPage();
             page = page + 1;
@@ -3894,7 +4138,7 @@ class ReporteVentasService {
           subTotalMontoVenta += utils.parseFloatN(montoTotal);
 
           i += 15;
-          if (i >= 550) {
+          if (i >= 520) {
             doc.fillColor('#BLACK');
             doc.addPage();
             page = page + 1;
@@ -3972,6 +4216,491 @@ class ReporteVentasService {
           });
         }
         break;
+      case 'CG':
+        var i = 0;
+        var page = 0;
+        var ymin;
+        ymin = 205;
+        for (var item = 0; item < data.ventas.length; item++) {
+          if (
+            item == 0 ||
+            data.ventas[item].cod_agencia != data.ventas[item - 1].cod_agencia
+          ) {
+            if (item > 0) i += 20;
+            doc.fontSize(10);
+            doc.font('Helvetica-Bold');
+            doc.text(data.ventas[item]['agencias.nb_agencia'], 35, ymin + i);
+            i += 18;
+          }
+
+          if (item == 0 || data.ventas[item].id != data.ventas[item - 1].id) {
+            doc.fontSize(9);
+            doc.font('Helvetica-Bold');
+            doc.text(
+              'Nro. Deposito: ' +
+                (data.ventas[item].nro_deposito
+                  ? data.ventas[item].nro_deposito
+                  : ''),
+              35,
+              ymin + i
+            );
+            doc.text(
+              'Fecha: ' +
+                moment(data.ventas[item].fecha_deposito).format('DD/MM/YYYY'),
+              170,
+              ymin + i
+            );
+            doc.text(
+              'Monto: ' + utils.formatNumber(data.ventas[item].monto_cobrado),
+              265,
+              ymin + i
+            );
+            doc.y = ymin + i;
+            doc.x = 330;
+            doc.text(data.ventas[item]['cuentas.bancos.nb_banco'], {
+              align: 'center',
+              columns: 1,
+              width: 150,
+            });
+            doc.y = ymin + i;
+            doc.x = 460;
+            doc.text(data.ventas[item]['cuentas.nro_cuenta'], {
+              align: 'center',
+              columns: 1,
+              width: 150,
+            });
+            i += 17;
+          }
+
+          doc.fontSize(8);
+          doc.font('Helvetica');
+          doc.fillColor('#444444');
+          doc.y = ymin + i;
+          doc.x = 25;
+          doc.text(
+            moment(data.ventas[item].fecha_emision).format('DD/MM/YYYY'),
+            {
+              align: 'center',
+              columns: 1,
+              width: 50,
+            }
+          );
+
+          doc.y = ymin + i;
+          doc.x = 74;
+          doc.text(
+            data.ventas[item]['detalles.movimientos.t_de_documento'] +
+              '-' +
+              data.ventas[item]['detalles.movimientos.nro_documento'],
+            {
+              align: 'center',
+              columns: 1,
+              width: 50,
+            }
+          );
+
+          let nroFactOrig = '';
+          if (data.ventas[item].serie_doc_principal)
+            nroFactOrig += data.ventas[item].serie_doc_principal + '-';
+          if (data.ventas[item].nro_ctrl_doc_ppal_new) {
+            nroFactOrig += data.ventas[item].nro_ctrl_doc_ppal_new.padStart(
+              9,
+              '00-000000'
+            );
+          } else if (data.ventas[item].nro_ctrl_doc_ppal) {
+            nroFactOrig += data.ventas[item].nro_ctrl_doc_ppal.padStart(
+              4,
+              '0000'
+            );
+          }
+
+          doc.y = ymin + i;
+          doc.x = 120;
+          doc.text(nroFactOrig, {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+
+          doc.y = ymin + i;
+          doc.x = 177;
+          doc.text(utils.truncate(data.ventas[item].cliente_orig_desc, 29), {
+            align: 'left',
+            columns: 1,
+            width: 160,
+          });
+
+          doc.y = ymin + i;
+          doc.x = 315;
+          doc.text(
+            data.ventas[item]['detalles.movimientos.agencias.ciudades.siglas'] +
+              ' / ' +
+              (data.ventas[item][
+                'detalles.movimientos.agencias_dest.ciudades.siglas'
+              ]
+                ? data.ventas[item][
+                    'detalles.movimientos.agencias_dest.ciudades.siglas'
+                  ]
+                : ''),
+            {
+              align: 'center',
+              columns: 1,
+              width: 50,
+            }
+          );
+          let modalidad = 'Contado';
+          if (data.ventas[item]['detalles.movimientos.modalidad_pago'] == 'CR')
+            modalidad = 'Crédito';
+          if (data.ventas[item]['detalles.movimientos.pagado_en'] == 'O')
+            modalidad += '/Origen';
+          else modalidad += '/Destino';
+          doc.y = ymin + i;
+          doc.x = 360;
+          doc.text(modalidad, {
+            align: 'center',
+            columns: 1,
+            width: 80,
+          });
+
+          let montoTotal =
+            data.ventas[item]['detalles.movimientos.monto_total'];
+          let montoCobrado = data.ventas[item]['detalles.monto_pagado'];
+          let montoSaldo = data.ventas[item]['detalles.movimientos.saldo'];
+
+          doc.y = ymin + i;
+          doc.x = 430;
+          doc.text(utils.formatNumber(montoTotal), {
+            align: 'right',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = ymin + i;
+          doc.x = 488;
+          doc.text(utils.formatNumber(montoCobrado), {
+            align: 'right',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = ymin + i;
+          doc.x = 524;
+          doc.text(utils.formatNumber(montoSaldo), {
+            align: 'right',
+            columns: 1,
+            width: 60,
+          });
+
+          // Sub Totales por Agencia
+          if (
+            item > 0 &&
+            data.ventas[item].cod_agencia != data.ventas[item - 1].cod_agencia
+          ) {
+            doc.font('Helvetica-Bold');
+            doc.y = ymin + i - 50;
+            doc.x = 300;
+            doc.text('Sub-Totales por Agencia:', {
+              align: 'left',
+              columns: 1,
+              width: 100,
+            });
+            doc.y = ymin + i - 50;
+            doc.x = 430;
+            doc.text(utils.formatNumber(subTotalMontoVenta), {
+              align: 'right',
+              columns: 1,
+              width: 50,
+            });
+            doc.y = ymin + i - 50;
+            doc.x = 488;
+            doc.text(utils.formatNumber(subTotalCobrado), {
+              align: 'right',
+              columns: 1,
+              width: 50,
+            });
+
+            doc.font('Helvetica');
+            i += 3;
+            subTotalMontoVenta = 0;
+            subTotalCobrado = 0;
+          }
+
+          totalMontoVenta += utils.parseFloatN(montoTotal);
+          totalCobrado += utils.parseFloatN(montoCobrado);
+
+          subTotalMontoVenta += utils.parseFloatN(montoTotal);
+          subTotalCobrado += utils.parseFloatN(montoCobrado);
+
+          i += 15;
+          if (i >= 520) {
+            doc.fillColor('#BLACK');
+            doc.addPage();
+            page = page + 1;
+            doc.switchToPage(page);
+            i = 0;
+            await this.generateHeader(doc, tipo, data);
+          }
+        }
+
+        // Sub Totales por Agencia Finales
+        i += 10;
+        doc.font('Helvetica-Bold');
+        doc.y = ymin + i;
+        doc.x = 300;
+        doc.text('Sub-Totales por Agencia:', {
+          align: 'left',
+          columns: 1,
+          width: 100,
+        });
+        doc.y = ymin + i;
+        doc.x = 430;
+        doc.text(utils.formatNumber(subTotalMontoVenta), {
+          align: 'right',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i;
+        doc.x = 488;
+        doc.text(utils.formatNumber(subTotalCobrado), {
+          align: 'right',
+          columns: 1,
+          width: 50,
+        });
+
+        // Totales Finales
+        i += 10;
+        doc.font('Helvetica-Bold');
+        doc.y = ymin + i;
+        doc.x = 343;
+        doc.text('Total General:', {
+          align: 'left',
+          columns: 1,
+          width: 100,
+        });
+        doc.y = ymin + i;
+        doc.x = 430;
+        doc.text(utils.formatNumber(totalMontoVenta), {
+          align: 'right',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = ymin + i;
+        doc.x = 488;
+        doc.text(utils.formatNumber(totalCobrado), {
+          align: 'right',
+          columns: 1,
+          width: 50,
+        });
+        break;
+      case 'CD':
+        var i = 0;
+        var page = 0;
+        var ymin;
+        ymin = 205;
+        for (var item = 0; item < data.ventas.length; item++) {
+          if (item == 0 ||
+              (data.ventas[item].cod_agencia !=
+                data.ventas[item - 1].cod_agencia) || (data.ventas[item].cod_agencia_dest !=
+                data.ventas[item - 1].cod_agencia_dest)) {
+            if (item > 0) i += 10;
+            doc.fontSize(9);
+            doc.font('Helvetica-Bold');
+            doc.text('Cobro en: ' + data.ventas[item]['agencias_dest.nb_agencia'], 35, ymin + i);
+            doc.text('Venta Realizada por: ' + data.ventas[item]['agencias.nb_agencia'], 300, ymin + i);
+            i += 17;
+          }
+
+          doc.fontSize(7);
+          doc.font('Helvetica');
+          doc.fillColor('#444444');
+          doc.y = ymin + i;
+          doc.x = 20;
+          doc.text(
+            moment(data.ventas[item].fecha_emision).format('DD/MM/YYYY'),
+            {
+              align: 'center',
+              columns: 1,
+              width: 40,
+            }
+          );
+
+          doc.y = ymin + i;
+          doc.x = 62;
+          doc.text(
+            data.ventas[item].t_de_documento +
+              '-' +
+              data.ventas[item].nro_documento,
+            {
+              align: 'center',
+              columns: 1,
+              width: 50,
+            }
+          );
+
+          let nroDocPpal = '';
+          if (data.ventas[item].tipo_doc_principal) nroDocPpal += data.ventas[item].tipo_doc_principal + '-';
+          if (data.ventas[item].serie_doc_principal) nroDocPpal += data.ventas[item].serie_doc_principal + '- ';
+          if (data.ventas[item].nro_ctrl_doc_ppal_new) {
+            nroDocPpal += data.ventas[item].nro_ctrl_doc_ppal_new.padStart(
+              9,
+              '00-000000'
+            );
+          } else if (data.ventas[item].nro_ctrl_doc_ppal) {
+            nroDocPpal += data.ventas[item].nro_ctrl_doc_ppal.padStart(
+              4,
+              '0000'
+            );
+          }
+
+          doc.y = ymin + i;
+          doc.x = 115;
+          doc.text(nroDocPpal, {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+
+          doc.y = ymin + i;
+          doc.x = 170;
+          doc.text(utils.truncate(data.ventas[item].cliente_dest_desc, 36), {
+            align: 'left',
+            columns: 1,
+            width: 160,
+          });
+
+          doc.y = ymin + i;
+          doc.x = 265;
+          doc.text(
+            tipo_factura.find(
+              (tipo) => tipo.value == data.ventas[item].tipo_factura
+            ).label,
+            {
+              align: 'center',
+              columns: 1,
+              width: 60,
+            }
+          );
+
+          let modalidad = 'Contado';
+          if (data.ventas[item].modalidad_pago == 'CR') modalidad = 'Crédito';
+          doc.y = ymin + i;
+          doc.x = 329;
+          doc.text(modalidad, {
+            align: 'left',
+            columns: 1,
+            width: 50,
+          });
+
+          let montoSubtotal = 0;
+          let montoImpuesto = 0;
+          let montoTotal = 0;
+          let montoSaldo = 0;
+
+          if (data.visible == 'SI') {
+            if (data.ventas[item].estatus_administra != 'A') {
+              montoSubtotal = data.ventas[item].monto_subtotal;
+              montoImpuesto = data.ventas[item].monto_impuesto;
+              montoTotal = data.ventas[item].monto_total;
+              montoSaldo = data.ventas[item].saldo;
+            }
+            doc.y = ymin + i;
+            doc.x = 355;
+            doc.text(utils.formatNumber(montoSubtotal), {
+              align: 'right',
+              columns: 1,
+              width: 50,
+            });
+            doc.y = ymin + i;
+            doc.x = 400;
+            doc.text(utils.formatNumber(montoImpuesto), {
+              align: 'right',
+              columns: 1,
+              width: 50,
+            });
+            doc.y = ymin + i;
+            doc.x = 445;
+            doc.text(utils.formatNumber(montoTotal), {
+              align: 'right',
+              columns: 1,
+              width: 60,
+            });
+            doc.y = ymin + i;
+            doc.x = 485;
+            doc.text(utils.formatNumber(montoSaldo), {
+              align: 'right',
+              columns: 1,
+              width: 60,
+            });
+          }
+
+          doc.y = ymin + i;
+          doc.x = 545;
+          doc.text(
+            estatus_administrativo.find(
+              (estatus) => estatus.value == data.ventas[item].estatus_administra
+            ).label,
+            {
+              align: 'center',
+              columns: 1,
+              width: 60,
+            }
+          );
+
+          totalSubtotal += utils.parseFloatN(montoSubtotal);
+          totalImpuesto += utils.parseFloatN(montoImpuesto);
+          totalMontoVenta += utils.parseFloatN(montoTotal);
+          totalSaldo += utils.parseFloatN(montoSaldo);
+
+          i += 15;
+          if (i >= 520) {
+            doc.fillColor('#BLACK');
+            doc.addPage();
+            page = page + 1;
+            doc.switchToPage(page);
+            i = 0;
+            await this.generateHeader(doc, tipo, data);
+          }
+        }
+
+        // Totales Finales
+        if (data.visible == 'SI') {
+          i += 10;
+          doc.font('Helvetica-Bold');
+          doc.y = ymin + i;
+          doc.x = 308;
+          doc.text('Total General:', {
+            align: 'left',
+            columns: 1,
+            width: 100,
+          });
+          doc.y = ymin + i;
+          doc.x = 355;
+          doc.text(utils.formatNumber(totalSubtotal), {
+            align: 'right',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = ymin + i;
+          doc.x = 400;
+          doc.text(utils.formatNumber(totalImpuesto), {
+            align: 'right',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = ymin + i;
+          doc.x = 445;
+          doc.text(utils.formatNumber(totalMontoVenta), {
+            align: 'right',
+            columns: 1,
+            width: 60,
+          });
+          doc.y = ymin + i;
+          doc.x = 485;
+          doc.text(utils.formatNumber(totalSaldo), {
+            align: 'right',
+            columns: 1,
+            width: 60,
+          });
+        }
+        break;
       default:
         break;
     }
@@ -3992,7 +4721,8 @@ class ReporteVentasService {
         tipo == 'NC' ||
         tipo == 'ND' ||
         tipo == 'DE' ||
-        tipo == 'CG'
+        tipo == 'CG' ||
+        tipo == 'CD'
           ? 485
           : 646;
       doc.y = 50;
