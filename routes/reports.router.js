@@ -18,6 +18,20 @@ router.get('/loadPDF/:report', (req, res) => {
   });
 });
 
+router.get('/asignacionGuias', authenticateJWT, async (req, res, next) => {
+  try {
+    const { id } = req.headers;
+    const response = await service.asignacionGuias(id);
+    res.status(200).json({
+      message: 'PDF Generado',
+      pdfPath: response.resPath,
+      validDoc: response.validDoc,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get('/cartaCliente', authenticateJWT, async (req, res, next) => {
   try {
     const { data, cliente, contacto, cargo, ciudad, usuario } = req.headers;

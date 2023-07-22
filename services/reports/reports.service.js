@@ -2,6 +2,8 @@ const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const reportsPath = './services/reports/pdf/';
 
+const AsignacionGuiasService = require('./asignacionGuias.service');
+const asignacionGuiasService = new AsignacionGuiasService();
 const CartaClienteService = require('./cartaCliente.service');
 const cartaClienteService = new CartaClienteService();
 const FacturaPreimpresoService = require('./facturaPreimpreso.service');
@@ -19,6 +21,16 @@ const reporteVentasService = new ReporteVentasService();
 
 class ReportsService {
   constructor() {}
+
+  // REPORTE DE ASIGNACION DE GUIAS
+  async asignacionGuias(id) {
+    let resPath = 'guiasDisponibles.pdf';
+    let doc = new PDFDocument({ margin: 50 });
+    doc.pipe(fs.createWriteStream(reportsPath + resPath));
+    await asignacionGuiasService.mainReport(doc, id);
+    doc.end();
+    return { validDoc: true, resPath: resPath };
+  }
 
   // REPORTE EMITIR CARTA CLIENTE
   async cartaCliente(data, cliente, contacto, cargo, ciudad, usuario) {
@@ -150,7 +162,9 @@ class ReportsService {
       tipo == 'ND' ||
       tipo == 'DE' ||
       tipo == 'CG' ||
-      tipo == 'CD'
+      tipo == 'CD' ||
+      tipo == 'CC' ||
+      tipo == 'CCC'
     ) {
       doc = new PDFDocument({
         margin: 20,

@@ -54,19 +54,6 @@ router.get('/', authenticateJWT, async (req, res, next) => {
   }
 });
 
-router.get('/generatePDF', authenticateJWT, async (req, res, next) => {
-  try {
-    const { id } = req.headers;
-    const pdfStream = await service.generatePdf(id);
-    res.status(200).json({
-      message: 'PDF Generado',
-      base64: pdfStream,
-    });
-  } catch (error) {
-    next(error);
-  }
-});
-
 router.get('/disp', authenticateJWT, async (req, res, next) => {
   try {
     const lote = req.headers.lote;
