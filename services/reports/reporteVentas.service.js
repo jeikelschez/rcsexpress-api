@@ -1025,7 +1025,6 @@ class ReporteVentasService {
           ],
           raw: true,
         });
-        console.log(ventas)
         if (ventas.length == 0) return false;
         break;
       default:

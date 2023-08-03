@@ -45,6 +45,7 @@ const DcostosRouter = require('./detalleCostos.router');
 const DcostosgRouter = require('./detalleCostosGuias.router');
 const McobranzasRouter = require('./maestroCobranzas.router');
 const DcobranzasRouter = require('./detalleCobranzas.router');
+const MctapagarRouter = require('./maestroCtaPagar.router');
 
 function routerApi(app) {
   const router = express.Router();
@@ -93,6 +94,7 @@ function routerApi(app) {
   router.use('/dcostosg', DcostosgRouter);
   router.use('/mcobranzas', McobranzasRouter);
   router.use('/dcobranzas', DcobranzasRouter);
+  router.use('/mctapagar', MctapagarRouter);
   router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 

@@ -123,6 +123,10 @@
       "description": "API para Manejar el Maestro de Cobranzas de la Organizacion"
     },
     {
+      "name": "Maestro_Cuentas_Pagar",
+      "description": "API para Manejar el Maestro de Cuentas por Pagar"
+    },
+    {
       "name": "Maestro_Retenciones",
       "description": "API para Manejar el Maestro de Retenciones de la Organizacion"
     },
@@ -8492,6 +8496,338 @@
         }
       }
     },
+    "/mctapagar": {
+      "get": {
+        "tags": ["Maestro_Cuentas_Pagar"],
+        "summary": "Obtener todo el maestro de Cuentas por Pagar",
+        "description": "API para Obtener el maestro de Cuentas por Pagar del sistema",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "header",
+            "description": "Numero de la pagina",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "header",
+            "description": "Cantidad de registros",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "header",
+            "description": "Ordenado por",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "header",
+            "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/extraSchemes/Paginate",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Maestro_Cuentas_Pagar"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Maestro_Cuentas_Pagar"],
+        "summary": "Crear concepto de Cuentas por Pagar",
+        "description": "API para Crear un nuevo concepto de Cuentas por Pagar",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Maestro_Cuentas_Pagar"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Maestro_Cuentas_Pagar"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mctapagar/{id}": {
+      "get": {
+        "tags": ["Maestro_Cuentas_Pagar"],
+        "summary": "Obtener concepto de Cuentas por Pagar por su Id",
+        "description": "API para Retornar un concepto de Cuentas por Pagar por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Cuenta por Pagar",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Maestro_Cuentas_Pagar"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Maestro_Cuentas_Pagar"],
+        "summary": "Actualizar concepto de Cuentas por Pagar",
+        "description": "API para Actualizar un concepto de Cuentas por Pagar por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Cuenta por Pagar",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Maestro_Cuentas_Pagar"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Maestro_Cuentas_Pagar"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Maestro_Cuentas_Pagar"],
+        "summary": "Borrar concepto de Cuentas por Pagar",
+        "description": "API para Borrar un concepto de Cuentas por Pagar por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Cuenta por Pagar",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Maestro_Cuentas_Pagar/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/mmovimientos": {
       "get": {
         "tags": ["Maestro_Movimientos"],
@@ -14412,6 +14748,119 @@
           },
           "id_cobranza": {
             "type": "string"
+          }
+        }
+      },
+      "Maestro_Cuentas_Pagar": {
+        "description": "Modelo de Maestro de Cuentas por Pagar",
+        "required": [
+          "id",
+          "cod_proveedor",
+          "cod_agencia"
+        ],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "cod_proveedor": {
+            "type": "number"
+          },
+          "cod_agencia": {
+            "type": "number"
+          },
+          "nro_documento": {
+            "type": "string"
+          },
+          "tipo_documento": {
+            "type": "string"
+          },
+          "fecha_documento": {
+            "type": "string"
+          },
+          "fecha_registro": {
+            "type": "string"
+          },
+          "concepto_documento": {
+            "type": "string"
+          },
+          "condicion_pago": {
+            "type": "number"
+          },
+          "monto_exento": {
+            "type": "number"
+          },
+          "monto_base_nacional": {
+            "type": "number"
+          },
+          "monto_base_intern": {
+            "type": "number"
+          },
+          "monto_imp_nacional": {
+            "type": "number"
+          },
+          "monto_imp_intern": {
+            "type": "number"
+          },
+          "total_documento": {
+            "type": "number"
+          },
+          "porcentaje_retencion": {
+            "type": "number"
+          },
+          "base_imponible_retencion": {
+            "type": "number"
+          },
+          "saldo_documento": {
+            "type": "number"
+          },
+          "saldo_retenido": {
+            "type": "number"
+          },
+          "estatus_documento": {
+            "type": "string"
+          },
+          "fecha_vencimiento": {
+            "type": "string"
+          },
+          "saldo_base_retencion": {
+            "type": "number"
+          },
+          "pago_decontado": {
+            "type": "string"
+          },
+          "pago_permanente": {
+            "type": "string"
+          },
+          "nro_doc_afectado": {
+            "type": "string"
+          },
+          "nro_ctrl_doc": {
+            "type": "string"
+          },
+          "islr": {
+            "type": "number"
+          },
+          "cod_tipo_persona": {
+            "type": "number"
+          },
+          "cod_tipo_retencion": {
+            "type": "string"
+          },
+          "nro_comprobante_iva": {
+            "type": "string"
+          },
+          "fecha_comprobante": {
+            "type": "string"
+          },
+          "fecha_entrega": {
+            "type": "string"
+          },
+          "iva": {
+            "type": "number"
+          },
+          "id_cta_pagar": {
+            "type": "number"
           }
         }
       },
