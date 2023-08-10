@@ -20,6 +20,8 @@ const ReporteVentasService = require('./reporteVentas.service');
 const reporteVentasService = new ReporteVentasService();
 const LibroComprasService = require('./libroCompras.service');
 const libroComprasService = new LibroComprasService();
+const LibroVentasService = require('./libroVentas.service');
+const libroVentasService = new LibroVentasService();
 
 class ReportsService {
   constructor() {}
@@ -181,8 +183,8 @@ class ReportsService {
     return { validDoc: validDoc, resPath: resPath };
   }
 
-  // REPORTE VENTAS
-  async libroCompras(print, agencia, proveedor, desde, hasta) {    
+  // LIBRO COMPRAS
+  async libroCompras(print, agencia, proveedor, desde, hasta, detalle) {
     if (!print) return { validDoc: true, resPath: 'reporteBase2.pdf' };
 
     let resPath = 'libroCompras.pdf';
@@ -190,6 +192,7 @@ class ReportsService {
       margin: 10,
       bufferPages: true,
       layout: 'landscape',
+      size: 'LEGAL',
     });
 
     doc.pipe(fs.createWriteStream(reportsPath + resPath));
@@ -198,7 +201,35 @@ class ReportsService {
       agencia,
       proveedor,
       desde,
-      hasta
+      hasta,
+      detalle
+    );
+    resPath = validDoc ? resPath : 'reporteBase2.pdf';
+    doc.end();
+    return { validDoc: validDoc, resPath: resPath };
+  }
+
+  // LIBRO VENTAS
+  async libroVentas(print, agencia, cliente, desde, hasta, detalle, correlativo) {
+    if (!print) return { validDoc: true, resPath: 'reporteBase2.pdf' };
+
+    let resPath = 'libroVentas.pdf';
+    let doc = new PDFDocument({
+      margin: 10,
+      bufferPages: true,
+      layout: 'landscape',
+      size: 'LEGAL',
+    });
+
+    doc.pipe(fs.createWriteStream(reportsPath + resPath));
+    let validDoc = await libroVentasService.mainReport(
+      doc,
+      agencia,
+      cliente,
+      desde,
+      hasta,
+      detalle,
+      correlativo
     );
     resPath = validDoc ? resPath : 'reporteBase2.pdf';
     doc.end();

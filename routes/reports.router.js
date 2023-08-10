@@ -147,13 +147,37 @@ router.get('/reporteVentas', authenticateJWT, async (req, res, next) => {
 
 router.get('/libroCompras', authenticateJWT, async (req, res, next) => {
   try {
-    const { print, agencia, proveedor, desde, hasta } = req.headers;
+    const { print, agencia, proveedor, desde, hasta, detalle } = req.headers;
     const response = await service.libroCompras(
       print,
       agencia,
       proveedor,
       desde,
-      hasta
+      hasta,
+      detalle
+    );
+    res.status(200).json({
+      message: 'PDF Generado',
+      pdfPath: response.resPath,
+      validDoc: response.validDoc,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/libroVentas', authenticateJWT, async (req, res, next) => {
+  try {
+    const { print, agencia, cliente, desde, hasta, detalle, correlativo } =
+      req.headers;
+    const response = await service.libroVentas(
+      print,
+      agencia,
+      cliente,
+      desde,
+      hasta,
+      detalle,
+      correlativo
     );
     res.status(200).json({
       message: 'PDF Generado',

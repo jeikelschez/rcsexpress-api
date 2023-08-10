@@ -5,7 +5,7 @@ const UtilsService = require('../utils.service');
 const utils = new UtilsService();
 
 class LibroComprasService {
-  async mainReport(doc, agencia, proveedor, desde, hasta) {
+  async mainReport(doc, agencia, proveedor, desde, hasta, detalle) {
     let where = {
       fecha_documento: {
         [Sequelize.Op.between]: [
@@ -57,6 +57,7 @@ class LibroComprasService {
 
     detalles.desde = desde;
     detalles.hasta = hasta;
+    detalles.detalle = detalle;
     if (proveedor) detalles.proveedor = proveedor;
     await this.generateHeader(doc, detalles);
     await this.generateCustomerInformation(doc, detalles);
@@ -73,7 +74,7 @@ class LibroComprasService {
 
     doc.fontSize(14);
     doc.y = 70;
-    doc.x = 230;
+    doc.x = 320;
     doc.text(
       detalles.proveedor
         ? 'LIBRO DE COMPRAS POR PROVEEDOR'
@@ -87,14 +88,14 @@ class LibroComprasService {
 
     doc.fontSize(12);
     doc.y = 90;
-    doc.x = 320;
+    doc.x = 410;
     doc.text('Desde: ' + detalles.desde, {
       align: 'left',
       columns: 1,
       width: 300,
     });
     doc.y = 90;
-    doc.x = 437;
+    doc.x = 527;
     doc.text('Hasta: ' + detalles.hasta, {
       align: 'left',
       columns: 1,
@@ -102,85 +103,93 @@ class LibroComprasService {
     });
 
     doc.fontSize(8);
-    doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 700, 35);
+    doc.y = 50;
+    doc.x = 220;
+    doc.text(detalles.detalle, {
+      align: 'left',
+      columns: 1,
+      width: 150,
+    });
+
+    doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 910, 35);
 
     doc.lineWidth(0.5);
-    doc.lineCap('butt').moveTo(15, 120).lineTo(780, 120).stroke();
+    doc.lineCap('butt').moveTo(25, 120).lineTo(985, 120).stroke();
 
-    doc.fontSize(5);
-    doc.text('Op.', 18, 125);
-    doc.text(' N°', 18, 132);
-    doc.text(' Fecha', 30, 125);
-    doc.text('Factura', 30, 132);
-    doc.text('Rif', 65, 125);
-    doc.text('Nombre o Razón Social del Proveedor', 90, 125);
-    doc.text('Tipo', 191, 125);
-    doc.text('Prov.', 190, 132);
-    doc.text('  N°', 206, 125);
-    doc.text('  de', 206, 132);
-    doc.text('Comp.', 205, 139);
-    doc.text(' Num.', 225, 125);
-    doc.text(' Plan.', 225, 132);
-    doc.text('Import.', 225, 139);
-    doc.text(' Num.', 245, 125);
-    doc.text('Exped.', 245, 132);
-    doc.text('Import.', 245, 139);
-    doc.text('Número', 275, 125);
-    doc.text('Factura.', 275, 132);
-    doc.text('Número', 310, 125);
-    doc.text('Control.', 310, 132);
-    doc.text('de Doc.', 310, 139);
-    doc.text('   N°', 345, 125);
-    doc.text(' Nota', 345, 132);
-    doc.text('Débito', 345, 139);
-    doc.text('   N°', 370, 125);
-    doc.text(' Nota', 370, 132);
-    doc.text('Crédito', 370, 139);
-    doc.text('Tipo', 395, 125);
-    doc.text('  de', 395, 132);
-    doc.text('Trans.', 395, 139);
-    doc.text('  N° de', 420, 125);
-    doc.text('  Fact.', 420, 132);
-    doc.text('Afectada', 420, 139);
-    doc.text('  Total', 456, 125);
-    doc.text('Compras', 455, 132);
-    doc.text(' con IVA', 455, 139);
-    doc.text(' Compras', 486, 125);
-    doc.text('sin derecho', 485, 132);
-    doc.text('  a IVA', 490, 139);
-    doc.text('Importaciones', 530, 125);
-    doc.lineCap('butt').moveTo(517, 130).lineTo(577, 130).stroke();
-    doc.text('Base', 525, 132);
-    doc.text('Imponible', 520, 139);
-    doc.text(' %', 550, 132);
-    doc.text('Alic.', 549, 139);
-    doc.text('Imp.', 564, 132);
-    doc.text('IVA.', 565, 139);
-    doc.text('Internas', 610, 125);
-    doc.lineCap('butt').moveTo(582, 130).lineTo(650, 130).stroke();
-    doc.text('Base', 590, 132);
-    doc.text('Imponible', 585, 139);
-    doc.text(' %', 613, 132);
-    doc.text('Alic.', 613, 139);
-    doc.text('Impuesto', 625, 132);
-    doc.text('IVA.', 633, 139);
-    doc.text('Fecha', 657, 125);
-    doc.text('Comp.', 657, 132);
-    doc.text('Retenc.', 657, 139);
-    doc.text('N°', 698, 125);
-    doc.text('Comprobante', 683, 132);
-    doc.text(' IVA', 725, 125);
-    doc.text(' Ret.', 725, 132);
-    doc.text('Vend.', 725, 139);
-    doc.text(' IVA', 746, 125);
-    doc.text(' Ret.', 746, 132);
-    doc.text('Terc.', 746, 139);
-    doc.text('  Ant.', 763, 125);
-    doc.text('  IVA', 763, 132);
-    doc.text('Import.', 763, 139);
+    doc.fontSize(7);
+    doc.text('Op.', 30, 125);
+    doc.text(' N°', 30, 133);
+    doc.text(' Fecha', 51, 125);
+    doc.text('Factura', 51, 133);
+    doc.text('Rif', 100, 125);
+    doc.text('Nombre o Razón Social del Proveedor', 140, 125);
+    doc.text('Tipo', 276, 125);
+    doc.text('Prov.', 275, 133);
+    doc.text('  N°', 297, 125);
+    doc.text('  de', 297, 133);
+    doc.text('Comp.', 295, 141);
+    doc.text(' Num.', 322, 125);
+    doc.text(' Plan.', 322, 133);
+    doc.text('Import.', 322, 141);
+    doc.text(' Num.', 352, 125);
+    doc.text('Exped.', 352, 133);
+    doc.text('Import.', 352, 141);
+    doc.text('Número', 382, 125);
+    doc.text('Factura', 382, 133);
+    doc.text('Número', 417, 125);
+    doc.text('Control.', 417, 133);
+    doc.text('de Doc.', 417, 141);
+    doc.text('   N°', 455, 125);
+    doc.text(' Nota', 455, 133);
+    doc.text('Débito', 455, 141);
+    doc.text('   N°', 483, 125);
+    doc.text(' Nota', 483, 133);
+    doc.text('Crédito', 483, 141);
+    doc.text('Tipo', 514, 125);
+    doc.text('  de', 514, 133);
+    doc.text('Trans.', 514, 141);
+    doc.text('N° de', 543, 125);
+    doc.text('Fact.', 544, 133);
+    doc.text('Afectada', 537, 141);
+    doc.text('Total', 578, 125);
+    doc.text('Compras', 571, 133);
+    doc.text('con IVA', 574, 141);
+    doc.text(' Compras', 610, 125);
+    doc.text('sin derecho', 610, 133);
+    doc.text('  a IVA', 618, 141);
+    doc.text('Importaciones', 668, 125);
+    doc.lineCap('butt').moveTo(655, 132).lineTo(727, 132).stroke();
+    doc.text('Base', 663, 133);
+    doc.text('Imponible', 655, 141);
+    doc.text(' %', 693, 133);
+    doc.text('Alic.', 692, 141);
+    doc.text('Imp.', 709, 133);
+    doc.text('IVA.', 710, 141);
+    doc.text('Internas', 755, 125);
+    doc.lineCap('butt').moveTo(730, 132).lineTo(810, 132).stroke();
+    doc.text('Base', 738, 133);
+    doc.text('Imponible', 730, 141);
+    doc.text(' %', 768, 133);
+    doc.text('Alic.', 767, 141);
+    doc.text('Impuesto', 780, 133);
+    doc.text('IVA.', 790, 141);
+    doc.text('Fecha', 822, 125);
+    doc.text('Comp.', 822, 133);
+    doc.text('Retenc.', 822, 141);
+    doc.text('N°', 880, 125);
+    doc.text('Comprobante', 860, 133);
+    doc.text(' IVA', 924, 125);
+    doc.text(' Ret.', 924, 133);
+    doc.text('Vend.', 924, 141);
+    doc.text(' IVA', 945, 125);
+    doc.text(' Ret.', 945, 133);
+    doc.text('Terc.', 945, 141);
+    doc.text('  Ant.', 962, 125);
+    doc.text('  IVA', 962, 133);
+    doc.text('Import.', 962, 141);
 
     doc.lineWidth(0.5);
-    doc.lineCap('butt').moveTo(15, 146).lineTo(780, 146).stroke();
+    doc.lineCap('butt').moveTo(25, 150).lineTo(985, 150).stroke();
   }
 
   async generateCustomerInformation(doc, detalles) {
@@ -195,49 +204,49 @@ class LibroComprasService {
     var i = 0;
     var page = 0;
     var ymin;
-    ymin = 155;
+    ymin = 160;
     for (var item = 0; item < detalles.length; item++) {
-      doc.fontSize(5);
+      doc.fontSize(7);
       doc.font('Helvetica');
       doc.fillColor('#444444');
 
       doc.y = ymin + i;
-      doc.x = 10;
+      doc.x = 22;
       doc.text(item + 1, {
         align: 'center',
         columns: 1,
         width: 20,
       });
       doc.y = ymin + i;
-      doc.x = 18;
+      doc.x = 42;
       doc.text(moment(detalles[item].fecha_registro).format('DD/MM/YYYY'), {
         align: 'center',
         columns: 1,
         width: 40,
       });
       doc.y = ymin + i;
-      doc.x = 50;
+      doc.x = 83;
       doc.text(detalles[item]['proveedores.rif_proveedor'], {
         align: 'center',
         columns: 1,
-        width: 40,
+        width: 50,
       });
       doc.y = ymin + i;
-      doc.x = 90;
+      doc.x = 138;
       doc.text(utils.truncate(detalles[item]['proveedores.nb_proveedor'], 70), {
         align: 'left',
         columns: 1,
-        width: 100,
+        width: 135,
       });
       doc.y = ymin + i;
-      doc.x = 180;
+      doc.x = 270;
       doc.text('P' + detalles[item]['proveedores.tipo_persona'], {
         align: 'center',
         columns: 1,
         width: 30,
       });
       doc.y = ymin + i;
-      doc.x = 267;
+      doc.x = 375;
       doc.text(
         detalles[item].tipo_documento == 'FA'
           ? detalles[item].nro_documento
@@ -249,7 +258,7 @@ class LibroComprasService {
         }
       );
       doc.y = ymin + i;
-      doc.x = 302;
+      doc.x = 409;
       doc.text(
         detalles[item].tipo_documento == 'FA'
           ? detalles[item].nro_ctrl_doc
@@ -259,11 +268,11 @@ class LibroComprasService {
         {
           align: 'center',
           columns: 1,
-          width: 35,
+          width: 45,
         }
       );
       doc.y = ymin + i;
-      doc.x = 338;
+      doc.x = 453;
       doc.text(
         detalles[item].tipo_documento == 'ND'
           ? detalles[item].nro_documento
@@ -275,7 +284,7 @@ class LibroComprasService {
         }
       );
       doc.y = ymin + i;
-      doc.x = 365;
+      doc.x = 480;
       doc.text(
         detalles[item].tipo_documento == 'NC'
           ? detalles[item].nro_documento
@@ -287,14 +296,14 @@ class LibroComprasService {
         }
       );
       doc.y = ymin + i;
-      doc.x = 388;
+      doc.x = 510;
       doc.text('01-Reg', {
         align: 'center',
         columns: 1,
         width: 26,
       });
       doc.y = ymin + i;
-      doc.x = 416;
+      doc.x = 538;
       doc.text(detalles[item].nro_doc_afectado, {
         align: 'center',
         columns: 1,
@@ -306,18 +315,18 @@ class LibroComprasService {
       total_retenido += utils.parseFloatN(detalles[item].saldo_retenido);
 
       doc.y = ymin + i;
-      doc.x = 430;
+      doc.x = 555;
       doc.text(utils.formatNumber(detalles[item].total_documento), {
         align: 'right',
         columns: 1,
         width: 50,
       });
       doc.y = ymin + i;
-      doc.x = 488;
+      doc.x = 610;
       doc.text(utils.formatNumber(detalles[item].monto_exento), {
         align: 'right',
         columns: 1,
-        width: 26,
+        width: 40,
       });
 
       if (detalles[item].monto_base_intern > 0) {
@@ -333,14 +342,14 @@ class LibroComprasService {
         total_imp_imp += utils.parseFloatN(imp_imp);
 
         doc.y = ymin + i;
-        doc.x = 518;
+        doc.x = 658;
         doc.text(utils.formatNumber(base_imp), {
           align: 'right',
           columns: 1,
-          width: 26,
+          width: 30,
         });
         doc.y = ymin + i;
-        doc.x = 543;
+        doc.x = 688;
         doc.text(
           (
             (detalles[item].monto_imp_intern * 100) /
@@ -353,7 +362,7 @@ class LibroComprasService {
           }
         );
         doc.y = ymin + i;
-        doc.x = 558;
+        doc.x = 705;
         doc.text(utils.formatNumber(imp_imp), {
           align: 'right',
           columns: 1,
@@ -373,15 +382,15 @@ class LibroComprasService {
       total_imp_nac += utils.parseFloatN(imp_nac);
 
       doc.y = ymin + i;
-      doc.x = 580;
+      doc.x = 718;
       doc.text(utils.formatNumber(base_nac), {
         align: 'right',
         columns: 1,
-        width: 30,
+        width: 45,
       });
       if (detalles[item].monto_base_nacional > 0) {
         doc.y = ymin + i;
-        doc.x = 605;
+        doc.x = 762;
         doc.text(
           (
             (detalles[item].monto_imp_nacional * 100) /
@@ -395,14 +404,14 @@ class LibroComprasService {
         );
       }
       doc.y = ymin + i;
-      doc.x = 616;
+      doc.x = 764;
       doc.text(utils.formatNumber(imp_nac), {
         align: 'right',
         columns: 1,
-        width: 30,
+        width: 45,
       });
       doc.y = ymin + i;
-      doc.x = 644;
+      doc.x = 812;
       doc.text(
         detalles[item].fecha_comprobante
           ? moment(detalles[item].fecha_comprobante).format('DD/MM/YYYY')
@@ -414,35 +423,35 @@ class LibroComprasService {
         }
       );
       doc.y = ymin + i;
-      doc.x = 675;
+      doc.x = 853;
       doc.text(detalles[item].nro_comprobante_iva, {
         align: 'center',
         columns: 1,
-        width: 50,
+        width: 60,
       });
       doc.y = ymin + i;
-      doc.x = 705;
+      doc.x = 905;
       doc.text(utils.formatNumber(detalles[item].saldo_retenido), {
         align: 'right',
         columns: 1,
         width: 40,
       });
       doc.y = ymin + i;
-      doc.x = 740;
+      doc.x = 943;
       doc.text(0, {
         align: 'right',
         columns: 1,
         width: 20,
       });
       doc.y = ymin + i;
-      doc.x = 757;
+      doc.x = 963;
       doc.text(0, {
         align: 'right',
         columns: 1,
         width: 20,
       });
 
-      i += 14;
+      i += 16;
       if (i >= 400) {
         doc.fillColor('#BLACK');
         doc.addPage();
@@ -455,41 +464,41 @@ class LibroComprasService {
 
     let y = ymin + i;
     doc.lineWidth(0.5);
-    doc.lineCap('butt').moveTo(15, y).lineTo(780, y).stroke();
+    doc.lineCap('butt').moveTo(25, y).lineTo(985, y).stroke();
 
     doc.font('Helvetica-Bold');
     doc.y = y + 8;
-    doc.x = 320;
+    doc.x = 455;
     doc.text('TOTAL GENERAL:', {
       align: 'right',
       columns: 1,
       width: 100,
     });
     doc.y = y + 8;
-    doc.x = 430;
+    doc.x = 555;
     doc.text(utils.formatNumber(total_documento), {
       align: 'right',
       columns: 1,
       width: 50,
     });
     doc.y = y + 8;
-    doc.x = 488;
+    doc.x = 610;
     doc.text(utils.formatNumber(total_exento), {
       align: 'right',
       columns: 1,
-      width: 26,
+      width: 40,
     });
 
     if (total_base_imp > 0) {
       doc.y = y + 8;
-      doc.x = 518;
+      doc.x = 658;
       doc.text(utils.formatNumber(total_base_imp), {
         align: 'right',
         columns: 1,
-        width: 26,
+        width: 30,
       });
       doc.y = y + 8;
-      doc.x = 558;
+      doc.x = 705;
       doc.text(utils.formatNumber(total_imp_imp), {
         align: 'right',
         columns: 1,
@@ -498,35 +507,35 @@ class LibroComprasService {
     }
 
     doc.y = y + 8;
-    doc.x = 580;
+    doc.x = 718;
     doc.text(utils.formatNumber(total_base_nac), {
       align: 'right',
       columns: 1,
-      width: 30,
+      width: 45,
     });
     doc.y = y + 8;
-    doc.x = 616;
+    doc.x = 764;
     doc.text(utils.formatNumber(total_imp_nac), {
       align: 'right',
       columns: 1,
-      width: 30,
+      width: 45,
     });
     doc.y = y + 8;
-    doc.x = 705;
+    doc.x = 905;
     doc.text(utils.formatNumber(total_retenido), {
       align: 'right',
       columns: 1,
       width: 40,
     });
     doc.y = y + 8;
-    doc.x = 740;
+    doc.x = 943;
     doc.text(0, {
       align: 'right',
       columns: 1,
       width: 20,
     });
     doc.y = y + 8;
-    doc.x = 757;
+    doc.x = 963;
     doc.text(0, {
       align: 'right',
       columns: 1,
@@ -537,7 +546,7 @@ class LibroComprasService {
     doc
       .lineCap('butt')
       .moveTo(370, y + 20)
-      .lineTo(780, y + 20)
+      .lineTo(985, y + 20)
       .stroke();
 
     if (!detalles.proveedor) {
@@ -548,217 +557,220 @@ class LibroComprasService {
         y = 100;
         await this.generateHeader(doc, detalles);
       }
-  
-      y += 60;
-      doc.text('Base Imponible', 476, y);
-      doc.text('Crédito Fiscal', 545, y);
-      doc.text('IVA Retenido (a', 610, y - 6);
-      doc.text('terceros)', 618, y);
-  
-      doc.text('Compras Exentas y/o sin derecho a crédito fiscal', 303, y + 11);
-      doc.text('Compras Importación Afectas solo Alicuota General', 303, y + 23);
+
+      y += 80;
+      doc.text('Base Imponible', 605, y);
+      doc.text('Crédito Fiscal', 685, y);
+      doc.text('IVA Retenido (a', 768, y - 6);
+      doc.text('terceros)', 780, y);
+
+      doc.text('Compras Exentas y/o sin derecho a crédito fiscal', 375, y + 13);
+      doc.text(
+        'Compras Importación Afectas solo Alicuota General',
+        375,
+        y + 28
+      );
       doc.text(
         'Compras Importación Afectas en Alicuota General + Adicional',
-        303,
-        y + 35
+        375,
+        y + 43
       );
-      doc.text('Compras Importación Afectas en Alicuota Reducida', 303, y + 47);
-      doc.text('Compras Internas Afectas solo Alicuota General', 303, y + 59);
+      doc.text('Compras Importación Afectas en Alicuota Reducida', 375, y + 58);
+      doc.text('Compras Internas Afectas solo Alicuota General', 375, y + 73);
       doc.text(
         'Compras Internas Afectas en Alicuota General + Adicional',
-        303,
-        y + 71
+        375,
+        y + 88
       );
-      doc.text('Compras Internas Afectas en Alicuota Reducida', 303, y + 83);
-  
-      doc.y = y + 11;
-      doc.x = 475;
+      doc.text('Compras Internas Afectas en Alicuota Reducida', 375, y + 103);
+
+      doc.y = y + 13;
+      doc.x = 607;
       doc.text(utils.formatNumber(total_exento), {
         align: 'center',
         columns: 1,
-        width: 40,
+        width: 50,
       });
-      doc.y = y + 23;
-      doc.x = 475;
+      doc.y = y + 28;
+      doc.x = 607;
       doc.text(total_base_imp, {
         align: 'center',
         columns: 1,
-        width: 40,
+        width: 50,
       });
-      doc.y = y + 35;
-      doc.x = 475;
+      doc.y = y + 43;
+      doc.x = 607;
       doc.text(0, {
         align: 'center',
         columns: 1,
-        width: 40,
+        width: 50,
       });
-      doc.y = y + 47;
-      doc.x = 475;
+      doc.y = y + 58;
+      doc.x = 607;
       doc.text(0, {
         align: 'center',
         columns: 1,
-        width: 40,
+        width: 50,
       });
-      doc.y = y + 59;
-      doc.x = 475;
+      doc.y = y + 73;
+      doc.x = 607;
       doc.text(utils.formatNumber(total_base_nac), {
         align: 'center',
         columns: 1,
-        width: 40,
+        width: 50,
       });
-      doc.y = y + 71;
-      doc.x = 475;
+      doc.y = y + 88;
+      doc.x = 607;
       doc.text(0, {
         align: 'center',
         columns: 1,
-        width: 40,
+        width: 50,
       });
-      doc.y = y + 83;
-      doc.x = 475;
+      doc.y = y + 103;
+      doc.x = 607;
       doc.text(0, {
         align: 'center',
         columns: 1,
-        width: 40,
+        width: 50,
       });
-      doc.y = y + 95;
-      doc.x = 475;
+      doc.y = y + 118;
+      doc.x = 607;
       doc.text(
         utils.formatNumber(total_exento + total_base_imp + total_base_nac),
         {
           align: 'center',
           columns: 1,
-          width: 40,
+          width: 50,
         }
       );
-  
-      doc.y = y + 11;
-      doc.x = 541;
+
+      doc.y = y + 13;
+      doc.x = 687;
       doc.text(0, {
         align: 'center',
         columns: 1,
         width: 40,
       });
-      doc.y = y + 23;
-      doc.x = 541;
+      doc.y = y + 28;
+      doc.x = 687;
       doc.text(total_imp_imp, {
         align: 'center',
         columns: 1,
         width: 40,
       });
-      doc.y = y + 35;
-      doc.x = 541;
+      doc.y = y + 43;
+      doc.x = 687;
       doc.text(0, {
         align: 'center',
         columns: 1,
         width: 40,
       });
-      doc.y = y + 47;
-      doc.x = 541;
+      doc.y = y + 58;
+      doc.x = 687;
       doc.text(0, {
         align: 'center',
         columns: 1,
         width: 40,
       });
-      doc.y = y + 59;
-      doc.x = 541;
+      doc.y = y + 73;
+      doc.x = 687;
       doc.text(utils.formatNumber(total_imp_nac), {
         align: 'center',
         columns: 1,
         width: 40,
       });
-      doc.y = y + 71;
-      doc.x = 541;
+      doc.y = y + 88;
+      doc.x = 687;
       doc.text(0, {
         align: 'center',
         columns: 1,
         width: 40,
       });
-      doc.y = y + 83;
-      doc.x = 541;
+      doc.y = y + 103;
+      doc.x = 687;
       doc.text(0, {
         align: 'center',
         columns: 1,
         width: 40,
       });
-      doc.y = y + 95;
-      doc.x = 541;
+      doc.y = y + 118;
+      doc.x = 687;
       doc.text(utils.formatNumber(total_imp_imp + total_imp_nac), {
         align: 'center',
         columns: 1,
         width: 40,
       });
-  
-      doc.y = y + 11;
-      doc.x = 610;
-      doc.text(0, {
-        align: 'center',
-        columns: 1,
-        width: 40,
-      });
-      doc.y = y + 23;
-      doc.x = 610;
-      doc.text(0, {
-        align: 'center',
-        columns: 1,
-        width: 40,
-      });
-      doc.y = y + 35;
-      doc.x = 610;
-      doc.text(0, {
-        align: 'center',
-        columns: 1,
-        width: 40,
-      });
-      doc.y = y + 47;
-      doc.x = 610;
-      doc.text(0, {
-        align: 'center',
-        columns: 1,
-        width: 40,
-      });
-      doc.y = y + 59;
-      doc.x = 610;
-      doc.text(utils.formatNumber(total_retenido), {
-        align: 'center',
-        columns: 1,
-        width: 40,
-      });
-      doc.y = y + 71;
-      doc.x = 610;
-      doc.text(0, {
-        align: 'center',
-        columns: 1,
-        width: 40,
-      });
-      doc.y = y + 83;
-      doc.x = 610;
-      doc.text(0, {
-        align: 'center',
-        columns: 1,
-        width: 40,
-      });
-      doc.y = y + 95;
-      doc.x = 610;
-      doc.text(utils.formatNumber(total_retenido), {
-        align: 'center',
-        columns: 1,
-        width: 40,
-      });
-  
-      doc.lineWidth(0.5);
-      y += 7;
-      for (var j = 0; j < 7; j++) {
-        doc.lineJoin('miter').rect(300, y, 160, 10).stroke();
-        doc.lineJoin('miter').rect(460, y, 70, 10).stroke();
-        doc.lineJoin('miter').rect(532, y, 60, 10).stroke();
-        doc.lineJoin('miter').rect(600, y, 60, 10).stroke();
-        y += 12;
-      }
-      doc.lineJoin('miter').rect(460, y, 70, 10).stroke();
-      doc.lineJoin('miter').rect(532, y, 60, 10).stroke();
-      doc.lineJoin('miter').rect(600, y, 60, 10).stroke();
 
-    }   
+      doc.y = y + 13;
+      doc.x = 775;
+      doc.text(0, {
+        align: 'center',
+        columns: 1,
+        width: 40,
+      });
+      doc.y = y + 28;
+      doc.x = 775;
+      doc.text(0, {
+        align: 'center',
+        columns: 1,
+        width: 40,
+      });
+      doc.y = y + 43;
+      doc.x = 775;
+      doc.text(0, {
+        align: 'center',
+        columns: 1,
+        width: 40,
+      });
+      doc.y = y + 58;
+      doc.x = 775;
+      doc.text(0, {
+        align: 'center',
+        columns: 1,
+        width: 40,
+      });
+      doc.y = y + 73;
+      doc.x = 775;
+      doc.text(utils.formatNumber(total_retenido), {
+        align: 'center',
+        columns: 1,
+        width: 40,
+      });
+      doc.y = y + 88;
+      doc.x = 775;
+      doc.text(0, {
+        align: 'center',
+        columns: 1,
+        width: 40,
+      });
+      doc.y = y + 103;
+      doc.x = 775;
+      doc.text(0, {
+        align: 'center',
+        columns: 1,
+        width: 40,
+      });
+      doc.y = y + 118;
+      doc.x = 775;
+      doc.text(utils.formatNumber(total_retenido), {
+        align: 'center',
+        columns: 1,
+        width: 40,
+      });
+
+      doc.lineWidth(0.5);
+      y += 9;
+      for (var j = 0; j < 7; j++) {
+        doc.lineJoin('miter').rect(370, y, 220, 13).stroke();
+        doc.lineJoin('miter').rect(590, y, 80, 13).stroke();
+        doc.lineJoin('miter').rect(672, y, 70, 13).stroke();
+        doc.lineJoin('miter').rect(760, y, 70, 13).stroke();
+        y += 15;
+      }
+      doc.lineJoin('miter').rect(590, y, 80, 13).stroke();
+      doc.lineJoin('miter').rect(672, y, 70, 13).stroke();
+      doc.lineJoin('miter').rect(760, y, 70, 13).stroke();
+    }
 
     var end;
     const range = doc.bufferedPageRange();
@@ -770,7 +782,7 @@ class LibroComprasService {
       doc.switchToPage(i);
       doc.fontSize(8);
       doc.fillColor('#444444');
-      doc.x = 665;
+      doc.x = 875;
       doc.y = 50;
       doc.text(`Pagina ${i + 1} de ${range.count}`, {
         align: 'right',
