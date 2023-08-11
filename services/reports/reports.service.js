@@ -1,4 +1,5 @@
 const PDFDocument = require('pdfkit');
+const ExcelDocument = require('exceljs');
 const fs = require('fs');
 const reportsPath = './services/reports/pdf/';
 
@@ -180,6 +181,19 @@ class ReportsService {
     let validDoc = await reporteVentasService.mainReport(doc, tipo, data);
     resPath = validDoc ? resPath : 'reporteBase.pdf';
     doc.end();
+    ///EXCELTEST
+    const workbook = new ExcelDocument.Workbook();
+    const worksheet = workbook.addWorksheet('New Sheet');
+    worksheet.columns = [
+      { header: 'ID', key: 'id' },
+      { header: 'NOMBRE', key: 'name' },
+      { header: 'PROFESION', key: 'work' }
+     ];
+     for (var i = 1; i < 10; i++) {
+      worksheet.addRow({id: i, name: 'John Doe', work: 'testing'});
+     }
+    workbook.xlsx.writeFile('./services/reports/excel/soyunaprueba.xlsx');
+    ///EXCELTEST
     return { validDoc: validDoc, resPath: resPath };
   }
 
@@ -234,6 +248,20 @@ class ReportsService {
     resPath = validDoc ? resPath : 'reporteBase2.pdf';
     doc.end();
     return { validDoc: validDoc, resPath: resPath };
+  }
+
+  async excelTest() {
+    const workbook = new ExcelDocument.Workbook();
+    const worksheet = workbook.addWorksheet('New Sheet');
+    worksheet.columns = [
+      { header: 'ID', key: 'id' },
+      { header: 'NOMBRE', key: 'name' },
+      { header: 'PROFESION', key: 'work' }
+     ];
+     for (var i = 1; i < 10; i++) {
+      worksheet.addRow({id: i, name: 'John Doe', work: 'testing'});
+     }
+    workbook.xlsx.writeFile('./services/reports/excel/soyunaprueba.xlsx');
   }
 }
 
