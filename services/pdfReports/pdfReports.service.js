@@ -1,7 +1,7 @@
 const PDFDocument = require('pdfkit');
 const ExcelDocument = require('exceljs');
 const fs = require('fs');
-const reportsPath = './services/reports/pdf/';
+const reportsPath = './services/pdfReports/pdf/';
 
 const AsignacionGuiasService = require('./asignacionGuias.service');
 const asignacionGuiasService = new AsignacionGuiasService();
@@ -23,8 +23,10 @@ const LibroComprasService = require('./libroCompras.service');
 const libroComprasService = new LibroComprasService();
 const LibroVentasService = require('./libroVentas.service');
 const libroVentasService = new LibroVentasService();
+const PagosPendProvService = require('./pagosPendProv.service');
+const pagosPendProvService = new PagosPendProvService();
 
-class ReportsService {
+class PdfReportsService {
   constructor() {}
 
   // REPORTE DE ASIGNACION DE GUIAS
@@ -181,19 +183,6 @@ class ReportsService {
     let validDoc = await reporteVentasService.mainReport(doc, tipo, data);
     resPath = validDoc ? resPath : 'reporteBase.pdf';
     doc.end();
-    ///EXCELTEST
-    const workbook = new ExcelDocument.Workbook();
-    const worksheet = workbook.addWorksheet('New Sheet');
-    worksheet.columns = [
-      { header: 'ID', key: 'id' },
-      { header: 'NOMBRE', key: 'name' },
-      { header: 'PROFESION', key: 'work' }
-     ];
-     for (var i = 1; i < 10; i++) {
-      worksheet.addRow({id: i, name: 'John Doe', work: 'testing'});
-     }
-    workbook.xlsx.writeFile('./services/reports/excel/soyunaprueba.xlsx');
-    ///EXCELTEST
     return { validDoc: validDoc, resPath: resPath };
   }
 
@@ -224,7 +213,15 @@ class ReportsService {
   }
 
   // LIBRO VENTAS
-  async libroVentas(print, agencia, cliente, desde, hasta, detalle, correlativo) {
+  async libroVentas(
+    print,
+    agencia,
+    cliente,
+    desde,
+    hasta,
+    detalle,
+    correlativo
+  ) {
     if (!print) return { validDoc: true, resPath: 'reporteBase2.pdf' };
 
     let resPath = 'libroVentas.pdf';
@@ -250,19 +247,28 @@ class ReportsService {
     return { validDoc: validDoc, resPath: resPath };
   }
 
-  async excelTest() {
-    const workbook = new ExcelDocument.Workbook();
-    const worksheet = workbook.addWorksheet('New Sheet');
-    worksheet.columns = [
-      { header: 'ID', key: 'id' },
-      { header: 'NOMBRE', key: 'name' },
-      { header: 'PROFESION', key: 'work' }
-     ];
-     for (var i = 1; i < 10; i++) {
-      worksheet.addRow({id: i, name: 'John Doe', work: 'testing'});
-     }
-    workbook.xlsx.writeFile('./services/reports/excel/soyunaprueba.xlsx');
+  // PAGOS PROVEEDORES
+  async pagosPendProv(print, agencia, proveedor, desde, hasta) {
+    if (!print) return { validDoc: true, resPath: 'reporteBase.pdf' };
+
+    let resPath = 'pagosProveedores.pdf';
+    let doc = new PDFDocument({
+      margin: 20,
+      bufferPages: true,
+    });
+
+    doc.pipe(fs.createWriteStream(reportsPath + resPath));
+    let validDoc = await pagosPendProvService.mainReport(
+      doc,
+      agencia,
+      proveedor,
+      desde,
+      hasta
+    );
+    resPath = validDoc ? resPath : 'reporteBase.pdf';
+    doc.end();
+    return { validDoc: validDoc, resPath: resPath };
   }
 }
 
-module.exports = ReportsService;
+module.exports = PdfReportsService;

@@ -1,15 +1,15 @@
 const express = require('express');
 
-const ReportsService = require('./../services/reports/reports.service');
+const PdfReportsService = require('./../services/pdfReports/pdfReports.service');
 const authenticateJWT = require('./../middlewares/authenticate.handler');
 const fs = require('fs');
 
 const router = express.Router();
-const service = new ReportsService();
+const service = new PdfReportsService();
 
 router.get('/loadPDF/:report', (req, res) => {
   const { report } = req.params;
-  const filePath = './services/reports/pdf/' + report;
+  const filePath = './services/pdfReports/pdf/' + report;
   fs.readFile(filePath, (err, file) => {
     if (err) return res.status(500).send('No se pudo descargar el archivo');
     res.setHeader('Content-Type', 'application/pdf');
@@ -178,6 +178,26 @@ router.get('/libroVentas', authenticateJWT, async (req, res, next) => {
       hasta,
       detalle,
       correlativo
+    );
+    res.status(200).json({
+      message: 'PDF Generado',
+      pdfPath: response.resPath,
+      validDoc: response.validDoc,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/pagosPendProv', authenticateJWT, async (req, res, next) => {
+  try {
+    const { print, agencia, proveedor, desde, hasta } = req.headers;
+    const response = await service.pagosPendProv(
+      print,
+      agencia,
+      proveedor,
+      desde,
+      hasta
     );
     res.status(200).json({
       message: 'PDF Generado',
