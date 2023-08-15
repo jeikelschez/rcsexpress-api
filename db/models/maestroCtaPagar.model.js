@@ -160,6 +160,10 @@ class Mctapagar extends Model {
       foreignKey: 'cod_proveedor',
       as: 'proveedores',
     });
+    this.hasMany(models.Pgenerados, {
+      foreignKey: 'cod_cta_pagar',
+      as: 'ctaspagar',
+    });
   }
 
   static config(sequelize) {

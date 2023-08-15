@@ -151,6 +151,10 @@
       "description": "API para Manejar los Objetos de la Organizacion"
     },
     {
+      "name": "Pagos_Generados",
+      "description": "API para Manejar los Pagos Generados de la Organizacion"
+    },
+    {
       "name": "Paises",
       "description": "API para Manejar los Paises de la Organizacion"
     },
@@ -10336,6 +10340,347 @@
         }
       }
     },
+    "/pgenerados": {
+      "get": {
+        "tags": ["Pagos_Generados"],
+        "summary": "Obtener todos los Pagos Generados",
+        "description": "API para Obtener todos los Pagos Generados del sistema",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "header",
+            "description": "Numero de la pagina",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "header",
+            "description": "Cantidad de registros",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "header",
+            "description": "Ordenado por",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "header",
+            "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cod_cta_pagar",
+            "in": "header",
+            "description": "Codigo de la Cuenta por Pagar",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/extraSchemes/Paginate",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Pagos_Generados"                      
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Pagos_Generados"],
+        "summary": "Crear Detalle de un Pago Generado",
+        "description": "API para Crear un nuevo Detalle de un Pago Generado",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Pagos_Generados"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pagos_Generados"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pgenerados/{id}": {
+      "get": {
+        "tags": ["Pagos_Generados"],
+        "summary": "Obtener Detalle de un Pago Generado por su Id",
+        "description": "API para Retornar un Detalle de un Pago Generado por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Detalle de un Pago Generado",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pagos_Generados"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Pagos_Generados"],
+        "summary": "Actualizar Detalle de un Pago Generado",
+        "description": "API para Actualizar un Detalle de un Pago Generado por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Detalle de un Pago Generado",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Pagos_Generados"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pagos_Generados"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Pagos_Generados"],
+        "summary": "Borrar Detalle de un Pago Generado",
+        "description": "API para Borrar un Detalle de un Pago Generado por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Detalle de un Pago Generado",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Pagos_Generados/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/paises": {
       "get": {
         "tags": ["Paises"],
@@ -15375,6 +15720,46 @@
           },
           "descripcion": {
             "type": "string"
+          }
+        }
+      },
+      "Pagos_Generados": {
+        "description": "Modelo de Detalle de Pagos Generados",
+        "required": ["id", "cod_cta_pagar"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "cod_cta_pagar": {
+            "type": "number"
+          },
+          "fecha_pago": {
+            "type": "string"
+          },
+          "cod_cuenta": {
+            "type": "number"
+          },
+          "tipo_doc_pago": {
+            "type": "string"
+          },
+          "nro_doc_pago": {
+            "type": "number"
+          },
+          "monto_pagado": {
+            "type": "number"
+          },
+          "monto_base": {
+            "type": "number"
+          },
+          "monto_retenido": {
+            "type": "number"
+          },
+          "porc_retencion": {
+            "type": "number"
+          },
+          "id_pago": {
+            "type": "number"
           }
         }
       },

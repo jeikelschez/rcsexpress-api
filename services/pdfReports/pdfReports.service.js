@@ -25,6 +25,8 @@ const LibroVentasService = require('./libroVentas.service');
 const libroVentasService = new LibroVentasService();
 const PagosPendProvService = require('./pagosPendProv.service');
 const pagosPendProvService = new PagosPendProvService();
+const PagosProvService = require('./pagosProv.service');
+const pagosProvService = new PagosProvService();
 
 class PdfReportsService {
   constructor() {}
@@ -247,11 +249,11 @@ class PdfReportsService {
     return { validDoc: validDoc, resPath: resPath };
   }
 
-  // PAGOS PROVEEDORES
+  // PAGOS PENDIENTES PROVEEDORES
   async pagosPendProv(print, agencia, proveedor, desde, hasta) {
     if (!print) return { validDoc: true, resPath: 'reporteBase.pdf' };
 
-    let resPath = 'pagosProveedores.pdf';
+    let resPath = 'pagosPendProv.pdf';
     let doc = new PDFDocument({
       margin: 20,
       bufferPages: true,
@@ -259,6 +261,29 @@ class PdfReportsService {
 
     doc.pipe(fs.createWriteStream(reportsPath + resPath));
     let validDoc = await pagosPendProvService.mainReport(
+      doc,
+      agencia,
+      proveedor,
+      desde,
+      hasta
+    );
+    resPath = validDoc ? resPath : 'reporteBase.pdf';
+    doc.end();
+    return { validDoc: validDoc, resPath: resPath };
+  }
+
+  // PAGOS PROVEEDORES
+  async pagosProv(print, agencia, proveedor, desde, hasta) {
+    if (!print) return { validDoc: true, resPath: 'reporteBase.pdf' };
+
+    let resPath = 'pagosProv.pdf';
+    let doc = new PDFDocument({
+      margin: 20,
+      bufferPages: true,
+    });
+
+    doc.pipe(fs.createWriteStream(reportsPath + resPath));
+    let validDoc = await pagosProvService.mainReport(
       doc,
       agencia,
       proveedor,
