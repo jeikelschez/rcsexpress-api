@@ -5,40 +5,31 @@ const UtilsService = require('../utils.service');
 const utils = new UtilsService();
 
 const clienteOrigDesc =
-  '(CASE WHEN (ci_rif_cte_conta_org IS NULL || ci_rif_cte_conta_org = "")' +
+  '(CASE WHEN (id_clte_part_orig IS NULL || id_clte_part_orig = "")' +
   ' THEN (SELECT nb_cliente' +
   ' FROM clientes ' +
   ' WHERE `Mmovimientos`.cod_cliente_org = clientes.id)' +
   ' ELSE (SELECT nb_cliente' +
   ' FROM clientes_particulares' +
-  ' WHERE `Mmovimientos`.cod_agencia = clientes_particulares.cod_agencia' +
-  ' AND `Mmovimientos`.cod_cliente_org = clientes_particulares.cod_cliente' +
-  ' AND `Mmovimientos`.ci_rif_cte_conta_org = clientes_particulares.rif_ci' +
-  ' AND clientes_particulares.estatus = "A" LIMIT 1)' +
+  ' WHERE `Mmovimientos`.id_clte_part_orig = clientes_particulares.id)' +
   ' END)';
 const clienteOrigDesc2 =
-  '(CASE WHEN (ci_rif_cte_conta_org IS NULL || ci_rif_cte_conta_org = "")' +
+  '(CASE WHEN (id_clte_part_orig IS NULL || id_clte_part_orig = "")' +
   ' THEN (SELECT nb_cliente' +
   ' FROM clientes ' +
   ' WHERE `detalles->movimientos`.cod_cliente_org = clientes.id)' +
   ' ELSE (SELECT nb_cliente' +
   ' FROM clientes_particulares' +
-  ' WHERE `detalles->movimientos`.cod_agencia = clientes_particulares.cod_agencia' +
-  ' AND `detalles->movimientos`.cod_cliente_org = clientes_particulares.cod_cliente' +
-  ' AND `detalles->movimientos`.ci_rif_cte_conta_org = clientes_particulares.rif_ci' +
-  ' AND clientes_particulares.estatus = "A" LIMIT 1)' +
+  ' WHERE `detalles->movimientos`.id_clte_part_orig = clientes_particulares.id)' +
   ' END)';
 const clienteDestDesc =
-  '(CASE WHEN (ci_rif_cte_conta_dest IS NULL || ci_rif_cte_conta_dest = "")' +
+  '(CASE WHEN (id_clte_part_dest IS NULL || id_clte_part_dest = "")' +
   ' THEN (SELECT nb_cliente' +
   ' FROM clientes ' +
   ' WHERE `Mmovimientos`.cod_cliente_dest = clientes.id)' +
   ' ELSE (SELECT nb_cliente' +
   ' FROM clientes_particulares' +
-  ' WHERE `Mmovimientos`.cod_agencia_dest = clientes_particulares.cod_agencia' +
-  ' AND `Mmovimientos`.cod_cliente_dest = clientes_particulares.cod_cliente' +
-  ' AND `Mmovimientos`.ci_rif_cte_conta_dest = clientes_particulares.rif_ci' +
-  ' AND clientes_particulares.estatus = "A" LIMIT 1)' +
+  ' WHERE `Mmovimientos`.id_clte_part_dest = clientes_particulares.id)' +
   ' END)';
 const valorDolar =
   'IFNULL((SELECT valor FROM historico_dolar hd WHERE hd.fecha = fecha_emision),0)';

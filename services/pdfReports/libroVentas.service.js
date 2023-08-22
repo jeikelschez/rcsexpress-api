@@ -5,16 +5,13 @@ const UtilsService = require('../utils.service');
 const utils = new UtilsService();
 
 const clienteOrigDesc =
-  '(CASE WHEN (ci_rif_cte_conta_org IS NULL || ci_rif_cte_conta_org = "")' +
+  '(CASE WHEN (id_clte_part_orig IS NULL || id_clte_part_orig = "")' +
   ' THEN (SELECT nb_cliente' +
   ' FROM clientes ' +
   ' WHERE `Mmovimientos`.cod_cliente_org = clientes.id)' +
   ' ELSE (SELECT nb_cliente' +
   ' FROM clientes_particulares' +
-  ' WHERE `Mmovimientos`.cod_agencia = clientes_particulares.cod_agencia' +
-  ' AND `Mmovimientos`.cod_cliente_org = clientes_particulares.cod_cliente' +
-  ' AND `Mmovimientos`.ci_rif_cte_conta_org = clientes_particulares.rif_ci' +
-  ' AND clientes_particulares.estatus = "A" LIMIT 1)' +
+  ' WHERE `Mmovimientos`.id_clte_part_orig = clientes_particulares.id)' +
   ' END)';
 const montoFpo =
   '(SELECT SUM(d.importe_renglon) FROM detalle_de_movimientos d' +

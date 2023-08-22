@@ -5,28 +5,22 @@ const UtilsService = require('../utils.service');
 const utils = new UtilsService();
 
 const clienteOrigDesc =
-  '(CASE WHEN (ci_rif_cte_conta_org IS NULL || ci_rif_cte_conta_org = "")' +
+  '(CASE WHEN (id_clte_part_orig IS NULL || id_clte_part_orig = "")' +
   ' THEN (SELECT nb_cliente' +
   ' FROM clientes ' +
   ' WHERE `movimientos`.cod_cliente_org = clientes.id)' +
   ' ELSE (SELECT nb_cliente' +
   ' FROM clientes_particulares' +
-  ' WHERE `movimientos`.cod_agencia = clientes_particulares.cod_agencia' +
-  ' AND `movimientos`.cod_cliente_org = clientes_particulares.cod_cliente' +
-  ' AND `movimientos`.ci_rif_cte_conta_org = clientes_particulares.rif_ci' +
-  ' AND clientes_particulares.estatus = "A" LIMIT 1)' +
+  ' WHERE `movimientos`.id_clte_part_orig = clientes_particulares.id)' +
   ' END)';
 const clienteDestDesc =
-  '(CASE WHEN (ci_rif_cte_conta_dest IS NULL || ci_rif_cte_conta_dest = "")' +
+  '(CASE WHEN (id_clte_part_dest IS NULL || id_clte_part_dest = "")' +
   ' THEN (SELECT nb_cliente' +
   ' FROM clientes ' +
   ' WHERE `movimientos`.cod_cliente_dest = clientes.id)' +
   ' ELSE (SELECT nb_cliente' +
   ' FROM clientes_particulares' +
-  ' WHERE `movimientos`.cod_agencia_dest = clientes_particulares.cod_agencia' +
-  ' AND `movimientos`.cod_cliente_dest = clientes_particulares.cod_cliente' +
-  ' AND `movimientos`.ci_rif_cte_conta_dest = clientes_particulares.rif_ci' +
-  ' AND clientes_particulares.estatus = "A" LIMIT 1)' +
+  ' WHERE `movimientos`.id_clte_part_dest = clientes_particulares.id)' +
   ' END)';
 const montoDolarDesc =
   'CASE WHEN ((SELECT valor FROM historico_dolar' +
