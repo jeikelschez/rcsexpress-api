@@ -27,6 +27,8 @@ const PagosPendProvService = require('./pagosPendProv.service');
 const pagosPendProvService = new PagosPendProvService();
 const PagosProvService = require('./pagosProv.service');
 const pagosProvService = new PagosProvService();
+const RelacionRetencionesService = require('./relacionRetenciones.service');
+const relacionRetencionesService = new RelacionRetencionesService();
 
 class PdfReportsService {
   constructor() {}
@@ -284,6 +286,29 @@ class PdfReportsService {
 
     doc.pipe(fs.createWriteStream(reportsPath + resPath));
     let validDoc = await pagosProvService.mainReport(
+      doc,
+      agencia,
+      proveedor,
+      desde,
+      hasta
+    );
+    resPath = validDoc ? resPath : 'reporteBase.pdf';
+    doc.end();
+    return { validDoc: validDoc, resPath: resPath };
+  }
+
+  // RELACION DE RETENCIONES
+  async relacionRetenciones(print, agencia, proveedor, desde, hasta) {
+    if (!print) return { validDoc: true, resPath: 'reporteBase.pdf' };
+
+    let resPath = 'relacionRetenciones.pdf';
+    let doc = new PDFDocument({
+      margin: 20,
+      bufferPages: true,
+    });
+
+    doc.pipe(fs.createWriteStream(reportsPath + resPath));
+    let validDoc = await relacionRetencionesService.mainReport(
       doc,
       agencia,
       proveedor,

@@ -229,4 +229,24 @@ router.get('/pagosProv', authenticateJWT, async (req, res, next) => {
   }
 });
 
+router.get('/relacionRetenciones', authenticateJWT, async (req, res, next) => {
+  try {
+    const { print, agencia, proveedor, desde, hasta } = req.headers;
+    const response = await service.relacionRetenciones(
+      print,
+      agencia,
+      proveedor,
+      desde,
+      hasta
+    );
+    res.status(200).json({
+      message: 'PDF Generado',
+      pdfPath: response.resPath,
+      validDoc: response.validDoc,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
