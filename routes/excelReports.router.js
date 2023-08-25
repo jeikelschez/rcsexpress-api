@@ -20,8 +20,8 @@ router.get('/loadExcel/:report', (req, res) => {
 
 router.get('/reporteVentas', authenticateJWT, async (req, res, next) => {
   try {
-    const { tipo } = req.headers;
-    const response = await service.reporteVentas(tipo);
+    const { tipo, data } = req.headers;
+    const response = await service.reporteVentas(tipo, data);
     res.status(200).json({
       message: 'Excel Generado',
       excelPath: response.resPath,
