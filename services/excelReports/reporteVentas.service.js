@@ -836,10 +836,13 @@ class ReporteVentasService {
           );
           worksheet.getCell('F' + i).value =
             data.ventas[item]['agencias_dest.ciudades.siglas'];
-          worksheet.getCell('G' + i).value = data.ventas[item].nro_piezas;
-          worksheet.getCell('H' + i).value = utils.formatNumber(
+          worksheet.getCell('G' + i).value = parseFloat(
+            data.ventas[item].nro_piezas
+          );
+          worksheet.getCell('H' + i).value = parseFloat(
             data.ventas[item].peso_kgs
           );
+          worksheet.getCell('H' + i).numFmt = '#,##0.00';
           let contadoOrig = 0;
           let contadoDest = 0;
           let impContadoOrig = 0;
@@ -872,7 +875,8 @@ class ReporteVentasService {
               utils.parseFloatN(creditoOrig) +
               utils.parseFloatN(impCreditoOrig);
 
-            worksheet.getCell('I' + i).value = utils.formatNumber(contadoOrig);
+            worksheet.getCell('I' + i).value = parseFloat(contadoOrig);
+            worksheet.getCell('I' + i).numFmt = '#,##0.00';
             worksheet.getCell('J' + i).value =
               utils.formatNumber(impContadoOrig);
             worksheet.getCell('K' + i).value = utils.formatNumber(contadoDest);
