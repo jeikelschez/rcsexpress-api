@@ -554,12 +554,12 @@ class ReporteVentasService {
       case 'VG':
         worksheet.columns = [
           { key: 1, width: 10 },
-          { key: 2, width: 10 },
-          { key: 3, width: 30 },
+          { key: 2, width: 15 },
+          { key: 3, width: 15 },
           { key: 4, width: 60 },
           { key: 5, width: 60 },
           { key: 6, width: 25 },
-          { key: 7, width: 15, style: {numFmt: '#,##0.00'} },
+          { key: 7, width: 15 },
           { key: 8, width: 15, style: {numFmt: '#,##0.00'} },
           { key: 9, width: 15, style: {numFmt: '#,##0.00'} },
           { key: 10, width: 15, style: {numFmt: '#,##0.00'} },
@@ -825,7 +825,7 @@ class ReporteVentasService {
             data.ventas[item].fecha_emision
           ).format('DD/MM/YYYY');
           
-          worksheet.getCell('C' + i).value = data.ventas[item].nro_documento;
+          worksheet.getCell('C' + i).value = parseFloat(data.ventas[item].nro_documento);
           worksheet.getCell('D' + i).value = utils.truncate(
             data.ventas[item].cliente_orig_desc,
             29
@@ -836,12 +836,12 @@ class ReporteVentasService {
           );
           worksheet.getCell('F' + i).value =
             data.ventas[item]['agencias_dest.ciudades.siglas'];
-          worksheet.getCell('G' + i).value = parseFloat(
-            data.ventas[item].nro_piezas
-          );
-          worksheet.getCell('H' + i).value = parseFloat(
-            data.ventas[item].peso_kgs
-          );
+          worksheet.getCell('G' + i).value = 
+           parseFloat(data.ventas[item].nro_piezas)
+          ;
+          worksheet.getCell('H' + i).value = 
+            parseFloat(data.ventas[item].peso_kgs)
+          ;
           let contadoOrig = 0;
           let contadoDest = 0;
           let impContadoOrig = 0;
@@ -874,22 +874,25 @@ class ReporteVentasService {
               utils.parseFloatN(creditoOrig) +
               utils.parseFloatN(impCreditoOrig);
 
-            worksheet.getCell('I' + i).value = parseFloat(contadoOrig);
+            worksheet.getCell('I' + i).value = contadoOrig;
             worksheet.getCell('J' + i).value =
-            parseFloat(parseFloat(impContadoOrig));
-            worksheet.getCell('K' + i).value = parseFloat(parseFloat(contadoDest));
+            parseFloat(impContadoOrig);
+            worksheet.getCell('K' + i).value = parseFloat(contadoDest);
             worksheet.getCell('L' + i).value =
-            parseFloat(parseFloat(impContadoDest));
-            worksheet.getCell('M' + i).value = parseFloat(parseFloat(creditoOrig));
-            worksheet.getCell('N' + i).value =
-            parseFloat(parseFloat(impCreditoOrig));
+            parseFloat(impContadoDest);
+            if (!isNaN(parseFloat(creditoOrig))) {
+              worksheet.getCell('M' + i).value = parseFloat(creditoOrig);
+            } 
+            if (!isNaN(parseFloat(impCreditoOrig))) {
+              worksheet.getCell('N' + i).value = parseFloat(impCreditoOrig);
+            } 
 
             montoOtros =
               (data.ventas[item].valor_declarado_seg *
                 data.ventas[item].porc_apl_seguro) /
               100;
 
-            worksheet.getCell('O' + i).value = parseFloat(parseFloat(montoOtros));
+            worksheet.getCell('O' + i).value = parseFloat(montoOtros);
 
             if (data.dolar == true) {
               if (data.ventas[item].valor_dolar > 0) {
@@ -897,12 +900,12 @@ class ReporteVentasService {
                   montoOtros / utils.parseFloatN(data.ventas[item].valor_dolar);
               }
 
-              worksheet.getCell('P' + i).value = parseFloat(parseFloat(
+              worksheet.getCell('P' + i).value = parseFloat(
                 otrosDolar.toFixed(2)
-              ));
+              );
             }
 
-            worksheet.getCell('Q' + i).value = parseFloat(parseFloat(montoVenta));
+            worksheet.getCell('Q' + i).value = parseFloat(montoVenta);
 
             if (data.dolar == true) {
               if (data.ventas[item].valor_dolar > 0) {
@@ -910,9 +913,9 @@ class ReporteVentasService {
                   montoVenta / utils.parseFloatN(data.ventas[item].valor_dolar);
               }
 
-              worksheet.getCell('R' + i).value = parseFloat(parseFloat(
+              worksheet.getCell('R' + i).value = parseFloat(
                 ventaDolar.toFixed(2)
-              ));
+              );
             }
           }
 
@@ -924,46 +927,46 @@ class ReporteVentasService {
             i = i - 3;
             worksheet.getCell('F' + i).value = 'Sub-Totales por Agencia:';
 
-            worksheet.getCell('G' + i).value = parseFloat(subTotalNroPiezas);
+            worksheet.getCell('G' + i).value = subTotalNroPiezas;
 
             worksheet.getCell('H' + i).value =
-            parseFloat(parseFloat(subTotalPesoKgs));
+            parseFloat(subTotalPesoKgs);
 
             if (data.visible == 'SI') {
               worksheet.getCell('I' + i).value =
-              parseFloat(parseFloat(subTotalContadoOrig));
+              parseFloat(subTotalContadoOrig);
 
-              worksheet.getCell('J' + i).value = parseFloat(parseFloat(
+              worksheet.getCell('J' + i).value = parseFloat(
                 subTotalImpContadoOrig
-              ));
+              );
               worksheet.getCell('K' + i).value =
-              parseFloat(parseFloat(subTotalContadoDest));
+              parseFloat(subTotalContadoDest);
 
-              worksheet.getCell('L' + i).value = parseFloat(parseFloat(
+              worksheet.getCell('L' + i).value = parseFloat(
                 subTotalImpContadoDest
-              ));
+              );
 
               worksheet.getCell('M' + i).value =
-              parseFloat(parseFloat(subTotalCreditoOrig));
+              parseFloat(subTotalCreditoOrig);
 
-              worksheet.getCell('N' + i).value = parseFloat(parseFloat(
+              worksheet.getCell('N' + i).value = parseFloat(
                 subTotalImpCreditoOrig
-              ));
+              );
 
               worksheet.getCell('O' + i).value =
-              parseFloat(parseFloat(subTotalMontoOtros));
+              parseFloat(subTotalMontoOtros);
 
               if (data.dolar == true) {
                 worksheet.getCell('P' + i).value =
-                parseFloat(parseFloat(subTotalOtrosDolar));
+                parseFloat(subTotalOtrosDolar);
               }
 
               worksheet.getCell('Q' + i).value =
-              parseFloat(parseFloat(subTotalMontoVenta));
+              parseFloat(subTotalMontoVenta);
 
               if (data.dolar == true) {
                 worksheet.getCell('R' + i).value =
-                parseFloat(parseFloat(subTotalVentaDolar));
+                parseFloat(subTotalVentaDolar);
               }
             }
             subTotalNroPiezas = 0;
@@ -1011,57 +1014,55 @@ class ReporteVentasService {
 
         // Sub Totales por Agencia Finales
         worksheet.getCell('F' + i).value = 'Sub-Totales por Agencia:'
-        worksheet.getCell('G' + i).value = parseFloat(subTotalNroPiezas)
-        worksheet.getCell('H' + i).value = parseFloat(subTotalPesoKgs)
+        worksheet.getCell('G' + i).value = subTotalNroPiezas
+        worksheet.getCell('H' + i).value = subTotalPesoKgs
         if (data.visible == 'SI') {
-          worksheet.getCell('I' + i).value = parseFloat(subTotalContadoOrig)
-          worksheet.getCell('J' + i).value = parseFloat(subTotalImpContadoOrig)
-          worksheet.getCell('K' + i).value = parseFloat(subTotalContadoDest)
-          worksheet.getCell('L' + i).value = parseFloat(subTotalImpContadoDest)
-          worksheet.getCell('M' + i).value = parseFloat(subTotalCreditoOrig)
-          worksheet.getCell('N' + i).value = parseFloat(subTotalImpCreditoOrig)
-          worksheet.getCell('O' + i).value = parseFloat(subTotalMontoOtros)
-          if (data.dolar == true) {
-            worksheet.getCell('P' + i).value = parseFloat(subTotalOtrosDolar)
+          worksheet.getCell('I' + i).value = subTotalContadoOrig
+          worksheet.getCell('J' + i).value = subTotalImpContadoOrig
+          worksheet.getCell('K' + i).value = subTotalContadoDest
+          worksheet.getCell('L' + i).value = subTotalImpContadoDest
+          worksheet.getCell('M' + i).value = subTotalCreditoOrig
+          worksheet.getCell('N' + i).value = subTotalImpCreditoOrig
+          worksheet.getCell('O' + i).value = subTotalMontoOtros
+          if (data.dolar == true) 
+            worksheet.getCell('P' + i).value = subTotalOtrosDolar
           }
-          worksheet.getCell('Q' + i).value = parseFloat(subTotalMontoVenta)
-
+          worksheet.getCell('Q' + i).value = subTotalMontoVenta
           if (data.dolar == true) {
-            worksheet.getCell('R' + i).value = parseFloat(subTotalVentaDolar)
+            worksheet.getCell('R' + i).value = subTotalVentaDolar
           }
-        }
 
         i++;
 
         worksheet.getCell('F' + i).value = 'Total General:';
 
-        worksheet.getCell('G' + i).value = parseFloat(totalNroPiezas);
+        worksheet.getCell('G' + i).value = totalNroPiezas;
 
-        worksheet.getCell('H' + i).value = parseFloat(totalPesoKgs);
+        worksheet.getCell('H' + i).value = totalPesoKgs;
 
         if (data.visible == 'SI') {
           worksheet.getCell('I' + i).value =
-          parseFloat(totalContadoOrig);
+          totalContadoOrig;
           worksheet.getCell('J' + i).value =
-          parseFloat(totalImpContadoOrig);
+          totalImpContadoOrig;
           worksheet.getCell('K' + i).value =
-          parseFloat(totalContadoDest);
+          totalContadoDest;
           worksheet.getCell('L' + i).value =
-          parseFloat(totalImpContadoDest);
+          totalImpContadoDest;
           worksheet.getCell('M' + i).value =
-          parseFloat(totalCreditoOrig);
+          totalCreditoOrig;
           worksheet.getCell('N' + i).value =
-          parseFloat(totalImpCreditoOrig);
+          totalImpCreditoOrig;
           worksheet.getCell('O' + i).value =
-          parseFloat(totalMontoOtros);
+          totalMontoOtros;
           worksheet.getCell('Q' + i).value =
-          parseFloat(totalMontoVenta);
+          totalMontoVenta;
 
           if (data.dolar == true) {
             worksheet.getCell('P' + i).value =
-            parseFloat(totalOtrosDolar);
+            totalOtrosDolar;
             worksheet.getCell('R' + i).value =
-            parseFloat(totalVentaDolar);
+            totalVentaDolar;
           }
         }
         break;
@@ -1125,11 +1126,14 @@ class ReporteVentasService {
               utils.parseFloatN(impCreditoOrig);
 
             worksheet.getCell('I' + i).value = parseFloat(contadoOrig);
-            worksheet.getCell('J' + i).value = parseFloat(impContadoOrig);
+            worksheet.getCell('J' + i).value =
+              parseFloat(impContadoOrig);
             worksheet.getCell('K' + i).value = parseFloat(contadoDest);
-            worksheet.getCell('L' + i).value = parseFloat(impContadoDest);
+            worksheet.getCell('L' + i).value =
+              parseFloat(impContadoDest);
             worksheet.getCell('M' + i).value = parseFloat(creditoOrig);
-            worksheet.getCell('N' + i).value = parseFloat(impCreditoOrig);
+            worksheet.getCell('N' + i).value =
+              parseFloat(impCreditoOrig);
 
             montoOtros =
               (data.ventas[item].valor_declarado_seg *
@@ -1183,7 +1187,7 @@ class ReporteVentasService {
         // Totales Finales
         i += 1;
         worksheet.getCell('F' + i).value = 'Total General:';
-        worksheet.getCell('G' + i).value = parseFloat(totalNroPiezas);
+        worksheet.getCell('G' + i).value = totalNroPiezas;
         worksheet.getCell('H' + i).value = parseFloat(totalPesoKgs);
 
         if (data.visible == 'SI') {
@@ -1322,8 +1326,8 @@ class ReporteVentasService {
         // Totales Finales
         i += 3;
         worksheet.getCell('A' + i).value = 'Total General:';
-        worksheet.getCell('B' + i).value = parseFloat(totalNroGuias);
-        worksheet.getCell('C' + i).value = parseFloat(totalNroPiezas);
+        worksheet.getCell('B' + i).value = totalNroGuias;
+        worksheet.getCell('C' + i).value = totalNroPiezas;
         worksheet.getCell('D' + i).value = parseFloat(totalPesoKgs);
 
         if (data.visible == 'SI') {
