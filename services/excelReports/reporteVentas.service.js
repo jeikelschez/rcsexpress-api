@@ -603,72 +603,73 @@ class ReporteVentasService {
         }
         break;
       case 'VC':
-        worksheet.getCell('F2').value = 'VENTAS GENERALES POR CLIENTE:';
-        worksheet.getCell('F4').value = 'DESDE:';
-        worksheet.getCell('G4').value = data.fecha_desde;
-        worksheet.getCell('I4').value = 'HASTA:';
-        worksheet.getCell('J4').value = data.fecha_hasta;
-        worksheet.getCell('L4').value = 'FECHA:';
-        worksheet.getCell('M4').value = moment().format('DD/MM/YYYY');
-        worksheet.getCell('A6').value = 'RCS EXPRESS, S.A';
-        worksheet.getCell('A7').value = 'RIF. J-31028463-6';
-        worksheet.getCell('A8').value = 'Agencia:';
-        worksheet.getCell('A9').value = 'Cliente:';
-        worksheet.getCell('C8').value = data.ventas[0]['agencias.nb_agencia'];
-        worksheet.getCell('C9').value =
-          data.ventas[0]['clientes_org.nb_cliente'];
+        worksheet.getCell('E2').value = 'VENTAS GENERALES POR CLIENTE:';
+        worksheet.getCell('E4').value = 'DESDE:';
+        worksheet.getCell('F4').value = data.fecha_desde;
+        worksheet.getCell('H4').value = 'HASTA:';
+        worksheet.getCell('I4').value = data.fecha_hasta;
+        worksheet.getCell('H4').value = 'FECHA:';
+        worksheet.getCell('I4').value = moment().format('DD/MM/YYYY');
+        worksheet.getCell('A2').value = 'RCS EXPRESS, S.A';
+        worksheet.getCell('A3').value = 'RIF. J-31028463-6';
+        worksheet.getCell('A4').value = 'Agencia:';
+        worksheet.getCell('A5').value = 'Cliente:';
+        worksheet.getCell('C4').value = data.ventas[0]['agencias.nb_agencia'];
+        worksheet.getCell('C5').value =data.ventas[0]['clientes_org.nb_cliente'];
         worksheet.columns = [
-          { key: 'A', width: 10 },
-          { key: 'B', width: 14 },
-          { key: 'C', width: 13 },
-          { key: 'D', width: 60 },
-          { key: 'E', width: 60 },
-          { key: 'F', width: 25 },
-          { key: 'G', width: 15 },
-          { key: 'H', width: 15 },
-          { key: 'I', width: 15 },
-          { key: 'J', width: 15 },
-          { key: 'K', width: 15 },
-          { key: 'L', width: 15 },
-          { key: 'M', width: 15 },
-          { key: 'N', width: 15 },
-          { key: 'O', width: 15 },
-          { key: 'P', width: 1 },
-          { key: 'Q', width: 15 },
-          { key: 'R', width: 1 },
-          { key: 'S', width: 1 },
-          { key: 'T', width: 1 },
+          { key: 1, width: 10 },
+          { key: 2, width: 14 },
+          { key: 3, width: 13 },
+          { key: 4, width: 60 },
+          { key: 5, width: 60 },
+          { key: 6, width: 25 },
+          { key: 7, width: 15 },
+          { key: 8, width: 15 },
+          { key: 9, width: 15 },
+          { key: 10, width: 15 },
+          { key: 11, width: 15 },
+          { key: 12, width: 15 },
+          { key: 13, width: 15 },
+          { key: 14, width: 15 },
+          { key: 15, width: 15 },
+          { key: 16, width: 15 },
+          { key: 17, width: 15 },
+          { key: 18, width: 15 },
+          { key: 19, width: 15 },
+          { key: 20, width: 15 },
         ];
-        worksheet.getCell('A11').value = '#:';
-        worksheet.getCell('B11').value = 'Fecha:';
-        worksheet.getCell('C11').value = 'Nro de Guia:';
-        worksheet.getCell('D11').value = 'Nro Fact Cliente';
-        worksheet.getCell('E11').value = 'Destinatario';
-        worksheet.getCell('F11').value = 'Dest.';
-        worksheet.getCell('G11').value = 'Pzas';
-        worksheet.getCell('H11').value = 'Kg.';
-        worksheet.getCell('I10').value = 'CONTADO';
-        worksheet.getCell('I11').value = 'Origen';
-        worksheet.getCell('J11').value = 'Imp.';
-        worksheet.getCell('K11').value = 'Destino';
-        worksheet.getCell('L11').value = 'Imp.';
-        worksheet.getCell('M10').value = 'CREDITO';
-        worksheet.getCell('M11').value = 'Monto';
-        worksheet.getCell('N11').value = 'Imp.';
-        worksheet.getCell('O11').value = 'Otros';
-        worksheet.getCell('Q11').value = 'TOTAL VENTAS';
+        worksheet.getColumn(16).hidden = true;
+        worksheet.getColumn(18).hidden = true;
+        worksheet.getColumn(19).hidden = true;
+        worksheet.getColumn(20).hidden = true;
         if (data.dolar == true) {
-          worksheet.columns = [
-            { key: 'P', width: 30 },
-            { key: 'R', width: 30 },
-            { key: 'S', width: 30 },
-            { key: 'T', width: 30 },
-          ];
-          worksheet.getCell('P11').value = 'Otros $';
-          worksheet.getCell('R11').value = 'TOTAL $';
-          worksheet.getCell('S11').value = 'VALOR DOLAR';
-          worksheet.getCell('T11').value = 'VALOR DECLARADO $';
+          worksheet.getColumn(16).hidden = false;
+          worksheet.getColumn(18).hidden = false;
+          worksheet.getColumn(19).hidden = false;
+          worksheet.getColumn(20).hidden = false;
+          worksheet.getCell('P7').value = 'Otros $';
+          worksheet.getCell('R7').value = 'TOTAL $';
+          worksheet.getCell('S7').value = 'VALOR DOLAR';
+          worksheet.getCell('T7').value = 'VALOR DECLARADO $';
         }
+        worksheet.getCell('A7').value = '#:';
+        worksheet.getCell('B7').value = 'Fecha:';
+        worksheet.getCell('C7').value = 'Nro de Guia:';
+        worksheet.getCell('D7').value = 'Nro Fact Cliente';
+        worksheet.getCell('E7').value = 'Destinatario';
+        worksheet.getCell('F7').value = 'Dest.';
+        worksheet.getCell('G7').value = 'Pzas';
+        worksheet.getCell('H7').value = 'Kg.';
+        worksheet.getCell('I6').value = 'CONTADO';
+        worksheet.getCell('I7').value = 'Origen';
+        worksheet.getCell('J7').value = 'Imp.';
+        worksheet.getCell('K7').value = 'Destino';
+        worksheet.getCell('L7').value = 'Imp.';
+        worksheet.getCell('M6').value = 'CREDITO';
+        worksheet.getCell('M7').value = 'Monto';
+        worksheet.getCell('N7').value = 'Imp.';
+        worksheet.getCell('O7').value = 'Otros';
+        worksheet.getCell('Q7').value = 'TOTAL VENTAS';
         break;
       case 'VCM':
       case 'VCD':
@@ -677,20 +678,20 @@ class ReporteVentasService {
       case 'TVD':
       case 'RD':
         worksheet.columns = [
-          { key: 'A', width: 7 },
-          { key: 'B', width: 14 },
-          { key: 'C', width: 13 },
-          { key: 'D', width: 60 },
-          { key: 'E', width: 60 },
-          { key: 'F', width: 25 },
-          { key: 'G', width: 15 },
-          { key: 'H', width: 15 },
-          { key: 'I', width: 15 },
-          { key: 'J', width: 15 },
-          { key: 'K', width: 15 },
-          { key: 'L', width: 1 },
-          { key: 'M', width: 15 },
-          { key: 'N', width: 1 },
+          { key: 1, width: 7 },
+          { key: 2, width: 14 },
+          { key: 3, width: 13 },
+          { key: 4, width: 60 },
+          { key: 5, width: 60 },
+          { key: 6, width: 25 },
+          { key: 7, width: 15 },
+          { key: 8, width: 15 },
+          { key: 9, width: 15 },
+          { key: 10, width: 15 },
+          { key: 11, width: 15 },
+          { key: 12, width: 15 },
+          { key: 13, width: 15 },
+          { key: 14, width: 15 },
         ];
         var labelDoc = 'Ventas Generales';
         if (tipo == 'VCM') {
@@ -760,10 +761,8 @@ class ReporteVentasService {
         worksheet.getCell('K11').value = 'Otros.';
         worksheet.getCell('M11').value = 'Total Venta';
         if (data.dolar == true) {
-          worksheet.columns = [
-            { key: 'L', width: 30 },
-            { key: 'N', width: 30 },
-          ];
+          worksheet.getColumn(12).hidden = false;
+          worksheet.getColumn(14).hidden = false;
           worksheet.getCell('L11').value = 'Otr $.';
           worksheet.getCell('N11').value = 'Venta $.';
         }
@@ -877,20 +876,20 @@ class ReporteVentasService {
 
             worksheet.getCell('I' + i).value = parseFloat(contadoOrig);
             worksheet.getCell('J' + i).value =
-            parseFloat(utils.formatNumber(impContadoOrig));
-            worksheet.getCell('K' + i).value = parseFloat(utils.formatNumber(contadoDest));
+            parseFloat(parseFloat(impContadoOrig));
+            worksheet.getCell('K' + i).value = parseFloat(parseFloat(contadoDest));
             worksheet.getCell('L' + i).value =
-            parseFloat(utils.formatNumber(impContadoDest));
-            worksheet.getCell('M' + i).value = parseFloat(utils.formatNumber(creditoOrig));
+            parseFloat(parseFloat(impContadoDest));
+            worksheet.getCell('M' + i).value = parseFloat(parseFloat(creditoOrig));
             worksheet.getCell('N' + i).value =
-            parseFloat(utils.formatNumber(impCreditoOrig));
+            parseFloat(parseFloat(impCreditoOrig));
 
             montoOtros =
               (data.ventas[item].valor_declarado_seg *
                 data.ventas[item].porc_apl_seguro) /
               100;
 
-            worksheet.getCell('O' + i).value = parseFloat(utils.formatNumber(montoOtros));
+            worksheet.getCell('O' + i).value = parseFloat(parseFloat(montoOtros));
 
             if (data.dolar == true) {
               if (data.ventas[item].valor_dolar > 0) {
@@ -898,12 +897,12 @@ class ReporteVentasService {
                   montoOtros / utils.parseFloatN(data.ventas[item].valor_dolar);
               }
 
-              worksheet.getCell('P' + i).value = parseFloat(utils.formatNumber(
+              worksheet.getCell('P' + i).value = parseFloat(parseFloat(
                 otrosDolar.toFixed(2)
               ));
             }
 
-            worksheet.getCell('Q' + i).value = parseFloat(utils.formatNumber(montoVenta));
+            worksheet.getCell('Q' + i).value = parseFloat(parseFloat(montoVenta));
 
             if (data.dolar == true) {
               if (data.ventas[item].valor_dolar > 0) {
@@ -911,7 +910,7 @@ class ReporteVentasService {
                   montoVenta / utils.parseFloatN(data.ventas[item].valor_dolar);
               }
 
-              worksheet.getCell('R' + i).value = parseFloat(utils.formatNumber(
+              worksheet.getCell('R' + i).value = parseFloat(parseFloat(
                 ventaDolar.toFixed(2)
               ));
             }
@@ -928,43 +927,43 @@ class ReporteVentasService {
             worksheet.getCell('G' + i).value = parseFloat(subTotalNroPiezas);
 
             worksheet.getCell('H' + i).value =
-            parseFloat(utils.formatNumber(subTotalPesoKgs));
+            parseFloat(parseFloat(subTotalPesoKgs));
 
             if (data.visible == 'SI') {
               worksheet.getCell('I' + i).value =
-              parseFloat(utils.formatNumber(subTotalContadoOrig));
+              parseFloat(parseFloat(subTotalContadoOrig));
 
-              worksheet.getCell('J' + i).value = parseFloat(utils.formatNumber(
+              worksheet.getCell('J' + i).value = parseFloat(parseFloat(
                 subTotalImpContadoOrig
               ));
               worksheet.getCell('K' + i).value =
-              parseFloat(utils.formatNumber(subTotalContadoDest));
+              parseFloat(parseFloat(subTotalContadoDest));
 
-              worksheet.getCell('L' + i).value = parseFloat(utils.formatNumber(
+              worksheet.getCell('L' + i).value = parseFloat(parseFloat(
                 subTotalImpContadoDest
               ));
 
               worksheet.getCell('M' + i).value =
-              parseFloat(utils.formatNumber(subTotalCreditoOrig));
+              parseFloat(parseFloat(subTotalCreditoOrig));
 
-              worksheet.getCell('N' + i).value = parseFloat(utils.formatNumber(
+              worksheet.getCell('N' + i).value = parseFloat(parseFloat(
                 subTotalImpCreditoOrig
               ));
 
               worksheet.getCell('O' + i).value =
-              parseFloat(utils.formatNumber(subTotalMontoOtros));
+              parseFloat(parseFloat(subTotalMontoOtros));
 
               if (data.dolar == true) {
                 worksheet.getCell('P' + i).value =
-                parseFloat(utils.formatNumber(subTotalOtrosDolar));
+                parseFloat(parseFloat(subTotalOtrosDolar));
               }
 
               worksheet.getCell('Q' + i).value =
-              parseFloat(utils.formatNumber(subTotalMontoVenta));
+              parseFloat(parseFloat(subTotalMontoVenta));
 
               if (data.dolar == true) {
                 worksheet.getCell('R' + i).value =
-                parseFloat(utils.formatNumber(subTotalVentaDolar));
+                parseFloat(parseFloat(subTotalVentaDolar));
               }
             }
             subTotalNroPiezas = 0;
@@ -1067,13 +1066,13 @@ class ReporteVentasService {
         }
         break;
       case 'VC':
-        var i = 13;
+        var i = 9;
         for (var item = 0; item < data.ventas.length; item++) {
           worksheet.getCell('A' + i).value = item + 1;
           worksheet.getCell('B' + i).value = moment(
             data.ventas[item].fecha_emision
           ).format('DD/MM/YYYY');
-          worksheet.getCell('C' + i).value = data.ventas[item].nro_documento;
+          worksheet.getCell('C' + i).value = parseFloat(data.ventas[item].nro_documento);
           worksheet.getCell('D' + i).value = utils.truncate(
             data.ventas[item].dimensiones,
             29
@@ -1084,13 +1083,13 @@ class ReporteVentasService {
           );
           worksheet.getCell('F' + i).value =
             data.ventas[item]['agencias_dest.ciudades.siglas'];
-          worksheet.getCell('G' + i).value = data.ventas[item].nro_piezas;
+          worksheet.getCell('G' + i).value = parseFloat(data.ventas[item].nro_piezas);
 
           let monto_kgs = data.neta
             ? data.ventas[item].carga_neta
             : data.ventas[item].peso_kgs;
 
-          worksheet.getCell('H' + i).value = utils.formatNumber(monto_kgs);
+          worksheet.getCell('H' + i).value = parseFloat(monto_kgs);
 
           let contadoOrig = 0;
           let contadoDest = 0;
@@ -1125,44 +1124,41 @@ class ReporteVentasService {
               utils.parseFloatN(creditoOrig) +
               utils.parseFloatN(impCreditoOrig);
 
-            worksheet.getCell('I' + i).value = utils.formatNumber(contadoOrig);
-            worksheet.getCell('J' + i).value =
-              utils.formatNumber(impContadoOrig);
-            worksheet.getCell('K' + i).value = utils.formatNumber(contadoDest);
-            worksheet.getCell('L' + i).value =
-              utils.formatNumber(impContadoDest);
-            worksheet.getCell('M' + i).value = utils.formatNumber(creditoOrig);
-            worksheet.getCell('N' + i).value =
-              utils.formatNumber(impCreditoOrig);
+            worksheet.getCell('I' + i).value = parseFloat(contadoOrig);
+            worksheet.getCell('J' + i).value = parseFloat(impContadoOrig);
+            worksheet.getCell('K' + i).value = parseFloat(contadoDest);
+            worksheet.getCell('L' + i).value = parseFloat(impContadoDest);
+            worksheet.getCell('M' + i).value = parseFloat(creditoOrig);
+            worksheet.getCell('N' + i).value = parseFloat(impCreditoOrig);
 
             montoOtros =
               (data.ventas[item].valor_declarado_seg *
                 data.ventas[item].porc_apl_seguro) /
               100;
 
-            worksheet.getCell('O' + i).value = utils.formatNumber(montoOtros);
+            worksheet.getCell('O' + i).value = parseFloat(montoOtros);
 
             if (data.dolar == true) {
               if (data.ventas[item].valor_dolar > 0) {
                 otrosDolar =
                   montoOtros / utils.parseFloatN(data.ventas[item].valor_dolar);
               }
-              worksheet.getCell('P' + i).value = utils.formatNumber(
+              worksheet.getCell('P' + i).value = parseFloat(
                 otrosDolar.toFixed(2)
               );
             }
 
-            worksheet.getCell('Q' + i).value = utils.formatNumber(montoVenta);
+            worksheet.getCell('Q' + i).value = parseFloat(montoVenta);
 
             if (data.dolar == true) {
               if (data.ventas[item].valor_dolar > 0) {
                 ventaDolar =
                   montoVenta / utils.parseFloatN(data.ventas[item].valor_dolar);
               }
-              worksheet.getCell('R' + i).value = utils.formatNumber(
+              worksheet.getCell('R' + i).value = parseFloat(
                 ventaDolar.toFixed(2)
               );
-              worksheet.getCell('S' + i).value = utils.formatNumber(
+              worksheet.getCell('S' + i).value = parseFloat(
                 data.ventas[item].valor_dolar
               );
             }
@@ -1185,36 +1181,36 @@ class ReporteVentasService {
         }
 
         // Totales Finales
-        i += 2;
+        i += 1;
         worksheet.getCell('F' + i).value = 'Total General:';
-        worksheet.getCell('G' + i).value = totalNroPiezas;
-        worksheet.getCell('H' + i).value = utils.formatNumber(totalPesoKgs);
+        worksheet.getCell('G' + i).value = parseFloat(totalNroPiezas);
+        worksheet.getCell('H' + i).value = parseFloat(totalPesoKgs);
 
         if (data.visible == 'SI') {
           worksheet.getCell('I' + i).value =
-            utils.formatNumber(totalContadoOrig);
+            parseFloat(totalContadoOrig);
           worksheet.getCell('J' + i).value =
-            utils.formatNumber(totalImpContadoOrig);
+            parseFloat(totalImpContadoOrig);
           worksheet.getCell('K' + i).value =
-            utils.formatNumber(totalContadoDest);
+            parseFloat(totalContadoDest);
           worksheet.getCell('L' + i).value =
-            utils.formatNumber(totalImpContadoDest);
+            parseFloat(totalImpContadoDest);
           worksheet.getCell('M' + i).value =
-            utils.formatNumber(totalCreditoOrig);
+            parseFloat(totalCreditoOrig);
           worksheet.getCell('N' + i).value =
-            utils.formatNumber(totalImpCreditoOrig);
+            parseFloat(totalImpCreditoOrig);
           worksheet.getCell('O' + i).value =
-            utils.formatNumber(totalMontoOtros);
+            parseFloat(totalMontoOtros);
           if (data.dolar == true) {
             worksheet.getCell('P' + i).value =
-              utils.formatNumber(totalOtrosDolar);
+              parseFloat(totalOtrosDolar);
           }
           worksheet.getCell('Q' + i).value =
-            utils.formatNumber(totalMontoVenta);
+            parseFloat(totalMontoVenta);
 
           if (data.dolar == true) {
             worksheet.getCell('R' + i).value =
-              utils.formatNumber(totalVentaDolar);
+              parseFloat(totalVentaDolar);
           }
         }
         break;
@@ -1246,45 +1242,45 @@ class ReporteVentasService {
             ? data.ventas[item].carga_neta
             : data.ventas[item].peso_kgs;
 
-          worksheet.getCell('D' + i).value = utils.formatNumber(monto_kgs);
+          worksheet.getCell('D' + i).value = parseFloat(monto_kgs);
 
           if (data.visible == 'SI') {
-            worksheet.getCell('E' + i).value = utils.formatNumber(
+            worksheet.getCell('E' + i).value = parseFloat(
               data.ventas[item].monto_contado_orig
             );
-            worksheet.getCell('F' + i).value = utils.formatNumber(
+            worksheet.getCell('F' + i).value = parseFloat(
               data.ventas[item].imp_contado_orig
             );
-            worksheet.getCell('G' + i).value = utils.formatNumber(
+            worksheet.getCell('G' + i).value = parseFloat(
               data.ventas[item].monto_contado_dest
             );
-            worksheet.getCell('H' + i).value = utils.formatNumber(
+            worksheet.getCell('H' + i).value = parseFloat(
               data.ventas[item].imp_contado_dest
             );
 
-            worksheet.getCell('I' + i).value = utils.formatNumber(
+            worksheet.getCell('I' + i).value = parseFloat(
               data.ventas[item].monto_credito_orig
             );
-            worksheet.getCell('J' + i).value = utils.formatNumber(
+            worksheet.getCell('J' + i).value = parseFloat(
               data.ventas[item].imp_credito_orig
             );
 
-            worksheet.getCell('K' + i).value = utils.formatNumber(
+            worksheet.getCell('K' + i).value = parseFloat(
               data.ventas[item].monto_otros
             );
 
             if (data.dolar == true) {
-              worksheet.getCell('L' + i).value = utils.formatNumber(
+              worksheet.getCell('L' + i).value = parseFloat(
                 data.ventas[item].monto_otros_dolar
               );
             }
 
-            worksheet.getCell('M' + i).value = utils.formatNumber(
+            worksheet.getCell('M' + i).value = parseFloat(
               data.ventas[item].monto_total
             );
 
             if (data.dolar == true) {
-              worksheet.getCell('N' + i).value = utils.formatNumber(
+              worksheet.getCell('N' + i).value = parseFloat(
                 data.ventas[item].monto_total_dolar
               );
             }
@@ -1326,37 +1322,37 @@ class ReporteVentasService {
         // Totales Finales
         i += 3;
         worksheet.getCell('A' + i).value = 'Total General:';
-        worksheet.getCell('B' + i).value = totalNroGuias;
-        worksheet.getCell('C' + i).value = totalNroPiezas;
-        worksheet.getCell('D' + i).value = utils.formatNumber(totalPesoKgs);
+        worksheet.getCell('B' + i).value = parseFloat(totalNroGuias);
+        worksheet.getCell('C' + i).value = parseFloat(totalNroPiezas);
+        worksheet.getCell('D' + i).value = parseFloat(totalPesoKgs);
 
         if (data.visible == 'SI') {
           worksheet.getCell('E' + i).value =
-            utils.formatNumber(totalContadoOrig);
+            parseFloat(totalContadoOrig);
           worksheet.getCell('F' + i).value =
-            utils.formatNumber(totalImpContadoOrig);
+            parseFloat(totalImpContadoOrig);
           worksheet.getCell('G' + i).value =
-            utils.formatNumber(totalContadoDest);
+            parseFloat(totalContadoDest);
           worksheet.getCell('H' + i).value =
-            utils.formatNumber(totalImpContadoDest);
+            parseFloat(totalImpContadoDest);
           worksheet.getCell('I' + i).value =
-            utils.formatNumber(totalCreditoOrig);
+            parseFloat(totalCreditoOrig);
           worksheet.getCell('J' + i).value =
-            utils.formatNumber(totalImpCreditoOrig);
+            parseFloat(totalImpCreditoOrig);
           worksheet.getCell('K' + i).value =
-            utils.formatNumber(totalMontoOtros);
+            parseFloat(totalMontoOtros);
 
           if (data.dolar == true) {
             worksheet.getCell('L' + i).value =
-              utils.formatNumber(totalOtrosDolar);
+              parseFloat(totalOtrosDolar);
           }
 
           worksheet.getCell('M' + i).value =
-            utils.formatNumber(totalMontoVenta);
+            parseFloat(totalMontoVenta);
 
           if (data.dolar == true) {
             worksheet.getCell('N' + i).value =
-              utils.formatNumber(totalVentaDolar);
+              parseFloat(totalVentaDolar);
           }
         }
         break;
