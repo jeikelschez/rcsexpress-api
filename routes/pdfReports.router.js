@@ -251,7 +251,7 @@ router.get('/relacionRetenciones', authenticateJWT, async (req, res, next) => {
 
 router.get('/retencionesIslr', authenticateJWT, async (req, res, next) => {
   try {
-    const { print, tipo, proveedor, desde, hasta, nro_comprobante } =
+    const { print, tipo, proveedor, desde, hasta, comprobante } =
       req.headers;
 
     const response = await service.retencionesIslr(
@@ -260,7 +260,7 @@ router.get('/retencionesIslr', authenticateJWT, async (req, res, next) => {
       proveedor,
       desde,
       hasta,
-      nro_comprobante
+      comprobante
     );
     res.status(200).json({
       message: 'PDF Generado',

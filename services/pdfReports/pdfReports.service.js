@@ -323,7 +323,7 @@ class PdfReportsService {
   }
 
   // RETENCIONES ISLR
-  async retencionesIslr(print, tipo, proveedor, desde, hasta, nro_comprobante) {
+  async retencionesIslr(print, tipo, proveedor, desde, hasta, comprobante) {
     if (!print) return { validDoc: true, resPath: 'reporteBase.pdf' };
 
     let resPath = 'retencionesIslr' + tipo + '.pdf';
@@ -340,7 +340,7 @@ class PdfReportsService {
       proveedor,
       desde,
       hasta,
-      nro_comprobante
+      comprobante
     );
     resPath = validDoc ? resPath : 'reporteBase.pdf';
     doc.end();
