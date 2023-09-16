@@ -21,7 +21,6 @@ class RetencionesIslrService {
   async mainReport(
     doc,
     tipo,
-    agencia,
     proveedor,
     desde,
     hasta,
