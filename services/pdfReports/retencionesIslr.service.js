@@ -25,7 +25,7 @@ class RetencionesIslrService {
     proveedor,
     desde,
     hasta,
-    nro_comprobante
+    comprobante
   ) {
     let detalles = [];
 
@@ -38,7 +38,7 @@ class RetencionesIslrService {
               moment(hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
             ],
           },
-          nro_comprobante: nro_comprobante,
+          nro_comprobante: comprobante,
         };
 
         let where2 = {};
