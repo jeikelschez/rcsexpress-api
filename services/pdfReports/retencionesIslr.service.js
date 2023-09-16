@@ -25,7 +25,7 @@ class RetencionesIslrService {
     proveedor,
     desde,
     hasta,
-    comprobante
+    nro_comprobante
   ) {
     let detalles = [];
 
@@ -38,7 +38,7 @@ class RetencionesIslrService {
               moment(hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
             ],
           },
-          nro_comprobante: '20234628',
+          nro_comprobante: nro_comprobante,
         };
 
         let where2 = {};
@@ -106,12 +106,12 @@ class RetencionesIslrService {
         break;
     }
 
-    await this.generateHeader(doc, tipo, detalles, comprobante);
+    await this.generateHeader(doc, tipo, detalles);
     await this.generateCustomerInformation(doc, tipo, detalles);
     return true;
   }
 
-  async generateHeader(doc, tipo, detalles, comprobante) {
+  async generateHeader(doc, tipo, detalles) {
     switch (tipo) {
       case 'IC':
         doc.image('./img/logo_rc5.png', 30, 25, { width: 50 });
@@ -141,18 +141,6 @@ class RetencionesIslrService {
             width: 150,
           }
         );
-
-        doc.y = 120;
-        doc.x = 605;
-        doc.text("dddd" + comprobante,
-          {
-            align: 'right',
-            columns: 1,
-            width: 150,
-          }
-        );
-
-
         doc.y = 90;
         doc.x = 605;
         doc.text('Nro. Comprobante: ' + detalles[0].nro_comprobante, {

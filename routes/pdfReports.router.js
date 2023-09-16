@@ -261,7 +261,7 @@ router.get('/retencionesIslr', authenticateJWT, async (req, res, next) => {
       proveedor,
       desde,
       hasta,
-      nro_comprobante
+      '20234628'
     );
     res.status(200).json({
       message: 'PDF Generado',
