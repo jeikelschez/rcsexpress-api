@@ -94,8 +94,6 @@ class RetencionesIslrService {
           raw: true,
         });
 
-        console.log(detalles);
-
         if (detalles.length == 0) return false;
 
         detalles.desde = desde;

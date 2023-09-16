@@ -254,7 +254,6 @@ router.get('/retencionesIslr', authenticateJWT, async (req, res, next) => {
     const { print, tipo, agencia, proveedor, desde, hasta, nro_comprobante } =
       req.headers;
 
-      console.log(tipo)
     const response = await service.retencionesIslr(
       print,
       tipo,
