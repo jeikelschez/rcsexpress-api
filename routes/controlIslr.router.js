@@ -1,20 +1,21 @@
 const express = require('express');
 
-const VcontrolService = require('./../services/variableControl.service');
+const CislrService = require('./../services/controlIslr.service');
 const validatorHandler = require('./../middlewares/validator.handler');
-const { createVcontrolSchema, updateVcontrolSchema, getVcontrolSchema } = require('./../schemas/variableControl.schema');
+const { createCislrSchema, updateCislrSchema, getCislrSchema } = require('./../schemas/controlIslr.schema');
 const authenticateJWT  = require('./../middlewares/authenticate.handler');
 
 const router = express.Router();
-const service = new VcontrolService();
+const service = new CislrService();
 
 router.get('/',
   authenticateJWT,
   async (req, res, next) => {
   try {
-    const { name } = req.headers;
-    const variables = await service.find(name);
-    res.json(variables);
+    const { page, limit, order_by, order_direction, filter, filter_value } = req.headers;
+
+    const cIslr = await service.find(page, limit, order_by, order_direction, filter, filter_value);
+    res.json(cIslr);
   } catch (error) {
     next(error);
   }
@@ -22,12 +23,12 @@ router.get('/',
 
 router.get('/:id',
   authenticateJWT,
-  validatorHandler(getVcontrolSchema, 'params'),
+  validatorHandler(getCislrSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const variable = await service.findOne(id);
-      res.json(variable);
+      const cIslr = await service.findOne(id);
+      res.json(cIslr);
     } catch (error) {
       next(error);
     }
@@ -36,12 +37,12 @@ router.get('/:id',
 
 router.post('/',
   authenticateJWT,
-  validatorHandler(createVcontrolSchema, 'body'),
+  validatorHandler(createCislrSchema, 'body'),
   async (req, res, next) => {
     try {
       const body = req.body;
-      const newVariable = await service.create(body);
-      res.status(201).json(newVariable);
+      const newCislr = await service.create(body);
+      res.status(201).json(newCislr);
     } catch (error) {
       next(error);
     }
@@ -50,14 +51,14 @@ router.post('/',
 
 router.put('/:id',
   authenticateJWT,
-  validatorHandler(getVcontrolSchema, 'params'),
-  validatorHandler(updateVcontrolSchema, 'body'),
+  validatorHandler(getCislrSchema, 'params'),
+  validatorHandler(updateCislrSchema, 'body'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
       const body = req.body;
-      const variable = await service.update(id, body);
-      res.json(variable);
+      const cIslr = await service.update(id, body);
+      res.json(cIslr);
     } catch (error) {
       next(error);
     }
@@ -66,7 +67,7 @@ router.put('/:id',
 
 router.delete('/:id',
   authenticateJWT,
-  validatorHandler(getVcontrolSchema, 'params'),
+  validatorHandler(getCislrSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;

@@ -29,6 +29,8 @@ const PagosProvService = require('./pagosProv.service');
 const pagosProvService = new PagosProvService();
 const RelacionRetencionesService = require('./relacionRetenciones.service');
 const relacionRetencionesService = new RelacionRetencionesService();
+const RetencionesIslrService = require('./retencionesIslr.service');
+const retencionesIslrService = new RetencionesIslrService();
 
 class PdfReportsService {
   constructor() {}
@@ -314,6 +316,32 @@ class PdfReportsService {
       proveedor,
       desde,
       hasta
+    );
+    resPath = validDoc ? resPath : 'reporteBase.pdf';
+    doc.end();
+    return { validDoc: validDoc, resPath: resPath };
+  }
+
+  // RETENCIONES ISLR
+  async retencionesIslr(print, tipo, agencia, proveedor, desde, hasta, nro_comprobante) {
+    if (!print) return { validDoc: true, resPath: 'reporteBase.pdf' };
+
+    let resPath = 'retencionesIslr' + tipo + '.pdf';
+    let doc = new PDFDocument({
+      margin: 10,
+      bufferPages: true,
+      layout: 'landscape',
+    });
+
+    doc.pipe(fs.createWriteStream(reportsPath + resPath));
+    let validDoc = await retencionesIslrService.mainReport(
+      doc,
+      tipo,
+      agencia,
+      proveedor,
+      desde,
+      hasta,
+      nro_comprobante
     );
     resPath = validDoc ? resPath : 'reporteBase.pdf';
     doc.end();

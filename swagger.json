@@ -63,6 +63,14 @@
       "description": "API para Manejar el Control de Guias"
     },
     {
+      "name": "Control_Islr",
+      "description": "API para Manejar el Control de Islr"
+    },
+    {
+      "name": "Control_Islr_Factura",
+      "description": "API para Manejar el Control de Islr Factura"
+    },
+    {
       "name": "Conceptos_Operacion",
       "description": "API para Manejar el Maestro de Conceptos de Operacion"
     },
@@ -3685,6 +3693,711 @@
           },
           "401": {
             "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cislr": {
+      "get": {
+        "tags": ["Control_Islr"],
+        "summary": "Obtener todo el Control de Islr",
+        "description": "API para Obtener todo el Control de Islr del sistema",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "header",
+            "description": "Numero de la pagina",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "header",
+            "description": "Cantidad de registros",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "header",
+            "description": "Ordenado por",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "header",
+            "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/extraSchemes/Paginate",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Control_Islr"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Control_Islr"],
+        "summary": "Crear Control de Islr",
+        "description": "API para Crear un nuevo Control de Islr",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Control_Islr"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Control_Islr"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cislr/{id}": {
+      "get": {
+        "tags": ["Control_Islr"],
+        "summary": "Obtener Control de Islr por su Id",
+        "description": "API para Retornar un Control de Islr por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Control de Islr",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Control_Islr"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Control_Islr"],
+        "summary": "Actualizar Control de Islr",
+        "description": "API para Actualizar un Control de Islr por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Control de Islr",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Control_Islr"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Control_Islr"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Control_Islr"],
+        "summary": "Borrar Control de Islr",
+        "description": "API para Borrar un Control de Islr por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Control de Islr",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Control_Islr/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cislrfac": {
+      "get": {
+        "tags": ["Control_Islr_Factura"],
+        "summary": "Obtener todo el Control de Islr Factura",
+        "description": "API para Obtener todo el Control de Islr Factura del sistema",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "header",
+            "description": "Numero de la pagina",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "header",
+            "description": "Cantidad de registros",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "header",
+            "description": "Ordenado por",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "header",
+            "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cod_islr",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "desde",
+            "in": "header",
+            "description": "Fecha de Envio Desde",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "hasta",
+            "in": "header",
+            "description": "Fecha de Envio Hasta",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "proveedor",
+            "in": "header",
+            "description": "Codigo del Proveedor",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/extraSchemes/Paginate",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Control_Islr_Factura",
+                      "properties": {
+                        "retenciones": {
+                          "$ref": "#/components/schemas/Control_Islr"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Control_Islr_Factura"],
+        "summary": "Crear Control de Islr Factura",
+        "description": "API para Crear un nuevo Control de Islr Factura",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Control_Islr_Factura"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Control_Islr_Factura"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cislrfac/{id}": {
+      "get": {
+        "tags": ["Control_Islr_Factura"],
+        "summary": "Obtener Control de Islr Factura por su Id",
+        "description": "API para Retornar un Control de Islr Factura por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Control de Islr Factura",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Control_Islr_Factura"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Control_Islr_Factura"],
+        "summary": "Actualizar Control de Islr",
+        "description": "API para Actualizar un Control de Islr Factura por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Control de Islr Factura",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Control_Islr_Factura"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Control_Islr_Factura"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Control_Islr_Factura"],
+        "summary": "Borrar Control de Islr Factura",
+        "description": "API para Borrar un Control de Islr Factura por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Control de Islr Factura",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Control_Islr_Factura/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
             "content": {
               "application/json": {
                 "schema": {
@@ -13736,6 +14449,17 @@
         "tags": ["Variable_Control"],
         "summary": "Obtener todas las Variables de Control",
         "description": "API para Obtener todas las Variables de Control del sistema",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "header",
+            "description": "Nombre de la Variable",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -14638,6 +15362,120 @@
           },
           "tipo": {
             "type": "number"
+          }
+        }
+      },
+      "Control_Islr": {
+        "description": "Modelo de Control de Islr",
+        "required": [
+          "id",
+          "ano_ejercicio",
+          "cod_tipo_retencion",
+          "cod_seniat",
+          "descripcion_ret",
+          "porc_retencion",
+          "monto_base",
+          "monto_retener",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "ano_ejercicio": {
+            "type": "number"
+          },
+          "cod_tipo_retencion": {
+            "type": "string"
+          },
+          "cod_seniat": {
+            "type": "string"
+          },
+          "descripcion_ret": {
+            "type": "string"
+          },
+          "porc_retencion": {
+            "type": "number"
+          },
+          "monto_base": {
+            "type": "number"
+          },
+          "monto_retener": {
+            "type": "number"
+          },
+          "status": {
+            "type": "number"
+          },
+          "fecha_reg_islr": {
+            "type": "string"
+          },
+          "t_comprobante": {
+            "type": "number"
+          },
+          "monto_transferido": {
+            "type": "number"
+          },
+          "nro_comprobante": {
+            "type": "string"
+          },
+          "fecha_comprobante": {
+            "type": "string"
+          }
+        }
+      },
+      "Control_Islr_Factura": {
+        "description": "Modelo de Control de Islr Factura",
+        "required": [
+          "id",
+          "cod_islr",
+          "mes_compra",
+          "id_compra",
+          "aplica",
+          "nro_factura",
+          "fecha_factura",
+          "cod_proveedor"
+        ],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "cod_islr": {
+            "type": "number"
+          },
+          "mes_compra": {
+            "type": "number"
+          },
+          "id_compra": {
+            "type": "number"
+          },
+          "aplica": {
+            "type": "number"
+          },
+          "nro_factura": {
+            "type": "string"
+          },
+          "fecha_factura": {
+            "type": "string"
+          },
+          "cod_proveedor": {
+            "type": "number"
+          },
+          "monto_base": {
+            "type": "number"
+          },
+          "nro_documento": {
+            "type": "string"
+          },
+          "nro_comprobante": {
+            "type": "number"
+          },
+          "t_comprobante": {
+            "type": "number"
+          },
+          "saldo_retenido": {
+            "type": "string"
           }
         }
       },

@@ -48,6 +48,8 @@ const McobranzasRouter = require('./maestroCobranzas.router');
 const DcobranzasRouter = require('./detalleCobranzas.router');
 const MctapagarRouter = require('./maestroCtaPagar.router');
 const PgeneradosRouter = require('./pagosGenerados.router');
+const CislrRouter = require('./controlIslr.router');
+const CislrfacRouter = require('./controlIslrFactura.router');
 
 function routerApi(app) {
   const router = express.Router();
@@ -99,6 +101,8 @@ function routerApi(app) {
   router.use('/dcobranzas', DcobranzasRouter);
   router.use('/mctapagar', MctapagarRouter);
   router.use('/pgenerados', PgeneradosRouter);
+  router.use('/cislr', CislrRouter);
+  router.use('/cislrfac', CislrfacRouter);
   router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 

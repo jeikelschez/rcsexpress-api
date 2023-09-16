@@ -60,18 +60,24 @@ const ProveedoresSchema = {
     type: DataTypes.INTEGER,
     references: {
       model: MRETENCIONES_TABLE,
-      key: 'id'
+      key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
-  }
-}
+    onDelete: 'SET NULL',
+  },
+};
 
 class Proveedores extends Model {
-
   static associate(models) {
-    this.belongsTo(models.Mretenciones, { foreignKey: 'cod_tipo_retencion', as: 'retenciones' });
+    this.belongsTo(models.Mretenciones, {
+      foreignKey: 'cod_tipo_retencion',
+      as: 'retenciones',
+    });
     this.hasMany(models.Costos, { foreignKey: 'cod_proveedor', as: 'costos' });
+    this.hasMany(models.Cislrfac, {
+      foreignKey: 'cod_proveedor',
+      as: 'proveedores',
+    });
   }
 
   static config(sequelize) {
@@ -79,8 +85,8 @@ class Proveedores extends Model {
       sequelize,
       tableName: PROVEEDORES_TABLE,
       modelName: 'Proveedores',
-      timestamps: false
-    }
+      timestamps: false,
+    };
   }
 }
 

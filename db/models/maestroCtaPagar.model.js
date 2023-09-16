@@ -164,6 +164,10 @@ class Mctapagar extends Model {
       foreignKey: 'cod_cta_pagar',
       as: 'ctaspagar',
     });
+    this.hasMany(models.Cislrfac, {
+      foreignKey: 'id_compra',
+      as: 'compras',
+    });
   }
 
   static config(sequelize) {

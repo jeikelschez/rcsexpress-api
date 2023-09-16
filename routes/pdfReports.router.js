@@ -249,4 +249,29 @@ router.get('/relacionRetenciones', authenticateJWT, async (req, res, next) => {
   }
 });
 
+router.get('/retencionesIslr', authenticateJWT, async (req, res, next) => {
+  try {
+    const { print, tipo, agencia, proveedor, desde, hasta, nro_comprobante } =
+      req.headers;
+
+      console.log(tipo)
+    const response = await service.retencionesIslr(
+      print,
+      tipo,
+      agencia,
+      proveedor,
+      desde,
+      hasta,
+      nro_comprobante
+    );
+    res.status(200).json({
+      message: 'PDF Generado',
+      pdfPath: response.resPath,
+      validDoc: response.validDoc,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

@@ -33,6 +33,9 @@ class RelacionRetencionesService {
         'nro_doc_pago',
         'monto_pagado',
         'monto_retenido',
+        'cod_cuenta',
+        'monto_base',
+        'porc_retencion'
       ],
       include: [
         {
@@ -76,6 +79,8 @@ class RelacionRetencionesService {
       ],
       order: [
         ['ctaspagar', 'cod_agencia', 'ASC'],
+        ['cuentas', 'bancos', 'id', 'ASC'],
+        ['cod_cuenta', 'ASC'],
         ['nro_doc_pago', 'ASC'],
         ['ctaspagar', 'proveedores', 'nb_proveedor', 'ASC'],
       ],
@@ -153,24 +158,25 @@ class RelacionRetencionesService {
     doc.fontSize(9);
     doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 510, 35);
     doc.text('Fecha Pago', 35, 200);
-    doc.text('Banco', 190, 200);
-    doc.text('Nro. Cheque', 300, 200);
-    doc.text('Monto Parcial', 369, 190);
-    doc.text('Cheque', 380, 200);
-    doc.text('Monto Retenido', 440, 200);
-    doc.text('Monto Pagado', 515, 200);
+    doc.text('Banco', 120, 200);
+    doc.text('Beneficiario', 205, 200);
+    doc.text('Nro. Cheque', 290, 200);
+    doc.text('Base Ret.', 360, 200);
+    doc.text('% Ret.', 410, 200);
+    doc.text('Monto Retenido', 445, 200);
+    doc.text('Monto Pagado', 520, 200);
 
     doc.lineWidth(1);
     doc.lineCap('butt').moveTo(25, 213).lineTo(590, 213).stroke();
   }
 
   async generateCustomerInformation(doc, detalles) {
-    let total_pagado = 0;
+    let total_base = 0;
     let total_retenido = 0;
-    let total_total = 0;
-    let subtotal_pagado = 0;
+    let total_pagado = 0;
+    let subtotal_base = 0;
     let subtotal_retenido = 0;
-    let subtotal_total = 0;
+    let subtotal_pagado = 0;
 
     var i = 0;
     var page = 0;
@@ -180,95 +186,117 @@ class RelacionRetencionesService {
       doc.fontSize(9);
       if (
         item == 0 ||
-        detalles[item]['ctaspagar.proveedores.nb_proveedor'] !=
-          detalles[item - 1]['ctaspagar.proveedores.nb_proveedor']
+        detalles[item]['ctaspagar.cod_agencia'] !=
+          detalles[item - 1]['ctaspagar.cod_agencia']
       ) {
         if (item > 0) i += 20;
         doc.font('Helvetica-Bold');
         doc.text(
-          detalles[item]['ctaspagar.proveedores.nb_proveedor'],
+          detalles[item]['ctaspagar.agencias.nb_agencia'],
           30,
           ymin + i + 15
         );
+      }
+
+      if (
+        item == 0 ||
+        detalles[item]['cuentas.bancos.id'] !=
+          detalles[item - 1]['cuentas.bancos.id'] ||
+        detalles[item].cod_cuenta != detalles[item - 1].cod_cuenta ||
+        detalles[item].nro_doc_pago != detalles[item - 1].nro_doc_pago
+      ) {
+        if (item > 0) i += 20;
+        doc.font('Helvetica-Bold');  
+        doc.y = ymin + i + 30;
+        doc.x = 30;
+        doc.text(moment(detalles[item].fecha_pago).format('DD/MM/YYYY'), {
+          align: 'center',
+          columns: 1,
+          width: 60,
+        });
+        doc.y = ymin + i + 30;
+        doc.x = 90;
         doc.text(
-          'Doc: ' +
-            detalles[item]['ctaspagar.tipo_documento'] +
-            '-' +
-            detalles[item]['ctaspagar.nro_documento'],
-          30,
-          ymin + i + 30
+          detalles[item]['cuentas.bancos.nb_banco'] +
+            ' ' +
+            detalles[item]['cuentas.nro_cuenta'],
+          {
+            align: 'center',
+            columns: 1,
+            width: 90,
+          }
         );
+        doc.y = ymin + i + 30;
+        doc.x = 185;
         doc.text(
-          'Saldo: ' +
-            utils.formatNumber(detalles[item]['ctaspagar.saldo_documento']),
-          160,
-          ymin + i + 30
+          utils.truncate(detalles[item]['ctaspagar.proveedores.nb_proveedor'], 35),
+          {
+            align: 'center',
+            columns: 1,
+            width: 100,
+          }
         );
-        doc.text(
-          '% Ret.: ' +
-            utils.formatNumber(
-              detalles[item]['ctaspagar.porcentaje_retencion']
-            ),
-          300,
-          ymin + i + 30
-        );
-        doc.text(
-          'Ret.: ' +
-            utils.formatNumber(
-              detalles[item]['ctaspagar.base_imponible_retencion'] *
-                (detalles[item]['ctaspagar.porcentaje_retencion'] / 100)
-            ),
-          400,
-          ymin + i + 30
-        );
-        doc.text(
-          'Total: ' +
-            utils.formatNumber(detalles[item]['ctaspagar.total_documento']),
-          500,
-          ymin + i + 30
-        );
-        i += 50;
+        doc.font('Helvetica-Bold');  
+        doc.y = ymin + i + 30;
+        doc.x = 290;
+        doc.text(detalles[item].nro_doc_pago, {
+          align: 'center',
+          columns: 1,
+          width: 60,
+        });
+        i += 60;
       }
 
       doc.font('Helvetica');
       doc.fillColor('#444444');
 
       doc.y = ymin + i;
-      doc.x = 30;
-      doc.text(moment(detalles[item].fecha_pago).format('DD/MM/YYYY'), {
+      doc.x = 230;
+      doc.text('Nro. Doc:', {
         align: 'center',
         columns: 1,
-        width: 60,
+        width: 40,
+      });      
+      doc.y = ymin + i;
+      doc.x = 270;
+      doc.text(detalles[item]['ctaspagar.tipo_documento'] + '-' + detalles[item]['ctaspagar.nro_documento'], {
+        align: 'center',
+        columns: 1,
+        width: 80,
       });
+
+      let monto_base = 0;      
+      if(detalles[item]['ctaspagar.tipo_documento'] == 'NC') {
+        monto_base = utils.parseFloatN(detalles[item].monto_base) * -1;
+      } else {
+        monto_base = detalles[item].monto_base;
+      }
       doc.y = ymin + i;
-      doc.x = 50;
-      doc.text(
-        detalles[item]['cuentas.bancos.nb_banco'] +
-          ' ' +
-          detalles[item]['cuentas.nro_cuenta'],
-        {
-          align: 'center',
-          columns: 1,
-          width: 300,
-        }
-      );
-      doc.y = ymin + i;
-      doc.x = 295;
-      doc.text(detalles[item].nro_doc_pago, {
+      doc.x = 340;
+      doc.text(utils.formatNumber(monto_base), {
         align: 'right',
         columns: 1,
         width: 60,
       });
+
       doc.y = ymin + i;
-      doc.x = 365;
-      doc.text(utils.formatNumber(detalles[item].monto_pagado), {
+      doc.x = 387;
+      doc.text(utils.formatNumber(detalles[item].porc_retencion), {
         align: 'right',
         columns: 1,
-        width: 60,
+        width: 50,
       });
+
+      let monto_retenido = 0;      
+      if(detalles[item]['ctaspagar.tipo_documento'] == 'NC') {
+        monto_base = utils.parseFloatN(detalles[item].monto_retenido) * -1;
+      } else {
+        monto_base = detalles[item].monto_retenido;
+      }
+
       doc.y = ymin + i;
       doc.x = 450;
-      doc.text(utils.formatNumber(detalles[item].monto_retenido), {
+      doc.text(utils.formatNumber(monto_retenido), {
         align: 'right',
         columns: 1,
         width: 60,
@@ -276,10 +304,7 @@ class RelacionRetencionesService {
       doc.y = ymin + i;
       doc.x = 515;
       doc.text(
-        utils.formatNumber(
-          utils.parseFloatN(detalles[item].monto_pagado) +
-            utils.parseFloatN(detalles[item].monto_retenido)
-        ),
+        utils.formatNumber(detalles[item].monto_pagado),
         {
           align: 'right',
           columns: 1,
@@ -290,8 +315,12 @@ class RelacionRetencionesService {
       // Sub Totales por Agencia
       if (
         item > 0 &&
-        detalles[item]['ctaspagar.proveedores.nb_proveedor'] !=
-          detalles[item - 1]['ctaspagar.proveedores.nb_proveedor']
+        (detalles[item]['ctaspagar.cod_agencia'] !=
+          detalles[item - 1]['ctaspagar.cod_agencia'] ||
+          detalles[item]['cuentas.bancos.id'] !=
+            detalles[item - 1]['cuentas.bancos.id'] ||
+          detalles[item].cod_cuenta != detalles[item - 1].cod_cuenta ||
+          detalles[item].nro_doc_pago != detalles[item - 1].nro_doc_pago)
       ) {
         doc
           .lineCap('butt')
@@ -308,7 +337,7 @@ class RelacionRetencionesService {
         });
         doc.y = ymin + i - 60;
         doc.x = 365;
-        doc.text(utils.formatNumber(subtotal_pagado), {
+        doc.text(utils.formatNumber(subtotal_base), {
           align: 'right',
           columns: 1,
           width: 60,
@@ -322,30 +351,24 @@ class RelacionRetencionesService {
         });
         doc.y = ymin + i - 60;
         doc.x = 515;
-        doc.text(utils.formatNumber(utils.parseFloatN(subtotal_total)), {
+        doc.text(utils.formatNumber(utils.parseFloatN(subtotal_pagado)), {
           align: 'right',
           columns: 1,
           width: 60,
         });
 
         doc.font('Helvetica');
-        subtotal_pagado = 0;
+        subtotal_base = 0;
         subtotal_retenido = 0;
-        subtotal_total = 0;
+        subtotal_pagado = 0;
       }
 
-      subtotal_pagado += utils.parseFloatN(detalles[item].monto_pagado);
-      subtotal_retenido += utils.parseFloatN(detalles[item].monto_retenido);
-      subtotal_total += utils.parseFloatN(
-        utils.parseFloatN(detalles[item].monto_pagado) +
-          utils.parseFloatN(detalles[item].monto_retenido)
-      );
-      total_pagado += utils.parseFloatN(detalles[item].monto_pagado);
+      subtotal_base += utils.parseFloatN(monto_base);
+      subtotal_retenido += utils.parseFloatN(monto_retenido);
+      subtotal_pagado += utils.parseFloatN(utils.parseFloatN(detalles[item].monto_pagado));
+      total_base += utils.parseFloatN(monto_base);
       total_retenido += utils.parseFloatN(detalles[item].monto_retenido);
-      total_total += utils.parseFloatN(
-        utils.parseFloatN(detalles[item].monto_pagado) +
-          utils.parseFloatN(detalles[item].monto_retenido)
-      );
+      total_pagado += utils.parseFloatN(utils.parseFloatN(detalles[item].monto_pagado));
 
       i += 16;
       if (i >= 450) {
@@ -375,7 +398,7 @@ class RelacionRetencionesService {
     });
     doc.y = ymin + i;
     doc.x = 365;
-    doc.text(utils.formatNumber(subtotal_pagado), {
+    doc.text(utils.formatNumber(subtotal_base), {
       align: 'right',
       columns: 1,
       width: 60,
@@ -389,7 +412,7 @@ class RelacionRetencionesService {
     });
     doc.y = ymin + i;
     doc.x = 515;
-    doc.text(utils.formatNumber(utils.parseFloatN(subtotal_total)), {
+    doc.text(utils.formatNumber(utils.parseFloatN(subtotal_pagado)), {
       align: 'right',
       columns: 1,
       width: 60,
@@ -411,7 +434,7 @@ class RelacionRetencionesService {
     });
     doc.y = ymin + i;
     doc.x = 365;
-    doc.text(utils.formatNumber(total_pagado), {
+    doc.text(utils.formatNumber(total_base), {
       align: 'right',
       columns: 1,
       width: 60,
@@ -425,7 +448,7 @@ class RelacionRetencionesService {
     });
     doc.y = ymin + i;
     doc.x = 515;
-    doc.text(utils.formatNumber(utils.parseFloatN(total_total)), {
+    doc.text(utils.formatNumber(utils.parseFloatN(total_pagado)), {
       align: 'right',
       columns: 1,
       width: 60,
