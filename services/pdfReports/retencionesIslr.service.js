@@ -144,7 +144,7 @@ class RetencionesIslrService {
 
         doc.y = 120;
         doc.x = 605;
-        doc.text(comprobante,
+        doc.text("dddd" + comprobante,
           {
             align: 'right',
             columns: 1,
