@@ -38,7 +38,7 @@ class RetencionesIslrService {
               moment(hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
             ],
           },
-          nro_comprobante: comprobante,
+          nro_comprobante: '20234628',
         };
 
         let where2 = {};
