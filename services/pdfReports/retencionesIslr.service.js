@@ -21,27 +21,25 @@ class RetencionesIslrService {
   async mainReport(
     doc,
     tipo,
-    proveedor,
-    desde,
-    hasta,
-    comprobante
+    data
   ) {
     let detalles = [];
+    data = JSON.parse(data);
 
     switch (tipo) {
       case 'IC':
         let where = {
           fecha_comprobante: {
             [Sequelize.Op.between]: [
-              moment(desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
-              moment(hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+              moment(data.desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+              moment(data.hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
             ],
           },
-          nro_comprobante: comprobante,
+          nro_comprobante: data.comprobante,
         };
 
         let where2 = {};
-        if (proveedor) where2.cod_proveedor = proveedor;
+        if (data.proveedor) where2.cod_proveedor = data.proveedor;
 
         detalles = await models.Cislr.findAll({
           where: where,
@@ -95,10 +93,9 @@ class RetencionesIslrService {
 
         if (detalles.length == 0) return false;
 
-        detalles.desde = desde;
-        detalles.hasta = hasta;
-        if (agencia) detalles.agencia = agencia;
-        if (proveedor) detalles.proveedor = proveedor;
+        detalles.desde = data.desde;
+        detalles.hasta = data.hasta;
+        if (data.proveedor) detalles.proveedor = data.proveedor;
         break;
       default:
         return false;
