@@ -42,9 +42,9 @@ const MctapagarSchema = {
   fecha_documento: {
     type: DataTypes.DATEONLY,
     get: function () {
-      return this.getDataValue('fecha_documento')
+      return moment(this.getDataValue('fecha_documento')).format('DD/MM/YYYY') != 'Invalid date'
         ? moment(this.getDataValue('fecha_documento')).format('DD/MM/YYYY')
-        : null;
+        : '00/00/0000';
     },
   },
   fecha_registro: {
@@ -140,9 +140,9 @@ const MctapagarSchema = {
   fecha_entrega: {
     type: DataTypes.DATEONLY,
     get: function () {
-      return this.getDataValue('fecha_entrega')
+      return moment(this.getDataValue('fecha_entrega')).format('DD/MM/YYYY') != 'Invalid date'
         ? moment(this.getDataValue('fecha_entrega')).format('DD/MM/YYYY')
-        : null;
+        : '00/00/0000';
     },
   },
   iva: {

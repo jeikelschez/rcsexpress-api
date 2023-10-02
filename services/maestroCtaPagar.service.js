@@ -5,7 +5,6 @@ const UtilsService = require('./utils.service');
 const utils = new UtilsService();
 
 class MctapagarService {
-
   constructor() {}
 
   async create(data) {
@@ -13,27 +12,57 @@ class MctapagarService {
     return newMCtapagar;
   }
 
-  async find(page, limit, order_by, order_direction, filter, filter_value) {    
+  async find(
+    page,
+    limit,
+    order_by,
+    order_direction,
+    filter,
+    filter_value,
+    desde,
+    hasta,
+    proveedor
+  ) {
     let params2 = {};
     let filterArray = {};
-    let order = [];     
+    let order = [];
 
-    if(filter && filter_value) {
+    if (desde) {
+      params2.fecha_documento = {
+        [Sequelize.Op.gte]: desde,
+      };
+    }
+
+    if (hasta) {
+      if (desde) {
+        params2.fecha_documento = {
+          [Sequelize.Op.between]: [desde, hasta],
+        };
+      } else {
+        params2.fecha_documento = {
+          [Sequelize.Op.lte]: hasta,
+        };
+      }
+    }
+
+    if (proveedor) params2.cod_proveedor = proveedor;
+
+    if (filter && filter_value) {
       let filters = [];
-      filter.split(",").forEach(function(item) {
+      filter.split(',').forEach(function (item) {
         let itemArray = {};
         itemArray[item] = { [Sequelize.Op.substring]: filter_value };
         filters.push(itemArray);
-      })
+      });
 
-      filterArray = { 
-        [Sequelize.Op.or]: filters 
-      };      
+      filterArray = {
+        [Sequelize.Op.or]: filters,
+      };
     }
 
     let params = { ...params2, ...filterArray };
 
-    if(order_by && order_direction) {
+    if (order_by && order_direction) {
       order.push([order_by, order_direction]);
     }
 

@@ -2,25 +2,48 @@ const express = require('express');
 
 const MctapagarService = require('./../services/maestroCtaPagar.service');
 const validatorHandler = require('./../middlewares/validator.handler');
-const { createMctapagarSchema, updateMctapagarSchema, getMctapagarSchema } = require('./../schemas/maestroCtaPagar.schema');
-const authenticateJWT  = require('./../middlewares/authenticate.handler');
+const {
+  createMctapagarSchema,
+  updateMctapagarSchema,
+  getMctapagarSchema,
+} = require('./../schemas/maestroCtaPagar.schema');
+const authenticateJWT = require('./../middlewares/authenticate.handler');
 
 const router = express.Router();
 const service = new MctapagarService();
 
-router.get('/',
-  authenticateJWT,
-  async (req, res, next) => {
+router.get('/', authenticateJWT, async (req, res, next) => {
   try {
-    const { page, limit, order_by, order_direction, filter, filter_value } = req.headers;
-    const mCtapagar = await service.find(page, limit, order_by, order_direction, filter, filter_value);
+    const {
+      page,
+      limit,
+      order_by,
+      order_direction,
+      filter,
+      filter_value,
+      desde,
+      hasta,
+      proveedor,
+    } = req.headers;
+    const mCtapagar = await service.find(
+      page,
+      limit,
+      order_by,
+      order_direction,
+      filter,
+      filter_value,
+      desde,
+      hasta,
+      proveedor
+    );
     res.json(mCtapagar);
   } catch (error) {
     next(error);
   }
 });
 
-router.get('/:id',
+router.get(
+  '/:id',
   authenticateJWT,
   validatorHandler(getMctapagarSchema, 'params'),
   async (req, res, next) => {
@@ -34,7 +57,8 @@ router.get('/:id',
   }
 );
 
-router.post('/',
+router.post(
+  '/',
   authenticateJWT,
   validatorHandler(createMctapagarSchema, 'body'),
   async (req, res, next) => {
@@ -48,7 +72,8 @@ router.post('/',
   }
 );
 
-router.put('/:id',
+router.put(
+  '/:id',
   authenticateJWT,
   validatorHandler(getMctapagarSchema, 'params'),
   validatorHandler(updateMctapagarSchema, 'body'),
@@ -64,14 +89,15 @@ router.put('/:id',
   }
 );
 
-router.delete('/:id',
+router.delete(
+  '/:id',
   authenticateJWT,
   validatorHandler(getMctapagarSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
       await service.delete(id);
-      res.status(201).json({id});
+      res.status(201).json({ id });
     } catch (error) {
       next(error);
     }

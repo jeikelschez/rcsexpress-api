@@ -16,6 +16,12 @@ const sustraendo =
   ' AND fecha_fin_val >= `Cislr`.`fecha_comprobante`' +
   ' AND cod_tipo_retencion = `Cislr`.`cod_tipo_retencion`' +
   ' AND cod_tipo_persona = `retenciones->compras`.cod_tipo_persona)';
+const sustraendo2 =
+  'SUM((SELECT sustraendo FROM maestro_retenciones' +
+  ' WHERE fecha_ini_val <= `ctaspagar->compras->retenciones`.`fecha_comprobante`' +
+  ' AND fecha_fin_val >= `ctaspagar->compras->retenciones`.`fecha_comprobante`' +
+  ' AND cod_tipo_retencion = `ctaspagar->compras->retenciones`.`cod_tipo_retencion`' +
+  ' AND cod_tipo_persona = `ctaspagar`.cod_tipo_persona))';
 
 class RetencionesIslrService {
   async mainReport(doc, tipo, data) {
@@ -135,8 +141,143 @@ class RetencionesIslrService {
         detalles.hasta = data.hasta;
         if (data.proveedor) detalles.proveedor = data.proveedor;
         break;
+      case 'DI':
+        where = {
+          fecha_pago: {
+            [Sequelize.Op.between]: [
+              moment(data.desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+              moment(data.hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+            ],
+          },
+        };
+
+        detalles = await models.Pgenerados.findAll({
+          where: where,
+          attributes: [
+            'id',
+            'fecha_pago',
+            'nro_doc_pago',
+            'monto_pagado',
+            'monto_retenido',
+            'cod_cuenta',
+            'monto_base',
+            'porc_retencion',
+          ],
+          include: [
+            {
+              model: models.Mctapagar,
+              as: 'ctaspagar',
+              required: true,
+              attributes: [
+                'fecha_registro',
+                'nro_documento',
+                'nro_ctrl_doc',
+                'porcentaje_retencion',
+              ],
+              include: [
+                {
+                  model: models.Cislrfac,
+                  as: 'compras',
+                  attributes: ['id', 'monto_base'],
+                  required: true,
+                  include: [
+                    {
+                      model: models.Cislr,
+                      as: 'retenciones',
+                      attributes: [
+                        'id',
+                        'cod_seniat',
+                        'porc_retencion',
+                        'monto_retener',
+                      ],
+                    },
+                  ],
+                },
+                {
+                  model: models.Proveedores,
+                  as: 'proveedores',
+                  attributes: ['nb_proveedor', 'rif_proveedor'],
+                },
+              ],
+            },
+            {
+              model: models.Cuentas,
+              as: 'cuentas',
+              attributes: ['nro_cuenta'],
+              include: [
+                {
+                  model: models.Bancos,
+                  as: 'bancos',
+                  attributes: ['nb_banco'],
+                },
+              ],
+            },
+          ],
+          order: [
+            ['cuentas', 'bancos', 'id', 'ASC'],
+            ['nro_doc_pago', 'ASC'],
+            ['ctaspagar', 'nro_documento', 'ASC'],
+          ],
+          raw: true,
+        });
+
+        detalles2 = await models.Pgenerados.findAll({
+          where: where,
+          attributes: [
+            'ctaspagar.compras.retenciones.porc_retencion',
+            [
+              Sequelize.fn(
+                'sum',
+                Sequelize.col('`ctaspagar.compras`.monto_base')
+              ),
+              'monto_base',
+            ],
+            [
+              Sequelize.fn(
+                'sum',
+                Sequelize.col('`ctaspagar.compras.retenciones`.monto_retener')
+              ),
+              'monto_retener',
+            ],
+            [Sequelize.fn('count', Sequelize.col('Pgenerados.id')), 'cantidad'],
+            [Sequelize.literal(sustraendo2), 'sustraendo'],
+          ],
+          include: [
+            {
+              model: models.Mctapagar,
+              as: 'ctaspagar',
+              required: true,
+              attributes: [],
+              include: [
+                {
+                  model: models.Cislrfac,
+                  as: 'compras',
+                  attributes: [],
+                  required: true,
+                  include: [
+                    {
+                      model: models.Cislr,
+                      as: 'retenciones',
+                      attributes: [],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+          group: ['ctaspagar.compras.retenciones.porc_retencion'],
+          order: [
+            ['ctaspagar', 'compras', 'retenciones', 'porc_retencion', 'DESC'],
+          ],
+          raw: true,
+        });
+
+        if (detalles.length == 0) return false;
+
+        detalles.desde = data.desde;
+        detalles.hasta = data.hasta;
+        break;
       default:
-        return false;
         break;
     }
 
@@ -152,17 +293,17 @@ class RetencionesIslrService {
     doc.fillColor('#444444');
     doc.text('R.C.S EXPRESS, S.A', 85, 35);
     doc.text('RIF. J-31028463-6', 85, 50);
-    doc.fontSize(9);
-    doc.font('Helvetica');
-    doc.text('Av. 74, C.C. Araurima, Nivel P.B. Local Nº 6', 30, 75);
-    doc.text('Urb. Terrazas de Castillito', 30, 88);
-    doc.text('Valencia Edo. Carabobo', 30, 101);
-    doc.text('Teléfonos: 0241-8717563 - 8716867', 30, 114);
+    doc.lineWidth(0.5);
 
     switch (tipo) {
       case 'IC':
+        doc.font('Helvetica');
+        doc.text('Av. 74, C.C. Araurima, Nivel P.B. Local Nº 6', 30, 75);
+        doc.text('Urb. Terrazas de Castillito', 30, 88);
+        doc.text('Valencia Edo. Carabobo', 30, 101);
+        doc.text('Teléfonos: 0241-8717563 - 8716867', 30, 114);
         doc.lineWidth(0.5);
-        doc.lineJoin('miter').rect(630, 70, 130, 48).stroke();
+        doc.lineJoin('miter').rect(610, 70, 150, 48).stroke();
 
         doc.y = 75;
         doc.x = 605;
@@ -321,6 +462,11 @@ class RetencionesIslrService {
         doc.text('Menos Sustraendo', 680, 240);
         break;
       case 'RC':
+        doc.font('Helvetica');
+        doc.text('Av. 74, C.C. Araurima, Nivel P.B. Local Nº 6', 30, 75);
+        doc.text('Urb. Terrazas de Castillito', 30, 88);
+        doc.text('Valencia Edo. Carabobo', 30, 101);
+        doc.text('Teléfonos: 0241-8717563 - 8716867', 30, 114);
         doc.lineWidth(0.5);
         doc.fontSize(13);
         doc.font('Helvetica-Bold');
@@ -346,8 +492,8 @@ class RetencionesIslrService {
           align: 'left',
           columns: 1,
           width: 300,
-        });    
-        
+        });
+
         doc.fontSize(8);
         doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 688, 35);
 
@@ -371,7 +517,7 @@ class RetencionesIslrService {
             align: 'center',
             columns: 1,
             width: 400,
-          });          
+          });
 
           doc.fontSize(9);
           doc.font('Helvetica');
@@ -439,7 +585,7 @@ class RetencionesIslrService {
               width: 300,
             }
           );
-          
+
           doc.fontSize(8);
           doc.lineJoin('miter').rect(30, 225, 49, 26).stroke();
           doc.text('Período', 41, 240);
@@ -521,6 +667,67 @@ class RetencionesIslrService {
           doc.text('Menos Sust.', 722, 158);
         }
         break;
+      case 'DI':
+        doc.fontSize(13);
+        doc.font('Helvetica-Bold');
+        doc.y = 30;
+        doc.x = 200;
+        doc.text('DECLARACION DE ISLR', {
+          align: 'center',
+          columns: 1,
+          width: 400,
+        });
+
+        doc.fontSize(12);
+        doc.y = 50;
+        doc.x = 290;
+        doc.text('Desde: ' + detalles.desde, {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+        doc.y = 50;
+        doc.x = 410;
+        doc.text('Hasta: ' + detalles.hasta, {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+
+        doc.fontSize(8);
+        doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 688, 35);
+
+        doc.fontSize(7);
+        doc.lineJoin('miter').rect(30, 98, 35, 13).stroke();
+        doc.text('Cheque', 35, 102);
+        doc.lineJoin('miter').rect(67, 98, 120, 13).stroke();
+        doc.text('Banco', 120, 102);
+        doc.lineJoin('miter').rect(189, 83, 82, 13).stroke();
+        doc.text('Fecha', 220, 87);
+        doc.lineJoin('miter').rect(189, 98, 40, 13).stroke();
+        doc.text('Pago', 202, 102);
+        doc.lineJoin('miter').rect(231, 98, 40, 13).stroke();
+        doc.text('Factura', 238, 102);
+        doc.lineJoin('miter').rect(273, 98, 140, 13).stroke();
+        doc.text('Beneficiario', 325, 102);
+        doc.lineJoin('miter').rect(415, 98, 64, 13).stroke();
+        doc.text('Rif', 443, 102);
+        doc.lineJoin('miter').rect(481, 98, 50, 13).stroke();
+        doc.text('N° Factura', 488, 102);
+        doc.lineJoin('miter').rect(533, 98, 50, 13).stroke();
+        doc.text('N° Control', 540, 102);
+        doc.lineJoin('miter').rect(585, 98, 25, 13).stroke();
+        doc.text('Cód.', 589, 102);
+        doc.lineJoin('miter').rect(612, 83, 60, 13).stroke();
+        doc.lineJoin('miter').rect(612, 98, 60, 13).stroke();
+        doc.text('Monto Objeto', 620, 87);
+        doc.text('Retención', 625, 102);
+        doc.lineJoin('miter').rect(674, 83, 25, 28).stroke();
+        doc.text('Aplic.', 677, 89);
+        doc.text('%', 683, 100);
+        doc.lineJoin('miter').rect(701, 98, 60, 13).stroke();
+        doc.text('Monto Retenido', 705, 102);
+        break;
       default:
         break;
     }
@@ -530,6 +737,7 @@ class RetencionesIslrService {
     let total_retencion = 0;
     let total_base = 0;
     let total_total = 0;
+    let total_retener = 0;
     var i = 0;
     var page = 0;
     var ymin;
@@ -1250,6 +1458,260 @@ class RetencionesIslrService {
             i += 18;
           }
         }
+        break;
+      case 'DI':
+        ymin = 118;
+        for (var item = 0; item < detalles.length; item++) {
+          doc.fontSize(7);
+          doc.font('Helvetica');
+          doc.fillColor('#444444');
+
+          doc.y = ymin + i;
+          doc.x = 31;
+          doc.text(detalles[item].nro_doc_pago, {
+            align: 'center',
+            columns: 1,
+            width: 35,
+          });
+          doc.y = ymin + i;
+          doc.x = 70;
+          doc.text(detalles[item]['cuentas.bancos.nb_banco'], {
+            align: 'center',
+            columns: 1,
+            width: 120,
+          });
+          doc.y = ymin + i;
+          doc.x = 190;
+          doc.text(moment(detalles[item].fecha_pago).format('DD/MM/YYYY'), {
+            align: 'center',
+            columns: 1,
+            width: 40,
+          });
+          doc.y = ymin + i;
+          doc.x = 232;
+          doc.text(
+            moment(detalles[item]['ctaspagar.fecha_registro']).format(
+              'DD/MM/YYYY'
+            ),
+            {
+              align: 'center',
+              columns: 1,
+              width: 40,
+            }
+          );
+          doc.y = ymin + i;
+          doc.x = 277;
+          doc.text(detalles[item]['ctaspagar.proveedores.nb_proveedor'], {
+            align: 'left',
+            columns: 1,
+            width: 140,
+          });
+          doc.y = ymin + i;
+          doc.x = 416;
+          doc.text(detalles[item]['ctaspagar.proveedores.rif_proveedor'], {
+            align: 'center',
+            columns: 1,
+            width: 64,
+          });
+          doc.y = ymin + i;
+          doc.x = 482;
+          doc.text(detalles[item]['ctaspagar.nro_documento'], {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = ymin + i;
+          doc.x = 534;
+          doc.text(detalles[item]['ctaspagar.nro_ctrl_doc'], {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = ymin + i;
+          doc.x = 586;
+          doc.text(detalles[item]['ctaspagar.compras.retenciones.cod_seniat'], {
+            align: 'center',
+            columns: 1,
+            width: 25,
+          });
+          doc.y = ymin + i;
+          doc.x = 610;
+          doc.text(
+            utils.formatNumber(detalles[item]['ctaspagar.compras.monto_base']),
+            {
+              align: 'right',
+              columns: 1,
+              width: 60,
+            }
+          );
+          doc.y = ymin + i;
+          doc.x = 675;
+          doc.text(
+            detalles[item]['ctaspagar.compras.retenciones.porc_retencion'] +
+              '%',
+            {
+              align: 'center',
+              columns: 1,
+              width: 25,
+            }
+          );
+          doc.y = ymin + i;
+          doc.x = 699;
+          doc.text(
+            utils.formatNumber(
+              detalles[item]['ctaspagar.compras.retenciones.monto_retener']
+            ),
+            {
+              align: 'right',
+              columns: 1,
+              width: 60,
+            }
+          );
+          total_base += utils.parseFloatN(
+            detalles[item]['ctaspagar.compras.monto_base']
+          );
+          total_retener += utils.parseFloatN(
+            detalles[item]['ctaspagar.compras.retenciones.monto_retener']
+          );
+
+          i += 18;
+          if (i >= 450) {
+            doc.fillColor('#BLACK');
+            doc.addPage();
+            page = page + 1;
+            doc.switchToPage(page);
+            i = 0;
+            await this.generateHeader(doc, tipo, detalles);
+          }
+        }
+        // Totales Finales
+        doc.font('Helvetica-Bold');
+        doc.y = ymin + i;
+        doc.x = 540;
+        doc.text('Totales:', {
+          align: 'left',
+          columns: 1,
+          width: 100,
+        });
+        doc.y = ymin + i;
+        doc.x = 610;
+        doc.text(utils.formatNumber(total_base), {
+          align: 'right',
+          columns: 1,
+          width: 60,
+        });
+        doc.y = ymin + i;
+        doc.x = 699;
+        doc.text(utils.formatNumber(total_retener), {
+          align: 'right',
+          columns: 1,
+          width: 60,
+        });
+
+        if (i >= 250) {
+          doc.fillColor('#BLACK');
+          doc.addPage();
+          page = page + 1;
+          doc.switchToPage(page);
+          i = 0;
+          await this.generateHeader(doc, tipo, detalles);
+        }
+
+        doc.fontSize(10);
+        doc
+          .lineJoin('miter')
+          .rect(130, ymin + i + 33, 136, 18)
+          .stroke();
+        doc.text('Cantidad Objeto Retención', 133, ymin + i + 37);
+        doc
+          .lineJoin('miter')
+          .rect(268, ymin + i + 33, 75, 18)
+          .stroke();
+        doc.text('Cant. Facturas', 271, ymin + i + 37);
+        doc
+          .lineJoin('miter')
+          .rect(345, ymin + i + 33, 108, 18)
+          .stroke();
+        doc.text('Imp. Ret. Menos Sust.', 348, ymin + i + 37);
+        doc
+          .lineJoin('miter')
+          .rect(455, ymin + i + 33, 63, 18)
+          .stroke();
+        doc.text('Sustraendo', 458, ymin + i + 37);
+
+        let base = 0;
+        let cantidad = 0;
+        let retener = 0;
+
+        for (var item2 = 0; item2 < detalles2.length; item2++) {
+          doc.y = ymin + i + 60;
+          doc.x = 60;
+          doc.text(
+            'Total Base ' + parseInt(detalles2[item2].porc_retencion) + '%',
+            {
+              align: 'left',
+              columns: 1,
+              width: 70,
+            }
+          );
+          doc.y = ymin + i + 60;
+          doc.x = 190;
+          doc.text(utils.formatNumber(detalles2[item2].monto_base), {
+            align: 'right',
+            columns: 1,
+            width: 70,
+          });
+          doc.y = ymin + i + 60;
+          doc.x = 280;
+          doc.text(detalles2[item2].cantidad, {
+            align: 'center',
+            columns: 1,
+            width: 60,
+          });
+          doc.y = ymin + i + 60;
+          doc.x = 390;
+          doc.text(utils.formatNumber(detalles2[item2].monto_retener), {
+            align: 'right',
+            columns: 1,
+            width: 60,
+          });
+          doc.y = ymin + i + 60;
+          doc.x = 453;
+          doc.text(utils.formatNumber(detalles2[item2].sustraendo), {
+            align: 'right',
+            columns: 1,
+            width: 60,
+          });
+
+          base += utils.parseFloatN(detalles2[item2].monto_base);
+          cantidad += utils.parseFloatN(detalles2[item2].cantidad);
+          retener += utils.parseFloatN(detalles2[item2].monto_retener);
+          i += 18;
+        }
+
+        doc.lineCap('butt').moveTo(180, ymin + i + 57).lineTo(460, ymin + i + 57).stroke();
+
+        doc.y = ymin + i + 65;
+        doc.x = 190;
+        doc.text(utils.formatNumber(base), {
+          align: 'right',
+          columns: 1,
+          width: 70,
+        });
+        doc.y = ymin + i + 65;
+        doc.x = 280;
+        doc.text(cantidad, {
+          align: 'center',
+          columns: 1,
+          width: 60,
+        });
+        doc.y = ymin + i + 65;
+        doc.x = 390;
+        doc.text(utils.formatNumber(retener), {
+          align: 'right',
+          columns: 1,
+          width: 60,
+        });
         break;
       default:
         break;

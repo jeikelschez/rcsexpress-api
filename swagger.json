@@ -4104,7 +4104,7 @@
           {
             "name": "desde",
             "in": "header",
-            "description": "Fecha de Envio Desde",
+            "description": "Fecha de Factura Desde",
             "required": false,
             "schema": {
               "type": "string"
@@ -4113,7 +4113,7 @@
           {
             "name": "hasta",
             "in": "header",
-            "description": "Fecha de Envio Hasta",
+            "description": "Fecha de Factura Hasta",
             "required": false,
             "schema": {
               "type": "string"
@@ -9267,6 +9267,33 @@
             "required": false,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "desde",
+            "in": "header",
+            "description": "Fecha de Documento Desde",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "hasta",
+            "in": "header",
+            "description": "Fecha de Documento Hasta",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "proveedor",
+            "in": "header",
+            "description": "Codigo del Proveedor",
+            "required": false,
+            "schema": {
+              "type": "integer"
             }
           }
         ],

@@ -95,6 +95,7 @@ class Cislrfac extends Model {
     this.belongsTo(models.Mctapagar, {
       foreignKey: 'id_compra',
       as: 'compras',
+      allowNull: false
     });
   }
 
