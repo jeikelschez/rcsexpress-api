@@ -33,6 +33,8 @@ const RetencionesIslrService = require('./retencionesIslr.service');
 const retencionesIslrService = new RetencionesIslrService();
 const RetencionesIvaService = require('./retencionesIva.service');
 const retencionesIvaService = new RetencionesIvaService();
+const RelacionFpoService = require('./relacionFpo.service');
+const relacionFpoService = new RelacionFpoService();
 
 class PdfReportsService {
   constructor() {}
@@ -359,6 +361,27 @@ class PdfReportsService {
 
     doc.pipe(fs.createWriteStream(reportsPath + resPath));
     let validDoc = await retencionesIvaService.mainReport(
+      doc,
+      tipo,
+      data
+    );
+    resPath = validDoc ? resPath : 'reporteBase.pdf';
+    doc.end();
+    return { validDoc: validDoc, resPath: resPath };
+  }
+
+  // RELACION FPO
+  async relacionFpo(print, tipo, data) {
+    if (!print) return { validDoc: true, resPath: 'reporteBase.pdf' };
+
+    let resPath = 'relacionFpo' + tipo + '.pdf';
+    let doc = new PDFDocument({
+      margin: 20,
+      bufferPages: true,
+    });
+
+    doc.pipe(fs.createWriteStream(reportsPath + resPath));
+    let validDoc = await relacionFpoService.mainReport(
       doc,
       tipo,
       data

@@ -277,4 +277,18 @@ router.get('/retencionesIva', authenticateJWT, async (req, res, next) => {
   }
 });
 
+router.get('/relacionFpo', authenticateJWT, async (req, res, next) => {
+  try {
+    const { print, tipo, data } = req.headers;
+    const response = await service.relacionFpo(print, tipo, data);
+    res.status(200).json({
+      message: 'PDF Generado',
+      pdfPath: response.resPath,
+      validDoc: response.validDoc,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
