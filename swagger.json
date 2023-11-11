@@ -9638,7 +9638,7 @@
             }
           },
           {
-            "name": "agencia_transito",
+            "name": "agenciaTransito",
             "in": "header",
             "description": "Codigo de la Agencia Transito",
             "required": false,
@@ -9647,7 +9647,7 @@
             }
           },
           {
-            "name": "agencia_dest",
+            "name": "agenciaDest",
             "in": "header",
             "description": "Codigo de la Agencia Destino",
             "required": false,
@@ -9656,7 +9656,7 @@
             }
           },
           {
-            "name": "agencia_dest_transito",
+            "name": "agenciaDestTransito",
             "in": "header",
             "description": "Codigo de la Agencia Transito Destino",
             "required": false,
@@ -9665,7 +9665,7 @@
             }
           },
           {
-            "name": "nro_documento",
+            "name": "nroDocumento",
             "in": "header",
             "description": "Numero de Documento",
             "required": false,
@@ -9701,7 +9701,7 @@
             }
           },
           {
-            "name": "cliente_orig",
+            "name": "clienteOrig",
             "in": "header",
             "description": "Codigo Cliente Origen",
             "required": false,
@@ -9710,7 +9710,7 @@
             }
           },
           {
-            "name": "cliente_dest",
+            "name": "clienteDest",
             "in": "header",
             "description": "Codigo Cliente Origen",
             "required": false,
@@ -9719,7 +9719,7 @@
             }
           },
           {
-            "name": "cliente_orig_exist",
+            "name": "clienteOrigExist",
             "in": "header",
             "description": "Exista Cliente Origen (S)",
             "required": false,
@@ -9728,7 +9728,7 @@
             }
           },
           {
-            "name": "cliente_part_exist",
+            "name": "clientePartExist",
             "in": "header",
             "description": "Exista Cliente Particular Origen (S)",
             "required": false,
@@ -9737,7 +9737,7 @@
             }
           },
           {
-            "name": "estatus_oper",
+            "name": "estatusOper",
             "in": "header",
             "description": "Estatus Operativo",
             "required": false,
@@ -9755,7 +9755,7 @@
             }
           },
           {
-            "name": "estatus_admin_in",
+            "name": "estatusAdminIn",
             "in": "header",
             "description": "Incluir Estatus Administrativo (Separado ,)",
             "required": false,
@@ -9764,7 +9764,7 @@
             }
           },
           {
-            "name": "estatus_admin_ex",
+            "name": "estatusAdminEx",
             "in": "header",
             "description": "Excluir Estatus Administrativo (Separado ,)",
             "required": false,
@@ -9773,7 +9773,7 @@
             }
           },
           {
-            "name": "no_abono",
+            "name": "noAbono",
             "in": "header",
             "description": "Monto Total = Saldo (S)",
             "required": false,
@@ -9782,7 +9782,7 @@
             }
           },
           {
-            "name": "tipo_doc_ppal",
+            "name": "tipoDocPpal",
             "in": "header",
             "description": "Tipo Doc Principal",
             "required": false,
@@ -9791,7 +9791,7 @@
             }
           },
           {
-            "name": "nro_doc_ppal",
+            "name": "nroDocPpal",
             "in": "header",
             "description": "Nro Doc Principal",
             "required": false,
@@ -9800,7 +9800,7 @@
             }
           },
           {
-            "name": "serie_doc_ppal",
+            "name": "serieDocPpal",
             "in": "header",
             "description": "Serie Doc Principal",
             "required": false,
@@ -9809,7 +9809,7 @@
             }
           },
           {
-            "name": "nro_ctrl_doc_ppal",
+            "name": "nroCtrlDocPpal",
             "in": "header",
             "description": "Nro Ctrl Doc Principal",
             "required": false,
@@ -9818,7 +9818,7 @@
             }
           },
           {
-            "name": "nro_ctrl_doc_ppal_new",
+            "name": "nroCtrlDocPpalNew",
             "in": "header",
             "description": "Nro Ctrl Doc Principal New",
             "required": false,
@@ -9827,7 +9827,7 @@
             }
           },
           {
-            "name": "cod_ag_doc_ppal",
+            "name": "codAgDocPpal",
             "in": "header",
             "description": "Codigo Agencia Doc Principal",
             "required": false,
@@ -9836,7 +9836,7 @@
             }
           },
           {
-            "name": "order_pe",
+            "name": "orderPe",
             "in": "header",
             "description": "Ordenado Especial para Prueba de Entrega (S)",
             "required": false,
@@ -9845,7 +9845,7 @@
             }
           },
           {
-            "name": "pagado_en",
+            "name": "pagadoEn",
             "in": "header",
             "description": "Pagado En",
             "required": false,
@@ -9863,7 +9863,7 @@
             }
           },
           {
-            "name": "prefix_nro",
+            "name": "prefixNro",
             "in": "header",
             "description": "Prefijo Nro Documento",
             "required": false,
@@ -9872,7 +9872,7 @@
             }
           },
           {
-            "name": "include_zona",
+            "name": "includeZona",
             "in": "header",
             "description": "Incluir Zona (S)",
             "required": false,
@@ -9881,7 +9881,7 @@
             }
           },
           {
-            "name": "no_pagada",
+            "name": "noPagada",
             "in": "header",
             "description": "Monto Total <> Saldo (S)",
             "required": false,
@@ -9890,7 +9890,7 @@
             }
           },
           {
-            "name": "si_saldo",
+            "name": "siSaldo",
             "in": "header",
             "description": "Saldo > 0 (S)",
             "required": false,
