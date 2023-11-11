@@ -49,7 +49,9 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       pagado_en,
       modalidad,
       prefix_nro,
-      include_zona
+      include_zona,
+      no_pagada,
+      si_saldo,
     } = req.headers;
 
     const cguias = await service.find(
@@ -62,7 +64,7 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       agencia,
       agencia_transito,
       agencia_dest,
-      agencia_dest_transito,      
+      agencia_dest_transito,
       nro_documento,
       tipo,
       tipo_in,
@@ -87,7 +89,9 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       pagado_en,
       modalidad,
       prefix_nro,
-      include_zona
+      include_zona,
+      no_pagada,
+      si_saldo
     );
     res.json(cguias);
   } catch (error) {

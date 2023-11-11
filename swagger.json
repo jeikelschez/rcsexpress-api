@@ -9879,6 +9879,24 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "no_pagada",
+            "in": "header",
+            "description": "Monto Total <> Saldo (S)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "si_saldo",
+            "in": "header",
+            "description": "Saldo > 0 (S)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {

@@ -9,6 +9,8 @@ const CartaClienteService = require('./cartaCliente.service');
 const cartaClienteService = new CartaClienteService();
 const FacturaPreimpresoService = require('./facturaPreimpreso.service');
 const facturaPreimpresoService = new FacturaPreimpresoService();
+const NotaPreimpresoService = require('./notaPreimpreso.service');
+const notaPreimpresoService = new NotaPreimpresoService();
 const AnexoFacturaService = require('./anexoFactura.service');
 const anexoFacturaService = new AnexoFacturaService();
 const RelacionDespachoService = require('./relacionDespacho.service');
@@ -79,6 +81,18 @@ class PdfReportsService {
     });
     doc.pipe(fs.createWriteStream(reportsPath + resPath));
     await facturaPreimpresoService.mainReport(doc, data);
+    doc.end();
+    return { validDoc: true, resPath: resPath };
+  }
+
+  // REPORTE NOTAS DE DEBITO O CREDITO
+  async notaPreimpreso(data) {
+    let resPath = 'notaPreimpreso.pdf';
+    let doc = new PDFDocument({
+      margin: 20,
+    });
+    doc.pipe(fs.createWriteStream(reportsPath + resPath));
+    await notaPreimpresoService.mainReport(doc, data);
     doc.end();
     return { validDoc: true, resPath: resPath };
   }

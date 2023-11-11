@@ -36,7 +36,7 @@ class FacturaPreimpresoService {
       .font('Helvetica-Bold')
       .text('CLIENTE: ' + cliente_orig.nb_cliente, 30, 40)
       .text(
-        'RIF/CO: ' +
+        'RIF/CI: ' +
           (cliente_orig.rif_cedula
             ? cliente_orig.rif_cedula
             : cliente_orig.rif_ci),

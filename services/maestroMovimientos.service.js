@@ -26,7 +26,7 @@ const siglasDest =
   '(SELECT siglas' +
   ' FROM agencias ' +
   ' JOIN ciudades ON agencias.cod_ciudad = ciudades.id ' +
-  ' WHERE `Mmovimientos`.cod_agencia_dest = agencias.id)';  
+  ' WHERE `Mmovimientos`.cod_agencia_dest = agencias.id)';
 
 class MmovimientosService {
   constructor() {}
@@ -71,7 +71,9 @@ class MmovimientosService {
     pagado_en,
     modalidad,
     prefix_nro,
-    include_zona
+    include_zona,
+    no_pagada,
+    si_saldo,
   ) {
     let params2 = {};
     let params3 = {};
@@ -174,6 +176,19 @@ class MmovimientosService {
         [Sequelize.Op.col]: 'saldo',
       };
     }
+    if (no_pagada) {
+      params2.monto_total = {
+        [Sequelize.Op.ne]: {
+          [Sequelize.Op.col]: 'saldo',
+        },
+      };
+    }
+
+    if (si_saldo) {
+      params2.saldo = {
+        [Sequelize.Op.gt]: 0,
+      };
+    }
 
     if (tipo_doc_ppal) params2.tipo_doc_principal = tipo_doc_ppal;
     if (nro_doc_ppal) params2.nro_doc_principal = nro_doc_ppal;
@@ -210,7 +225,6 @@ class MmovimientosService {
         [Sequelize.literal(clienteOrigDesc), 'cliente_orig_desc'],
         [Sequelize.literal(clienteDestDesc), 'cliente_dest_desc'],
         [Sequelize.literal(siglasDest), 'siglas_dest'],
-
       ],
     };
 
