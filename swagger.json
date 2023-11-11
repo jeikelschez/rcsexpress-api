@@ -9595,7 +9595,7 @@
             }
           },
           {
-            "name": "orderBy",
+            "name": "orderby",
             "in": "header",
             "description": "Ordenado por",
             "schema": {
@@ -9603,7 +9603,7 @@
             }
           },
           {
-            "name": "orderDirection",
+            "name": "orderdirection",
             "in": "header",
             "description": "Direccion del ordenado",
             "schema": {
@@ -9620,7 +9620,7 @@
             }
           },
           {
-            "name": "filterValue",
+            "name": "filtervalue",
             "in": "header",
             "description": "Valor a filtrar",
             "required": false,
@@ -9638,7 +9638,7 @@
             }
           },
           {
-            "name": "agenciaTransito",
+            "name": "agenciatransito",
             "in": "header",
             "description": "Codigo de la Agencia Transito",
             "required": false,
@@ -9647,7 +9647,7 @@
             }
           },
           {
-            "name": "agenciaDest",
+            "name": "agenciadest",
             "in": "header",
             "description": "Codigo de la Agencia Destino",
             "required": false,
@@ -9656,7 +9656,7 @@
             }
           },
           {
-            "name": "agenciaDestTransito",
+            "name": "agenciadesttransito",
             "in": "header",
             "description": "Codigo de la Agencia Transito Destino",
             "required": false,
@@ -9665,7 +9665,7 @@
             }
           },
           {
-            "name": "nroDocumento",
+            "name": "nrodocumento",
             "in": "header",
             "description": "Numero de Documento",
             "required": false,
@@ -9701,7 +9701,7 @@
             }
           },
           {
-            "name": "clienteOrig",
+            "name": "clienteorig",
             "in": "header",
             "description": "Codigo Cliente Origen",
             "required": false,
@@ -9710,7 +9710,7 @@
             }
           },
           {
-            "name": "clienteDest",
+            "name": "clientedest",
             "in": "header",
             "description": "Codigo Cliente Origen",
             "required": false,
@@ -9719,7 +9719,7 @@
             }
           },
           {
-            "name": "clienteOrigExist",
+            "name": "clienteorigexist",
             "in": "header",
             "description": "Exista Cliente Origen (S)",
             "required": false,
@@ -9728,7 +9728,7 @@
             }
           },
           {
-            "name": "clientePartExist",
+            "name": "clientepartexist",
             "in": "header",
             "description": "Exista Cliente Particular Origen (S)",
             "required": false,
@@ -9737,7 +9737,7 @@
             }
           },
           {
-            "name": "estatusOper",
+            "name": "estatusoper",
             "in": "header",
             "description": "Estatus Operativo",
             "required": false,
@@ -9755,7 +9755,7 @@
             }
           },
           {
-            "name": "estatusAdminIn",
+            "name": "estatusadminin",
             "in": "header",
             "description": "Incluir Estatus Administrativo (Separado ,)",
             "required": false,
@@ -9764,7 +9764,7 @@
             }
           },
           {
-            "name": "estatusAdminEx",
+            "name": "estatusadminex",
             "in": "header",
             "description": "Excluir Estatus Administrativo (Separado ,)",
             "required": false,
@@ -9773,7 +9773,7 @@
             }
           },
           {
-            "name": "noAbono",
+            "name": "noabono",
             "in": "header",
             "description": "Monto Total = Saldo (S)",
             "required": false,
@@ -9782,7 +9782,7 @@
             }
           },
           {
-            "name": "tipoDocPpal",
+            "name": "tipodocppal",
             "in": "header",
             "description": "Tipo Doc Principal",
             "required": false,
@@ -9791,7 +9791,7 @@
             }
           },
           {
-            "name": "nroDocPpal",
+            "name": "nrodocppal",
             "in": "header",
             "description": "Nro Doc Principal",
             "required": false,
@@ -9800,7 +9800,7 @@
             }
           },
           {
-            "name": "serieDocPpal",
+            "name": "seriedocppal",
             "in": "header",
             "description": "Serie Doc Principal",
             "required": false,
@@ -9809,7 +9809,7 @@
             }
           },
           {
-            "name": "nroCtrlDocPpal",
+            "name": "nroctrldocppal",
             "in": "header",
             "description": "Nro Ctrl Doc Principal",
             "required": false,
@@ -9818,7 +9818,7 @@
             }
           },
           {
-            "name": "nroCtrlDocPpalNew",
+            "name": "nroctrldocppalnew",
             "in": "header",
             "description": "Nro Ctrl Doc Principal New",
             "required": false,
@@ -9827,7 +9827,7 @@
             }
           },
           {
-            "name": "codAgDocPpal",
+            "name": "codagdocppal",
             "in": "header",
             "description": "Codigo Agencia Doc Principal",
             "required": false,
@@ -9836,7 +9836,7 @@
             }
           },
           {
-            "name": "orderPe",
+            "name": "orderpe",
             "in": "header",
             "description": "Ordenado Especial para Prueba de Entrega (S)",
             "required": false,
@@ -9845,7 +9845,7 @@
             }
           },
           {
-            "name": "pagadoEn",
+            "name": "pagadoen",
             "in": "header",
             "description": "Pagado En",
             "required": false,
@@ -9863,7 +9863,7 @@
             }
           },
           {
-            "name": "prefixNro",
+            "name": "prefixnro",
             "in": "header",
             "description": "Prefijo Nro Documento",
             "required": false,
@@ -9872,7 +9872,7 @@
             }
           },
           {
-            "name": "includeZona",
+            "name": "includezona",
             "in": "header",
             "description": "Incluir Zona (S)",
             "required": false,
@@ -9881,7 +9881,7 @@
             }
           },
           {
-            "name": "noPagada",
+            "name": "nopagada",
             "in": "header",
             "description": "Monto Total <> Saldo (S)",
             "required": false,
@@ -9890,7 +9890,7 @@
             }
           },
           {
-            "name": "siSaldo",
+            "name": "sisaldo",
             "in": "header",
             "description": "Saldo > 0 (S)",
             "required": false,
