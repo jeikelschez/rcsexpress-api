@@ -74,7 +74,7 @@ class MmovimientosService {
     prefix_nro,
     include_zona,
     no_pagada,
-    si_saldo,
+    saldo,
   ) {
     let params2 = {};
     let params3 = {};
@@ -185,7 +185,7 @@ class MmovimientosService {
       };
     }
 
-    if (si_saldo) {
+    if (saldo) {
       params2.saldo = {
         [Sequelize.Op.gt]: 0,
       };

@@ -52,7 +52,7 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       prefix_nro,
       include_zona,
       no_pagada,
-      si_saldo,
+      saldo,
     } = req.headers;
 
     logger.info(JSON.stringify(req.headers));
@@ -94,7 +94,7 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       prefix_nro,
       include_zona,
       no_pagada,
-      si_saldo
+      saldo
     );
     res.json(cguias);
   } catch (error) {
