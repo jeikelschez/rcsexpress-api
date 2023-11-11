@@ -99,7 +99,7 @@ class MmovimientosService {
       }
     }
 
-    if (agenciaDest) {
+    if (agenciadest) {
       if (agenciadesttransito) {
         params3 = {
           [Sequelize.Op.or]: [
