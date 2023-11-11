@@ -247,8 +247,6 @@ class RelacionFpoService {
 
         if (detalles.length == 0) return false;
 
-        console.log(detalles);
-
         detalles.desde = data.desde;
         detalles.hasta = data.hasta;
         break;

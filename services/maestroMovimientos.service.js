@@ -1,4 +1,5 @@
 const boom = require('@hapi/boom');
+const logger = require('./../config/logger');
 
 const { models, Sequelize } = require('./../libs/sequelize');
 const UtilsService = require('./utils.service');
@@ -217,6 +218,9 @@ class MmovimientosService {
         [Sequelize.Op.or]: filters,
       };
     }
+
+    logger.info(JSON.stringify(params2));
+    logger.info(JSON.stringify(params2.saldo));
 
     let params = { ...params3, ...params2, ...filterArray };
 
