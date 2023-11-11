@@ -18,10 +18,10 @@ router.get('/', authenticateJWT, async (req, res, next) => {
     const {
       page,
       limit,
-      order_by,
-      order_direction,
+      orderBy,
+      orderDirection,
       filter,
-      filter_value,
+      filterValue,
       agencia,
       agencia_transito,
       agencia_dest,
@@ -55,15 +55,15 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       si_saldo,
     } = req.headers;
 
-    logger.info(JSON.stringify(req.headers));
+    logger.info(si_saldo);
 
     const cguias = await service.find(
       page,
       limit,
-      order_by,
-      order_direction,
+      orderBy,
+      orderDirection,
       filter,
-      filter_value,
+      filterValue,
       agencia,
       agencia_transito,
       agencia_dest,
