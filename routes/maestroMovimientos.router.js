@@ -13,7 +13,7 @@ const authenticateJWT = require('./../middlewares/authenticate.handler');
 const router = express.Router();
 const service = new MmovimientosService();
 
-router.get('/', authenticateJWT, async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
     const {
       page,
