@@ -196,7 +196,7 @@ class MmovimientosService {
     if (nro_ctrl_doc_ppal) params2.nro_ctrl_doc_ppal = nro_ctrl_doc_ppal;
     if (nro_ctrl_doc_ppal_new)
       params2.nro_ctrl_doc_ppal_new = nro_ctrl_doc_ppal_new;
-    if (cod_ag_doc_ppal) params2.cod_ag_doc_ppal = cod_ag_doc_ppal;
+    if (cod_ag_doc_ppal) params2.cod_ag_doc_ppal = cod_ag_doc_ppal; 
     if (pagado_en) params2.pagado_en = pagado_en;
     if (modalidad) params2.modalidad_pago = modalidad;
     if (prefix_nro) {
