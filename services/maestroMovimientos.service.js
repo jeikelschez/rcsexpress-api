@@ -221,6 +221,8 @@ class MmovimientosService {
 
     let params = { ...params3, ...params2, ...filterArray };
 
+    logger.info(JSON.stringify(params))
+
     let attributes = {
       include: [
         [Sequelize.literal(clienteOrigDesc), 'cliente_orig_desc'],
