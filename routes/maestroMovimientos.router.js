@@ -1,4 +1,5 @@
 const express = require('express');
+const logger = require('./../config/logger');
 
 const MmovimientosService = require('./../services/maestroMovimientos.service');
 const validatorHandler = require('./../middlewares/validator.handler');
@@ -53,6 +54,8 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       no_pagada,
       si_saldo,
     } = req.headers;
+
+    logger.info(si_saldo);
 
     const cguias = await service.find(
       page,

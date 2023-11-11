@@ -80,7 +80,7 @@ class MmovimientosService {
     let params3 = {};
     let filterArray = {};
     let order = [];
-    let include = [];
+    let include = [];    
 
     if (agencia) {
       if (agencia_transito) {
@@ -220,7 +220,6 @@ class MmovimientosService {
     }
 
     logger.info(JSON.stringify(params2));
-    logger.info(JSON.stringify(params2.saldo));
 
     let params = { ...params3, ...params2, ...filterArray };
 
