@@ -15,7 +15,7 @@
       "description": "Ambiente de Desarrollo"
     },
     {
-      "url": "https://scen.rcsexpress.com/api/v1/",
+      "url": "/http://52.2.51.102:3000/api/v1/",
       "description": "Ambiente de Producción"
     }
   ],
