@@ -39,42 +39,42 @@ class MmovimientosService {
 
   async find(
     page,
-    limit,
-    order_by,
-    order_direction,
-    filter,
-    filter_value,
-    agencia,
-    agencia_transito,
-    agencia_dest,
-    agencia_dest_transito,
-    nro_documento,
-    tipo,
-    tipo_in,
-    desde,
-    hasta,
-    cliente_orig,
-    cliente_dest,
-    cliente_orig_exist,
-    cliente_part_exist,
-    estatus_oper,
-    transito,
-    estatus_admin_in,
-    estatus_admin_ex,
-    no_abono,
-    tipo_doc_ppal,
-    nro_doc_ppal,
-    serie_doc_ppal,
-    nro_ctrl_doc_ppal,
-    nro_ctrl_doc_ppal_new,
-    cod_ag_doc_ppal,
-    order_pe,
-    pagado_en,
-    modalidad,
-    prefix_nro,
-    include_zona,
-    no_pagada,
-    si_saldo,
+      limit,
+      orderBy,
+      orderDirection,
+      filter,
+      filterValue,
+      agencia,
+      agenciaTransito,
+      agenciaDest,
+      agenciaDestTransito,
+      nroDocumento,
+      tipo,
+      tipoIn,
+      desde,
+      hasta,
+      clienteOrig,
+      clienteDest,
+      clienteOrigExist,
+      clientePartExist,
+      estatusOper,
+      transito,
+      estatusAdminIn,
+      estatusAdminEx,
+      noAbono,
+      tipoDocPpal,
+      nroDocPpal,
+      serieDocPpal,
+      nroCtrlDocPpal,
+      nroCtrlDocPpalNew,
+      codAgDocPpal,
+      orderPe,
+      pagadoEn,
+      modalidad,
+      prefixNro,
+      includeZona,
+      noPagada,
+      siSaldo
   ) {
     let params2 = {};
     let params3 = {};
@@ -83,7 +83,7 @@ class MmovimientosService {
     let include = [];    
 
     if (agencia) {
-      if (agencia_transito) {
+      if (agenciaTransito) {
         params3 = {
           [Sequelize.Op.or]: [
             {
@@ -99,29 +99,29 @@ class MmovimientosService {
       }
     }
 
-    if (agencia_dest) {
-      if (agencia_dest_transito) {
+    if (agenciaDest) {
+      if (agenciaDestTransito) {
         params3 = {
           [Sequelize.Op.or]: [
             {
-              cod_agencia_dest: agencia_dest.split(','),
+              cod_agencia_dest: agenciaDest.split(','),
             },
             {
-              cod_agencia_transito: agencia_dest.split(','),
+              cod_agencia_transito: agenciaDest.split(','),
             },
           ],
         };
       } else {
-        params2.cod_agencia_dest = agencia_dest.split(',');
+        params2.cod_agencia_dest = agenciaDest.split(',');
       }
     }
 
-    if (nro_documento) params2.nro_documento = nro_documento;
+    if (nroDocumento) params2.nro_documento = nroDocumento;
     if (tipo) params2.t_de_documento = tipo;
 
-    if (tipo_in) {
+    if (tipoIn) {
       params2.t_de_documento = {
-        [Sequelize.Op.in]: tipo_in.split(','),
+        [Sequelize.Op.in]: tipoIn.split(','),
       };
     }
 
@@ -143,41 +143,41 @@ class MmovimientosService {
       }
     }
 
-    if (cliente_orig) params2.cod_cliente_org = cliente_orig;
-    if (cliente_dest) params2.cod_cliente_dest = cliente_dest;
+    if (clienteOrig) params2.cod_cliente_org = clientOrig;
+    if (clienteDest) params2.cod_cliente_dest = clienteDest;
 
-    if (cliente_orig_exist) {
+    if (clienteOrigExist) {
       params2.cod_cliente_org = {
         [Sequelize.Op.not]: null,
       };
     }
 
-    if (cliente_part_exist) {
+    if (clientePartExist) {
       params2.id_clte_part_orig = {
         [Sequelize.Op.not]: null,
       };
     }
 
-    if (estatus_oper) params2.estatus_operativo = estatus_oper;
+    if (estatusOper) params2.estatus_operativo = estatusOper;
     if (transito) params2.check_transito = transito;
 
-    if (estatus_admin_in) {
+    if (estatusAdminIn) {
       params2.estatus_administra = {
-        [Sequelize.Op.in]: estatus_admin_in.split(','),
+        [Sequelize.Op.in]: estatusAdminIn.split(','),
       };
     }
 
-    if (estatus_admin_ex) {
+    if (estatusAdminEx) {
       params2.estatus_administra = {
-        [Sequelize.Op.notIn]: estatus_admin_ex.split(','),
+        [Sequelize.Op.notIn]: estatusAdminEx.split(','),
       };
     }
-    if (no_abono) {
+    if (noAbono) {
       params2.monto_total = {
         [Sequelize.Op.col]: 'saldo',
       };
     }
-    if (no_pagada) {
+    if (noPagada) {
       params2.monto_total = {
         [Sequelize.Op.ne]: {
           [Sequelize.Op.col]: 'saldo',
@@ -185,32 +185,32 @@ class MmovimientosService {
       };
     }
 
-    if (si_saldo) {
+    if (siSaldo) {
       params2.saldo = {
         [Sequelize.Op.gt]: 0,
       };
     }
 
-    if (tipo_doc_ppal) params2.tipo_doc_principal = tipo_doc_ppal;
-    if (nro_doc_ppal) params2.nro_doc_principal = nro_doc_ppal;
-    if (serie_doc_ppal) params2.serie_doc_principal = serie_doc_ppal;
-    if (nro_ctrl_doc_ppal) params2.nro_ctrl_doc_ppal = nro_ctrl_doc_ppal;
-    if (nro_ctrl_doc_ppal_new)
-      params2.nro_ctrl_doc_ppal_new = nro_ctrl_doc_ppal_new;
-    if (cod_ag_doc_ppal) params2.cod_ag_doc_ppal = cod_ag_doc_ppal; 
-    if (pagado_en) params2.pagado_en = pagado_en;
+    if (tipoDocPpal) params2.tipo_doc_principal = tipoDocPpal;
+    if (nroDocPpal) params2.nro_doc_principal = nroDocPpal;
+    if (serieDocPpal) params2.serie_doc_principal = serieDocPpal;
+    if (nroCtrlDocPpal) params2.nro_ctrl_doc_ppal = nroCtrlDocPpal;
+    if (nroCtrlDocPpalNew)
+      params2.nro_ctrl_doc_ppal_new = nroCtrlDocPpalNew;
+    if (codAgDocPpal) params2.cod_ag_doc_ppal = codAgDocPpal; 
+    if (pagadoEn) params2.pagado_en = pagadoEn;
     if (modalidad) params2.modalidad_pago = modalidad;
-    if (prefix_nro) {
+    if (prefixNro) {
       params2.nro_documento = {
-        [Sequelize.Op.startsWith]: prefix_nro,
+        [Sequelize.Op.startsWith]: prefixNnro,
       };
     }
 
-    if (filter && filter_value) {
+    if (filter && filterValue) {
       let filters = [];
       filter.split(',').forEach(function (item) {
         let itemArray = {};
-        itemArray[item] = { [Sequelize.Op.substring]: filter_value };
+        itemArray[item] = { [Sequelize.Op.substring]: filterValue };
         filters.push(itemArray);
       });
 
@@ -218,8 +218,6 @@ class MmovimientosService {
         [Sequelize.Op.or]: filters,
       };
     }
-
-    //logger.info(JSON.stringify(params2));
 
     let params = { ...params3, ...params2, ...filterArray };
 
@@ -231,20 +229,20 @@ class MmovimientosService {
       ],
     };
 
-    if (include_zona) {
+    if (includeZona) {
       include = ['zonas_dest'];
     }
 
-    if (order_pe) {
+    if (orderPe) {
       order.push(['cod_agencia', 'ASC']);
       order.push(['cod_agencia_dest', 'ASC']);
       order.push(['nro_documento', 'ASC']);
       order.push(['fecha_emision', 'ASC']);
-    } else if (order_by) {
-      if (order_by.includes(',')) {
-        order = JSON.parse(order_by);
-      } else if (order_by && order_direction) {
-        order.push([order_by, order_direction]);
+    } else if (orderBy) {
+      if (orderBy.includes(',')) {
+        order = JSON.parse(orderBy);
+      } else if (orderBy && orderDirection) {
+        order.push([orderBy, orderDirection]);
       }
     }
 
