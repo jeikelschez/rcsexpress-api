@@ -9595,7 +9595,7 @@
             }
           },
           {
-            "name": "order_by",
+            "name": "orderBy",
             "in": "header",
             "description": "Ordenado por",
             "schema": {
@@ -9603,7 +9603,7 @@
             }
           },
           {
-            "name": "order_direction",
+            "name": "orderDirection",
             "in": "header",
             "description": "Direccion del ordenado",
             "schema": {
@@ -9620,7 +9620,7 @@
             }
           },
           {
-            "name": "filter_value",
+            "name": "filterValue",
             "in": "header",
             "description": "Valor a filtrar",
             "required": false,
