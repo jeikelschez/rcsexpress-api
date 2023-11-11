@@ -219,7 +219,7 @@ class MmovimientosService {
       };
     }
 
-    logger.info(JSON.stringify(params2));
+    //logger.info(JSON.stringify(params2));
 
     let params = { ...params3, ...params2, ...filterArray };
 
