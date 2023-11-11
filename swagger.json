@@ -9629,12 +9629,12 @@
             }
           },
           {
-            "name": "json_data",
+            "name": "agencia",
             "in": "header",
-            "description": "Data de headers",
+            "description": "Codigo de la Agencia",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
