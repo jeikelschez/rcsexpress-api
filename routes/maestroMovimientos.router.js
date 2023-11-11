@@ -13,7 +13,7 @@ const authenticateJWT = require('./../middlewares/authenticate.handler');
 const router = express.Router();
 const service = new MmovimientosService();
 
-router.get('/', async (req, res, next) => {
+router.get('/', authenticateJWT, async (req, res, next) => {
   try {
     const {
       page,
@@ -22,7 +22,37 @@ router.get('/', async (req, res, next) => {
       order_direction,
       filter,
       filter_value,
-      json_data,
+      agencia,
+      agencia_transito,
+      agencia_dest,
+      agencia_dest_transito,
+      nro_documento,
+      tipo,
+      tipo_in,
+      desde,
+      hasta,
+      cliente_orig,
+      cliente_dest,
+      cliente_orig_exist,
+      cliente_part_exist,
+      estatus_oper,
+      transito,
+      estatus_admin_in,
+      estatus_admin_ex,
+      no_abono,
+      tipo_doc_ppal,
+      nro_doc_ppal,
+      serie_doc_ppal,
+      nro_ctrl_doc_ppal,
+      nro_ctrl_doc_ppal_new,
+      cod_ag_doc_ppal,
+      order_pe,
+      pagado_en,
+      modalidad,
+      prefix_nro,
+      include_zona,
+      no_pagada,
+      si_saldo,
     } = req.headers;
 
     logger.info(JSON.stringify(req.headers));
@@ -34,7 +64,37 @@ router.get('/', async (req, res, next) => {
       order_direction,
       filter,
       filter_value,
-      json_data
+      agencia,
+      agencia_transito,
+      agencia_dest,
+      agencia_dest_transito,
+      nro_documento,
+      tipo,
+      tipo_in,
+      desde,
+      hasta,
+      cliente_orig,
+      cliente_dest,
+      cliente_orig_exist,
+      cliente_part_exist,
+      estatus_oper,
+      transito,
+      estatus_admin_in,
+      estatus_admin_ex,
+      no_abono,
+      tipo_doc_ppal,
+      nro_doc_ppal,
+      serie_doc_ppal,
+      nro_ctrl_doc_ppal,
+      nro_ctrl_doc_ppal_new,
+      cod_ag_doc_ppal,
+      order_pe,
+      pagado_en,
+      modalidad,
+      prefix_nro,
+      include_zona,
+      no_pagada,
+      si_saldo
     );
     res.json(cguias);
   } catch (error) {
