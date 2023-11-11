@@ -55,7 +55,7 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       si_saldo,
     } = req.headers;
 
-    logger.info(si_saldo);
+    logger.info(JSON.stringify(req.headers));
 
     const cguias = await service.find(
       page,
