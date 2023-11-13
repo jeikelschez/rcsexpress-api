@@ -42,7 +42,7 @@ class MmovimientosService {
     let params3 = {};
     let order = [];
     let include = [];
-    filters = JSON.parse(filters);    
+    filters = JSON.parse(filters);  
 
     if (filters.agencia) {
       if (filters.agencia_transito) {
@@ -66,15 +66,15 @@ class MmovimientosService {
         params3 = {
           [Sequelize.Op.or]: [
             {
-              cod_agencia_dest: filters.agencia_dest.split(','),
+              cod_agencia_dest: (filters.agencia_dest).toString().split(','),
             },
             {
-              cod_agencia_transito: filters.agencia_dest.split(','),
+              cod_agencia_transito: (filters.agencia_dest).toString().split(','),
             },
           ],
         };
       } else {
-        params2.cod_agencia_dest = filters.agencia_dest.split(',');
+        params2.cod_agencia_dest = (filters.agencia_dest).toString().split(',');
       }
     }
 
@@ -83,7 +83,7 @@ class MmovimientosService {
 
     if (filters.tipo_in) {
       params2.t_de_documento = {
-        [Sequelize.Op.in]: filters.tipo_in.split(','),
+        [Sequelize.Op.in]: (filters.tipo_in).toString().split(','),
       };
     }
 
@@ -125,13 +125,13 @@ class MmovimientosService {
 
     if (filters.estatus_admin_in) {
       params2.estatus_administra = {
-        [Sequelize.Op.in]: filters.estatus_admin_in.split(','),
+        [Sequelize.Op.in]: (filters.estatus_admin_in).toString().split(','),
       };
     }
 
     if (filters.estatus_admin_ex) {
       params2.estatus_administra = {
-        [Sequelize.Op.notIn]: filters.estatus_admin_ex.split(','),
+        [Sequelize.Op.notIn]: (filters.estatus_admin_ex).toString().split(','),
       };
     }
     if (filters.no_abono) {
