@@ -50,6 +50,7 @@ const MctapagarRouter = require('./maestroCtaPagar.router');
 const PgeneradosRouter = require('./pagosGenerados.router');
 const CislrRouter = require('./controlIslr.router');
 const CislrfacRouter = require('./controlIslrFactura.router');
+const MbancariosRouter = require('./movimientosBancarios.router');
 
 function routerApi(app) {
   const router = express.Router();
@@ -103,6 +104,7 @@ function routerApi(app) {
   router.use('/pgenerados', PgeneradosRouter);
   router.use('/cislr', CislrRouter);
   router.use('/cislrfac', CislrfacRouter);
+  router.use('/mbancarios', MbancariosRouter);
   router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 

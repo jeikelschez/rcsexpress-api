@@ -37,6 +37,8 @@ const RetencionesIvaService = require('./retencionesIva.service');
 const retencionesIvaService = new RetencionesIvaService();
 const RelacionFpoService = require('./relacionFpo.service');
 const relacionFpoService = new RelacionFpoService();
+const CobranzaService = require('./cobranza.service');
+const cobranzaService = new CobranzaService();
 
 class PdfReportsService {
   constructor() {}
@@ -399,6 +401,24 @@ class PdfReportsService {
       doc,
       tipo,
       data
+    );
+    resPath = validDoc ? resPath : 'reporteBase.pdf';
+    doc.end();
+    return { validDoc: validDoc, resPath: resPath };
+  }
+
+  // COBRANZA
+  async cobranza(id) {
+    let resPath = 'cobranza.pdf';
+    let doc = new PDFDocument({
+      margin: 20,
+      bufferPages: true,
+    });
+
+    doc.pipe(fs.createWriteStream(reportsPath + resPath));
+    let validDoc = await cobranzaService.mainReport(
+      doc,
+      id
     );
     resPath = validDoc ? resPath : 'reporteBase.pdf';
     doc.end();

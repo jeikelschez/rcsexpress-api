@@ -44,6 +44,7 @@ const { Mctapagar, MctapagarSchema } = require('./maestroCtaPagar.model');
 const { Pgenerados, PgeneradosSchema } = require('./pagosGenerados.model');
 const { Cislr, CislrSchema } = require('./controlIslr.model');
 const { Cislrfac, CislrfacSchema } = require('./controlIslrFactura.model');
+const { Mbancarios, MbancariosSchema } = require('./movimientosBancarios.model');
 
 function setupModels(sequelize) {
   Bancos.init(BancosSchema, Bancos.config(sequelize));
@@ -92,6 +93,7 @@ function setupModels(sequelize) {
   Pgenerados.init(PgeneradosSchema, Pgenerados.config(sequelize));
   Cislr.init(CislrSchema, Cislr.config(sequelize));
   Cislrfac.init(CislrfacSchema, Cislrfac.config(sequelize));
+  Mbancarios.init(MbancariosSchema, Mbancarios.config(sequelize));
 
   Paises.associate(sequelize.models);
   Estados.associate(sequelize.models);
@@ -132,6 +134,7 @@ function setupModels(sequelize) {
   Pgenerados.associate(sequelize.models);
   Cislr.associate(sequelize.models);
   Cislrfac.associate(sequelize.models);
+  Mbancarios.associate(sequelize.models);
 
   Usuarios.hooks(sequelize.models);
 }

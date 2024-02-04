@@ -139,6 +139,10 @@
       "description": "API para Manejar el Maestro de Retenciones de la Organizacion"
     },
     {
+      "name": "Movimientos_Bancarios",
+      "description": "API para Manejar el Maestro de Movimientos Bancarios de la Organizacion"
+    },
+    {
       "name": "Maestro_Movimientos",
       "description": "API para Manejar el Maestro de Movimientos de la Organizacion"
     },
@@ -9572,6 +9576,338 @@
         }
       }
     },
+    "/mbancarios": {
+      "get": {
+        "tags": ["Movimientos_Bancarios"],
+        "summary": "Obtener todo el maestro de Movimientos Bancarios",
+        "description": "API para Obtener el maestro de Movimientos Bancarios del sistema",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "header",
+            "description": "Numero de la pagina",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "header",
+            "description": "Cantidad de registros",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "header",
+            "description": "Ordenado por",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "header",
+            "description": "Direccion del ordenado",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "header",
+            "description": "Campos de Filtros",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter_value",
+            "in": "header",
+            "description": "Valor a filtrar",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/extraSchemes/Paginate",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Movimientos_Bancarios"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Movimientos_Bancarios"],
+        "summary": "Crear Movimientos Bancarios",
+        "description": "API para Crear un nuevo Movimientos Bancarios",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Movimientos_Bancarios"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Movimientos_Bancarios"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mbancarios/{id}": {
+      "get": {
+        "tags": ["Movimientos_Bancarios"],
+        "summary": "Obtener un Movimientos Bancario por su Id",
+        "description": "API para Retornar un Movimientos Bancario por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del movimiento",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Movimientos_Bancarios"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Movimientos_Bancarios"],
+        "summary": "Actualizar un Movimiento Bancario",
+        "description": "API para Actualizar un Movimiento Bancario por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del movimiento",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Movimientos_Bancarios"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Movimientos_Bancarios"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Movimientos_Bancarios"],
+        "summary": "Borrar un Movimiento Bancario",
+        "description": "API para Borrar un Movimiento Bancario por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del movimiento",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Movimientos_Bancarios/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/mmovimientos": {
       "get": {
         "tags": ["Maestro_Movimientos"],
@@ -15408,17 +15744,11 @@
             "type": "number",
             "readOnly": true
           },
-          "cod_agencia": {
-            "type": "number"
-          },
           "cod_cobranza": {
             "type": "number"
           },
           "cod_movimiento": {
             "type": "number"
-          },
-          "fecha_emision": {
-            "type": "string"
           },
           "monto_pagado": {
             "type": "number"
@@ -15429,14 +15759,8 @@
           "islr_retenido": {
             "type": "number"
           },
-          "cod_banco": {
-            "type": "number"
-          },
-          "nro_cuenta": {
+          "observacion": {
             "type": "string"
-          },
-          "cod_cliente": {
-            "type": "number"
           }
         }
       },
@@ -15831,6 +16155,46 @@
           }
         }
       },
+      "Movimientos_Bancarios": {
+        "description": "Modelo de Movimientos Bancarios",
+        "required": [
+          "id",
+          "cod_cuenta"
+        ],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "cod_cuenta": {
+            "type": "number"
+          },
+          "tipo_transaccion": {
+            "type": "string"
+          },
+          "fecha_movimiento": {
+            "type": "string"
+          },
+          "nro_documento": {
+            "type": "number"
+          },
+          "tipo_documento": {
+            "type": "string"
+          },
+          "monto_movimiento": {
+            "type": "number"
+          },
+          "observacion": {
+            "type": "string"
+          },
+          "beneficiario": {
+            "type": "string"
+          },
+          "tipo_pago": {
+            "type": "string"
+          }
+        }
+      },      
       "Maestro_Movimientos": {
         "description": "Modelo de Maestro de Movimientos",
         "required": [
