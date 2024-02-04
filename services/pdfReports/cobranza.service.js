@@ -89,14 +89,14 @@ class CobranzasService {
       width: 400,
     });
 
-    doc.fontSize(16);
-    doc.text('Nro:', 485, 170);
+    doc.fontSize(14);
+    doc.text('Nro:', 475, 170);
     doc.y = 170;
-    doc.x = 520;
+    doc.x = 515;
     doc.text(detalles[0].ingreso_caja, {
       align: 'center',
       columns: 1,
-      width: 40,
+      width: 50,
     });
 
     doc.fontSize(10);
