@@ -19,13 +19,15 @@ class DcostosgService {
     order_direction,
     filter,
     filter_value,
-    cod_costo
+    cod_costo,
+    cod_movimiento
   ) {
     let params2 = {};
     let filterArray = {};
     let order = [];
 
     if (cod_costo) params2.cod_costo = cod_costo;
+    if (cod_movimiento) params2.cod_movimiento = cod_movimiento;
 
     if (filter && filter_value) {
       let filters = [];

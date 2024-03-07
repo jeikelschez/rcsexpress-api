@@ -23,14 +23,31 @@ class AgentesService {
     filter_value,
     agencia,
     activo,
-    group_ag
+    group_ag,
+    responsable
   ) {
     let params2 = {};
     let filterArray = {};
     let order = [];
 
-    if (agencia) params2.cod_agencia = agencia;
+    if(agencia && agencia.toString().split(',').length > 1) {
+      let agentes = await models.Agentes.findAll({
+        attributes: ['persona_responsable'],
+        where: {
+          cod_agencia: {
+            [Sequelize.Op.in]: agencia.toString().split(','),
+          },
+          flag_activo: 1,
+        },
+        group: 'persona_responsable',
+        raw: true,
+      });
+      return agentes;
+    }
+
+    if (agencia) params2.cod_agencia = agencia.toString().split(',');
     if (activo) params2.flag_activo = 1;
+    if(responsable) params2.persona_responsable = responsable;
 
     if (filter && filter_value) {
       let filters = [];

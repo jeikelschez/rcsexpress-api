@@ -22,6 +22,7 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       filter,
       filter_value,
       cod_costo,
+      cod_movimiento,
     } = req.headers;
     const dCostosg = await service.find(
       page,
@@ -30,7 +31,8 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       order_direction,
       filter,
       filter_value,
-      cod_costo
+      cod_costo,
+      cod_movimiento
     );
     res.json(dCostosg);
   } catch (error) {

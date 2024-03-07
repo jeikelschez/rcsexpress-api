@@ -24,6 +24,7 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       agencia,
       activo,
       group_ag,
+      responsable,
     } = req.headers;
     const agentes = await service.find(
       page,
@@ -34,7 +35,8 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       filter_value,
       agencia,
       activo,
-      group_ag
+      group_ag,
+      responsable
     );
     res.json(agentes);
   } catch (error) {

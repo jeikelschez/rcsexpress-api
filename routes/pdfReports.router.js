@@ -308,7 +308,21 @@ router.get('/relacionFpo', authenticateJWT, async (req, res, next) => {
 router.get('/cobranza', authenticateJWT, async (req, res, next) => {
   try {
     const { id } = req.headers;
-    const response = await service.cobranza(id);    
+    const response = await service.cobranza(id);
+    res.status(200).json({
+      message: 'PDF Generado',
+      pdfPath: response.resPath,
+      validDoc: response.validDoc,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/comisiones', authenticateJWT, async (req, res, next) => {
+  try {
+    const { data, desde, hasta, dolar, group } = req.headers;
+    const response = await service.comisiones(data, desde, hasta, dolar, group);
     res.status(200).json({
       message: 'PDF Generado',
       pdfPath: response.resPath,

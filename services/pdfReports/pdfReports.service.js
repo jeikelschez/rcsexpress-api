@@ -39,6 +39,8 @@ const RelacionFpoService = require('./relacionFpo.service');
 const relacionFpoService = new RelacionFpoService();
 const CobranzaService = require('./cobranza.service');
 const cobranzaService = new CobranzaService();
+const ComisionesService = require('./comisiones.service');
+const comisionesService = new ComisionesService();
 
 class PdfReportsService {
   constructor() {}
@@ -354,11 +356,7 @@ class PdfReportsService {
     });
 
     doc.pipe(fs.createWriteStream(reportsPath + resPath));
-    let validDoc = await retencionesIslrService.mainReport(
-      doc,
-      tipo,
-      data
-    );
+    let validDoc = await retencionesIslrService.mainReport(doc, tipo, data);
     resPath = validDoc ? resPath : 'reporteBase.pdf';
     doc.end();
     return { validDoc: validDoc, resPath: resPath };
@@ -376,11 +374,7 @@ class PdfReportsService {
     });
 
     doc.pipe(fs.createWriteStream(reportsPath + resPath));
-    let validDoc = await retencionesIvaService.mainReport(
-      doc,
-      tipo,
-      data
-    );
+    let validDoc = await retencionesIvaService.mainReport(doc, tipo, data);
     resPath = validDoc ? resPath : 'reporteBase.pdf';
     doc.end();
     return { validDoc: validDoc, resPath: resPath };
@@ -397,11 +391,7 @@ class PdfReportsService {
     });
 
     doc.pipe(fs.createWriteStream(reportsPath + resPath));
-    let validDoc = await relacionFpoService.mainReport(
-      doc,
-      tipo,
-      data
-    );
+    let validDoc = await relacionFpoService.mainReport(doc, tipo, data);
     resPath = validDoc ? resPath : 'reporteBase.pdf';
     doc.end();
     return { validDoc: validDoc, resPath: resPath };
@@ -416,9 +406,36 @@ class PdfReportsService {
     });
 
     doc.pipe(fs.createWriteStream(reportsPath + resPath));
-    let validDoc = await cobranzaService.mainReport(
+    let validDoc = await cobranzaService.mainReport(doc, id);
+    resPath = validDoc ? resPath : 'reporteBase.pdf';
+    doc.end();
+    return { validDoc: validDoc, resPath: resPath };
+  }
+
+  // COMISIONES
+  async comisiones(data, desde, hasta, dolar, group) {
+    let resPath = 'comisiones.pdf';
+    let doc = new PDFDocument({
+      margin: 10,
+      bufferPages: true,
+      layout: 'landscape',
+    });
+
+    if (group == 'true') {
+      doc = new PDFDocument({
+        margin: 20,
+        bufferPages: true,
+      });
+    }
+
+    doc.pipe(fs.createWriteStream(reportsPath + resPath));
+    let validDoc = await comisionesService.mainReport(
       doc,
-      id
+      data,
+      desde,
+      hasta,
+      dolar,
+      group
     );
     resPath = validDoc ? resPath : 'reporteBase.pdf';
     doc.end();

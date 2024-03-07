@@ -653,6 +653,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "responsable",
+            "in": "header",
+            "description": "Persona Responsable",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -6495,6 +6504,15 @@
             "name": "cod_costo",
             "in": "header",
             "description": "Codigo del Costo",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },          
+          {
+            "name": "cod_movimiento",
+            "in": "header",
+            "description": "Codigo del Movimiento",
             "required": false,
             "schema": {
               "type": "integer"
