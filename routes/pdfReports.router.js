@@ -333,4 +333,18 @@ router.get('/comisiones', authenticateJWT, async (req, res, next) => {
   }
 });
 
+router.get('/comprobanteIgtf', authenticateJWT, async (req, res, next) => {
+  try {
+    const { id } = req.headers;
+    const response = await service.comprobanteIgtf(id);
+    res.status(200).json({
+      message: 'PDF Generado',
+      pdfPath: response.resPath,
+      validDoc: response.validDoc,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

@@ -41,6 +41,8 @@ const CobranzaService = require('./cobranza.service');
 const cobranzaService = new CobranzaService();
 const ComisionesService = require('./comisiones.service');
 const comisionesService = new ComisionesService();
+const ComprobanteIgtfService = require('./comprobanteIgtf.service');
+const comprobanteIgtfService = new ComprobanteIgtfService();
 
 class PdfReportsService {
   constructor() {}
@@ -437,6 +439,22 @@ class PdfReportsService {
       dolar,
       group
     );
+    resPath = validDoc ? resPath : 'reporteBase.pdf';
+    doc.end();
+    return { validDoc: validDoc, resPath: resPath };
+  }
+
+  // COMPROBANTE IGTF
+  async comprobanteIgtf(id) {
+    let resPath = 'comprobante_igtf.pdf';
+    let doc = new PDFDocument({
+      margin: 10,
+      bufferPages: true,
+      layout: 'landscape',
+    });
+
+    doc.pipe(fs.createWriteStream(reportsPath + resPath));
+    let validDoc = await comprobanteIgtfService.mainReport(doc, id);
     resPath = validDoc ? resPath : 'reporteBase.pdf';
     doc.end();
     return { validDoc: validDoc, resPath: resPath };
