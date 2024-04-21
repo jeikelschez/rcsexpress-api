@@ -347,4 +347,18 @@ router.get('/comprobanteIgtf', authenticateJWT, async (req, res, next) => {
   }
 });
 
+router.get('/reporteIgtf', authenticateJWT, async (req, res, next) => {
+  try {
+    const { print, data } = req.headers;
+    const response = await service.reporteIgtf(print, data);
+    res.status(200).json({
+      message: 'PDF Generado',
+      pdfPath: response.resPath,
+      validDoc: response.validDoc,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
