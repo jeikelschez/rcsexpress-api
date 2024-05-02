@@ -51,6 +51,10 @@
       "description": "API para Manejar los Clientes Particulares de la Organizacion"
     },
     {
+      "name": "Clientes_Usuarios",
+      "description": "API para Manejar los Usuarios de los Clientes de la Organizacion"
+    },
+    {
       "name": "Conceptos_Facturacion",
       "description": "API para Manejar el Maestro de Conceptos de Facturacion"
     },
@@ -1941,6 +1945,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "usuarios",
+            "in": "header",
+            "description": "Incluir Usuarios (S)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2551,6 +2564,300 @@
                   "properties": {
                     "id": {
                       "$ref": "#/components/schemas/Clientes_Particulares/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cusuarios": {
+      "get": {
+        "tags": ["Clientes_Usuarios"],
+        "summary": "Obtener todos los Usuarios de Clientes",
+        "description": "API para Obtener todos los Usuarios de Clientes del sistema",
+        "parameters": [
+          {
+            "name": "activo",
+            "in": "header",
+            "description": "Activo (S)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cliente",
+            "in": "header",
+            "description": "Codigo del CLiente",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Clientes_Usuarios"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Clientes_Usuarios"],
+        "summary": "Crear Usuario de Clientes",
+        "description": "API para Crear un nuevo Usuario de Clientes",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Clientes_Usuarios"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Clientes_Usuarios"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cusuarios/{id}": {
+      "get": {
+        "tags": ["Clientes_Usuarios"],
+        "summary": "Obtener Usuario de Clientes por su Id",
+        "description": "API para Retornar un Usuario de Clientes por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Usuario de Clientes",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Clientes_Usuarios"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Clientes_Usuarios"],
+        "summary": "Actualizar Usuario de Clientes",
+        "description": "API para Actualizar un Usuario de Clientes por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Usuario de Clientes",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Clientes_Usuarios"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Clientes_Usuarios"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Clientes_Usuarios"],
+        "summary": "Borrar Usuario de Clientes",
+        "description": "API para Borrar un Usuario de Clientes por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo del Usuario de Clientes",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Clientes_Usuarios/properties/id"
                     }
                   },
                   "type": "object"
@@ -15350,6 +15657,28 @@
           },
           "cod_localidad": {
             "type": "number"
+          }
+        }
+      },
+      "Clientes_Usuarios": {
+        "description": "Modelo de Usuario de Clientes",
+        "required": ["id", "cod_cliente", "email", "password", "estatus"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "cod_cliente": {
+            "type": "number"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "estatus": {
+            "type": "string"
           }
         }
       },

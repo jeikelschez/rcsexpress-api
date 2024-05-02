@@ -1,15 +1,19 @@
 const boom = require('@hapi/boom');
 
-const { models, Sequelize }= require('./../libs/sequelize');
+const { models, Sequelize } = require('./../libs/sequelize');
 const UtilsService = require('./utils.service');
 const utils = new UtilsService();
 
-const caseActivo = '(CASE flag_activo WHEN "1" THEN "ACTIVO" ELSE "INACTIVO" END)';
-const caseTipo = '(CASE tipo_persona WHEN "N" THEN "NATURAL" ELSE "JURIDICA" END)';
-const caseModalidad = '(CASE modalidad_pago WHEN "CO" THEN "CONTADO" ELSE "CREDITO" END)';
+const caseActivo =
+  '(CASE flag_activo WHEN "1" THEN "ACTIVO" ELSE "INACTIVO" END)';
+const caseTipo =
+  '(CASE tipo_persona WHEN "N" THEN "NATURAL" ELSE "JURIDICA" END)';
+const caseModalidad =
+  '(CASE modalidad_pago WHEN "CO" THEN "CONTADO" ELSE "CREDITO" END)';
+const clientesUsuarios =
+  '(SELECT COUNT(*) FROM clientes_usuarios cu WHERE cu.cod_cliente = `Clientes`.id)';
 
 class ClientesService {
-
   constructor() {}
 
   async create(data) {
@@ -17,61 +21,92 @@ class ClientesService {
     return newCliente;
   }
 
-  async find(page, limit, order_by, order_direction, filter, filter_value, agencia, particular, activo) {
+  async find(
+    page,
+    limit,
+    order_by,
+    order_direction,
+    filter,
+    filter_value,
+    agencia,
+    particular,
+    activo,
+    usuarios
+  ) {
     let params2 = {};
     let filterArray = {};
-    let order = [];    
+    let usuariosArray = {};
+    let order = [];
 
     params2.nb_cliente = {
-      [Sequelize.Op.ne]: "",
+      [Sequelize.Op.ne]: '',
     };
-    
-    if(agencia) params2.cod_agencia = agencia;
-    if(particular) params2.cte_decontado = 1;
-    if(activo) params2.flag_activo = "A";
 
-    if(filter && filter_value) {
+    if (agencia) params2.cod_agencia = agencia;
+    if (particular) params2.cte_decontado = 1;
+    if (activo) params2.flag_activo = 'A';
+
+    if (filter && filter_value) {
       let filters = [];
-      filter.split(",").forEach(function(item) {
+      filter.split(',').forEach(function (item) {
         let itemArray = {};
         itemArray[item] = { [Sequelize.Op.substring]: filter_value };
         filters.push(itemArray);
-      })
+      });
 
-      filterArray = { 
-        [Sequelize.Op.or]: filters 
-      };      
+      filterArray = {
+        [Sequelize.Op.or]: filters,
+      };
     }
 
     let params = { ...params2, ...filterArray };
 
-    if(order_by && order_direction) {
+    if (usuarios) {
+      usuariosArray = {
+        [Sequelize.Op.and]: [
+          Sequelize.literal(
+            'EXISTS (SELECT 1 FROM clientes_usuarios cu WHERE cu.cod_cliente = `Clientes`.`id`)'
+          ),
+        ],
+      };
+
+      params = { ...params, ...usuariosArray };
+    }
+
+    if (order_by && order_direction) {
       order.push([order_by, order_direction]);
     } else {
-      order.push(["nb_cliente", "ASC"]);
+      order.push(['nb_cliente', 'ASC']);
     }
 
     let attributes = {
       include: [
         [Sequelize.literal(caseActivo), 'activo_desc'],
         [Sequelize.literal(caseTipo), 'tipo_desc'],
-        [Sequelize.literal(caseModalidad), 'modalidad_desc']
-      ]
+        [Sequelize.literal(caseModalidad), 'modalidad_desc'],
+        [Sequelize.literal(clientesUsuarios), 'clientes_usuarios'],
+      ],
     };
 
-    return await utils.paginate(models.Clientes, page, limit, params, order, attributes);
+    return await utils.paginate(
+      models.Clientes,
+      page,
+      limit,
+      params,
+      order,
+      attributes
+    );
   }
 
   async findOne(id) {
-    const cliente = await models.Clientes.findByPk(id,
-    {
+    const cliente = await models.Clientes.findByPk(id, {
       attributes: {
         include: [
           [Sequelize.literal(caseActivo), 'activo_desc'],
           [Sequelize.literal(caseTipo), 'tipo_desc'],
-          [Sequelize.literal(caseModalidad), 'modalidad_desc']
-        ]
-      }
+          [Sequelize.literal(caseModalidad), 'modalidad_desc'],
+        ],
+      },
     });
     if (!cliente) {
       throw boom.notFound('Cliente no existe');

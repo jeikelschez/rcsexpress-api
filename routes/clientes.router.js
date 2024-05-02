@@ -8,13 +8,23 @@ const authenticateJWT  = require('./../middlewares/authenticate.handler');
 const router = express.Router();
 const service = new ClientesService();
 
+router.get('/verify/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const cliente = await service.findOne(id);
+    res.json(cliente);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get('/',
   authenticateJWT,
   async (req, res, next) => {
   try {
-    const { page, limit, order_by, order_direction, filter, filter_value, agencia, particular, activo } = req.headers;
+    const { page, limit, order_by, order_direction, filter, filter_value, agencia, particular, activo, usuarios } = req.headers;
     const clientes = await service.find(page, limit, order_by, order_direction, filter, filter_value, 
-      agencia, particular, activo);
+      agencia, particular, activo, usuarios);
     res.json(clientes);
   } catch (error) {
     next(error);
