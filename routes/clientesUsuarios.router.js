@@ -12,6 +12,16 @@ const authenticateJWT  = require('./../middlewares/authenticate.handler');
 
 const service = new CusuariosService();
 
+router.get('/login', async (req, res, next) => {
+  try {
+    const { email, password } = req.headers;
+    const data = await service.login(email, password);
+    res.json({data});
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get('/verify', async (req, res, next) => {
   try {
     const { activo, cliente, email } = req.headers;
@@ -43,8 +53,8 @@ router.get('/send-invitation', async (req, res) => {
     raw: true,
   });
 
-  // let url = 'http://localhost:8080/#/login_user?cliente=';
-  let url = 'https://scen.rcsexpress.com/#/login_user?cliente=';
+  //let url = 'http://localhost:8080/#/userConfirm?cliente=';
+  let url = 'https://scen.rcsexpress.com/#/userConfirm?cliente=';
 
   let config = {
     service: 'gmail',
@@ -108,6 +118,9 @@ router.get('/send-invitation', async (req, res) => {
 router.get('/send-confirm', async(req, res) => {
   const { address, client, password } = req.headers;
 
+  //let url = 'http://localhost:8080/#/userLogin';
+  let url = 'https://scen.rcsexpress.com/#/userLogin';
+
   let cliente = await models.Clientes.findByPk(client, {    
     raw: true,
   });
@@ -135,13 +148,13 @@ router.get('/send-confirm', async(req, res) => {
       greeting: 'Hola',
       signature: 'Atentamente',
       name: cliente.nb_cliente,
-      intro: ['Su Usuario fue ingresado con exito.', 'Usuario: ' + address, 'Contraseña: ' + password],
+      intro: ['Su usuario fue ingresado con exito.', 'Usuario: ' + address, 'Contraseña: ' + password],
       action: {
         instructions: 'Para ingresar al sistema, haga click debajo:',
         button: {
           color: '#193595',
           text: 'Accede al Sistema',
-          link: 'https://rcsexpress.com/',
+          link: url,
         },
       },
     },

@@ -47,6 +47,24 @@ class ClientesUsuariosService {
     await cUsuario.destroy();
     return { id };
   }
+
+  async login(email, password) {
+    const usuario = await models.Cusuarios.findOne({
+      where: {
+        email: email
+      },
+    });
+
+    if (usuario) {
+      if(password == usuario.password) {        
+        return usuario.cod_cliente;
+      } else {
+        throw boom.notFound('Password Incorrecto');
+      }
+    } else {
+      throw boom.notFound('Usuario No existe');
+    }
+  }
 }
 
 module.exports = ClientesUsuariosService;
