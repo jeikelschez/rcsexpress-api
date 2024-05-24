@@ -46,4 +46,18 @@ router.get('/comisiones', authenticateJWT, async (req, res, next) => {
   }
 });
 
+router.get('/guiasEmpresa', async (req, res, next) => {
+  try {
+    const { client, desde, hasta, estatus, ciudad, guia } = req.headers;
+    const response = await service.guiasEmpresa(client, desde, hasta, estatus, ciudad, guia);
+    res.status(200).json({
+      message: 'Excel Generado',
+      excelPath: response.resPath,
+      validDoc: response.validDoc,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

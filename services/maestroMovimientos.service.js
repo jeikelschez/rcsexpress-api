@@ -46,6 +46,10 @@ const siglasDest =
   ' FROM agencias ' +
   ' JOIN ciudades ON agencias.cod_ciudad = ciudades.id ' +
   ' WHERE `Mmovimientos`.cod_agencia_dest = agencias.id)';
+const motivoRetraso =
+  '(SELECT desc_concepto' +
+  ' FROM conceptos_operacion' +
+  ' WHERE `Mmovimientos`.cod_motivo_retraso = conceptos_operacion.cod_concepto)';
 
 class MmovimientosService {
   constructor() {}
@@ -53,6 +57,76 @@ class MmovimientosService {
   async create(data) {
     const newMmovimiento = await models.Mmovimientos.create(data);
     return newMmovimiento;
+  }
+
+  async findGuias(client, desde, hasta, estatus, ciudad, guia) {
+    let params = {};
+    let params2 = {};
+
+    params.cod_cliente_org = client;
+    params.fecha_emision = {
+      [Sequelize.Op.between]: [desde, hasta],
+    };
+    params.t_de_documento = 'GC';
+
+    if (guia) {
+      params.nro_documento = guia;
+    }
+
+    if (estatus) {
+      params.estatus_operativo = estatus;
+    }
+
+    if (ciudad) {
+      params2.id = ciudad;
+    }
+
+    const guias = await models.Mmovimientos.findAll({
+      where: params,
+      attributes: [
+        'cod_cliente_org',
+        'nro_documento',
+        'dimensiones',
+        'nro_piezas',
+        'peso_kgs',
+        'persona_recibio',
+        'ci_persona_recibio',
+        'fecha_emision',
+        'fecha_envio',
+        'fecha_recepcion',
+        'hora_recepcion',
+        'estatus_operativo',
+        'observacion_entrega',
+        'modalidad_pago',
+        'cod_agencia_transito',
+        [Sequelize.literal(clienteDestDesc), 'cliente_dest_desc'],
+        [Sequelize.literal(motivoRetraso), 'motivo_retraso'],
+      ],
+      include: [
+        {
+          model: models.Agencias,
+          as: 'agencias_dest',
+          attributes: ['id'],
+          required: true,
+          include: [
+            {
+              model: models.Ciudades,
+              as: 'ciudades',
+              required: true,
+              where: params2,
+            },
+          ],
+        },
+        {
+          model: models.Agencias,
+          as: 'agencias_trans',
+          attributes: ['id', 'nb_agencia'],
+          required: false,
+        },
+      ],
+      order: [['nro_documento', 'DESC']],
+    });
+    return guias;
   }
 
   async find(page, limit, order_by, order_direction, filters = {}) {

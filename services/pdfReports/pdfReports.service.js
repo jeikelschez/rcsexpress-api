@@ -45,6 +45,8 @@ const ComprobanteIgtfService = require('./comprobanteIgtf.service');
 const comprobanteIgtfService = new ComprobanteIgtfService();
 const ReporteIgtfService = require('./reporteIgtf.service');
 const reporteIgtfService = new ReporteIgtfService();
+const GuiasEmpresaService = require('./guiasEmpresa.service');
+const guiasEmpresaService = new GuiasEmpresaService();
 
 class PdfReportsService {
   constructor() {}
@@ -474,6 +476,22 @@ class PdfReportsService {
 
     doc.pipe(fs.createWriteStream(reportsPath + resPath));
     let validDoc = await reporteIgtfService.mainReport(doc, data);
+    resPath = validDoc ? resPath : 'reporteBase.pdf';
+    doc.end();
+    return { validDoc: validDoc, resPath: resPath };
+  }
+
+  // GUIAS EMPRESA
+  async guiasEmpresa(client, desde, hasta, estatus, ciudad, guia) {
+    let resPath = 'Consulta_RCS.pdf';
+    let doc = new PDFDocument({
+      margin: 10,
+      bufferPages: true,
+      layout: 'landscape',
+    });
+
+    doc.pipe(fs.createWriteStream(reportsPath + resPath));
+    let validDoc = await guiasEmpresaService.mainReport(doc, client, desde, hasta, estatus, ciudad, guia);
     resPath = validDoc ? resPath : 'reporteBase.pdf';
     doc.end();
     return { validDoc: validDoc, resPath: resPath };

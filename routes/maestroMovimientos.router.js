@@ -12,23 +12,28 @@ const authenticateJWT = require('./../middlewares/authenticate.handler');
 const router = express.Router();
 const service = new MmovimientosService();
 
+router.get('/guiasEmpresa', async (req, res, next) => {
+  try {
+    const { client, desde, hasta, estatus, ciudad, guia } = req.headers;
+    const cguias = await service.findGuias(
+      client,
+      desde,
+      hasta,
+      estatus,
+      ciudad,
+      guia
+    );
+    res.json(cguias);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get('/', authenticateJWT, async (req, res, next) => {
   try {
-    const {
-      page,
-      limit,
-      order,
-      direction,
-      filters,
-    } = req.headers;
+    const { page, limit, order, direction, filters } = req.headers;
 
-    const cguias = await service.find(
-      page,
-      limit,
-      order,
-      direction,
-      filters,
-    );
+    const cguias = await service.find(page, limit, order, direction, filters);
     res.json(cguias);
   } catch (error) {
     next(error);
