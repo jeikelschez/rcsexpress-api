@@ -375,4 +375,18 @@ router.get('/guiasEmpresa', async (req, res, next) => {
   }
 });
 
+router.get('/guiasLote', authenticateJWT, async (req, res, next) => {
+  try {
+    const { tipo, data } = req.headers;
+    const response = await service.guiasLote(tipo, data);
+    res.status(200).json({
+      message: 'PDF Generado',
+      pdfPath: response.resPath,
+      validDoc: response.validDoc,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

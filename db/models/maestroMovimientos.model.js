@@ -582,6 +582,10 @@ class Mmovimientos extends Model {
       foreignKey: 'cod_zona_dest',
       as: 'zonas_dest',
     });
+    this.belongsTo(models.Cparticulares, {
+      foreignKey: 'id_clte_part_dest',
+      as: 'cliente_particular',
+    });
     this.hasMany(models.Ccomisiones, {
       foreignKey: 'cod_movimiento',
       as: 'comisiones',

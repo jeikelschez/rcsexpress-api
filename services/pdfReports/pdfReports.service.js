@@ -47,6 +47,8 @@ const ReporteIgtfService = require('./reporteIgtf.service');
 const reporteIgtfService = new ReporteIgtfService();
 const GuiasEmpresaService = require('./guiasEmpresa.service');
 const guiasEmpresaService = new GuiasEmpresaService();
+const GuiasLoteService = require('./guiasLote.service');
+const guiasLoteService = new GuiasLoteService();
 
 class PdfReportsService {
   constructor() {}
@@ -472,7 +474,7 @@ class PdfReportsService {
       margin: 10,
       bufferPages: true,
       layout: 'landscape',
-    });    
+    });
 
     doc.pipe(fs.createWriteStream(reportsPath + resPath));
     let validDoc = await reporteIgtfService.mainReport(doc, data);
@@ -491,10 +493,30 @@ class PdfReportsService {
     });
 
     doc.pipe(fs.createWriteStream(reportsPath + resPath));
-    let validDoc = await guiasEmpresaService.mainReport(doc, client, desde, hasta, estatus, ciudad, guia);
+    let validDoc = await guiasEmpresaService.mainReport(
+      doc,
+      client,
+      desde,
+      hasta,
+      estatus,
+      ciudad,
+      guia
+    );
     resPath = validDoc ? resPath : 'reporteBase.pdf';
     doc.end();
     return { validDoc: validDoc, resPath: resPath };
+  }
+
+  // GUIAS LOTE
+  async guiasLote(tipo, data) {
+    let resPath = 'guiasLote.pdf';
+    let doc = new PDFDocument({
+      margin: 20,
+    });
+    doc.pipe(fs.createWriteStream(reportsPath + resPath));
+    await guiasLoteService.mainReport(doc, tipo, data);
+    doc.end();
+    return { validDoc: true, resPath: resPath };
   }
 }
 
