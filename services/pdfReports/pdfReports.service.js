@@ -513,6 +513,12 @@ class PdfReportsService {
     let doc = new PDFDocument({
       margin: 20,
     });
+    if(tipo == 1) {
+      doc = new PDFDocument({
+        size: [612, 396],
+        margin: 20,
+      });
+    }
     doc.pipe(fs.createWriteStream(reportsPath + resPath));
     await guiasLoteService.mainReport(doc, tipo, data);
     doc.end();

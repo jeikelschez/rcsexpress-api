@@ -152,6 +152,10 @@ class GuiasLoteService {
             },
           ],
         },
+        {
+          model: models.Agentes,
+          as: 'agentes_venta',
+        },
       ],
       order: [['nro_documento', 'ASC']],
       raw: true,
@@ -163,7 +167,326 @@ class GuiasLoteService {
   async generateCustomerInformation(doc, tipo, detalles) {
     for (var item = 0; item < detalles.length; item++) {
       if (tipo == 1) {
-        // Guias con Preimpreso
+        doc.fontSize(10);
+        doc.font('Helvetica');
+        doc.y = 20;
+        doc.x = 460;
+        doc.text(detalles[item].siglas_org, {
+          align: 'center',
+          columns: 1,
+          width: 30,
+        });
+        doc.y = 45;
+        doc.x = 460;
+        doc.text(detalles[item].nro_piezas, {
+          align: 'center',
+          columns: 1,
+          width: 30,
+        });
+        doc.y = 20;
+        doc.x = 530;
+        doc.text(detalles[item].siglas_dest, {
+          align: 'center',
+          columns: 1,
+          width: 30,
+        });
+        doc.y = 45;
+        doc.x = 530;
+        doc.text(utils.formatNumber(detalles[item].peso_kgs), {
+          align: 'center',
+          columns: 1,
+          width: 30,
+        });
+
+        let y = 35;
+
+        doc.fontSize(9);
+        doc.y = y + 45;
+        doc.x = 28;
+        doc.text(detalles[item]['clientes_org.razon_social'], {
+          align: 'right',
+          columns: 1,
+          width: 270,
+        });
+        doc.y = y + 60;
+        doc.x = 28;
+        doc.text(detalles[item]['clientes_org.rif_cedula'], {
+          align: 'left',
+          columns: 1,
+          width: 270,
+        });
+        doc.y = y + 60;
+        doc.x = 28;
+        doc.text(
+          detalles[item]['clientes_org.dir_correo'] == '0'
+            ? ''
+            : detalles[item]['clientes_org.dir_correo'],
+          {
+            align: 'right',
+            columns: 1,
+            width: 270,
+          }
+        );
+        doc.y = y + 72;
+        doc.x = 28;
+        doc.text(detalles[item]['clientes_org.tlf_cliente'], {
+          align: 'left',
+          columns: 1,
+          width: 270,
+        });
+        doc.y = y + 84;
+        doc.x = 28;
+        doc.text(detalles[item]['clientes_org.dir_fiscal'], {
+          align: 'left',
+          columns: 1,
+          width: 270,
+        });
+        doc.y = y + 108;
+        doc.x = 40;
+        doc.text(detalles[item]['clientes_org.parroquias.desc_parroquia'], {
+          align: 'left',
+          columns: 1,
+          width: 100,
+        });
+        doc.y = y + 108;
+        doc.x = 150;
+        doc.text(detalles[item]['clientes_org.municipios.desc_municipio'], {
+          align: 'left',
+          columns: 1,
+          width: 100,
+        });
+        doc.y = y + 120;
+        doc.x = 40;
+        doc.text(detalles[item]['clientes_org.ciudades.desc_ciudad'], {
+          align: 'left',
+          columns: 1,
+          width: 100,
+        });
+        doc.y = y + 120;
+        doc.x = 150;
+        doc.text(detalles[item]['clientes_org.ciudades.estados.desc_estado'], {
+          align: 'left',
+          columns: 1,
+          width: 100,
+        });
+        doc.y = y + 132;
+        doc.x = 40;
+        doc.text(detalles[item]['clientes_org.localidades.cod_postal'], {
+          align: 'left',
+          columns: 1,
+          width: 100,
+        });
+        doc.y = y + 132;
+        doc.x = 150;
+        doc.text(
+          detalles[item]['clientes_org.ciudades.estados.paises.desc_pais'],
+          {
+            align: 'left',
+            columns: 1,
+            width: 100,
+          }
+        );
+        doc.fontSize(14);
+        doc.y = y + 150;
+        doc.x = 23;
+        doc.text(detalles[item]['clientes_org.agencias.ciudades.desc_ciudad'], {
+          align: 'center',
+          columns: 1,
+          width: 280,
+        });
+
+        doc.fontSize(9);
+        doc.y = y + 45;
+        doc.x = 313;
+        doc.text(detalles[item]['cliente_particular.nb_cliente'], {
+          align: 'right',
+          columns: 1,
+          width: 270,
+        });
+        doc.y = y + 60;
+        doc.x = 313;
+        doc.text(detalles[item]['cliente_particular.rif_ci'], {
+          align: 'left',
+          columns: 1,
+          width: 270,
+        });
+        doc.y = y + 72;
+        doc.x = 313;
+        doc.text(detalles[item]['cliente_particular.telefonos'], {
+          align: 'left',
+          columns: 1,
+          width: 270,
+        });
+        doc.y = y + 84;
+        doc.x = 313;
+        doc.text(detalles[item]['cliente_particular.direccion'], {
+          align: 'left',
+          columns: 1,
+          width: 270,
+        });
+        doc.y = y + 108;
+        doc.x = 330;
+        doc.text(
+          detalles[item]['cliente_particular.parroquias.desc_parroquia'],
+          {
+            align: 'left',
+            columns: 1,
+            width: 100,
+          }
+        );
+        doc.y = y + 108;
+        doc.x = 440;
+        doc.text(
+          detalles[item]['cliente_particular.municipios.desc_municipio'],
+          {
+            align: 'left',
+            columns: 1,
+            width: 130,
+          }
+        );
+        doc.y = y + 120;
+        doc.x = 330;
+        doc.text(detalles[item]['cliente_particular.ciudades.desc_ciudad'], {
+          align: 'left',
+          columns: 1,
+          width: 100,
+        });
+        doc.y = y + 120;
+        doc.x = 440;
+        doc.text(
+          detalles[item]['cliente_particular.ciudades.estados.desc_estado'],
+          {
+            align: 'left',
+            columns: 1,
+            width: 100,
+          }
+        );
+        doc.y = y + 132;
+        doc.x = 330;
+        doc.text(detalles[item]['cliente_particular.localidades.cod_postal'], {
+          align: 'left',
+          columns: 1,
+          width: 100,
+        });
+        doc.y = y + 132;
+        doc.x = 440;
+        doc.text(
+          detalles[item][
+            'cliente_particular.ciudades.estados.paises.desc_pais'
+          ],
+          {
+            align: 'left',
+            columns: 1,
+            width: 100,
+          }
+        );
+        doc.fontSize(14);
+        doc.y = y + 150;
+        doc.x = 308;
+        doc.text(
+          detalles[item]['cliente_particular.agencias.ciudades.desc_ciudad'],
+          {
+            align: 'center',
+            columns: 1,
+            width: 280,
+          }
+        );
+
+        doc.fontSize(9);
+        doc.y = y + 190;
+        doc.x = 30;
+        doc.text(
+          detalles[item]['clientes_org.persona_contacto'] == 0
+            ? ''
+            : detalles[item]['clientes_org.persona_contacto'],
+          {
+            align: 'left',
+            columns: 1,
+            width: 80,
+          }
+        );
+        doc.y = y + 190;
+        doc.x = 120;
+        doc.text(moment(detalles[item].fecha_emision).format('DD/MM/YYYY'), {
+          align: 'center',
+          columns: 1,
+          width: 80,
+        });
+        doc.y = y + 220;
+        doc.x = 30;
+        doc.text(detalles[item]['agentes_venta.persona_responsable'], {
+          align: 'left',
+          columns: 1,
+          width: 150,
+        });
+        doc.y = y + 220;
+        doc.x = 210;
+        doc.text(detalles[item]['agentes_venta.rif_ci_agente'], {
+          align: 'left',
+          columns: 1,
+          width: 60,
+        });
+        doc.y = y + 220;
+        doc.x = 280;
+        doc.text(detalles[item]['agentes_venta.tlf_agente'], {
+          align: 'left',
+          columns: 1,
+          width: 80,
+        });
+
+        doc.fontSize(11);
+        let tipo_carga;
+        if (detalles[item].tipo_carga == 'SB') {
+          tipo_carga = 'SOBRE';
+        } else {
+          tipo_carga = 'PAQUETE';
+        }
+        doc.y = y + 250;
+        doc.x = 60;
+        doc.text(tipo_carga, {
+          align: 'left',
+          columns: 1,
+          width: 97,
+        });
+
+        let modalidad = '';
+        if (
+          detalles[item].modalidad_pago == 'CO' &&
+          detalles[item].pagado_en == 'O'
+        ) {
+          modalidad = 'CONTADO ORIGEN';
+        } else if (
+          detalles[item].modalidad_pago == 'CO' &&
+          detalles[item].pagado_en == 'D'
+        ) {
+          modalidad = 'CONTADO DESTINO';
+        } else if (
+          detalles[item].modalidad_pago == 'CR' &&
+          detalles[item].pagado_en == 'O'
+        ) {
+          modalidad = 'CREDITO ORIGEN';
+        } else if (
+          detalles[item].modalidad_pago == 'CR' &&
+          detalles[item].pagado_en == 'D'
+        ) {
+          modalidad = 'CREDITO DESTINO';
+        }
+        doc.y = y + 250;
+        doc.x = 180;
+        doc.text(modalidad, {
+          align: 'left',
+          columns: 1,
+          width: 112,
+        });
+
+        doc.fontSize(12);
+        doc.y = y + 320;
+        doc.x = 28;
+        doc.text(detalles[item].dimensiones, {
+          align: 'left',
+          columns: 1,
+          width: 217,
+        });
       } else {
         // Guias sin Preimpreso
         let y = 17;
@@ -455,7 +778,7 @@ class GuiasLoteService {
             {
               align: 'left',
               columns: 1,
-              width: 100,
+              width: 130,
             }
           );
           doc.y = y + 120;
@@ -694,10 +1017,9 @@ class GuiasLoteService {
         doc.lineWidth(1);
         doc.strokeColor('black');
         doc.lineCap('butt').moveTo(20, 520).lineTo(590, 520).stroke();
-
-        if (item != detalles.length - 1) {
-          doc.addPage();
-        }
+      }
+      if (item != detalles.length - 1) {
+        doc.addPage();
       }
     }
   }
