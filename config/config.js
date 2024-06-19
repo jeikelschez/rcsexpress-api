@@ -12,6 +12,8 @@ const config = {
   dbPort:  process.env.DB_PORT,
   accessToken:  process.env.ATS,
   refreshToken:  process.env.RTS,
+  mailUser: process.env.MAIL_APP_USER,
+  mailPass: process.env.MAIL_APP_PSWD,
 }
 
 module.exports = { config };
