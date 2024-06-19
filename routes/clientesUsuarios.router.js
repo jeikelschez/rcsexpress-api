@@ -12,8 +12,12 @@ const mailPass = config.mailPass;
 
 const CusuariosService = require('./../services/clientesUsuarios.service');
 const validatorHandler = require('./../middlewares/validator.handler');
-const { createCusuariosSchema, updateCusuariosSchema, getCusuariosSchema } = require('./../schemas/clientesUsuarios.schema');
-const authenticateJWT  = require('./../middlewares/authenticate.handler');
+const {
+  createCusuariosSchema,
+  updateCusuariosSchema,
+  getCusuariosSchema,
+} = require('./../schemas/clientesUsuarios.schema');
+const authenticateJWT = require('./../middlewares/authenticate.handler');
 
 const service = new CusuariosService();
 
@@ -21,7 +25,7 @@ router.get('/login', async (req, res, next) => {
   try {
     const { email, password } = req.headers;
     const data = await service.login(email, password);
-    res.json({data});
+    res.json({ data });
   } catch (error) {
     next(error);
   }
@@ -37,7 +41,8 @@ router.get('/verify', async (req, res, next) => {
   }
 });
 
-router.post('/',
+router.post(
+  '/',
   validatorHandler(createCusuariosSchema, 'body'),
   async (req, res, next) => {
     try {
@@ -54,7 +59,7 @@ router.post('/',
 router.get('/send-invitation', async (req, res) => {
   const { address, client } = req.headers;
 
-  let cliente = await models.Clientes.findByPk(client, {    
+  let cliente = await models.Clientes.findByPk(client, {
     raw: true,
   });
 
@@ -66,6 +71,9 @@ router.get('/send-invitation', async (req, res) => {
     auth: {
       user: mailUser,
       pass: mailPass,
+    },
+    tls: {
+      rejectUnauthorized: false,
     },
   };
   let transporter = nodemailer.createTransport(config);
@@ -87,7 +95,10 @@ router.get('/send-invitation', async (req, res) => {
       greeting: 'Hola',
       signature: 'Atentamente',
       name: cliente.nb_cliente,
-      intro: ['Ha recibido este correo como parte de una invitación para acceder al sistema de consulta de las Guías asociadas a su Empresa.', 'Al acceder, se le pedirá que asocie una contraseña a su Usuario'],
+      intro: [
+        'Ha recibido este correo como parte de una invitación para acceder al sistema de consulta de las Guías asociadas a su Empresa.',
+        'Al acceder, se le pedirá que asocie una contraseña a su Usuario',
+      ],
       action: {
         instructions: 'Para confirmar su invitación, haga click debajo:',
         button: {
@@ -124,13 +135,13 @@ router.get('/send-invitation', async (req, res) => {
 });
 
 // Endpoint para la Confirmacion
-router.get('/send-confirm', async(req, res) => {
+router.get('/send-confirm', async (req, res) => {
   const { address, client, password } = req.headers;
 
   //let url = 'http://localhost:8080/#/userLogin';
   let url = 'https://scen.rcsexpress.com/#/userLogin';
 
-  let cliente = await models.Clientes.findByPk(client, {    
+  let cliente = await models.Clientes.findByPk(client, {
     raw: true,
   });
 
@@ -139,6 +150,9 @@ router.get('/send-confirm', async(req, res) => {
     auth: {
       user: mailUser,
       pass: mailPass,
+    },
+    tls: {
+      rejectUnauthorized: false,
     },
   };
   let transporter = nodemailer.createTransport(config);
@@ -157,7 +171,11 @@ router.get('/send-confirm', async(req, res) => {
       greeting: 'Hola',
       signature: 'Atentamente',
       name: cliente.nb_cliente,
-      intro: ['Su usuario fue ingresado con exito.', 'Usuario: ' + address, 'Contraseña: ' + password],
+      intro: [
+        'Su usuario fue ingresado con exito.',
+        'Usuario: ' + address,
+        'Contraseña: ' + password,
+      ],
       action: {
         instructions: 'Para ingresar al sistema, haga click debajo:',
         button: {
@@ -202,7 +220,8 @@ router.get('/', authenticateJWT, async (req, res, next) => {
   }
 });
 
-router.get('/:id',
+router.get(
+  '/:id',
   authenticateJWT,
   validatorHandler(getCusuariosSchema, 'params'),
   async (req, res, next) => {
@@ -216,7 +235,8 @@ router.get('/:id',
   }
 );
 
-router.put('/:id',
+router.put(
+  '/:id',
   authenticateJWT,
   validatorHandler(getCusuariosSchema, 'params'),
   validatorHandler(updateCusuariosSchema, 'body'),
@@ -232,14 +252,15 @@ router.put('/:id',
   }
 );
 
-router.delete('/:id',
+router.delete(
+  '/:id',
   authenticateJWT,
   validatorHandler(getCusuariosSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
       await service.delete(id);
-      res.status(201).json({id});
+      res.status(201).json({ id });
     } catch (error) {
       next(error);
     }
