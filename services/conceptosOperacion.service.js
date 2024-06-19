@@ -13,10 +13,16 @@ class CoperacionService {
     return newConcepto;
   }
 
-  async find(tipo) {
+  async find(tipo, tipo_in) {
     let params = {};
 
     if(tipo) params.tipo = tipo;
+
+    if (tipo_in) {
+      params.tipo = {
+        [Sequelize.Op.in]: tipo_in.toString().split(','),
+      };
+    }
 
     const conceptos = await models.Coperacion.findAll({
       where: params,

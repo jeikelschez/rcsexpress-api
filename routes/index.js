@@ -52,6 +52,7 @@ const CislrRouter = require('./controlIslr.router');
 const CislrfacRouter = require('./controlIslrFactura.router');
 const MbancariosRouter = require('./movimientosBancarios.router');
 const ClientesUsuariosRouter = require('./clientesUsuarios.router');
+const DgastosRouter = require('./distribucionGastos.router');
 
 function routerApi(app) {
   const router = express.Router();
@@ -107,6 +108,7 @@ function routerApi(app) {
   router.use('/cislrfac', CislrfacRouter);
   router.use('/mbancarios', MbancariosRouter);
   router.use('/cusuarios', ClientesUsuariosRouter);
+  router.use('/dgastos', DgastosRouter);
   router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 

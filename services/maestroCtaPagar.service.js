@@ -21,7 +21,8 @@ class MctapagarService {
     filter_value,
     desde,
     hasta,
-    proveedor
+    proveedor,
+    documento
   ) {
     let params2 = {};
     let filterArray = {};
@@ -46,6 +47,7 @@ class MctapagarService {
     }
 
     if (proveedor) params2.cod_proveedor = proveedor;
+    if (documento) params2.nro_documento = documento;
 
     if (filter && filter_value) {
       let filters = [];

@@ -24,6 +24,7 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       desde,
       hasta,
       proveedor,
+      documento,
     } = req.headers;
     const mCtapagar = await service.find(
       page,
@@ -34,7 +35,8 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       filter_value,
       desde,
       hasta,
-      proveedor
+      proveedor,
+      documento
     );
     res.json(mCtapagar);
   } catch (error) {

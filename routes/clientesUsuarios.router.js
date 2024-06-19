@@ -65,6 +65,8 @@ router.get('/send-invitation', async (req, res) => {
   };
   let transporter = nodemailer.createTransport(config);
 
+  console.log(config)
+
   let MailGenerator = new mailgen({
     theme: 'default',
     product: {
