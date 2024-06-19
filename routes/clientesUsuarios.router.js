@@ -73,6 +73,8 @@ router.get('/send-invitation', async (req, res) => {
       pass: mailPass,
     },
     tls: {
+      secure: false,
+      ignoreTLS: true,
       rejectUnauthorized: false,
     },
   };
@@ -152,6 +154,8 @@ router.get('/send-confirm', async (req, res) => {
       pass: mailPass,
     },
     tls: {
+      secure: false,
+      ignoreTLS: true,
       rejectUnauthorized: false,
     },
   };
