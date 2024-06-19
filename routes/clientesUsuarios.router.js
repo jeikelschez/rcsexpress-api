@@ -5,7 +5,6 @@ const base64 = require('js-base64');
 const mailgen = require('mailgen');
 const { models, Sequelize } = require('./../libs/sequelize');
 const { config } = require('./../config/config');
-const logger = require('./../config/logger');
 
 const mailUser = config.mailUser;
 const mailPass = config.mailPass;
@@ -62,16 +61,15 @@ router.get('/send-invitation', async (req, res) => {
   let url = 'https://scen.rcsexpress.com/#/userConfirm?cliente=';
 
   let config = {
-    service: 'gmail',
+    host: "mail.rcsexpress.com",
+    port: 465,
+    secure: true,
     auth: {
       user: mailUser,
       pass: mailPass,
     },
   };
   let transporter = nodemailer.createTransport(config);
-
-  logger.info(mailUser);
-  logger.info(mailPass);
 
   let MailGenerator = new mailgen({
     theme: 'default',
@@ -118,7 +116,6 @@ router.get('/send-invitation', async (req, res) => {
       });
     })
     .catch((err) => {
-      logger.info(err);
       return res.status(500).json({ msg: err });
     });
 });
@@ -135,7 +132,9 @@ router.get('/send-confirm', async(req, res) => {
   });
 
   let config = {
-    service: 'gmail',
+    host: "mail.rcsexpress.com",
+    port: 465,
+    secure: true,
     auth: {
       user: mailUser,
       pass: mailPass,
