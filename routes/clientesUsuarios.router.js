@@ -118,6 +118,7 @@ router.get('/send-invitation', async (req, res) => {
       });
     })
     .catch((err) => {
+      logger.info(err);
       return res.status(500).json({ msg: err });
     });
 });
