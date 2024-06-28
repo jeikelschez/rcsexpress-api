@@ -1,6 +1,8 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 const moment = require('moment');
 
+const { MRETENCIONES_TABLE } = require('./maestroRetenciones.model');
+
 const CISLR_TABLE = 'control_islr';
 
 const CislrSchema = {
@@ -16,7 +18,13 @@ const CislrSchema = {
   },
   cod_tipo_retencion: {
     allowNull: false,
-    type: DataTypes.STRING,
+    type: DataTypes.INTEGER,
+    references: {
+      model: MRETENCIONES_TABLE,
+      key: 'id',
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL',
   },
   cod_seniat: {
     allowNull: false,
@@ -71,6 +79,10 @@ const CislrSchema = {
 
 class Cislr extends Model {
   static associate(models) {
+    this.belongsTo(models.Mretenciones, {
+      foreignKey: 'cod_tipo_retencion',
+      as: 'codigos',
+    });
     this.hasMany(models.Cislrfac, {
       foreignKey: 'cod_islr',
       as: 'retenciones',

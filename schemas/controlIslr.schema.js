@@ -2,7 +2,7 @@ const Joi = require('joi');
 
 const id = Joi.number().integer();
 const ano_ejercicio = Joi.number().precision(0);
-const cod_tipo_retencion = Joi.string().max(2);
+const cod_tipo_retencion = Joi.number().integer();
 const cod_seniat = Joi.string().max(3);
 const descripcion_ret = Joi.string().min(3).max(100);
 const porc_retencion = Joi.number().precision(2);

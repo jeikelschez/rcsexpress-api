@@ -20,6 +20,7 @@ class CislrfacService {
     filter,
     filter_value,
     cod_islr,
+    cod_compra,
     desde,
     hasta,
     proveedor
@@ -48,6 +49,7 @@ class CislrfacService {
 
     if (proveedor) params2.cod_proveedor = proveedor;
     if (cod_islr) params2.cod_islr = cod_islr;
+    if (cod_compra) params2.id_compra = cod_compra;
 
     if (filter && filter_value) {
       let filters = [];

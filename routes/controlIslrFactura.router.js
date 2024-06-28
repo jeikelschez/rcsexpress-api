@@ -22,6 +22,7 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       filter,
       filter_value,
       cod_islr,
+      cod_compra,
       desde,
       hasta,
       proveedor,
@@ -35,6 +36,7 @@ router.get('/', authenticateJWT, async (req, res, next) => {
       filter,
       filter_value,
       cod_islr,
+      cod_compra,
       desde,
       hasta,
       proveedor

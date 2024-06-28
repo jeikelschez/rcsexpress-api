@@ -4419,7 +4419,16 @@
           {
             "name": "cod_islr",
             "in": "header",
-            "description": "Valor a filtrar",
+            "description": "Codigo de ISLR",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "cod_compra",
+            "in": "header",
+            "description": "Codigo de Compra",
             "required": false,
             "schema": {
               "type": "integer"
@@ -16208,7 +16217,7 @@
             "type": "number"
           },
           "cod_tipo_retencion": {
-            "type": "string"
+            "type": "number"
           },
           "cod_seniat": {
             "type": "string"
