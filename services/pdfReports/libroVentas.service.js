@@ -164,7 +164,7 @@ class LibroVentasService {
     doc.text('de', 298, 133);
     doc.text('Factura', 290, 141);
     doc.text('Número', 335, 125);
-    doc.text('Control.', 335, 133);
+    doc.text('Control', 335, 133);
     doc.text('Documento', 330, 141);
     doc.text('Número de', 378, 125);
     doc.text('Nota de', 383, 133);

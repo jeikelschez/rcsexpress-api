@@ -13,7 +13,7 @@ router.get('/loadExcel/:report', (req, res) => {
   fs.readFile(filePath, (err, file) => {
     if (err) return res.status(500).send('No se pudo descargar el archivo');
     res.setHeader('Content-Type', 'application/excel');
-    res.setHeader('Content-Disposition', `inline; filename= ${report }`);
+    res.setHeader('Content-Disposition', `inline; filename= ${report}`);
     res.send(file);
   });
 });
@@ -49,7 +49,56 @@ router.get('/comisiones', authenticateJWT, async (req, res, next) => {
 router.get('/guiasEmpresa', async (req, res, next) => {
   try {
     const { client, desde, hasta, estatus, ciudad, guia } = req.headers;
-    const response = await service.guiasEmpresa(client, desde, hasta, estatus, ciudad, guia);
+    const response = await service.guiasEmpresa(
+      client,
+      desde,
+      hasta,
+      estatus,
+      ciudad,
+      guia
+    );
+    res.status(200).json({
+      message: 'Excel Generado',
+      excelPath: response.resPath,
+      validDoc: response.validDoc,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/libroCompras', authenticateJWT, async (req, res, next) => {
+  try {
+    const { agencia, proveedor, desde, hasta, detalle } = req.headers;
+    const response = await service.libroCompras(
+      agencia,
+      proveedor,
+      desde,
+      hasta,
+      detalle
+    );
+    res.status(200).json({
+      message: 'Excel Generado',
+      excelPath: response.resPath,
+      validDoc: response.validDoc,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/libroVentas', authenticateJWT, async (req, res, next) => {
+  try {
+    const { agencia, cliente, desde, hasta, detalle, correlativo } =
+      req.headers;
+    const response = await service.libroVentas(
+      agencia,
+      cliente,
+      desde,
+      hasta,
+      detalle,
+      correlativo
+    );
     res.status(200).json({
       message: 'Excel Generado',
       excelPath: response.resPath,
