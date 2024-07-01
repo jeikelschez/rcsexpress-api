@@ -14,14 +14,15 @@ const service = new MmovimientosService();
 
 router.get('/guiasEmpresa', async (req, res, next) => {
   try {
-    const { client, desde, hasta, estatus, ciudad, guia } = req.headers;
+    const { client, desde, hasta, estatus, ciudad, guia, serie } = req.headers;
     const cguias = await service.findGuias(
       client,
       desde,
       hasta,
       estatus,
       ciudad,
-      guia
+      guia,
+      serie
     );
     res.json(cguias);
   } catch (error) {

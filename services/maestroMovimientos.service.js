@@ -59,7 +59,7 @@ class MmovimientosService {
     return newMmovimiento;
   }
 
-  async findGuias(client, desde, hasta, estatus, ciudad, guia) {
+  async findGuias(client, desde, hasta, estatus, ciudad, guia, serie) {
     let params = {};
     let params2 = {};
 
@@ -71,6 +71,10 @@ class MmovimientosService {
 
     if (guia) {
       params.nro_documento = guia;
+    } else if (!serie) {
+      params.nro_documento = {
+        [Sequelize.Op.lte]: 550000000,
+      };
     }
 
     if (estatus) {
@@ -79,7 +83,7 @@ class MmovimientosService {
 
     if (ciudad) {
       params2.id = ciudad;
-    }
+    }    
 
     const guias = await models.Mmovimientos.findAll({
       where: params,
