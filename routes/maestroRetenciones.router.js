@@ -2,25 +2,48 @@ const express = require('express');
 
 const MretencionesService = require('./../services/maestroRetenciones.service');
 const validatorHandler = require('./../middlewares/validator.handler');
-const { createMretencionesSchema, updateMretencionesSchema, getMretencionesSchema } = require('./../schemas/maestroRetenciones.schema');
-const authenticateJWT  = require('./../middlewares/authenticate.handler');
+const {
+  createMretencionesSchema,
+  updateMretencionesSchema,
+  getMretencionesSchema,
+} = require('./../schemas/maestroRetenciones.schema');
+const authenticateJWT = require('./../middlewares/authenticate.handler');
 
 const router = express.Router();
 const service = new MretencionesService();
 
-router.get('/',
-  authenticateJWT,
-  async (req, res, next) => {
+router.get('/', authenticateJWT, async (req, res, next) => {
   try {
-    const { page, limit, order_by, order_direction, filter, filter_value, vigente, tipo_persona } = req.headers;
-    const mRetenciones = await service.find(page, limit, order_by, order_direction, filter, filter_value, vigente, tipo_persona);
+    const {
+      page,
+      limit,
+      order_by,
+      order_direction,
+      filter,
+      filter_value,
+      vigente,
+      tipo_persona,
+      valido,
+    } = req.headers;
+    const mRetenciones = await service.find(
+      page,
+      limit,
+      order_by,
+      order_direction,
+      filter,
+      filter_value,
+      vigente,
+      tipo_persona,
+      valido
+    );
     res.json(mRetenciones);
   } catch (error) {
     next(error);
   }
 });
 
-router.get('/:id',
+router.get(
+  '/:id',
   authenticateJWT,
   validatorHandler(getMretencionesSchema, 'params'),
   async (req, res, next) => {
@@ -34,7 +57,8 @@ router.get('/:id',
   }
 );
 
-router.post('/',
+router.post(
+  '/',
   authenticateJWT,
   validatorHandler(createMretencionesSchema, 'body'),
   async (req, res, next) => {
@@ -48,7 +72,8 @@ router.post('/',
   }
 );
 
-router.put('/:id',
+router.put(
+  '/:id',
   authenticateJWT,
   validatorHandler(getMretencionesSchema, 'params'),
   validatorHandler(updateMretencionesSchema, 'body'),
@@ -64,14 +89,15 @@ router.put('/:id',
   }
 );
 
-router.delete('/:id',
+router.delete(
+  '/:id',
   authenticateJWT,
   validatorHandler(getMretencionesSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
       await service.delete(id);
-      res.status(201).json({id});
+      res.status(201).json({ id });
     } catch (error) {
       next(error);
     }

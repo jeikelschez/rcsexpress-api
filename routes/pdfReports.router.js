@@ -364,7 +364,14 @@ router.get('/reporteIgtf', authenticateJWT, async (req, res, next) => {
 router.get('/guiasEmpresa', async (req, res, next) => {
   try {
     const { client, desde, hasta, estatus, ciudad, guia } = req.headers;
-    const response = await service.guiasEmpresa(client, desde, hasta, estatus, ciudad, guia);
+    const response = await service.guiasEmpresa(
+      client,
+      desde,
+      hasta,
+      estatus,
+      ciudad,
+      guia
+    );
     res.status(200).json({
       message: 'PDF Generado',
       pdfPath: response.resPath,
@@ -379,6 +386,20 @@ router.get('/guiasLote', authenticateJWT, async (req, res, next) => {
   try {
     const { tipo, data } = req.headers;
     const response = await service.guiasLote(tipo, data);
+    res.status(200).json({
+      message: 'PDF Generado',
+      pdfPath: response.resPath,
+      validDoc: response.validDoc,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/reportePago', authenticateJWT, async (req, res, next) => {
+  try {
+    const { id, beneficiario } = req.headers;
+    const response = await service.reportePago(id, beneficiario);
     res.status(200).json({
       message: 'PDF Generado',
       pdfPath: response.resPath,

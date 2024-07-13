@@ -47,6 +47,7 @@ const { Cislrfac, CislrfacSchema } = require('./controlIslrFactura.model');
 const { Mbancarios, MbancariosSchema } = require('./movimientosBancarios.model');
 const { Cusuarios, CusuariosSchema } = require('./clientesUsuarios.model');
 const { Dgastos, DgastosSchema } = require('./distribucionGastos.model');
+const { Chequeras, ChequerasSchema } = require('./chequeras.model');
 
 function setupModels(sequelize) {
   Bancos.init(BancosSchema, Bancos.config(sequelize));
@@ -98,6 +99,7 @@ function setupModels(sequelize) {
   Mbancarios.init(MbancariosSchema, Mbancarios.config(sequelize));
   Cusuarios.init(CusuariosSchema, Cusuarios.config(sequelize));
   Dgastos.init(DgastosSchema, Dgastos.config(sequelize));
+  Chequeras.init(ChequerasSchema, Chequeras.config(sequelize));
 
   Paises.associate(sequelize.models);
   Estados.associate(sequelize.models);
@@ -141,6 +143,7 @@ function setupModels(sequelize) {
   Mbancarios.associate(sequelize.models);
   Cusuarios.associate(sequelize.models);
   Dgastos.associate(sequelize.models);
+  Chequeras.associate(sequelize.models);
 
   Usuarios.hooks(sequelize.models);
 }

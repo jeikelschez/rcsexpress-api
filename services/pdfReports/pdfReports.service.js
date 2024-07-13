@@ -49,6 +49,8 @@ const GuiasEmpresaService = require('./guiasEmpresa.service');
 const guiasEmpresaService = new GuiasEmpresaService();
 const GuiasLoteService = require('./guiasLote.service');
 const guiasLoteService = new GuiasLoteService();
+const ReportePagoService = require('./reportePago.service');
+const reportePagoService = new ReportePagoService();
 
 class PdfReportsService {
   constructor() {}
@@ -523,6 +525,16 @@ class PdfReportsService {
     await guiasLoteService.mainReport(doc, tipo, data);
     doc.end();
     return { validDoc: true, resPath: resPath };
+  }
+
+  // REPORTE COMPROBANTE PAGO
+  async reportePago(id, beneficiario) {
+    let resPath = 'reportePago.pdf';
+    let doc = new PDFDocument({ margin: 50 });
+    doc.pipe(fs.createWriteStream(reportsPath + resPath));
+    let validDoc = await reportePagoService.mainReport(doc, id, beneficiario);
+    doc.end();
+    return { validDoc: validDoc, resPath: resPath };
   }
 }
 

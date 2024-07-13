@@ -39,6 +39,10 @@
       "description": "API para Manejar los Bancos de la Organizacion"
     },
     {
+      "name": "Chequeras",
+      "description": "API para Manejar las Chequeras de la Organizacion"
+    },
+    {
       "name": "Ciudades",
       "description": "API para Manejar los Ciudades de la Organizacion"
     },
@@ -1477,6 +1481,306 @@
                   "properties": {
                     "id": {
                       "$ref": "#/components/schemas/Bancos/properties/id"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/chequeras": {
+      "get": {
+        "tags": ["Chequeras"],
+        "summary": "Obtener todos las chequeras",
+        "description": "API para Obtener todos las chequeras del sistema",
+        "parameters": [
+          {
+            "name": "cuenta",
+            "in": "header",
+            "description": "Codigo de la Cuenta",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "estatus",
+            "in": "header",
+            "description": "Estatus de la Chequera",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/extraSchemes/Paginate",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Chequeras"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Chequeras"],
+        "summary": "Crear Chequeras",
+        "description": "API para Crear una nueva Chequera",
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Chequeras"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Chequeras"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/chequeras/{id}": {
+      "get": {
+        "tags": ["Chequeras"],
+        "summary": "Obtener Chequera por su Id",
+        "description": "API para Retornar una Chequera por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Chequera",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Chequeras"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Chequeras"],
+        "summary": "Actualizar Chequeras",
+        "description": "API para Actualizar una Chequera por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Chequera",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Put object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Chequeras"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Chequeras"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/400"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "MediaType No Soportado"
+          },
+          "500": {
+            "description": "Error Interno del Sistema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/standarResponses/500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Chequeras"],
+        "summary": "Borrar Chequeras",
+        "description": "API para Borrar una Chequera por su ID específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Codigo de la Chequera",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Chequeras/properties/id"
                     }
                   },
                   "type": "object"
@@ -6161,7 +6465,7 @@
                   "$ref": "#/extraSchemes/Paginate",
                   "properties": {
                     "data": {
-                      "$ref": "#/components/schemas/Detalle_Cobranzas"                      
+                      "$ref": "#/components/schemas/Detalle_Cobranzas"
                     }
                   }
                 }
@@ -6837,7 +7141,7 @@
             "schema": {
               "type": "integer"
             }
-          },          
+          },
           {
             "name": "cod_movimiento",
             "in": "header",
@@ -7535,7 +7839,7 @@
                   "$ref": "#/extraSchemes/Paginate",
                   "properties": {
                     "data": {
-                      "$ref": "#/components/schemas/Distribucion_Gastos"                      
+                      "$ref": "#/components/schemas/Distribucion_Gastos"
                     }
                   }
                 }
@@ -11010,6 +11314,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "valido",
+            "in": "header",
+            "description": "Fecha de Validez de la Retención",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -11936,7 +12249,7 @@
                   "$ref": "#/extraSchemes/Paginate",
                   "properties": {
                     "data": {
-                      "$ref": "#/components/schemas/Pagos_Generados"                      
+                      "$ref": "#/components/schemas/Pagos_Generados"
                     }
                   }
                 }
@@ -16045,6 +16358,34 @@
           }
         }
       },
+      "Chequeras": {
+        "description": "Modelo de Chequeras",
+        "required": ["id", "cod_cuenta", "nro_chequera"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "readOnly": true
+          },
+          "cod_cuenta": {
+            "type": "number"
+          },
+          "nro_chequera": {
+            "type": "number"
+          },
+          "primer_cheque": {
+            "type": "number"
+          },
+          "ultimo_cheque": {
+            "type": "number"
+          },
+          "ultimo_cheque_asignado": {
+            "type": "number"
+          },
+          "estatus_chequera": {
+            "type": "string"
+          }
+        }
+      },
       "Ciudades": {
         "description": "Modelo de Ciudades",
         "required": ["id", "desc_ciudad", "cod_estado"],
@@ -16448,7 +16789,13 @@
       },
       "Detalle_Cobranzas": {
         "description": "Modelo de Detalle de Cobranzas",
-        "required": ["id", "cod_agencia", "cod_cobranza", "cod_movimiento", "fecha_emision"],
+        "required": [
+          "id",
+          "cod_agencia",
+          "cod_cobranza",
+          "cod_movimiento",
+          "fecha_emision"
+        ],
         "properties": {
           "id": {
             "type": "number",
@@ -16551,7 +16898,13 @@
       },
       "Distribucion_Gastos": {
         "description": "Modelo de Distribucion de Gastos",
-        "required": ["id", "cod_cta_pagar", "cod_agencia", "cod_concepto", "tipo_concepto"],
+        "required": [
+          "id",
+          "cod_cta_pagar",
+          "cod_agencia",
+          "cod_concepto",
+          "tipo_concepto"
+        ],
         "properties": {
           "id": {
             "type": "number",
@@ -16737,12 +17090,7 @@
       },
       "Maestro_Cobranzas": {
         "description": "Modelo de Maestro de Cobranzas",
-        "required": [
-          "id",
-          "cod_agencia",
-          "fecha_deposito",
-          "monto_cobrado"
-        ],
+        "required": ["id", "cod_agencia", "fecha_deposito", "monto_cobrado"],
         "properties": {
           "id": {
             "type": "number",
@@ -16779,11 +17127,7 @@
       },
       "Maestro_Cuentas_Pagar": {
         "description": "Modelo de Maestro de Cuentas por Pagar",
-        "required": [
-          "id",
-          "cod_proveedor",
-          "cod_agencia"
-        ],
+        "required": ["id", "cod_proveedor", "cod_agencia"],
         "properties": {
           "id": {
             "type": "number",
@@ -16892,10 +17236,7 @@
       },
       "Movimientos_Bancarios": {
         "description": "Modelo de Movimientos Bancarios",
-        "required": [
-          "id",
-          "cod_cuenta"
-        ],
+        "required": ["id", "cod_cuenta"],
         "properties": {
           "id": {
             "type": "number",
@@ -16929,7 +17270,7 @@
             "type": "string"
           }
         }
-      },      
+      },
       "Maestro_Movimientos": {
         "description": "Modelo de Maestro de Movimientos",
         "required": [

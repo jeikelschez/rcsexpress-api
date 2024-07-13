@@ -10,7 +10,6 @@ const monto_pagado = Joi.number().precision(2);
 const monto_base = Joi.number().precision(2);
 const monto_retenido = Joi.number().precision(2);
 const porc_retencion = Joi.number().precision(2);
-const id_pago = Joi.number().precision(0);
 
 const createPgeneradosSchema = Joi.object({
     cod_cta_pagar: cod_cta_pagar.required(),
@@ -21,8 +20,7 @@ const createPgeneradosSchema = Joi.object({
     monto_pagado: monto_pagado.allow(null, ''),
     monto_base: monto_base.allow(null, ''),
     monto_retenido: monto_retenido.allow(null, ''),
-    porc_retencion: porc_retencion.allow(null, ''),
-    id_pago: id_pago.allow(null, '')
+    porc_retencion: porc_retencion.allow(null, '')
 });
 
 const updatePgeneradosSchema = Joi.object({
@@ -35,8 +33,7 @@ const updatePgeneradosSchema = Joi.object({
     monto_pagado: monto_pagado.allow(null, ''),
     monto_base: monto_base.allow(null, ''),
     monto_retenido: monto_retenido.allow(null, ''),
-    porc_retencion: porc_retencion.allow(null, ''),
-    id_pago: id_pago.allow(null, '')
+    porc_retencion: porc_retencion.allow(null, '')
 });
 
 const getPgeneradosSchema = Joi.object({

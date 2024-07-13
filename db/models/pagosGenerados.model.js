@@ -57,10 +57,7 @@ const PgeneradosSchema = {
   },
   porc_retencion: {
     type: DataTypes.DECIMAL,
-  },
-  id_pago: {
-    type: DataTypes.DECIMAL,
-  },
+  }
 };
 
 class Pgenerados extends Model {

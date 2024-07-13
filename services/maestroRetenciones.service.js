@@ -16,7 +16,7 @@ class MretencionesService {
     return newMRetencion;
   }
 
-  async find(page, limit, order_by, order_direction, filter, filter_value, vigente, tipo_persona) {    
+  async find(page, limit, order_by, order_direction, filter, filter_value, vigente, tipo_persona, valido) {    
     let params2 = {};
     let filterArray = {};
     let order = []; 
@@ -29,6 +29,17 @@ class MretencionesService {
         },
         fecha_fin_val: {
           [Sequelize.Op.gt]: date
+        }
+      }
+    }
+
+    if(valido) {      
+      params2 = {
+        fecha_ini_val: {
+          [Sequelize.Op.lte]: valido
+        },
+        fecha_fin_val: {
+          [Sequelize.Op.gt]: valido
         }
       }
     }
