@@ -51,6 +51,8 @@ const GuiasLoteService = require('./guiasLote.service');
 const guiasLoteService = new GuiasLoteService();
 const ReportePagoService = require('./reportePago.service');
 const reportePagoService = new ReportePagoService();
+const RetencionesCompradorService = require('./retencionesComprador.service');
+const retencionesCompradorService = new RetencionesCompradorService();
 
 class PdfReportsService {
   constructor() {}
@@ -533,6 +535,23 @@ class PdfReportsService {
     let doc = new PDFDocument({ margin: 50 });
     doc.pipe(fs.createWriteStream(reportsPath + resPath));
     let validDoc = await reportePagoService.mainReport(doc, id, beneficiario);
+    doc.end();
+    return { validDoc: validDoc, resPath: resPath };
+  }
+
+  // RETENCIONES COMPRADOR
+  async retencionesComprador(print, data) {
+    if (!print) return { validDoc: true, resPath: 'reporteBase.pdf' };
+    let resPath = 'retencionesComprador.pdf';
+    let doc = new PDFDocument({
+      margin: 10,
+      bufferPages: true,
+      layout: 'landscape',
+    });
+
+    doc.pipe(fs.createWriteStream(reportsPath + resPath));
+    let validDoc = await retencionesCompradorService.mainReport(doc, data);
+    resPath = validDoc ? resPath : 'reporteBase.pdf';
     doc.end();
     return { validDoc: validDoc, resPath: resPath };
   }

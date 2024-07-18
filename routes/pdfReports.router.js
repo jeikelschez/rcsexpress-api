@@ -410,4 +410,18 @@ router.get('/reportePago', authenticateJWT, async (req, res, next) => {
   }
 });
 
+router.get('/retencionesComprador', authenticateJWT, async (req, res, next) => {
+  try {
+    const { print, data } = req.headers;
+    const response = await service.retencionesComprador(print, data);
+    res.status(200).json({
+      message: 'PDF Generado',
+      pdfPath: response.resPath,
+      validDoc: response.validDoc,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
