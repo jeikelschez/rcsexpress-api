@@ -78,62 +78,95 @@ class CobranzasService {
     doc.text('RIF. J-31028463-6', 35, 170);
     doc.font('Helvetica-Bold');
     doc.fillColor('#444444');
-    doc.fontSize(20);
+    doc.fontSize(24);
 
-    let tittle = 'Ingreso de Caja';
-    doc.y = 100;
-    doc.x = 130;
-    doc.text(tittle, {
+    doc.y = 70;
+    doc.x = 200;
+    doc.text('Ingreso de Caja', {
       align: 'center',
       columns: 1,
       width: 400,
     });
 
     doc.fontSize(14);
-    doc.text('Nro:', 475, 170);
+    doc.text('Nro:', 660, 170);
     doc.y = 170;
-    doc.x = 515;
+    doc.x = 690;
     doc.text(detalles[0].ingreso_caja, {
       align: 'center',
       columns: 1,
-      width: 50,
+      width: 70,
     });
 
-    doc.fontSize(10);
-    doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 500, 35);
+    doc.fontSize(9);
+    doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 680, 35);
+
+    doc.fontSize(12);
     doc.lineWidth(0.5);
 
-    doc.lineJoin('miter').rect(30, 195, 80, 42).stroke();
-    doc.text('Fecha', 55, 202);
+    doc.lineJoin('miter').rect(30, 195, 110, 44).stroke();
+    doc.y = 205;
+    doc.x = 30;
+    doc.text('Fecha',
+      {
+        align: 'center',
+        columns: 1,
+        width: 110,
+      }
+    );
     doc.y = 220;
     doc.x = 30;
     doc.text(moment(detalles[0].fecha_deposito).format('DD/MM/YYYY'), {
       align: 'center',
       columns: 1,
-      width: 80,
+      width: 110,
     });
-    doc.lineJoin('miter').rect(112, 195, 100, 42).stroke();
-    doc.text('Banco', 147, 200);
-    doc.y = detalles[0]['cuentas.bancos.nb_banco'].length < 11 ? 220 : 213;
-    doc.x = 114;
+    doc.lineJoin('miter').rect(140, 195, 140, 44).stroke();
+    doc.y = 205;
+    doc.x = 140;
+    doc.text('Banco',
+      {
+        align: 'center',
+        columns: 1,
+        width: 140,
+      }
+    );
+    doc.y = 220;
+    doc.x = 140;
     doc.text(detalles[0]['cuentas.bancos.nb_banco'], {
       align: 'center',
       columns: 1,
-      width: 100,
+      width: 140,
     });
-    doc.lineJoin('miter').rect(214, 195, 132, 42).stroke();
-    doc.text('Cuenta', 265, 200);
+    doc.lineJoin('miter').rect(280, 195, 170, 44).stroke();
+    doc.y = 205;
+    doc.x = 280;
+    doc.text('Cuenta',
+      {
+        align: 'center',
+        columns: 1,
+        width: 170,
+      }
+    );
     doc.y = 220;
-    doc.x = 214;
+    doc.x = 280;
     doc.text(detalles[0]['cuentas.nro_cuenta'], {
       align: 'center',
       columns: 1,
-      width: 132,
+      width: 170,
     });
-    doc.lineJoin('miter').rect(348, 195, 110, 42).stroke();
-    doc.text('Ingresos', 382, 200);
+    doc.lineJoin('miter').rect(450, 195, 150, 44).stroke();
+    doc.y = 205;
+    doc.x = 450;
+    doc.text('Ingresos',
+      {
+        align: 'center',
+        columns: 1,
+        width: 150,
+      }
+    );
     doc.y = 220;
-    doc.x = 348;
+    doc.x = 450;
     doc.text(
       new Intl.NumberFormat('de-DE', {
         style: 'currency',
@@ -146,13 +179,21 @@ class CobranzasService {
       {
         align: 'center',
         columns: 1,
-        width: 110,
+        width: 150,
       }
     );
-    doc.lineJoin('miter').rect(460, 195, 118, 42).stroke();
-    doc.text('Total Depósito', 483, 200);
+    doc.lineJoin('miter').rect(600, 195, 153, 44).stroke();
+    doc.y = 205;
+    doc.x = 600;
+    doc.text('Total Depósito',
+      {
+        align: 'center',
+        columns: 1,
+        width: 153,
+      }
+    );
     doc.y = 220;
-    doc.x = 460;
+    doc.x = 600;
     doc.text(
       new Intl.NumberFormat('de-DE', {
         style: 'currency',
@@ -165,75 +206,160 @@ class CobranzasService {
       {
         align: 'center',
         columns: 1,
-        width: 118,
+        width: 153,
       }
     );
 
-    doc.fontSize(9);
-    doc.lineJoin('miter').rect(30, 239, 548, 20).stroke();
-    doc.text('DETALLE DEL INGRESO', 263, 245);
+    doc.fontSize(12);
+    doc.lineJoin('miter').rect(30, 239, 723, 25).stroke();
+    doc.y = 248;
+    doc.x = 30;
+    doc.text('DETALLE DEL INGRESO', {
+      align: 'center',
+      columns: 1,
+      width: 723,
+    });
 
-    doc.fontSize(8);
-    doc.lineJoin('miter').rect(30, 261, 141, 26).stroke();
-    doc.text('Cliente', 95, 266);
-    doc.lineJoin('miter').rect(173, 261, 40, 26).stroke();
-    doc.text('Nº', 190, 266);
-    doc.text('Factura', 178, 275);
-    doc.lineJoin('miter').rect(215, 261, 50, 26).stroke();
-    doc.text('Fecha', 229, 266);
-    doc.text('Factura', 226, 275);
-    doc.lineJoin('miter').rect(267, 261, 55, 26).stroke();
-    doc.text('Monto', 285, 266);
-    doc.text('Factura', 282, 275);
-    doc.lineJoin('miter').rect(324, 261, 50, 26).stroke();
-    doc.text('Ret. ISLR', 331, 266);
-    doc.text('3%', 343, 275);
-    doc.lineJoin('miter').rect(376, 261, 40, 26).stroke();
-    doc.text('Ret. IVA', 381, 266);
-    doc.text('75%', 389, 275);
-    doc.lineJoin('miter').rect(418, 261, 40, 26).stroke();
-    doc.text('Estación', 421, 266);
-    doc.lineJoin('miter').rect(460, 261, 118, 26).stroke();
-    doc.text('Observación', 495, 266);
+    doc.fontSize(10);
+    doc.lineJoin('miter').rect(30, 266, 194, 26).stroke();
+    doc.y = 270;
+    doc.x = 30;
+    doc.text('Cliente', {
+      align: 'center',
+      columns: 1,
+      width: 194,
+    });
+    doc.lineJoin('miter').rect(226, 266, 50, 26).stroke();
+    doc.y = 270;
+    doc.x = 226;
+    doc.text('Nº', {
+      align: 'center',
+      columns: 1,
+      width: 50,
+    });
+    doc.y = 282;
+    doc.x = 226;
+    doc.text('Factura', {
+      align: 'center',
+      columns: 1,
+      width: 50,
+    });
+    doc.lineJoin('miter').rect(278, 266, 55, 26).stroke();
+    doc.y = 270;
+    doc.x = 278;
+    doc.text('Fecha', {
+      align: 'center',
+      columns: 1,
+      width: 55,
+    });
+    doc.y = 282;
+    doc.x = 278;
+    doc.text('Factura', {
+      align: 'center',
+      columns: 1,
+      width: 55,
+    });
+    doc.lineJoin('miter').rect(335, 266, 70, 26).stroke();
+    doc.y = 270;
+    doc.x = 335;
+    doc.text('Monto', {
+      align: 'center',
+      columns: 1,
+      width: 70,
+    });
+    doc.y = 282;
+    doc.x = 335;
+    doc.text('Factura', {
+      align: 'center',
+      columns: 1,
+      width: 70,
+    });
+    doc.lineJoin('miter').rect(407, 266, 50, 26).stroke();
+    doc.y = 270;
+    doc.x = 407;
+    doc.text('Ret. ISLR', {
+      align: 'center',
+      columns: 1,
+      width: 50,
+    });
+    doc.y = 282;
+    doc.x = 407;
+    doc.text('3%', {
+      align: 'center',
+      columns: 1,
+      width: 50,
+    });
+    doc.lineJoin('miter').rect(459, 266, 50, 26).stroke();
+    doc.y = 270;
+    doc.x = 459;
+    doc.text('Ret. IVA', {
+      align: 'center',
+      columns: 1,
+      width: 50,
+    });
+    doc.y = 282;
+    doc.x = 459;
+    doc.text('75%', {
+      align: 'center',
+      columns: 1,
+      width: 50,
+    });
+    doc.lineJoin('miter').rect(511, 266, 50, 26).stroke();
+    doc.y = 270;
+    doc.x = 511;
+    doc.text('Estación', {
+      align: 'center',
+      columns: 1,
+      width: 50,
+    });
+    doc.lineJoin('miter').rect(563, 266, 190, 26).stroke();
+    doc.y = 270;
+    doc.x = 563;
+    doc.text('Observación', {
+      align: 'center',
+      columns: 1,
+      width: 190,
+    });
   }
 
   async generateCustomerInformation(doc, detalles) {
     var i = 0;
     var page = 0;
     var ymin;
-    ymin = 294;
+    ymin = 300;
     for (var item = 0; item < detalles.length; item++) {
+      doc.fontSize(9);
       doc.font('Helvetica');
       doc.fillColor('#444444');
 
       doc
         .lineJoin('miter')
-        .rect(30, ymin + i - 5, 141, 23)
+        .rect(30, ymin + i - 5, 194, 28)
         .stroke();
       doc.y = ymin + i;
       doc.x = 30;
       doc.text(detalles[item]['detalles.movimientos.cliente_orig_desc'], {
         align: 'center',
         columns: 1,
-        width: 141,
+        width: 194,
       });
       doc
         .lineJoin('miter')
-        .rect(173, ymin + i - 5, 40, 23)
+        .rect(226, ymin + i - 5, 50, 28)
         .stroke();
       doc.y = ymin + i;
-      doc.x = 173;
+      doc.x = 226;
       doc.text(detalles[item]['detalles.movimientos.nro_control'], {
         align: 'center',
         columns: 1,
-        width: 40,
+        width: 50,
       });
       doc
         .lineJoin('miter')
-        .rect(215, ymin + i - 5, 50, 23)
+        .rect(278, ymin + i - 5, 55, 28)
         .stroke();
       doc.y = ymin + i;
-      doc.x = 215;
+      doc.x = 278;
       doc.text(
         moment(detalles[item]['detalles.movimientos.fecha_emision']).format(
           'DD/MM/YYYY'
@@ -241,66 +367,66 @@ class CobranzasService {
         {
           align: 'center',
           columns: 1,
-          width: 50,
+          width: 55,
         }
       );
       doc
         .lineJoin('miter')
-        .rect(267, ymin + i - 5, 55, 23)
+        .rect(335, ymin + i - 5, 70, 28)
         .stroke();
       doc.y = ymin + i;
-      doc.x = 265;
+      doc.x = 335;
       doc.text(utils.formatNumber(detalles[item]['detalles.monto_pagado']), {
         align: 'right',
         columns: 1,
-        width: 55,
+        width: 67,
       });
       doc
         .lineJoin('miter')
-        .rect(324, ymin + i - 5, 50, 23)
+        .rect(407, ymin + i - 5, 50, 28)
         .stroke();
       doc.y = ymin + i;
-      doc.x = 322;
+      doc.x = 407;
       doc.text(utils.formatNumber(detalles[item]['detalles.islr_retenido']), {
         align: 'right',
+        columns: 1,
+        width: 47,
+      });
+      doc
+        .lineJoin('miter')
+        .rect(459, ymin + i - 5, 50, 28)
+        .stroke();
+      doc.y = ymin + i;
+      doc.x = 459;
+      doc.text(utils.formatNumber(detalles[item]['detalles.iva_retenido']), {
+        align: 'right',
+        columns: 1,
+        width: 47,
+      });
+      doc
+        .lineJoin('miter')
+        .rect(511, ymin + i - 5, 50, 28)
+        .stroke();
+      doc.y = ymin + i;
+      doc.x = 511;
+      doc.text(detalles[item]['agencias.ciudades.siglas'], {
+        align: 'center',
         columns: 1,
         width: 50,
       });
       doc
         .lineJoin('miter')
-        .rect(376, ymin + i - 5, 40, 23)
+        .rect(563, ymin + i - 5, 190, 28)
         .stroke();
       doc.y = ymin + i;
-      doc.x = 374;
-      doc.text(utils.formatNumber(detalles[item]['detalles.iva_retenido']), {
-        align: 'right',
-        columns: 1,
-        width: 40,
-      });
-      doc
-        .lineJoin('miter')
-        .rect(418, ymin + i - 5, 40, 23)
-        .stroke();
-      doc.y = ymin + i;
-      doc.x = 418;
-      doc.text(detalles[item]['agencias.ciudades.siglas'], {
-        align: 'center',
-        columns: 1,
-        width: 40,
-      });
-      doc
-        .lineJoin('miter')
-        .rect(460, ymin + i - 5, 118, 23)
-        .stroke();
-      doc.y = ymin + i;
-      doc.x = 460;
+      doc.x = 563;
       doc.text(detalles[item]['detalles.observacion'], {
         align: 'center',
         columns: 1,
-        width: 118,
+        width: 190,
       });
 
-      i += 25;
+      i += 30;
       if (i >= 450) {
         doc.fillColor('#BLACK');
         doc.addPage();
@@ -310,51 +436,56 @@ class CobranzasService {
         await this.generateHeader(doc, detalles);
       }
     }
-
-    let y = ymin + i;
+    
     doc.font('Helvetica-Bold');
-    doc.text('DETALLE DEL DEPÓSITO', 470, y + 5);
-    doc.y = y + 22;
-    doc.x = 445;
+    let y = ymin + i - 3;
+    
+    doc.fontSize(11);
+    doc.lineJoin('miter').rect(600, y, 153, 25).stroke();
+    doc.text('DETALLE DEL DEPÓSITO', 608, y + 7);
+
+    doc.fontSize(10);
+    doc.y = y + 33;
+    doc.x = 585;
     doc.text('Total Ingreso:', {
       align: 'right',
       columns: 1,
-      width: 80,
+      width: 100,
     });
-    doc.y = y + 22;
-    doc.x = 515;
+    doc.y = y + 33;
+    doc.x = 665;
     doc.text(utils.formatNumber(detalles[0].monto_cobrado), {
       align: 'right',
       columns: 1,
-      width: 60,
+      width: 80,
     });
-    doc.y = y + 35;
-    doc.x = 445;
+    doc.y = y + 53;
+    doc.x = 585;
     doc.text('Impuesto Retenido:', {
       align: 'right',
       columns: 1,
-      width: 80,
+      width: 100,
     });
-    doc.y = y + 35;
-    doc.x = 515;
+    doc.y = y + 53;
+    doc.x = 665;
     doc.text(utils.formatNumber(detalles[0].monto_retenido * -1), {
       align: 'right',
       columns: 1,
-      width: 60,
+      width: 80,
     });
-    doc.y = y + 48;
-    doc.x = 445;
+    doc.y = y + 73;
+    doc.x = 585;
     doc.text('Total Depósito:', {
       align: 'right',
       columns: 1,
-      width: 80,
+      width: 100,
     });
-    doc.y = y + 48;
-    doc.x = 515;
+    doc.y = y + 73;
+    doc.x = 665;
     doc.text(utils.formatNumber(detalles[0].monto_deposito), {
       align: 'right',
       columns: 1,
-      width: 60,
+      width: 80,
     });
 
     var end;
@@ -365,9 +496,9 @@ class CobranzasService {
       i++
     ) {
       doc.switchToPage(i);
-      doc.fontSize(8);
+      doc.fontSize(9);
       doc.fillColor('#444444');
-      doc.x = 485;
+      doc.x = 655;
       doc.y = 50;
       doc.text(`Pagina ${i + 1} de ${range.count}`, {
         align: 'right',

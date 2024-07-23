@@ -413,8 +413,9 @@ class PdfReportsService {
   async cobranza(id) {
     let resPath = 'cobranza.pdf';
     let doc = new PDFDocument({
-      margin: 20,
+      margin: 10,
       bufferPages: true,
+      layout: 'landscape',
     });
 
     doc.pipe(fs.createWriteStream(reportsPath + resPath));

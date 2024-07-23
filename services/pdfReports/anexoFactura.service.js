@@ -72,7 +72,9 @@ class AnexoFacturaService {
       .text('RCS Express, S.A', 110, 50)
       .text('R.I.F. J-31028463-6', 110, 70)
       .fontSize(12)
-      .text('Valencia, ' + moment().format('DD/MM/YYYY'), 200, 50, { align: 'right' })
+      .text('Valencia, ' + moment().format('DD/MM/YYYY'), 200, 50, {
+        align: 'right',
+      })
       .fontSize(16)
       .text('Informe de Ventas Realizadas', 200, 110)
       .fontSize(11);
@@ -193,11 +195,11 @@ class AnexoFacturaService {
       total += utils.parseFloatN(detalle[item].monto_total);
 
       doc.y = ymin + i;
-      doc.x = 43;
+      doc.x = 45;
       doc.text(
         detalle[item].fecha_emision.substring(5, 7) +
           '-' +
-          detalle[item].fecha_emision.substring(2, 4),
+          detalle[item].fecha_emision.substring(0, 4),
         {
           align: 'center',
           columns: 1,
@@ -220,7 +222,7 @@ class AnexoFacturaService {
       });
       doc.y = ymin + i;
       doc.x = 210;
-      doc.text(detalle[item].dimensiones.substring(0, 22), {
+      doc.text(detalle[item].dimensiones.substring(0, 20), {
         align: 'center',
         columns: 1,
         width: 105,
@@ -230,14 +232,14 @@ class AnexoFacturaService {
       doc.text(detalle[item]['agencias.ciudades.siglas'], {
         align: 'center',
         columns: 1,
-        width: 25,
+        width: 30,
       });
       doc.y = ymin + i;
       doc.x = 361;
       doc.text(detalle[item]['agencias_dest.ciudades.siglas'], {
         align: 'center',
         columns: 1,
-        width: 25,
+        width: 30,
       });
       doc.y = ymin + i;
       doc.x = 388;
@@ -268,7 +270,7 @@ class AnexoFacturaService {
           width: 65,
         }
       );
-      i = i + 25;
+      i = i + 17;
       if (i >= 500) {
         doc.addPage();
         page = page + 1;
@@ -285,10 +287,8 @@ class AnexoFacturaService {
       i = 0;
       ymin = 50;
     }
-    doc.fontSize(12);
     doc.font('Helvetica-Bold');
-    doc.text('Totales:', 220, ymin + i);
-    doc.fontSize(10);
+    doc.text('Totales:', 310, ymin + i);
     doc.y = ymin + i;
     doc.x = 388;
     doc.text(utils.formatNumber(base.toFixed(2)), {
@@ -310,57 +310,62 @@ class AnexoFacturaService {
       columns: 1,
       width: 65,
     });
-    doc.fontSize(12);
-    doc.text('Descuento de Fletes:', 220, ymin + i + 20);
-    doc.fontSize(10);
-    doc.y = ymin + i + 20;
-    doc.x = 388;
-    doc.text(utils.formatNumber(descuento.toFixed(2)), {
-      align: 'right',
-      columns: 1,
-      width: 65,
-    });
-    doc.y = ymin + i + 20;
-    doc.x = 455;
-    doc.text(utils.formatNumber(descuento_impuesto.toFixed(2)), {
-      align: 'right',
-      columns: 1,
-      width: 44,
-    });
-    doc.y = ymin + i + 20;
-    doc.x = 495;
-    doc.text(utils.formatNumber((descuento + descuento_impuesto).toFixed(2)), {
-      align: 'right',
-      columns: 1,
-      width: 65,
-    });
-    doc.y = ymin + i + 40;
-    doc.x = 388;
-    doc.text(utils.formatNumber((base + descuento).toFixed(2)), {
-      align: 'right',
-      columns: 1,
-      width: 65,
-    });
-    doc.y = ymin + i + 40;
-    doc.x = 455;
-    doc.text(
-      utils.formatNumber((base + descuento + descuento_impuesto).toFixed(2)),
-      {
-        align: 'right',
-        columns: 1,
-        width: 44,
-      }
-    );
-    doc.y = ymin + i + 40;
-    doc.x = 495;
-    doc.text(
-      utils.formatNumber((base + descuento + descuento_impuesto).toFixed(2)),
-      {
+
+    if (data.monto_descuento > 0) {
+      doc.text('Descuento de Fletes:', 310, ymin + i + 17);
+      doc.y = ymin + i + 17;
+      doc.x = 388;
+      doc.text(utils.formatNumber(descuento.toFixed(2)), {
         align: 'right',
         columns: 1,
         width: 65,
-      }
-    );
+      });
+      doc.y = ymin + i + 17;
+      doc.x = 455;
+      doc.text(utils.formatNumber(descuento_impuesto.toFixed(2)), {
+        align: 'right',
+        columns: 1,
+        width: 44,
+      });
+      doc.y = ymin + i + 17;
+      doc.x = 495;
+      doc.text(
+        utils.formatNumber((descuento + descuento_impuesto).toFixed(2)),
+        {
+          align: 'right',
+          columns: 1,
+          width: 65,
+        }
+      );
+      doc.y = ymin + i + 34;
+      doc.x = 388;
+      doc.text(utils.formatNumber((base + descuento).toFixed(2)), {
+        align: 'right',
+        columns: 1,
+        width: 65,
+      });
+      doc.y = ymin + i + 34;
+      doc.x = 455;
+      doc.text(
+        utils.formatNumber((base + descuento + descuento_impuesto).toFixed(2)),
+        {
+          align: 'right',
+          columns: 1,
+          width: 44,
+        }
+      );
+      doc.y = ymin + i + 34;
+      doc.x = 495;
+      doc.text(
+        utils.formatNumber((base + descuento + descuento_impuesto).toFixed(2)),
+        {
+          align: 'right',
+          columns: 1,
+          width: 65,
+        }
+      );
+    }
+
     var end;
     const range = doc.bufferedPageRange();
     for (

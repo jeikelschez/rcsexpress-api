@@ -424,7 +424,7 @@ class LibroVentasService {
       }
 
       let monto_alicuota = 0;
-      if (monto_impuesto > 0) monto_alicuota = detalles[item].porc_impuesto;
+      if (monto_impuesto > 0) monto_alicuota = utils.parseFloatN(detalles[item].porc_impuesto);
       let monto_fpo =
         detalles[item].estatus_administra != 'A' ? detalles[item].monto_fpo : 0;
 
