@@ -166,7 +166,7 @@ class GuiasLoteService {
 
   async generateCustomerInformation(doc, tipo, detalles) {
     for (var item = 0; item < detalles.length; item++) {
-      if (tipo == 1) {
+      /*if (tipo == 1) {
         doc.fontSize(10);
         doc.font('Helvetica');
         doc.y = 20;
@@ -487,6 +487,645 @@ class GuiasLoteService {
           columns: 1,
           width: 217,
         });
+      }*/
+
+      if (tipo == 1) {
+        let y = 17;
+        for (var x = 0; x < 3; x++) {
+          doc.fontSize(11);
+          doc.font('Helvetica-Bold');
+          doc.text('GUÍA DE PORTE', 30, y - 7);
+          doc.fontSize(12);
+          doc.text('- GUÍA DE CARGA', 120, y - 8);
+          doc.fontSize(18);
+          doc.text('N° ' + detalles[item].nro_documento, 70, y + 5);
+          doc.fontSize(10);
+          doc.text('CONCESIÓN POSTAL Nº 20-22-15-40', 40, y + 23);
+          doc.fontSize(7);
+          doc.font('Helvetica');
+          doc.text('PARA SEGUIMIENTO DE ESTA GUÍA, CONSULTA', 49, y + 35);
+          doc.text('NUESTRA PÁGINA WEB', 51, y + 43);
+          doc.font('Helvetica-Bold');
+          doc.text('www.rcsexpress.com', 134, y + 43);
+          doc.font('Helvetica');
+          doc.text('EMAIL:', 70, y + 51);
+          doc.font('Helvetica-Bold');
+          doc.text('rcsexpress.ve@gmail.com', 95, y + 51);
+
+          doc.image('./img/logo_rc.png', 240, y - 7, { width: 65, height: 65 });
+
+          doc.fontSize(12);
+          doc.font('Helvetica-Bold');
+          doc.text('R.C.S. EXPRESS, S.A', 308, y - 7);
+
+          doc.fontSize(7);
+          doc.font('Helvetica');
+          doc.y = y + 6;
+          doc.x = 308;
+          doc.text(
+            'AV. 74 C.C. ARAURIMA, NIVEL PB LOCAL Nº 6 URB. TERRAZAS DE CASTILLITO SAN DIEGO ESTADO CARABOBO, ZONA POSTAL 2006',
+            {
+              align: 'left',
+              columns: 1,
+              width: 170,
+            }
+          );
+          doc.text('TELÉFONOS: (0241) 871.75.63 / 871.68.67', 308, y + 31);
+          doc.text('CELULAR: (0414) 435.68.05 - (0414) 404.08.62', 308, y + 40);
+
+          doc.font('Helvetica-Bold');
+          doc.text('RIF. J-31028463-6', 308, y + 50);
+
+          doc.lineWidth(0.5);
+          doc.fontSize(7);
+          doc.strokeColor('grey');
+          doc.lineJoin('miter').rect(508, y, 80, 20).stroke();
+          doc.strokeColor('white');
+          doc.lineWidth(3);
+          doc.lineCap('butt').moveTo(511, y).lineTo(543, y).stroke();
+          doc.text('# Piezas', 513, y - 3);
+          doc.fontSize(11);
+          doc.y = y + 6;
+          doc.x = 508;
+          doc.text(detalles[item].nro_piezas, {
+            align: 'center',
+            columns: 1,
+            width: 80,
+          });
+
+          doc.lineWidth(0.5);
+          doc.fontSize(7);
+          doc.strokeColor('grey');
+          doc
+            .lineJoin('miter')
+            .rect(508, y + 25, 80, 20)
+            .stroke();
+          doc.strokeColor('white');
+          doc.lineWidth(3);
+          doc
+            .lineCap('butt')
+            .moveTo(511, y + 25)
+            .lineTo(531, y + 25)
+            .stroke();
+          doc.text('Peso', 513, y + 22);
+          doc.fontSize(11);
+          doc.y = y + 31;
+          doc.x = 508;
+          doc.text(utils.formatNumber(detalles[item].peso_kgs), {
+            align: 'center',
+            columns: 1,
+            width: 80,
+          });
+
+          doc.fontSize(9);
+          doc.text('Fecha: ', 510, y + 50);
+
+          doc.font('Helvetica');
+          doc.y = y + 50;
+          doc.x = 533;
+          doc.text(moment(detalles[item].fecha_emision).format('DD/MM/YYYY'), {
+            align: 'center',
+            columns: 1,
+            width: 60,
+          });
+
+          doc.lineWidth(0.5);
+          doc.fontSize(7);
+          doc.strokeColor('grey');
+          doc
+            .lineJoin('miter')
+            .rect(23, y + 64, 280, 130)
+            .stroke();
+          doc.strokeColor('white');
+          doc.lineWidth(3);
+          doc
+            .lineCap('butt')
+            .moveTo(30, y + 64)
+            .lineTo(193, y + 64)
+            .stroke();
+          doc.text('REMITENTE (PERSONA NATURAL O JURÍDICA):', 32, y + 61);
+          doc.fontSize(8);
+          doc.font('Helvetica-Bold');
+          doc.y = y + 73;
+          doc.x = 28;
+          doc.text(detalles[item]['clientes_org.razon_social'], {
+            align: 'left',
+            columns: 1,
+            width: 270,
+          });
+          doc.fontSize(7);
+          doc.font('Helvetica-Bold');
+          doc.y = y + 92;
+          doc.x = 28;
+          doc.text('C.I. / R.I.F.:', {
+            align: 'left',
+            columns: 1,
+            width: 70,
+          });
+          doc.font('Helvetica-Bold');
+          doc.y = y + 92;
+          doc.x = 190;
+          doc.text('CORREO:', {
+            align: 'left',
+            columns: 1,
+            width: 70,
+          });
+          doc.font('Helvetica');
+          doc.y = y + 92;
+          doc.x = 100;
+          doc.text(detalles[item]['clientes_org.rif_cedula'], {
+            align: 'left',
+            columns: 1,
+            width: 270,
+          });
+          doc.font('Helvetica-Bold');
+          doc.y = y + 104;
+          doc.x = 28;
+          doc.text('TELÉFONOS:', {
+            align: 'left',
+            columns: 1,
+            width: 70,
+          });
+          doc.font('Helvetica');
+          doc.y = y + 104;
+          doc.x = 100;
+          doc.text(detalles[item]['clientes_org.tlf_cliente'], {
+            align: 'left',
+            columns: 1,
+            width: 270,
+          });
+          doc.font('Helvetica-Bold');
+          doc.y = y + 116;
+          doc.x = 28;
+          doc.text('LOCALIDAD:', {
+            align: 'left',
+            columns: 1,
+            width: 70,
+          });
+          doc.y = y + 128;
+          doc.x = 28;
+          doc.text('INMUEBLE:', {
+            align: 'left',
+            columns: 1,
+            width: 70,
+          });
+          doc.font('Helvetica');
+          doc.y = y + 116;
+          doc.x = 100;
+          doc.text(
+            utils.truncate(detalles[item]['clientes_org.dir_fiscal'], 132),
+            {
+              align: 'left',
+              columns: 1,
+              width: 200,
+            }
+          );
+          doc.font('Helvetica-Bold');
+          doc.y = y + 144;
+          doc.x = 28;
+          doc.text('PARROQUIA:', {
+            align: 'left',
+            columns: 1,
+            width: 70,
+          });
+          doc.font('Helvetica');
+          doc.y = y + 144;
+          doc.x = 100;
+          doc.text(detalles[item]['clientes_org.parroquias.desc_parroquia'], {
+            align: 'left',
+            columns: 1,
+            width: 100,
+          });
+          doc.font('Helvetica-Bold');
+          doc.y = y + 144;
+          doc.x = 190;
+          doc.text('MUNICIPIO:', {
+            align: 'left',
+            columns: 1,
+            width: 70,
+          });
+          doc.font('Helvetica');
+          doc.y = y + 144;
+          doc.x = 235;
+          doc.text(detalles[item]['clientes_org.municipios.desc_municipio'], {
+            align: 'left',
+            columns: 1,
+            width: 100,
+          });
+          doc.font('Helvetica-Bold');
+          doc.y = y + 155;
+          doc.x = 28;
+          doc.text('CIUDAD O PUEBLO:', {
+            align: 'left',
+            columns: 1,
+            width: 70,
+          });
+          doc.font('Helvetica');
+          doc.y = y + 155;
+          doc.x = 100;
+          doc.text(detalles[item]['clientes_org.ciudades.desc_ciudad'], {
+            align: 'left',
+            columns: 1,
+            width: 100,
+          });
+          doc.font('Helvetica-Bold');
+          doc.y = y + 155;
+          doc.x = 190;
+          doc.text('ESTADO:', {
+            align: 'left',
+            columns: 1,
+            width: 70,
+          });
+          doc.font('Helvetica');
+          doc.y = y + 155;
+          doc.x = 235;
+          doc.text(
+            detalles[item]['clientes_org.ciudades.estados.desc_estado'],
+            {
+              align: 'left',
+              columns: 1,
+              width: 100,
+            }
+          );
+          doc.font('Helvetica-Bold');
+          doc.y = y + 166;
+          doc.x = 28;
+          doc.text('ZONA POSTAL:', {
+            align: 'left',
+            columns: 1,
+            width: 70,
+          });
+          doc.font('Helvetica');
+          doc.y = y + 166;
+          doc.x = 100;
+          doc.text(detalles[item]['clientes_org.localidades.cod_postal'], {
+            align: 'left',
+            columns: 1,
+            width: 100,
+          });
+          doc.font('Helvetica-Bold');
+          doc.y = y + 166;
+          doc.x = 190;
+          doc.text('PAÍS:', {
+            align: 'left',
+            columns: 1,
+            width: 70,
+          });
+          doc.font('Helvetica');
+          doc.y = y + 166;
+          doc.x = 235;
+          doc.text(
+            detalles[item]['clientes_org.ciudades.estados.paises.desc_pais'],
+            {
+              align: 'left',
+              columns: 1,
+              width: 100,
+            }
+          );
+          doc.fontSize(14);
+          doc.y = y + 178;
+          doc.x = 23;
+          doc.text(
+            'ORIGEN: ' +
+              detalles[item]['clientes_org.agencias.ciudades.desc_ciudad'] +
+              ' (' +
+              detalles[item].siglas_dest +
+              ')',
+            {
+              align: 'center',
+              columns: 1,
+              width: 280,
+            }
+          );
+
+          doc.lineWidth(0.5);
+          doc.fontSize(7);
+          doc.strokeColor('grey');
+          doc
+            .lineJoin('miter')
+            .rect(308, y + 64, 280, 130)
+            .stroke();
+          doc.strokeColor('white');
+          doc.lineWidth(3);
+          doc
+            .lineCap('butt')
+            .moveTo(315, y + 64)
+            .lineTo(487, y + 64)
+            .stroke();
+          doc.text('DESTINATARIO (PERSONA NATURAL O JURÍDICA):', 317, y + 61);
+          doc.fontSize(8);
+          doc.font('Helvetica-Bold');
+          doc.y = y + 73;
+          doc.x = 313;
+          doc.text(detalles[item]['cliente_particular.nb_cliente'], {
+            align: 'left',
+            columns: 1,
+            width: 270,
+          });
+          doc.fontSize(7);
+          doc.font('Helvetica-Bold');
+          doc.y = y + 92;
+          doc.x = 313;
+          doc.text('C.I. / R.I.F.:', {
+            align: 'left',
+            columns: 1,
+            width: 70,
+          });
+          doc.font('Helvetica-Bold');
+          doc.y = y + 92;
+          doc.x = 475;
+          doc.text('CORREO:', {
+            align: 'left',
+            columns: 1,
+            width: 70,
+          });
+          doc.font('Helvetica');
+          doc.y = y + 92;
+          doc.x = 385;
+          doc.text(detalles[item]['cliente_particular.rif_ci'], {
+            align: 'left',
+            columns: 1,
+            width: 270,
+          });
+          doc.font('Helvetica-Bold');
+          doc.y = y + 104;
+          doc.x = 313;
+          doc.text('TELÉFONOS:', {
+            align: 'left',
+            columns: 1,
+            width: 70,
+          });
+          doc.font('Helvetica');
+          doc.y = y + 104;
+          doc.x = 385;
+          doc.text(detalles[item]['cliente_particular.telefonos'], {
+            align: 'left',
+            columns: 1,
+            width: 270,
+          });
+          doc.font('Helvetica-Bold');
+          doc.y = y + 116;
+          doc.x = 313;
+          doc.text('LOCALIDAD:', {
+            align: 'left',
+            columns: 1,
+            width: 70,
+          });
+          doc.y = y + 128;
+          doc.x = 313;
+          doc.text('INMUEBLE:', {
+            align: 'left',
+            columns: 1,
+            width: 70,
+          });
+          doc.font('Helvetica');
+          doc.y = y + 116;
+          doc.x = 385;
+          doc.text(
+            utils.truncate(detalles[item]['cliente_particular.direccion'], 132),
+            {
+              align: 'left',
+              columns: 1,
+              width: 200,
+            }
+          );
+          doc.font('Helvetica-Bold');
+          doc.y = y + 144;
+          doc.x = 313;
+          doc.text('PARROQUIA:', {
+            align: 'left',
+            columns: 1,
+            width: 70,
+          });
+          doc.font('Helvetica');
+          doc.y = y + 144;
+          doc.x = 385;
+          doc.text(
+            detalles[item]['cliente_particular.parroquias.desc_parroquia'],
+            {
+              align: 'left',
+              columns: 1,
+              width: 100,
+            }
+          );
+          doc.font('Helvetica-Bold');
+          doc.y = y + 144;
+          doc.x = 475;
+          doc.text('MUNICIPIO:', {
+            align: 'left',
+            columns: 1,
+            width: 70,
+          });
+          doc.font('Helvetica');
+          doc.y = y + 144;
+          doc.x = 520;
+          doc.text(
+            detalles[item]['cliente_particular.municipios.desc_municipio'],
+            {
+              align: 'left',
+              columns: 1,
+              width: 130,
+            }
+          );
+          doc.font('Helvetica-Bold');
+          doc.y = y + 155;
+          doc.x = 313;
+          doc.text('CIUDAD O PUEBLO:', {
+            align: 'left',
+            columns: 1,
+            width: 70,
+          });
+          doc.font('Helvetica');
+          doc.y = y + 155;
+          doc.x = 385;
+          doc.text(detalles[item]['cliente_particular.ciudades.desc_ciudad'], {
+            align: 'left',
+            columns: 1,
+            width: 100,
+          });
+          doc.font('Helvetica-Bold');
+          doc.y = y + 155;
+          doc.x = 475;
+          doc.text('ESTADO:', {
+            align: 'left',
+            columns: 1,
+            width: 70,
+          });
+          doc.font('Helvetica');
+          doc.y = y + 155;
+          doc.x = 520;
+          doc.text(
+            detalles[item]['cliente_particular.ciudades.estados.desc_estado'],
+            {
+              align: 'left',
+              columns: 1,
+              width: 100,
+            }
+          );
+          doc.font('Helvetica-Bold');
+          doc.y = y + 166;
+          doc.x = 313;
+          doc.text('ZONA POSTAL:', {
+            align: 'left',
+            columns: 1,
+            width: 70,
+          });
+          doc.font('Helvetica');
+          doc.y = y + 166;
+          doc.x = 385;
+          doc.text(
+            detalles[item]['cliente_particular.localidades.cod_postal'],
+            {
+              align: 'left',
+              columns: 1,
+              width: 100,
+            }
+          );
+          doc.font('Helvetica-Bold');
+          doc.y = y + 166;
+          doc.x = 475;
+          doc.text('PAÍS:', {
+            align: 'left',
+            columns: 1,
+            width: 70,
+          });
+          doc.font('Helvetica');
+          doc.y = y + 166;
+          doc.x = 520;
+          doc.text(
+            detalles[item][
+              'cliente_particular.ciudades.estados.paises.desc_pais'
+            ],
+            {
+              align: 'left',
+              columns: 1,
+              width: 100,
+            }
+          );
+          doc.fontSize(14);
+          doc.y = y + 178;
+          doc.x = 308;
+          doc.text(
+            'DESTINO: ' +
+              detalles[item][
+                'cliente_particular.agencias.ciudades.desc_ciudad'
+              ] +
+              ' (' +
+              detalles[item].siglas_dest +
+              ')',
+            {
+              align: 'center',
+              columns: 1,
+              width: 280,
+            }
+          );
+
+          doc.font('Helvetica-Bold');
+          doc.fontSize(9);
+          doc.text('Nombre:', 28, y + 210);
+          doc.text('Apellido:', 28, y + 227);
+          doc.text('Fecha:', 28, y + 244);
+          doc.text('Hora:', 28, y + 261);
+          doc.text('Cédula:', 28, y + 278);
+          doc.text('Firma y Sello', 230, y + 278); 
+          
+          doc.text('Modalidad de Pago:', 313, y + 210);
+          doc.text('Descripcion del Envío:', 313, y + 227);
+          doc.text('Valor Declarado:', 313, y + 244);
+          doc.text('Franqueo Postal:', 313, y + 261);
+          doc.text('Precio del Envío:', 313, y + 278);
+
+          doc.font('Helvetica');
+          let modalidad = '';
+          if (
+            detalles[item].modalidad_pago == 'CO' &&
+            detalles[item].pagado_en == 'O'
+          ) {
+            modalidad = 'CONTADO ORIGEN';
+          } else if (
+            detalles[item].modalidad_pago == 'CO' &&
+            detalles[item].pagado_en == 'D'
+          ) {
+            modalidad = 'CONTADO DESTINO';
+          } else if (
+            detalles[item].modalidad_pago == 'CR' &&
+            detalles[item].pagado_en == 'O'
+          ) {
+            modalidad = 'CREDITO ORIGEN';
+          } else if (
+            detalles[item].modalidad_pago == 'CR' &&
+            detalles[item].pagado_en == 'D'
+          ) {
+            modalidad = 'CREDITO DESTINO';
+          }
+          doc.text(modalidad, 412, y + 210);
+
+          let tipo_carga;
+          if (detalles[item].tipo_carga == 'SB') {
+            tipo_carga = 'SOBRE';
+          } else {
+            tipo_carga = 'PAQUETE';
+          }
+          doc.text(tipo_carga, 412, y + 227);
+
+          doc.lineWidth(0.5);
+          doc.fontSize(7);
+          doc.strokeColor('grey');
+          doc
+            .lineJoin('miter')
+            .rect(23, y + 200, 280, 90)
+            .stroke();
+          doc.strokeColor('white');
+          doc.lineWidth(3);
+          doc.font('Helvetica');
+          doc
+            .lineCap('butt')
+            .moveTo(30, y + 200)
+            .lineTo(105, y + 200)
+            .stroke();
+          doc.text('Detalles de Recepción', 32, y + 197);
+
+          doc.lineWidth(0.5);
+          doc.fontSize(7);
+          doc.strokeColor('grey');
+          doc
+            .lineJoin('miter')
+            .rect(308, y + 200, 190, 90)
+            .stroke();
+          doc.strokeColor('white');
+          doc.lineWidth(3);
+          doc
+            .lineCap('butt')
+            .moveTo(315, y + 200)
+            .lineTo(375, y + 200)
+            .stroke();
+          doc.font('Helvetica');
+          doc.text('Detalles del Envío', 317, y + 197);
+
+          doc.image('./img/qrcode.jpg', 505, y + 203, {
+            width: 80,
+            height: 80,
+          });
+
+          doc.text(detalles[item].dimensiones, 90, y + 295);
+          doc.font('Helvetica-Bold');
+          doc.text('OBSERVACIONES:', 23, y + 295);
+          doc.text(
+            'NO SE ACEPTAN RECLAMOS DESPUES DE 24 HORAS DE LA RECEPCIÓN DE LA MERCANCIA',
+            147,
+            y + 308
+          );
+
+          y += 330;
+        }
+
+        doc.lineWidth(1);
+        doc.strokeColor('grey');
+        doc.lineCap('butt').moveTo(20, 335).lineTo(590, 335).stroke();
+
+        doc.lineWidth(1);
+        doc.strokeColor('grey');
+        doc.lineCap('butt').moveTo(20, 665).lineTo(590, 665).stroke();
       } else {
         // Guias sin Preimpreso
         let y = 17;
@@ -616,7 +1255,7 @@ class GuiasLoteService {
             .lineTo(68, y + 36)
             .stroke();
           doc.text('Remitente', 32, y + 33);
-          doc.fontSize(9);
+          doc.fontSize(7);
           doc.y = y + 45;
           doc.x = 28;
           doc.text(detalles[item]['clientes_org.razon_social'], {
@@ -732,7 +1371,7 @@ class GuiasLoteService {
             .lineTo(360, y + 36)
             .stroke();
           doc.text('Destinatario', 317, y + 33);
-          doc.fontSize(9);
+          doc.fontSize(7);
           doc.y = y + 45;
           doc.x = 313;
           doc.text(detalles[item]['cliente_particular.nb_cliente'], {

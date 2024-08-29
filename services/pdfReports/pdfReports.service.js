@@ -520,8 +520,9 @@ class PdfReportsService {
     });
     if(tipo == 1) {
       doc = new PDFDocument({
-        size: [612, 396],
-        margin: 20,
+        margin: 10,
+        bufferPages: true,
+        size: 'LEGAL',
       });
     }
     doc.pipe(fs.createWriteStream(reportsPath + resPath));

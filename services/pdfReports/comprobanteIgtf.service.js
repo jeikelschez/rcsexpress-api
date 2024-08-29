@@ -154,7 +154,7 @@ class ComprobanteIgtfService {
     doc.y = 267;
     doc.x = 60;
     doc.text(
-      'AV. 70 C.C. ARAURIMA, NIVEL P.B. LOCAL Nº6 URBANIZACIÓN TERRAZAS DE CASTILLITO VALENCIA, ESTADO CARABOBO',
+      'AV. 74 C.C. ARAURIMA, NIVEL P.B. LOCAL Nº6 URBANIZACIÓN TERRAZAS DE CASTILLITO VALENCIA, ESTADO CARABOBO',
       {
         align: 'center',
         columns: 1,
