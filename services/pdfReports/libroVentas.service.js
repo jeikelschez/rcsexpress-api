@@ -37,7 +37,7 @@ class LibroVentasService {
       ['nro_control_new', 'ASC'],
       ['nro_control', 'ASC'],
     ];
-    if (correlativo == 'false') {
+    if (!correlativo) {
       order = [
         ['cod_agencia', 'ASC'],
         ['fecha_emision', 'ASC'],
@@ -229,7 +229,7 @@ class LibroVentasService {
     ymin = 160;
     for (var item = 0; item < detalles.length; item++) {
       if (
-        detalles.correlativo == 'false' &&
+        !detalles.correlativo &&
         (item == 0 ||
           detalles[item].cod_agencia != detalles[item - 1].cod_agencia)
       ) {
@@ -480,7 +480,7 @@ class LibroVentasService {
 
       // Sub Totales por Agencia
       if (
-        detalles.correlativo == 'false' &&
+        !detalles.correlativo &&
         item > 0 &&
         detalles[item].cod_agencia != detalles[item - 1].cod_agencia
       ) {
@@ -567,7 +567,7 @@ class LibroVentasService {
       }
     }
 
-    if (detalles.correlativo == 'false') {
+    if (!detalles.correlativo) {
       // Sub Totales por Agencia Finales
       i += 5;
       doc.font('Helvetica-Bold');
