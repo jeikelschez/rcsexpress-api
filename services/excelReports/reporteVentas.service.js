@@ -160,6 +160,7 @@ class ReporteVentasService {
           order: [
             ['cod_agencia', 'ASC'],
             ['fecha_emision', 'ASC'],
+            ['nro_documento', 'ASC'],
           ],
           raw: true,
         });
@@ -240,6 +241,7 @@ class ReporteVentasService {
             },
           ],
           order: [
+            ['cod_agencia', 'ASC'],
             ['fecha_emision', 'ASC'],
             ['nro_documento', 'ASC'],
           ],

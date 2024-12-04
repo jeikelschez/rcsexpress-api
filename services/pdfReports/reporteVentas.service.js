@@ -242,6 +242,7 @@ class ReporteVentasService {
             },
           ],
           order: [
+            ['cod_agencia', 'ASC'],
             ['fecha_emision', 'ASC'],
             ['nro_documento', 'ASC'],
           ],
