@@ -17685,6 +17685,10 @@
           "tipo_persona_desc": {
             "type": "string",
             "readOnly": true
+          },
+          "codigo_desc": {
+            "type": "string",
+            "readOnly": true
           }
         }
       },
