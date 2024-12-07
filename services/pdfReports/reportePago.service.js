@@ -1,8 +1,17 @@
 const moment = require('moment');
-const { models } = require('./../../libs/sequelize');
+const { models, Sequelize } = require('../../libs/sequelize');
 
 const UtilsService = require('./../utils.service');
 const utils = new UtilsService();
+
+const montoIslr =
+  '(SELECT a.monto_base * porc_retencion / 100 ' +
+  'FROM control_islr_factura a, control_islr b ' +
+  'WHERE a.cod_islr = b.id AND a.id_compra = `ctaspagar`.id)';
+const porcRetencion =
+  '(SELECT porc_retencion ' +
+  'FROM control_islr_factura a, control_islr b ' +
+  'WHERE a.cod_islr = b.id AND a.id_compra = `ctaspagar`.id)';
 
 class ReportePagoService {
   async mainReport(doc, id, beneficiario) {
@@ -21,6 +30,14 @@ class ReportePagoService {
           as: 'ctaspagar',
         },
       ],
+      attributes: [
+        'nro_doc_pago',
+        'monto_pagado',
+        'fecha_pago',
+        'monto_retenido',
+        [Sequelize.literal(montoIslr), 'monto_islr'],
+        [Sequelize.literal(porcRetencion), 'porc_retencion'],
+      ],
       raw: true,
     });
 
@@ -33,12 +50,12 @@ class ReportePagoService {
     let x = 10;
     doc.lineJoin('miter').rect(35, 35, 540, 220).stroke();
     doc.lineJoin('miter').rect(35, 270, 540, 20).stroke();
-    doc.lineJoin('miter').rect(35, 295, 540, 100).stroke();
+    doc.lineJoin('miter').rect(35, 295, 540, 118).stroke();
     doc.lineCap('butt').moveTo(35, 318).lineTo(575, 318).stroke();
-    doc.lineCap('butt').moveTo(380, 295).lineTo(380, 420).stroke();
-    doc.lineCap('butt').moveTo(480, 295).lineTo(480, 420).stroke();
-    doc.lineCap('butt').moveTo(575, 295).lineTo(575, 420).stroke();
-    doc.lineCap('butt').moveTo(380, 420).lineTo(575, 420).stroke();
+    doc.lineCap('butt').moveTo(380, 295).lineTo(380, 440).stroke();
+    doc.lineCap('butt').moveTo(480, 295).lineTo(480, 440).stroke();
+    doc.lineCap('butt').moveTo(575, 295).lineTo(575, 440).stroke();
+    doc.lineCap('butt').moveTo(380, 440).lineTo(575, 440).stroke();
 
     doc.lineWidth(0.5);
     doc.lineJoin('round').rect(430, 45, 120, 25).stroke();
@@ -61,9 +78,11 @@ class ReportePagoService {
     doc.text('VALENCIA,', 70, 150);
     doc.text('Fecha de Pago:', 60, 240);
     doc.text('NO ENDOSABLE', 406, 230);
-    doc.text('CONCEPTOS Y DETALLES', 170, 305);
-    doc.text('DEBE', 420, 305);
-    doc.text('HABER', 515, 305);
+
+    doc.fontSize(11);
+    doc.text('CONCEPTOS Y DETALLES', 147, 303);
+    doc.text('DEBE', 415, 303);
+    doc.text('HABER', 508, 303);
 
     doc.fontSize(13);
     doc.y = 54;
@@ -154,6 +173,21 @@ class ReportePagoService {
       width: 200,
     });
 
+    doc.fontSize(11);
+    doc.y = 276;
+    doc.x = 45;
+    doc.text(
+      'Banco: ' +
+        detalle['cuentas.bancos.nb_banco'] +
+        ' - Cuenta Nº: ' +
+        detalle['cuentas.nro_cuenta'],
+      {
+        align: 'left',
+        columns: 1,
+        width: 300,
+      }
+    );
+
     let item1 = '';
     if (
       detalle['ctaspagar.saldo_retenido'] <= 0 ||
@@ -210,15 +244,33 @@ class ReportePagoService {
       width: 70,
     });
 
+    let impuesto =
+      detalle['ctaspagar.monto_base_nacional'] > 0
+        ? (detalle['ctaspagar.monto_imp_nacional'] /
+            detalle['ctaspagar.monto_base_nacional']) *
+          100
+        : 0;
+
     doc.y = 350;
     doc.x = 50;
-    doc.text('** Retención **', {
+    doc.text('** Retención IVA ' + impuesto + '% **', {
       align: 'left',
       columns: 1,
-      width: 100,
+      width: 180,
     });
-
     doc.y = 370;
+    doc.x = 50;
+    doc.text(
+      '** Retención ISLR ' +
+        parseFloat(detalle.porc_retencion).toFixed(0) +
+        '% **',
+      {
+        align: 'left',
+        columns: 1,
+        width: 180,
+      }
+    );
+    doc.y = 390;
     doc.x = 50;
     doc.text('Total Pago', {
       align: 'left',
@@ -227,11 +279,13 @@ class ReportePagoService {
     });
 
     let retenido = 0;
+    let islr = 0;
     if (
       detalle['ctaspagar.tipo_documento'] != 'NC' &&
       detalle['ctaspagar.tipo_documento'] != 'RE'
     ) {
       retenido = parseFloat(detalle.monto_retenido);
+      islr = parseFloat(detalle.monto_islr);
     }
     doc.y = 350;
     doc.x = 495;
@@ -240,9 +294,16 @@ class ReportePagoService {
       columns: 1,
       width: 70,
     });
-
-    let pagado = debe - retenido - haber;
     doc.y = 370;
+    doc.x = 495;
+    doc.text(utils.formatNumber(islr), {
+      align: 'right',
+      columns: 1,
+      width: 70,
+    });
+
+    let pagado = debe - retenido - islr - haber;
+    doc.y = 390;
     doc.x = 495;
     doc.text(utils.formatNumber(pagado), {
       align: 'right',
@@ -250,7 +311,7 @@ class ReportePagoService {
       width: 70,
     });
 
-    doc.y = 403;
+    doc.y = 423;
     doc.x = 400;
     doc.text(utils.formatNumber(debe), {
       align: 'right',
@@ -258,9 +319,9 @@ class ReportePagoService {
       width: 70,
     });
 
-    doc.y = 403;
+    doc.y = 423;
     doc.x = 495;
-    doc.text(utils.formatNumber(haber + retenido + pagado), {
+    doc.text(utils.formatNumber(haber + retenido + islr + pagado), {
       align: 'right',
       columns: 1,
       width: 70,
