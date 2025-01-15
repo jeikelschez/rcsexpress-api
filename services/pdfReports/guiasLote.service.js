@@ -14,6 +14,10 @@ const siglasDest =
   ' FROM agencias ' +
   ' JOIN ciudades ON agencias.cod_ciudad = ciudades.id ' +
   ' WHERE `Mmovimientos`.cod_agencia_dest = agencias.id)';
+const zonaDesc =
+  '(SELECT nb_zona' +
+  ' FROM zonas ' +
+  ' WHERE `Mmovimientos`.cod_zona_dest = zonas.id)';
 
 class GuiasLoteService {
   async mainReport(doc, tipo, data) {
@@ -46,6 +50,7 @@ class GuiasLoteService {
         'tipo_carga',
         [Sequelize.literal(siglasOrg), 'siglas_org'],
         [Sequelize.literal(siglasDest), 'siglas_dest'],
+        [Sequelize.literal(zonaDesc), 'zona_desc'],
       ],
       include: [
         {
@@ -464,10 +469,7 @@ class GuiasLoteService {
           doc.x = 23;
           doc.text(
             'ORIGEN: ' +
-              detalles[item]['clientes_org.agencias.ciudades.desc_ciudad'] +
-              ' (' +
-              detalles[item].siglas_dest +
-              ')',
+              detalles[item]['clientes_org.agencias.ciudades.desc_ciudad'],
             {
               align: 'center',
               columns: 1,
@@ -682,20 +684,11 @@ class GuiasLoteService {
           doc.fontSize(14);
           doc.y = y + 178;
           doc.x = 308;
-          doc.text(
-            'DESTINO: ' +
-              detalles[item][
-                'cliente_particular.agencias.ciudades.desc_ciudad'
-              ] +
-              ' (' +
-              detalles[item].siglas_dest +
-              ')',
-            {
-              align: 'center',
-              columns: 1,
-              width: 280,
-            }
-          );
+          doc.text('DESTINO: ' + detalles[item].zona_desc, {
+            align: 'center',
+            columns: 1,
+            width: 280,
+          });
 
           doc.font('Helvetica-Bold');
           doc.fontSize(9);
@@ -704,8 +697,8 @@ class GuiasLoteService {
           doc.text('Fecha:', 28, y + 244);
           doc.text('Hora:', 28, y + 261);
           doc.text('Cédula:', 28, y + 278);
-          doc.text('Firma y Sello', 230, y + 278); 
-          
+          doc.text('Firma y Sello', 230, y + 278);
+
           doc.text('Modalidad de Pago:', 313, y + 210);
           doc.text('Descripcion del Envío:', 313, y + 227);
           doc.text('Valor Declarado:', 313, y + 244);
