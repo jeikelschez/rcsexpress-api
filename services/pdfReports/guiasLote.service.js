@@ -1133,7 +1133,7 @@ class GuiasLoteService {
           doc.y = y + 150;
           doc.x = 308;
           doc.text(
-            detalles[item]['cliente_particular.agencias.ciudades.desc_ciudad'],
+            detalles[item].zona_desc,
             {
               align: 'center',
               columns: 1,
