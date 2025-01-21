@@ -4,7 +4,9 @@ const { models, Sequelize } = require('./../libs/sequelize');
 const UtilsService = require('./utils.service');
 const utils = new UtilsService();
 
-const agenteDesc = "CONCAT(TRIM(persona_responsable), ' - C.I.', TRIM(rif_ci_agente))";
+const agenteDesc =
+  "CONCAT(TRIM(persona_responsable), ' - C.I.', TRIM(rif_ci_agente))";
+const agenteId = "CONCAT(id, ' - ', TRIM(persona_responsable))";
 
 class AgentesService {
   constructor() {}
@@ -30,7 +32,7 @@ class AgentesService {
     let filterArray = {};
     let order = [];
 
-    if(agencia && agencia.toString().split(',').length > 1) {
+    if (agencia && agencia.toString().split(',').length > 1) {
       let agentes = await models.Agentes.findAll({
         attributes: ['persona_responsable'],
         where: {
@@ -47,7 +49,7 @@ class AgentesService {
 
     if (agencia) params2.cod_agencia = agencia.toString().split(',');
     if (activo) params2.flag_activo = 1;
-    if(responsable) params2.persona_responsable = responsable;
+    if (responsable) params2.persona_responsable = responsable;
 
     if (filter && filter_value) {
       let filters = [];
@@ -65,9 +67,7 @@ class AgentesService {
     let params = { ...params2, ...filterArray };
 
     let attributes = {
-      include: [
-        [Sequelize.literal(agenteDesc), 'agente_desc'],
-      ],
+      include: [[Sequelize.literal(agenteDesc), 'agente_desc']],
     };
 
     if (order_by && order_direction) {
@@ -84,6 +84,10 @@ class AgentesService {
             cod_agencia: cod_agencia,
             flag_activo: 1,
           },
+          order: [['persona_responsable', 'ASC']],
+          attributes: {
+            include: [[Sequelize.literal(agenteId), 'agente_id']],
+          },
           raw: true,
         });
         agentesArray.splice(cod_agencia, 0, agentes);
@@ -91,7 +95,14 @@ class AgentesService {
       return agentesArray;
     }
 
-    return await utils.paginate(models.Agentes, page, limit, params, order, attributes);
+    return await utils.paginate(
+      models.Agentes,
+      page,
+      limit,
+      params,
+      order,
+      attributes
+    );
   }
 
   async findOne(id) {
