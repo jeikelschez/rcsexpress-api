@@ -1082,7 +1082,7 @@ class RelacionDespachoService {
       }
 
       i += 9;
-      if (i >= 340 || item >= detalle.length - 1) {
+      if (i >= 320 || item >= detalle.length - 1) {
         doc.lineJoin('square').rect(35, 510, 350, 60).stroke();
         doc.fontSize(12);
         doc.font('Helvetica-Bold');
@@ -1185,7 +1185,7 @@ class RelacionDespachoService {
       }
     }
 
-    if (i >= 340) {
+    if (i >= 320) {
       doc.addPage();
       page = page + 1;
       doc.switchToPage(page);
