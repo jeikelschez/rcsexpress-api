@@ -311,11 +311,11 @@ class MmovimientosService {
       ]);
       attributes.include.push([
         Sequelize.literal(comisionEnt),
-        'comision_entrega',
+        'com_entrega',
       ]);
       attributes.include.push([
         Sequelize.literal(comisionSeg),
-        'comision_seguro',
+        'com_seguro',
       ]);
     }
 
