@@ -16,7 +16,8 @@ class ZonasService {
     if(agencia) params.cod_agencia = agencia;
     if(desc) params.nb_zona = desc.trim();
     const zonas = await models.Zonas.findAll({
-      where: params
+      where: params,
+      order: [['nb_zona', 'ASC']],
     });
     return zonas;
   }

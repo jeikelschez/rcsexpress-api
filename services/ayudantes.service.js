@@ -15,7 +15,8 @@ class AyudantesService {
     let params = {};
     if(activo) params.flag_activo = 1;
     const ayudantes = await models.Ayudantes.findAll({
-      where: params
+      where: params,
+      order: [['nb_ayudante', 'ASC']],
     });
     return ayudantes;
   }

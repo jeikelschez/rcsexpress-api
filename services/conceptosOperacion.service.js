@@ -31,7 +31,8 @@ class CoperacionService {
         include: [
           [Sequelize.literal(caseAfecta), 'afecta_desc']
         ]
-      }
+      },
+      order: [['desc_concepto', 'ASC']],
     });
     return conceptos;
   }

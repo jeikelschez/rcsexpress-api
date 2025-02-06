@@ -15,7 +15,8 @@ class ReceptoresService {
     let params = {};
     if(activo) params.flag_activo = 1;
     const receptores = await models.Receptores.findAll({
-      where: params
+      where: params,
+      order: [['nb_receptor', 'ASC']],
     });
     return receptores;
   }

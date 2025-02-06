@@ -12,7 +12,9 @@ class BancosService {
   }
 
   async find() {
-    const bancos = await models.Bancos.findAll();
+    const bancos = await models.Bancos.findAll({
+      order: [['nb_banco', 'ASC']],
+    });
     return bancos;
   }
 

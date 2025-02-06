@@ -18,8 +18,9 @@ class UnidadesService {
       attributes: {
         include: [
           [Sequelize.literal(unidadDesc), 'unidad_desc']
-        ]
-      }
+        ]        
+      },
+      order: [['placas', 'ASC']],
     });
     return unidades;
   }
