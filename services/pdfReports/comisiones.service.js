@@ -127,16 +127,17 @@ class ComisionesService {
   }
 
   async generateHeader(doc, desde, hasta, dolar, group) {
-    doc.image('./img/logo_rc.png', 35, 25, { width: 60 });
-    doc.fontSize(8);
-    doc.text('RCS EXPRESS, S.A', 35, 120);
-    doc.text('RIF. J-31028463-6', 35, 130);
-    doc.font('Helvetica-Bold');
-    doc.fillColor('#444444');
-
-    doc.fontSize(16);
-
     if (group == 'true') {
+      doc.image('./img/logo_rc.png', 35, 25, { width: 60 });
+      doc.fontSize(8);
+      doc.text('RCS EXPRESS, S.A', 35, 120);
+      doc.text('RIF. J-31028463-6', 35, 130);
+      doc.font('Helvetica-Bold');
+      doc.fillColor('#444444');
+
+      doc.lineCap('butt').moveTo(25, 182).lineTo(595, 182).stroke();
+
+      doc.fontSize(16);
       doc.y = 70;
       doc.x = 120;
       doc.text('Comisiones de Entrega por Generar', {
@@ -187,23 +188,36 @@ class ComisionesService {
         doc.text('Seg $', 565, 170);
       }
     } else {
-      doc.y = 70;
-      doc.x = 200;
+      doc
+        .image('./img/logo_rc.png', 45, 35, { width: 40 })
+        .fillColor('#444444')
+        .fontSize(11)
+        .font('Helvetica-Bold')
+        .text('RCS Express, S.A', 95, 55)
+        .text('R.I.F. J-31028463-6', 95, 70)
+        .text('Fecha: ' + moment().format('DD/MM/YYYY'), 647, 35)
+        .fontSize(8);
+
+      doc.lineCap('butt').moveTo(25, 135).lineTo(755, 135).stroke();
+
+      doc.fontSize(16);
+      doc.y = 40;
+      doc.x = 150;
       doc.text('Comisiones de Entrega por Generar', {
         align: 'center',
         columns: 1,
-        width: 400,
+        width: 490,
       });
 
       doc.fontSize(12);
-      doc.y = 95;
+      doc.y = 65;
       doc.x = 290;
       doc.text('Desde: ' + desde, {
         align: 'left',
         columns: 1,
         width: 300,
       });
-      doc.y = 95;
+      doc.y = 65;
       doc.x = 407;
       doc.text('Hasta: ' + hasta, {
         align: 'left',
@@ -211,41 +225,38 @@ class ComisionesService {
         width: 300,
       });
 
-      doc.fontSize(10);
-      doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 670, 35);
-
       doc.fontSize(8);
-      doc.text('#', 28, 170);
-      doc.text('Nro.', 60, 160);
-      doc.text('Documento', 45, 170);
-      doc.text('Fecha', 103, 160);
-      doc.text('Emisión', 99, 170);
-      doc.text('Kgs.', 138, 170);
-      doc.text('Pzas.', 161, 170);
-      doc.text('Fecha', 191, 160);
-      doc.text('Envío', 192, 170);
-      doc.text('Fecha', 235, 160);
-      doc.text('Entrega', 233, 170);
-      doc.text('Días', 273, 160);
-      doc.text('Ent.', 274, 170);
-      doc.text('Org.', 293, 170);
-      doc.text('Cliente', 390, 170);
-      doc.text('Estatus', 520, 160);
-      doc.text('Operativo', 516, 170);
-      doc.text('Monto', 565, 160);
-      doc.text('Total', 568, 170);
-      doc.text('Comisión', 632, 160);
-      doc.text('Entrega', 636, 170);
-      doc.text('Comisión', 700, 160);
-      doc.text('Seguro', 706, 170);
+      doc.text('#', 28, 120);
+      doc.text('Nro.', 60, 110);
+      doc.text('Documento', 45, 120);
+      doc.text('Fecha', 103, 110);
+      doc.text('Emisión', 99, 120);
+      doc.text('Kgs.', 138, 120);
+      doc.text('Pzas.', 161, 120);
+      doc.text('Fecha', 191, 110);
+      doc.text('Envío', 192, 120);
+      doc.text('Fecha', 235, 110);
+      doc.text('Entrega', 233, 120);
+      doc.text('Días', 273, 110);
+      doc.text('Ent.', 274, 120);
+      doc.text('Org.', 293, 120);
+      doc.text('Cliente', 390, 120);
+      doc.text('Estatus', 520, 110);
+      doc.text('Operativo', 516, 120);
+      doc.text('Monto', 565, 110);
+      doc.text('Total', 568, 120);
+      doc.text('Comisión', 632, 110);
+      doc.text('Entrega', 636, 120);
+      doc.text('Comisión', 700, 110);
+      doc.text('Seguro', 706, 120);
 
       if (dolar == 'true') {
-        doc.text('Monto', 600, 160);
-        doc.text('Total $', 600, 170);
-        doc.text('Com', 675, 160);
-        doc.text('Ent $', 675, 170);
-        doc.text('Com', 743, 160);
-        doc.text('Seg $', 742, 170);
+        doc.text('Monto', 600, 110);
+        doc.text('Total $', 600, 120);
+        doc.text('Com', 675, 110);
+        doc.text('Ent $', 675, 120);
+        doc.text('Com', 743, 110);
+        doc.text('Seg $', 742, 120);
       }
     }
   }
@@ -254,7 +265,7 @@ class ComisionesService {
     var i = 0;
     var page = 0;
     var ymin;
-    ymin = 190;
+    ymin = 150;
 
     let monto_total_dolar = 0;
     let comision_entrega_dolar = 0;
@@ -337,6 +348,7 @@ class ComisionesService {
       }
 
       if (group == 'true') {
+        ymin = 192;
         doc.fontSize(8);
         if (item == 0) {
           doc.font('Helvetica-Bold');
@@ -1068,7 +1080,7 @@ class ComisionesService {
             }
 
             i += 17;
-            if (i >= 340) {
+            if (i >= 380) {
               doc.fontSize(8);
               doc.fillColor('#BLACK');
               doc.addPage();
@@ -1474,7 +1486,7 @@ class ComisionesService {
         }
 
         i += 15;
-        if (i >= 380) {
+        if (i >= 410) {
           doc.fillColor('#BLACK');
           doc.addPage();
           page = page + 1;
@@ -2100,9 +2112,9 @@ class ComisionesService {
       i++
     ) {
       doc.switchToPage(i);
-      doc.fontSize(group == 'true' ? 8 : 9);
+      doc.fontSize(group == 'true' ? 8 : 10);
       doc.fillColor('#444444');
-      doc.x = group == 'true' ? 485 : 655;
+      doc.x = group == 'true' ? 485 : 640;
       doc.y = 50;
       doc.text(`Pagina ${i + 1} de ${range.count}`, {
         align: 'right',
