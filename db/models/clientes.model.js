@@ -70,6 +70,9 @@ const ClientesSchema = {
   flag_activo: {
     type: DataTypes.STRING,
   },
+  contenido: {
+    type: DataTypes.STRING,
+  },
   cod_agencia: {
     allowNull: false,
     type: DataTypes.INTEGER,

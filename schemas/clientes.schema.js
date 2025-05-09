@@ -14,6 +14,7 @@ const tipo_persona = Joi.string().min(1);
 const modalidad_pago = Joi.string().min(2);
 const persona_contacto = Joi.string().min(3).max(100);
 const observacion = Joi.string().min(3).max(1000);
+const contenido = Joi.string().min(3).max(100);
 const cte_decontado = Joi.string().min(1);
 const tipo_persona_new = Joi.string().min(1).max(2);
 const flag_activo = Joi.string().min(1);
@@ -39,6 +40,7 @@ const createClientesSchema = Joi.object({
   modalidad_pago: modalidad_pago.required(),
   persona_contacto: persona_contacto.allow(null, ''),
   observacion: observacion.allow(null, ''),
+  contenido: contenido.allow(null, ''),
   cte_decontado: cte_decontado.allow(null, ''),
   tipo_persona_new: tipo_persona_new.allow(null, ''),
   flag_activo: flag_activo.allow(null, ''),
@@ -66,6 +68,7 @@ const updateClientesSchema = Joi.object({
   modalidad_pago: modalidad_pago.allow(null, ''),
   persona_contacto: persona_contacto.allow(null, ''),
   observacion: observacion.allow(null, ''),
+  contenido: contenido.allow(null, ''),
   cte_decontado: cte_decontado.allow(null, ''),
   tipo_persona_new: tipo_persona_new.allow(null, ''),
   flag_activo: flag_activo.allow(null, ''),

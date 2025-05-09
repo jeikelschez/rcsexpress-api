@@ -30,20 +30,14 @@ const descFpo =
 const clienteOrg =
   '(SELECT `clientes`.`nb_cliente` FROM `clientes` AS `clientes` ' +
   'WHERE `clientes`.`id` = `movimientos`.`cod_cliente_org`)';
-const escala =
-  '(CASE WHEN peso_kgs <= 0.5 THEN "Más de 0 Hasta 0,500" ' +
-  'WHEN peso_kgs > 0.5 AND peso_kgs <= 1 THEN "Más de 0,500 Hasta 1000" ' +
-  'WHEN peso_kgs > 1 AND peso_kgs <= 2 THEN "Más de 1000 Hasta 2000" ' +
-  'WHEN peso_kgs > 2 AND peso_kgs <= 4 THEN "Más de 2000 Hasta 4000" ' +
-  'WHEN peso_kgs > 4 AND peso_kgs <= 5 THEN "Más de 4000 Hasta 5000" ' +
-  'WHEN peso_kgs > 5 AND peso_kgs <= 10 THEN "Más de 5000 Hasta 10000" ' +
-  'WHEN peso_kgs > 10 AND peso_kgs <= 20 THEN "Más de 10000 Hasta 20000" ' +
-  'WHEN peso_kgs > 20 AND peso_kgs <= 30 THEN "Más de 20000 Hasta 30000" END)';
-const tarifa =
-  '(SELECT SUM(dm.importe_renglon) ' +
-  'FROM detalle_de_movimientos dm ' +
-  'WHERE `Mmovimientos`.id = dm.cod_movimiento ' +
-  'AND dm.cod_concepto in (1,2,3,6))';
+const fechaFact =
+  '(SELECT fecha_emision FROM maestro_de_movimientos b ' +
+  'WHERE `movimientos`.cod_ag_doc_ppal = b.cod_agencia ' +
+  'AND `movimientos`.nro_ctrl_doc_ppal = b.nro_control ' +
+  'AND `movimientos`.nro_ctrl_doc_ppal_new = b.nro_control_new)';
+const valorDolar =
+  '(SELECT valor FROM historico_dolar ' +
+  ' WHERE historico_dolar.fecha = `movimientos`.fecha_emision)';
 
 class RelacionFpoService {
   async mainReport(doc, tipo, data) {
@@ -53,14 +47,6 @@ class RelacionFpoService {
 
     switch (tipo) {
       case 'RG':
-      case 'R1':
-      case 'R2':
-      case 'R3':
-      case 'R4':
-      case 'R5':
-      case 'R6':
-      case 'R7':
-      case 'R8':
         where = {
           fecha_emision: {
             [Sequelize.Op.between]: [
@@ -99,6 +85,7 @@ class RelacionFpoService {
           ],
           raw: true,
           group: ['movimientos.id'],
+          order: [['movimientos', 'nro_documento', 'ASC']],
         });
 
         if (detalles.length == 0) return false;
@@ -108,6 +95,7 @@ class RelacionFpoService {
         if (data.nbCliente) detalles.cliente = data.nbCliente;
         break;
       case 'RE':
+      case 'PA':
         where = {
           fecha_emision: {
             [Sequelize.Op.between]: [
@@ -213,7 +201,7 @@ class RelacionFpoService {
         detalles.hasta = data.hasta;
         if (data.nbCliente) detalles.cliente = data.nbCliente;
         break;
-      case 'PA':
+      case 'RD':
         where = {
           fecha_emision: {
             [Sequelize.Op.between]: [
@@ -233,22 +221,61 @@ class RelacionFpoService {
           },
         };
 
-        detalles = await models.Mmovimientos.findAll({
-          where: where,
+        if (data.cliente) where.cod_cliente_org = data.cliente;
+
+        detalles = await models.Dmovimientos.findAll({
           attributes: [
-            [Sequelize.literal(escala), 'escala'],
-            [Sequelize.literal(tarifa), 'tarifa'],
-            'monto_fpo',
-            'nro_piezas',
+            [Sequelize.literal(nroPiezas), 'nro_piezas'],
+            [Sequelize.literal(pesoKgs), 'peso_kgs'],
+            [Sequelize.literal(montoBase), 'monto_base'],
+            [Sequelize.literal(montoSeguro), 'monto_seguro'],
+            [Sequelize.literal(fechaFact), 'fecha_fact'],
+            [Sequelize.literal(valorDolar), 'valor_dolar'],
+          ],
+          include: [
+            {
+              model: models.Mmovimientos,
+              as: 'movimientos',
+              where: where,
+              attributes: [
+                'fecha_emision',
+                'nro_documento',
+                'monto_fpo',
+                'nro_ctrl_doc_ppal',
+                'nro_ctrl_doc_ppal_new',
+              ],
+              include: [
+                {
+                  model: models.Clientes,
+                  as: 'clientes_org',
+                },
+                {
+                  model: models.Agencias,
+                  as: 'agencias_dest',
+                  attributes: [],
+                  include: [
+                    {
+                      model: models.Ciudades,
+                      as: 'ciudades',
+                    },
+                  ],
+                },
+              ],
+            },
           ],
           raw: true,
-          order: [['monto_fpo', 'ASC'], ['peso_kgs', 'ASC']],
+          group: ['movimientos.id'],
+          order: [
+            ['movimientos', 'fecha_emision', 'ASC'],
+            ['movimientos', 'nro_documento', 'ASC'],
+          ],
         });
 
         if (detalles.length == 0) return false;
 
         detalles.desde = data.desde;
         detalles.hasta = data.hasta;
+        if (data.nbCliente) detalles.cliente = data.nbCliente;
         break;
       default:
         return false;
@@ -256,22 +283,14 @@ class RelacionFpoService {
 
     if (detalles.length == 0) return false;
 
-    await this.generateHeader(doc, tipo, data, detalles);
+    await this.generateHeader(doc, tipo, data, detalles, 0);
     await this.generateCustomerInformation(doc, tipo, data, detalles);
     return true;
   }
 
-  async generateHeader(doc, tipo, data, detalles) {
+  async generateHeader(doc, tipo, data, detalles, page) {
     switch (tipo) {
       case 'RG':
-      case 'R1':
-      case 'R2':
-      case 'R3':
-      case 'R4':
-      case 'R5':
-      case 'R6':
-      case 'R7':
-      case 'R8':
         doc.image('./img/logo_rc.png', 35, 25, { width: 50 });
         doc.fontSize(10);
         doc.font('Helvetica-Bold');
@@ -290,8 +309,8 @@ class RelacionFpoService {
           columns: 1,
           width: 400,
         });
-        doc.fontSize(10);
-        doc.y = 100;
+        doc.fontSize(12);
+        doc.y = 105;
         doc.x = 120;
         doc.text(data.tittle, {
           align: 'center',
@@ -337,17 +356,17 @@ class RelacionFpoService {
         });
 
         doc.lineWidth(0.5);
+        doc.lineCap('butt').moveTo(35, 130).lineTo(580, 130).stroke();
         doc.lineCap('butt').moveTo(35, 145).lineTo(580, 145).stroke();
-        doc.lineCap('butt').moveTo(35, 160).lineTo(580, 160).stroke();
-        doc.text('Fecha Emisión', 40, 150);
-        doc.text('Nro. Guía Carga', 110, 150);
-        doc.text('Piezas', 185, 150);
-        doc.text('Peso', 230, 150);
-        doc.text('Monto Base', 270, 150);
-        doc.text('Protección Envío', 330, 150);
-        doc.text('Total Flete', 415, 150);
-        doc.text('Porcentaje', 475, 150);
-        doc.text('Monto FPO', 530, 150);
+        doc.text('Fecha Emisión', 40, 135);
+        doc.text('Nro. Guía Carga', 110, 135);
+        doc.text('Piezas', 185, 135);
+        doc.text('Peso', 230, 135);
+        doc.text('Monto Base', 270, 135);
+        doc.text('Protección Envío', 330, 135);
+        doc.text('Total Flete', 415, 135);
+        doc.text('Porcentaje', 475, 135);
+        doc.text('Monto FPO', 530, 135);
         break;
       case 'RE':
       case 'REG':
@@ -369,8 +388,8 @@ class RelacionFpoService {
           columns: 1,
           width: 400,
         });
-        doc.fontSize(10);
-        doc.y = 100;
+        doc.fontSize(12);
+        doc.y = 105;
         doc.x = 120;
         doc.text(data.tittle, {
           align: 'center',
@@ -416,205 +435,457 @@ class RelacionFpoService {
         });
 
         doc.lineWidth(0.5);
+        doc.lineCap('butt').moveTo(35, 130).lineTo(580, 130).stroke();
         doc.lineCap('butt').moveTo(35, 145).lineTo(580, 145).stroke();
-        doc.lineCap('butt').moveTo(35, 160).lineTo(580, 160).stroke();
-        doc.text('Rangos', 100, 150);
-        doc.text('Peso', 185, 150);
-        doc.text('Piezas', 225, 150);
-        doc.text('Monto Base', 270, 150);
-        doc.text('Protección Envío', 330, 150);
-        doc.text('Total Flete', 415, 150);
-        doc.text('Porcentaje', 475, 150);
-        doc.text('Monto FPO', 530, 150);
+        doc.text('Rangos', 100, 135);
+        doc.text('Peso', 185, 135);
+        doc.text('Piezas', 225, 135);
+        doc.text('Monto Base', 270, 135);
+        doc.text('Protección Envío', 330, 135);
+        doc.text('Total Flete', 415, 135);
+        doc.text('Porcentaje', 475, 135);
+        doc.text('Monto FPO', 530, 135);
         break;
       case 'PA':
-        doc.image('./img/cintillo.jpg', 35, 25, { width: 550 });
+        doc.image('./img/logo_rc.png', 35, 25, { width: 50 });
+        doc.fontSize(10);
         doc.font('Helvetica-Bold');
         doc.fillColor('#444444');
+        doc.text('R.C.S EXPRESS, S.A', 35, 105);
+        doc.fontSize(8);
+        doc.font('Helvetica');
+        doc.text('RIF. J-31028463-6', 35, 117);
+
+        doc.font('Helvetica-Bold');
         doc.fontSize(14);
-        doc.y = 65;
-        doc.x = 115;
-        doc.text('PLANILLA DE AUTOLIQUIDACIÓN', {
+        doc.y = 60;
+        doc.x = 120;
+        doc.text('Relación de Pagos IPOSTEL Envíos Nacionales', {
+          align: 'center',
+          columns: 1,
+          width: 400,
+        });
+        doc.fontSize(12);
+        doc.y = 105;
+        doc.x = 120;
+        doc.text(data.tittle, {
           align: 'center',
           columns: 1,
           width: 400,
         });
 
-        doc.fontSize(10);
-        doc.font('Helvetica');
-        doc.y = 110;
-        doc.x = 0;
-        doc.text('Nombre de la Empresa:', {
-          align: 'right',
-          columns: 1,
-          width: 150,
-        });
-        doc.y = 135;
-        doc.x = 0;
-        doc.text('Dirección:', {
-          align: 'right',
-          columns: 1,
-          width: 150,
-        });
-        doc.y = 160;
-        doc.x = 0;
-        doc.text('Teléfono:', {
-          align: 'right',
-          columns: 1,
-          width: 150,
-        });
-        doc.y = 185;
-        doc.x = 0;
-        doc.text('Franqueo Postal (Lapso):', {
-          align: 'right',
-          columns: 1,
-          width: 150,
-        });
-        doc.y = 205;
-        doc.x = 0;
-        doc.text('Monto:', {
-          align: 'right',
-          columns: 1,
-          width: 150,
-        });
-        doc.y = 205;
-        doc.x = 250;
-        doc.text('Planilla Depósito:', {
-          align: 'right',
-          columns: 1,
-          width: 150,
-        });
-        doc.y = 230;
-        doc.x = 0;
-        doc.text('Banco:', {
-          align: 'right',
-          columns: 1,
-          width: 150,
-        });
-        doc.y = 230;
-        doc.x = 250;
-        doc.text('N° Cuenta:', {
-          align: 'right',
-          columns: 1,
-          width: 150,
-        });
-        doc.y = 255;
-        doc.x = 0;
-        doc.text('Fecha Depósito:', {
-          align: 'right',
-          columns: 1,
-          width: 150,
-        });
-
-        doc.font('Helvetica-Bold');
-        doc.y = 110;
-        doc.x = 155;
-        doc.text('R.C.S. Express, S.A.', {
-          align: 'left',
-          columns: 1,
-          width: 150,
-        });
-        doc.y = 110;
-        doc.x = 535;
-        doc.text('C.P. 20-22', {
-          align: 'left',
-          columns: 1,
-          width: 150,
-        });
-        doc.y = 135;
-        doc.x = 155;
-        doc.text(
-          'Av. 74 C. C. Araurima Nivel PB Local Nº 6 Urb. Terrazas de Castillito San Diego - Edo. Carabobo',
-          {
-            align: 'left',
+        if (detalles.cliente) {
+          doc.fontSize(12);
+          doc.y = 115;
+          doc.x = 120;
+          doc.text(detalles.cliente, {
+            align: 'center',
             columns: 1,
-            width: 340,
-          }
-        );
-        doc.y = 160;
-        doc.x = 155;
-        doc.text('(0241) 871.7563 / 871.6867', {
-          align: 'left',
-          columns: 1,
-          width: 150,
-        });
-        doc.y = 185;
-        doc.x = 155;
-        doc.text('Desde ' + data.desde + ' Hasta ' + data.hasta, {
+            width: 400,
+          });
+        }
+
+        doc.font('Helvetica');
+        doc.fontSize(10);
+        doc.y = 85;
+        doc.x = 230;
+        doc.text('Desde: ' + detalles.desde, {
           align: 'left',
           columns: 1,
           width: 300,
         });
-        doc.y = 205;
-        doc.x = 155;
-        doc.text('81.223,22', {
+        doc.y = 85;
+        doc.x = 327;
+        doc.text('Hasta: ' + detalles.hasta, {
           align: 'left',
           columns: 1,
-          width: 150,
-        });
-        doc.y = 205;
-        doc.x = 405;
-        doc.text(data.planilla, {
-          align: 'left',
-          columns: 1,
-          width: 150,
-        });
-        doc.y = 230;
-        doc.x = 155;
-        doc.text('Banco de Venezuela', {
-          align: 'left',
-          columns: 1,
-          width: 150,
-        });
-        doc.y = 230;
-        doc.x = 405;
-        doc.text('0102-0552-22-0000037769', {
-          align: 'left',
-          columns: 1,
-          width: 150,
-        });
-        doc.y = 255;
-        doc.x = 155;
-        doc.text(data.fecha_deposito, {
-          align: 'left',
-          columns: 1,
-          width: 150,
+          width: 300,
         });
 
         doc.fontSize(8);
-        doc.font('Helvetica-BoldOblique');
-        doc.text(
-          'Providencia Administrativa N° CJ/002/2020, de fecha 30 de junio de 2020, publicada en Gaceta Oficial Nº 41.912 de fecha 01-07-2020',
-          60,
-          280
-        );
-
-        doc.fontSize(10);
-        doc.y = 305;
-        doc.x = 115;
-        doc.text('RÉGIMEN NACIONAL', {
-          align: 'center',
+        doc.x = 480;
+        doc.y = 30;
+        doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), {
+          align: 'right',
           columns: 1,
-          width: 400,
+          width: 100,
         });
 
         doc.lineWidth(0.5);
-        doc
-          .lineJoin('miter')
-          .rect(40, 320, 530, 30)
-          .fillAndStroke('grey', 'black');
-        doc.fillColor('black');
-        doc.font('Helvetica-Bold');
         doc.fontSize(9);
-        doc.text('ESCALA DE PESO (Grs.)', 47, 332);
-        doc.text('TARIFA DE', 180, 326);
-        doc.text('SERVICIO', 182, 338);
-        doc.text('TARIFA %', 260, 332);
-        doc.text('MONTO DE', 330, 326);
-        doc.text('FPO', 344, 338);
-        doc.text('PIEZAS', 412, 326);
-        doc.text('MOVILIZADAS', 400, 338);
-        doc.text('MONTO CAUSADO', 480, 332);
+        doc.lineCap('butt').moveTo(35, 130).lineTo(580, 130).stroke();
+        doc.lineCap('butt').moveTo(35, 155).lineTo(580, 155).stroke();
+        doc.text('ESCALA DE PESO (Grs.)', 50, 135);
+        doc.text('TARIFA DE', 190, 135);
+        doc.text('SERVICIO', 192, 145);
+        doc.text('TARIFA %', 263, 135);
+        doc.text('MONTO DE FPO', 330, 135);
+        doc.text('PIEZAS', 433, 135);
+        doc.text('MOVILIZADAS', 420, 145);
+        doc.text('MONTO CAUSADO', 495, 135);
+        break;
+      case 'RD':
+        doc.lineWidth(0.5);
+        doc.fontSize(9);
+        doc.font('Helvetica-Bold');
+
+        doc.lineJoin('square').rect(20, 20, 575, 15).stroke();
+        doc.y = 25;
+        doc.x = 20;
+        doc.text('R.C.S. EXPRESS, S.A. RIF J31028463-6 CP N° IP 20-22-15-40', {
+          align: 'center',
+          columns: 1,
+          width: 575,
+        });
+
+        doc.lineJoin('square').rect(20, 35, 575, 15).stroke();
+        doc.y = 40;
+        doc.x = 20;
+        doc.text(
+          'RESUMEN ' +
+            utils.numerosAMeses(
+              parseInt(moment(detalles.desde, 'DD/MM/YYYY').format('MM'))
+            ) +
+            ' ' +
+            moment(detalles.desde, 'DD/MM/YYYY').format('YYYY'),
+          {
+            align: 'center',
+            columns: 1,
+            width: 575,
+          }
+        );
+
+        if (page % 2 === 0) {
+          doc.lineJoin('square').rect(20, 50, 50, 45).stroke();
+          doc.y = 65;
+          doc.x = 20;
+          doc.text('N° de', {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = 75;
+          doc.x = 20;
+          doc.text('Operación', {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+
+          doc.lineJoin('square').rect(70, 50, 60, 45).stroke();
+          doc.y = 65;
+          doc.x = 70;
+          doc.text('Fecha de', {
+            align: 'center',
+            columns: 1,
+            width: 60,
+          });
+          doc.y = 75;
+          doc.x = 70;
+          doc.text('Factura', {
+            align: 'center',
+            columns: 1,
+            width: 60,
+          });
+
+          doc.lineJoin('square').rect(130, 50, 80, 45).stroke();
+          doc.y = 70;
+          doc.x = 130;
+          doc.text('Nº R.I.F.', {
+            align: 'center',
+            columns: 1,
+            width: 80,
+          });
+
+          doc.lineJoin('square').rect(210, 50, 120, 45).stroke();
+          doc.y = 70;
+          doc.x = 210;
+          doc.text('Proveedor o Razón Social', {
+            align: 'center',
+            columns: 1,
+            width: 120,
+          });
+
+          doc.lineJoin('square').rect(330, 50, 60, 45).stroke();
+          doc.y = 65;
+          doc.x = 330;
+          doc.text('N° de', {
+            align: 'center',
+            columns: 1,
+            width: 60,
+          });
+          doc.y = 75;
+          doc.x = 330;
+          doc.text('Guía', {
+            align: 'center',
+            columns: 1,
+            width: 60,
+          });
+
+          doc.lineJoin('square').rect(390, 50, 60, 45).stroke();
+          doc.y = 65;
+          doc.x = 390;
+          doc.text('Fecha de', {
+            align: 'center',
+            columns: 1,
+            width: 60,
+          });
+          doc.y = 75;
+          doc.x = 390;
+          doc.text('Guía', {
+            align: 'center',
+            columns: 1,
+            width: 60,
+          });
+
+          doc.lineJoin('square').rect(450, 50, 30, 45).stroke();
+          doc.y = 70;
+          doc.x = 450;
+          doc.text('Serie', {
+            align: 'center',
+            columns: 1,
+            width: 30,
+          });
+
+          doc.lineJoin('square').rect(480, 50, 55, 45).stroke();
+          doc.y = 65;
+          doc.x = 480;
+          doc.text('N° de', {
+            align: 'center',
+            columns: 1,
+            width: 55,
+          });
+          doc.y = 75;
+          doc.x = 480;
+          doc.text('Factura', {
+            align: 'center',
+            columns: 1,
+            width: 55,
+          });
+
+          doc.lineJoin('square').rect(535, 50, 60, 45).stroke();
+          doc.y = 65;
+          doc.x = 535;
+          doc.text('N° de', {
+            align: 'center',
+            columns: 1,
+            width: 60,
+          });
+          doc.y = 75;
+          doc.x = 535;
+          doc.text('Control', {
+            align: 'center',
+            columns: 1,
+            width: 60,
+          });
+        } else {
+          doc.lineJoin('square').rect(20, 50, 45, 45).stroke();
+          doc.y = 65;
+          doc.x = 20;
+          doc.text('Tasa de', {
+            align: 'center',
+            columns: 1,
+            width: 45,
+          });
+          doc.y = 75;
+          doc.x = 20;
+          doc.text('Cambio', {
+            align: 'center',
+            columns: 1,
+            width: 45,
+          });
+
+          doc.lineJoin('square').rect(65, 50, 50, 45).stroke();
+          doc.y = 70;
+          doc.x = 65;
+          doc.text('Peso', {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+
+          doc.lineJoin('square').rect(115, 50, 50, 45).stroke();
+          doc.y = 54;
+          doc.x = 115;
+          doc.text('Total', {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = 62;
+          doc.x = 115;
+          doc.text('Ventas', {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = 70;
+          doc.x = 115;
+          doc.text('Internas', {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = 78;
+          doc.x = 115;
+          doc.text('Incluyendo', {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = 86;
+          doc.x = 115;
+          doc.text('el Iva', {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+
+          doc.lineJoin('square').rect(165, 50, 45, 45).stroke();
+          doc.y = 65;
+          doc.x = 165;
+          doc.text('Base', {
+            align: 'center',
+            columns: 1,
+            width: 45,
+          });
+          doc.y = 75;
+          doc.x = 165;
+          doc.text('Imponible', {
+            align: 'center',
+            columns: 1,
+            width: 45,
+          });
+
+          doc.lineJoin('square').rect(210, 50, 55, 45).stroke();
+          doc.y = 65;
+          doc.x = 210;
+          doc.text('Monto', {
+            align: 'center',
+            columns: 1,
+            width: 55,
+          });
+          doc.y = 75;
+          doc.x = 210;
+          doc.text('Exento', {
+            align: 'center',
+            columns: 1,
+            width: 55,
+          });
+
+          doc.lineJoin('square').rect(265, 50, 25, 45).stroke();
+          doc.y = 65;
+          doc.x = 265;
+          doc.text('%', {
+            align: 'center',
+            columns: 1,
+            width: 25,
+          });
+          doc.y = 75;
+          doc.x = 265;
+          doc.text('IVA', {
+            align: 'center',
+            columns: 1,
+            width: 25,
+          });
+
+          doc.lineJoin('square').rect(290, 50, 50, 45).stroke();
+          doc.y = 55;
+          doc.x = 290;
+          doc.text('%', {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = 64;
+          doc.x = 290;
+          doc.text('Franqueo', {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = 73;
+          doc.x = 290;
+          doc.text('Postal', {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = 82;
+          doc.x = 290;
+          doc.text('Obligatorio', {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+
+          doc.lineJoin('square').rect(340, 50, 50, 45).stroke();
+          doc.y = 65;
+          doc.x = 340;
+          doc.text('Impuesto', {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = 75;
+          doc.x = 340;
+          doc.text('IVA', {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+
+          doc.lineJoin('square').rect(390, 50, 50, 45).stroke();
+          doc.y = 60;
+          doc.x = 390;
+          doc.text('Franqueo', {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = 70;
+          doc.x = 390;
+          doc.text('Postal', {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = 80;
+          doc.x = 390;
+          doc.text('Obligatorio', {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+
+          doc.lineJoin('square').rect(440, 50, 50, 45).stroke();
+          doc.y = 70;
+          doc.x = 440;
+          doc.text('Origen', {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+
+          doc.lineJoin('square').rect(490, 50, 50, 45).stroke();
+          doc.y = 70;
+          doc.x = 490;
+          doc.text('Destino', {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+
+          doc.lineJoin('square').rect(540, 50, 55, 45).stroke();
+          doc.y = 70;
+          doc.x = 540;
+          doc.text('Contenido', {
+            align: 'center',
+            columns: 1,
+            width: 55,
+          });
+        }
+
         break;
       default:
         break;
@@ -632,6 +903,7 @@ class RelacionFpoService {
     let total_seguro = 0;
     let total_total = 0;
     let total_fpo = 0;
+    let total_causado = 0;
     let subtotal_piezas = 0;
     let subtotal_peso = 0;
     let subtotal_base = 0;
@@ -641,15 +913,7 @@ class RelacionFpoService {
 
     switch (tipo) {
       case 'RG':
-      case 'R1':
-      case 'R2':
-      case 'R3':
-      case 'R4':
-      case 'R5':
-      case 'R6':
-      case 'R7':
-      case 'R8':
-        ymin = 170;
+        ymin = 155;
         for (var item = 0; item < detalles.length; item++) {
           doc.y = ymin + i;
           doc.x = 32;
@@ -741,7 +1005,7 @@ class RelacionFpoService {
             page = page + 1;
             doc.switchToPage(page);
             i = 0;
-            await this.generateHeader(doc, tipo, data, detalles);
+            await this.generateHeader(doc, tipo, data, detalles, page);
           }
         }
 
@@ -805,14 +1069,14 @@ class RelacionFpoService {
         });
         break;
       case 'RE':
-        ymin = 170;
+        ymin = 155;
         for (var item = 0; item < detalles.length; item++) {
           doc.y = ymin + i;
           doc.x = 45;
           doc.text(detalles[item].desc_fpo, {
             align: 'left',
             columns: 1,
-            width: 100,
+            width: 150,
           });
           doc.y = ymin + i;
           doc.x = 170;
@@ -883,7 +1147,7 @@ class RelacionFpoService {
             page = page + 1;
             doc.switchToPage(page);
             i = 0;
-            await this.generateHeader(doc, tipo, data, detalles);
+            await this.generateHeader(doc, tipo, data, detalles, page);
           }
         }
 
@@ -939,8 +1203,106 @@ class RelacionFpoService {
           width: 60,
         });
         break;
+      case 'PA':
+        doc.fontSize(9);
+        ymin = 165;
+        for (var item = 0; item < detalles.length; item++) {
+          doc.y = ymin + i;
+          doc.x = 45;
+          doc.text(detalles[item].desc_fpo, {
+            align: 'left',
+            columns: 1,
+            width: 150,
+          });
+
+          let monto_total =
+            utils.parseFloatN(detalles[item].monto_base) +
+            utils.parseFloatN(detalles[item].monto_seguro);
+          doc.y = ymin + i;
+          doc.x = 160;
+          doc.text(utils.formatNumber(monto_total), {
+            align: 'right',
+            columns: 1,
+            width: 80,
+          });
+
+          doc.y = ymin + i;
+          doc.x = 255;
+          doc.text(detalles[item].valor_fpo + ' %', {
+            align: 'center',
+            columns: 1,
+            width: 60,
+          });
+
+          let monto_causado =
+            monto_total * (parseInt(detalles[item].valor_fpo) / 100);
+          let fpo = monto_causado / detalles[item].nro_piezas;
+
+          doc.y = ymin + i;
+          doc.x = 340;
+          doc.text(utils.formatNumber(fpo), {
+            align: 'right',
+            columns: 1,
+            width: 60,
+          });
+          doc.y = ymin + i;
+          doc.x = 430;
+          doc.text(detalles[item].nro_piezas, {
+            align: 'center',
+            columns: 1,
+            width: 40,
+          });
+
+          doc.y = ymin + i;
+          doc.x = 490;
+          doc.text(utils.formatNumber(monto_causado), {
+            align: 'right',
+            columns: 1,
+            width: 80,
+          });
+
+          count++;
+          total_piezas += utils.parseFloatN(detalles[item].nro_piezas);
+          total_causado += monto_causado;
+
+          i += 15;
+          if (i >= 580) {
+            doc.fillColor('#BLACK');
+            doc.addPage();
+            page = page + 1;
+            doc.switchToPage(page);
+            i = 0;
+            await this.generateHeader(doc, tipo, data, detalles, page);
+          }
+        }
+
+        // Totales Finales
+        doc.font('Helvetica-Bold');
+        doc.y = ymin + i;
+        doc.x = 300;
+        doc.text('TOTAL CAUSADO:', {
+          align: 'left',
+          columns: 1,
+          width: 80,
+        });
+        doc.y = ymin + i;
+        doc.x = 430;
+        doc.text(total_piezas, {
+          align: 'center',
+          columns: 1,
+          width: 40,
+        });
+
+        doc.y = ymin + i;
+        doc.x = 490;
+        doc.text(utils.formatNumber(total_causado), {
+          align: 'right',
+          columns: 1,
+          width: 80,
+        });
+        break;
       case 'REG':
-        ymin = 170;
+        ymin = 155;
         for (var item = 0; item < detalles.length; item++) {
           if (
             item == 0 ||
@@ -959,7 +1321,7 @@ class RelacionFpoService {
           doc.text(detalles[item].desc_fpo, {
             align: 'left',
             columns: 1,
-            width: 100,
+            width: 150,
           });
           doc.y = ymin + i;
           doc.x = 170;
@@ -1103,7 +1465,7 @@ class RelacionFpoService {
             page = page + 1;
             doc.switchToPage(page);
             i = 0;
-            await this.generateHeader(doc, tipo, data, detalles);
+            await this.generateHeader(doc, tipo, data, detalles, page);
           }
         }
 
@@ -1213,165 +1575,414 @@ class RelacionFpoService {
           width: 60,
         });
         break;
-      case 'PA':
-        ymin = 360;
-        for (var item = 0; item < detalles.length; item++) {
-          if (
-            item > 0 &&
-            detalles[item].monto_fpo != detalles[item - 1].monto_fpo
-          ) {
-            i += 20;
-          }
+      case 'RD':
+        ymin = 105;
 
+        // Primera pagina
+        for (var item = 0; item < detalles.length; item++) {
           doc.font('Helvetica');
-          doc.fillColor('#444444');
+          doc.fontSize(9);
+
+          doc
+            .lineJoin('square')
+            .rect(20, ymin + i - 10, 50, 27)
+            .stroke();
           doc.y = ymin + i;
-          doc.x = 50;
-          doc.text(detalles[item].escala, {
-            align: 'left',
+          doc.x = 20;
+          doc.text(item + 1, {
+            align: 'center',
             columns: 1,
-            width: 150,
+            width: 50,
           });
+
+          doc
+            .lineJoin('square')
+            .rect(70, ymin + i - 10, 60, 27)
+            .stroke();
           doc.y = ymin + i;
-          doc.x = 170;
-          doc.text(utils.formatNumber(detalles[item].tarifa), {
-            align: 'right',
-            columns: 1,
-            width: 60,
-          });
-          doc.y = ymin + i;
-          doc.x = 253;
-          doc.text(parseInt(detalles[item].monto_fpo) + '%', {
+          doc.x = 70;
+          doc.text(moment(detalles[item].fecha_fact).format('DD/MM/YYYY'), {
             align: 'center',
             columns: 1,
             width: 60,
           });
-          let fpo =
-            detalles[item].tarifa * (parseInt(detalles[item].monto_fpo) / 100);
+
+          doc
+            .lineJoin('square')
+            .rect(130, ymin + i - 10, 80, 27)
+            .stroke();
           doc.y = ymin + i;
-          doc.x = 315;
-          doc.text(utils.formatNumber(fpo), {
-            align: 'right',
+          doc.x = 130;
+          doc.text(detalles[item]['movimientos.clientes_org.rif_cedula'], {
+            align: 'center',
             columns: 1,
-            width: 65,
-          });
-          doc.y = ymin + i;
-          doc.x = 370;
-          doc.text(detalles[item].nro_piezas, {
-            align: 'right',
-            columns: 1,
-            width: 65,
-          });
-          let monto_fpo =
-            utils.parseFloatN(fpo) *
-            utils.parseFloatN(detalles[item].nro_piezas);
-          doc.y = ymin + i;
-          doc.x = 495;
-          doc.text(utils.formatNumber(monto_fpo), {
-            align: 'right',
-            columns: 1,
-            width: 65,
+            width: 80,
           });
 
-          // Sub Totales por %
-          if (
-            item > 0 &&
-            detalles[item].monto_fpo != detalles[item - 1].monto_fpo
-          ) {
-            doc.font('Helvetica-Bold');
-            doc.y = ymin + i - 20;
-            doc.x = 297;
-            doc.text('SUBTOTAL ' + parseInt(detalles[item - 1].monto_fpo) + '%:', {
-              align: 'left',
-              columns: 1,
-              width: 80,
-            });
-            doc.y = ymin + i - 20;
-            doc.x = 370;
-            doc.text(subtotal_piezas, {
-              align: 'right',
-              columns: 1,
-              width: 65,
-            });
-            doc.y = ymin + i - 20;
-            doc.x = 495;
-            doc.text(utils.formatNumber(subtotal_fpo), {
-              align: 'right',
-              columns: 1,
-              width: 65,
-            });
-            doc.font('Helvetica');
+          doc
+            .lineJoin('square')
+            .rect(210, ymin + i - 10, 120, 27)
+            .stroke();
+          doc.y = ymin + i;
+          doc.x = 210;
+          doc.text(detalles[item]['movimientos.clientes_org.nb_cliente'], {
+            align: 'center',
+            columns: 1,
+            width: 120,
+            height: 27,
+            baseline: 'middle',
+          });
 
-            subtotal_piezas = 0;
-            subtotal_fpo = 0;
-          }
+          doc
+            .lineJoin('square')
+            .rect(330, ymin + i - 10, 60, 27)
+            .stroke();
+          doc.y = ymin + i;
+          doc.x = 330;
+          doc.text(detalles[item]['movimientos.nro_documento'], {
+            align: 'center',
+            columns: 1,
+            width: 60,
+          });
 
-          count++;
-          total_piezas += utils.parseFloatN(detalles[item].nro_piezas);
-          total_fpo += utils.parseFloatN(monto_fpo);
-          subtotal_piezas += utils.parseFloatN(detalles[item].nro_piezas);
-          subtotal_fpo += utils.parseFloatN(monto_fpo);
+          doc
+            .lineJoin('square')
+            .rect(390, ymin + i - 10, 60, 27)
+            .stroke();
+          doc.y = ymin + i;
+          doc.x = 390;
+          doc.text(
+            moment(detalles[item]['movimientos.fecha_emision']).format(
+              'DD/MM/YYYY'
+            ),
+            {
+              align: 'center',
+              columns: 1,
+              width: 60,
+            }
+          );
 
-          i += 15;
-          if (i >= 380) {
+          doc
+            .lineJoin('square')
+            .rect(450, ymin + i - 10, 30, 27)
+            .stroke();
+          doc.y = ymin + i;
+          doc.x = 450;
+          doc.text('N/A', {
+            align: 'center',
+            columns: 1,
+            width: 30,
+          });
+
+          doc
+            .lineJoin('square')
+            .rect(480, ymin + i - 10, 55, 27)
+            .stroke();
+          doc.y = ymin + i;
+          doc.x = 480;
+          doc.text(detalles[item]['movimientos.nro_ctrl_doc_ppal'], {
+            align: 'center',
+            columns: 1,
+            width: 55,
+          });
+
+          doc
+            .lineJoin('square')
+            .rect(535, ymin + i - 10, 60, 27)
+            .stroke();
+          doc.y = ymin + i;
+          doc.x = 535;
+          doc.text(
+            detalles[item]['movimientos.nro_ctrl_doc_ppal_new'].padStart(
+              9,
+              '00-000000'
+            ),
+            {
+              align: 'center',
+              columns: 1,
+              width: 60,
+            }
+          );
+
+          i += 27;
+          if (i >= 650) {
             doc.fillColor('#BLACK');
             doc.addPage();
-            page = page + 1;
+            doc.addPage();
+            page = page + 2;
             doc.switchToPage(page);
             i = 0;
-            await this.generateHeader(doc, tipo, data, detalles);
+            await this.generateHeader(doc, tipo, data, detalles, page);
           }
         }
 
-        // Sub Totales por % Finales
-        doc.font('Helvetica-Bold');
-        doc.y = ymin + i;
-        doc.x = 297;
-        doc.text('SUBTOTAL ' + parseInt(detalles[count - 1].monto_fpo) + '%:', {
-          align: 'left',
-          columns: 1,
-          width: 80,
-        });
-        doc.y = ymin + i;
-        doc.x = 370;
-        doc.text(subtotal_piezas, {
-          align: 'right',
-          columns: 1,
-          width: 65,
-        });
-        doc.y = ymin + i;
-        doc.x = 495;
-        doc.text(utils.formatNumber(subtotal_fpo), {
-          align: 'right',
-          columns: 1,
-          width: 65,
-        });
+        let maxPage = page + 1;
+        ymin = 105;
+        i = 0;
+        page = 1;
+        doc.addPage();
+        doc.switchToPage(page);
+        await this.generateHeader(doc, tipo, data, detalles, page);
 
-        i += 16;
+        // Segunda pagina
+        for (var item = 0; item < detalles.length; item++) {
+          doc.font('Helvetica');
+          doc.fontSize(9);
+
+          doc
+            .lineJoin('square')
+            .rect(20, ymin + i - 10, 45, 27)
+            .stroke();
+          doc.y = ymin + i;
+          doc.x = 18;
+          doc.text(utils.formatNumber(detalles[item].valor_dolar), {
+            align: 'right',
+            columns: 1,
+            width: 45,
+          });
+
+          doc
+            .lineJoin('square')
+            .rect(65, ymin + i - 10, 50, 27)
+            .stroke();
+          doc.y = ymin + i;
+          doc.x = 63;
+          doc.text(utils.formatNumber(detalles[item].peso_kgs), {
+            align: 'right',
+            columns: 1,
+            width: 50,
+          });
+
+          doc
+            .lineJoin('square')
+            .rect(115, ymin + i - 10, 50, 27)
+            .stroke();
+          doc.y = ymin + i;
+          doc.x = 115;
+          doc.text('N/A', {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+
+          doc
+            .lineJoin('square')
+            .rect(165, ymin + i - 10, 45, 27)
+            .stroke();
+          doc.y = ymin + i;
+          doc.x = 165;
+          doc.text('N/A', {
+            align: 'center',
+            columns: 1,
+            width: 45,
+          });
+
+          let monto_total =
+            utils.parseFloatN(detalles[item].monto_base) +
+            utils.parseFloatN(detalles[item].monto_seguro);
+
+          doc
+            .lineJoin('square')
+            .rect(210, ymin + i - 10, 55, 27)
+            .stroke();
+          doc.y = ymin + i;
+          doc.x = 208;
+          doc.text(utils.formatNumber(monto_total), {
+            align: 'right',
+            columns: 1,
+            width: 55,
+          });
+
+          doc
+            .lineJoin('square')
+            .rect(265, ymin + i - 10, 25, 27)
+            .stroke();
+          doc.y = ymin + i;
+          doc.x = 265;
+          doc.text('N/A', {
+            align: 'center',
+            columns: 1,
+            width: 25,
+          });
+
+          doc
+            .lineJoin('square')
+            .rect(290, ymin + i - 10, 50, 27)
+            .stroke();
+          doc.y = ymin + i;
+          doc.x = 290;
+          doc.text(
+            utils.formatNumber(detalles[item]['movimientos.monto_fpo']) + '%',
+            {
+              align: 'center',
+              columns: 1,
+              width: 50,
+            }
+          );
+
+          doc
+            .lineJoin('square')
+            .rect(340, ymin + i - 10, 50, 27)
+            .stroke();
+          doc.y = ymin + i;
+          doc.x = 340;
+          doc.text('N/A', {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+
+          let fpo =
+            monto_total *
+            (utils.parseFloatN(detalles[item]['movimientos.monto_fpo']) / 100);
+
+          doc
+            .lineJoin('square')
+            .rect(390, ymin + i - 10, 50, 27)
+            .stroke();
+          doc.y = ymin + i;
+          doc.x = 388;
+          doc.text(utils.formatNumber(fpo), {
+            align: 'right',
+            columns: 1,
+            width: 50,
+          });
+
+          doc
+            .lineJoin('square')
+            .rect(440, ymin + i - 10, 50, 27)
+            .stroke();
+          doc.y = ymin + i;
+          doc.x = 440;
+          doc.text('VALENCIA', {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+
+          doc
+            .lineJoin('square')
+            .rect(490, ymin + i - 10, 50, 27)
+            .stroke();
+          doc.y = ymin + i;
+          doc.x = 490;
+          doc.text(
+            detalles[item]['movimientos.agencias_dest.ciudades.desc_ciudad'],
+            {
+              align: 'center',
+              columns: 1,
+              width: 50,
+              height: 27,
+              baseline: 'middle',
+            }
+          );
+
+          doc
+            .lineJoin('square')
+            .rect(540, ymin + i - 10, 55, 27)
+            .stroke();
+          doc.y = ymin + i;
+          doc.x = 540;
+          doc.text(detalles[item]['movimientos.clientes_org.contenido'], {
+            align: 'center',
+            columns: 1,
+            width: 55,
+            height: 27,
+            baseline: 'middle',
+          });
+
+          total_peso += utils.parseFloatN(detalles[item].peso_kgs);
+          total_total += utils.parseFloatN(monto_total);
+          total_fpo += utils.parseFloatN(fpo);
+
+          i += 27;
+          if (i >= 650) {
+            doc.fillColor('#BLACK');
+            page = page + 2;
+            if (page <= maxPage) {
+              doc.switchToPage(page);
+            }
+
+            i = 0;
+            await this.generateHeader(doc, tipo, data, detalles, page);
+          }
+        }
 
         // Totales Finales
         doc.font('Helvetica-Bold');
+        doc
+          .lineJoin('square')
+          .rect(20, ymin + i - 10, 45, 27)
+          .stroke();
         doc.y = ymin + i;
-        doc.x = 320;
-        doc.text('TOTALES:', {
-          align: 'left',
+        doc.x = 20;
+        doc.text('Totales:', {
+          align: 'center',
           columns: 1,
-          width: 80,
+          width: 45,
         });
+
+        doc
+          .lineJoin('square')
+          .rect(65, ymin + i - 10, 50, 27)
+          .stroke();
         doc.y = ymin + i;
-        doc.x = 370;
-        doc.text(total_piezas, {
+        doc.x = 63;
+        doc.text(utils.formatNumber(total_peso), {
           align: 'right',
           columns: 1,
-          width: 65,
+          width: 50,
         });
+
+        doc
+          .lineJoin('square')
+          .rect(115, ymin + i - 10, 50, 27)
+          .stroke();
+        doc
+          .lineJoin('square')
+          .rect(165, ymin + i - 10, 100, 27)
+          .stroke();
         doc.y = ymin + i;
-        doc.x = 495;
+        doc.x = 163;
+        doc.text(utils.formatNumber(total_total), {
+          align: 'right',
+          columns: 1,
+          width: 100,
+        });
+
+        doc
+          .lineJoin('square')
+          .rect(265, ymin + i - 10, 25, 27)
+          .stroke();
+        doc
+          .lineJoin('square')
+          .rect(290, ymin + i - 10, 50, 27)
+          .stroke();
+        doc
+          .lineJoin('square')
+          .rect(340, ymin + i - 10, 100, 27)
+          .stroke();
+        doc.y = ymin + i;
+        doc.x = 338;
         doc.text(utils.formatNumber(total_fpo), {
           align: 'right',
           columns: 1,
-          width: 65,
+          width: 100,
         });
+
+        doc
+          .lineJoin('square')
+          .rect(440, ymin + i - 10, 50, 27)
+          .stroke();
+        doc
+          .lineJoin('square')
+          .rect(490, ymin + i - 10, 50, 27)
+          .stroke();
+        doc
+          .lineJoin('square')
+          .rect(540, ymin + i - 10, 55, 27)
+          .stroke();
+
         break;
       default:
         break;
@@ -1385,7 +1996,7 @@ class RelacionFpoService {
       i++
     ) {
       doc.switchToPage(i);
-      if (tipo != 'PA') {
+      if (tipo != 'RD') {
         doc.fontSize(8);
         doc.font('Helvetica');
         doc.fillColor('#444444');

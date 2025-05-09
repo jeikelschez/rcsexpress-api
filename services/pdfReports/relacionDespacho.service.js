@@ -70,23 +70,25 @@ class RelacionDespachoService {
 
   async generateHeader(doc, data) {
     doc
-      .image('./img/logo_rc.png', 45, 35, { width: 40 })
+      .image('./img/logo_rc.png', 45, 30, { width: 30 })
       .fillColor('#444444')
       .fontSize(11)
       .font('Helvetica-Bold')
-      .text('RCS Express, S.A', 95, 55)
-      .text('R.I.F. J-31028463-6', 95, 70)
-      .text('Fecha: ' + moment().format('DD/MM/YYYY'), 647, 35)
-      .fontSize(8);
+      .text('RCS Express, S.A', 85, 45)
+      .text('R.I.F. J-31028463-6', 85, 60)
+      .fontSize(10);
 
-    doc.y = 65;
+    doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 655, 30);
+    doc.fontSize(8);
+
+    doc.y = 55;
     doc.x = 590;
     doc.text('Autorizado Por: ' + data.usuario, {
       align: 'right',
       columns: 1,
       width: 150,
     });
-    doc.y = 75;
+    doc.y = 65;
     doc.x = 590;
     doc.text('Impreso Por: ' + data.usuario, {
       align: 'right',
@@ -94,7 +96,7 @@ class RelacionDespachoService {
       width: 150,
     });
     doc.fontSize(16);
-    doc.y = 40;
+    doc.y = 30;
     doc.x = 150;
     doc.text(data.nombreReporte, {
       align: 'center',
@@ -102,19 +104,19 @@ class RelacionDespachoService {
       width: 490,
     });
     doc.fontSize(11);
-    doc.y = 60;
+    doc.y = 50;
     doc.x = 240;
     doc.text(data.agencia, {
       align: 'center',
       columns: 1,
       width: 300,
     });
-    doc.text('Desde: ' + data.fecha_desde, 280, 75);
-    doc.text('Hasta: ' + data.fecha_hasta, 400, 75);
+    doc.text('Desde: ' + data.fecha_desde, 280, 65);
+    doc.text('Hasta: ' + data.fecha_hasta, 400, 65);
     doc.moveDown();
 
     doc.fontSize(8);
-    doc.y = 112;
+    doc.y = 102;
     doc.x = 35;
     doc.text('DATOS DEL DOCUMENTO', {
       align: 'center',
@@ -123,7 +125,7 @@ class RelacionDespachoService {
     });
 
     if (data.visibleGuia) {
-      doc.y = 130;
+      doc.y = 120;
       doc.x = 50;
       doc.text('Guía', {
         align: 'left',
@@ -132,42 +134,42 @@ class RelacionDespachoService {
       });
     }
 
-    doc.y = 130;
+    doc.y = 120;
     doc.x = 82;
     doc.text('Emisión', {
       align: 'left',
       columns: 1,
       width: 40,
     });
-    doc.y = 130;
+    doc.y = 120;
     doc.x = 124;
     doc.text('O.', {
       align: 'left',
       columns: 1,
       width: 10,
     });
-    doc.y = 130;
+    doc.y = 120;
     doc.x = 144;
     doc.text('D.', {
       align: 'left',
       columns: 1,
       width: 10,
     });
-    doc.y = 130;
+    doc.y = 120;
     doc.x = 160;
     doc.text('Zona D.', {
       align: 'left',
       columns: 1,
       width: 30,
     });
-    doc.y = 130;
-    doc.x = 198;
+    doc.y = 120;
+    doc.x = 201;
     doc.text('Piezas', {
       align: 'left',
       columns: 1,
       width: 30,
     });
-    doc.y = 130;
+    doc.y = 120;
     doc.x = 229;
     doc.text(data.neta == 'N' ? 'Neto' : 'Kgs.', {
       align: 'left',
@@ -176,28 +178,28 @@ class RelacionDespachoService {
     });
 
     if (data.visible == 'V' && data.dolar) {
-      doc.y = 112;
+      doc.y = 102;
       doc.x = 252;
       doc.text('CLIENTE', {
         align: 'center',
         columns: 1,
         width: 220,
       });
-      doc.y = 112;
+      doc.y = 102;
       doc.x = 472;
       doc.text('VALOR DECLARADO', {
         align: 'center',
         columns: 1,
         width: 97,
       });
-      doc.y = 96;
+      doc.y = 86;
       doc.x = 569;
       doc.text('MODALIDAD DE PAGO', {
         align: 'center',
         columns: 1,
         width: 155,
       });
-      doc.y = 128;
+      doc.y = 118;
       doc.x = 724;
       doc.text('$', {
         align: 'center',
@@ -205,61 +207,61 @@ class RelacionDespachoService {
         width: 30,
       });
 
-      doc.y = 130;
+      doc.y = 120;
       doc.x = 255;
       doc.text('Remitente');
-      doc.y = 130;
+      doc.y = 120;
       doc.x = 367;
       doc.text('Destinatario');
-      doc.y = 130;
+      doc.y = 120;
       doc.x = 484;
       doc.text('Bolivares');
-      doc.y = 130;
+      doc.y = 120;
       doc.x = 545;
       doc.text('$');
 
-      doc.y = 112;
+      doc.y = 102;
       doc.x = 569;
       doc.text('CRÉDITO', {
         align: 'center',
         columns: 1,
         width: 80,
       });
-      doc.y = 130;
+      doc.y = 120;
       doc.x = 577;
       doc.text('Origen');
-      doc.y = 130;
+      doc.y = 120;
       doc.x = 610;
       doc.text('Destino');
 
-      doc.y = 112;
+      doc.y = 102;
       doc.x = 649;
       doc.text('CONTADO', {
         align: 'center',
         columns: 1,
         width: 75,
       });
-      doc.y = 130;
+      doc.y = 120;
       doc.x = 656;
       doc.text('Origen');
-      doc.y = 130;
+      doc.y = 120;
       doc.x = 688;
       doc.text('Destino');
 
-      doc.lineJoin('miter').rect(35, 107, 217, 17).stroke();
-      doc.lineJoin('miter').rect(252, 107, 220, 17).stroke();
-      doc.lineJoin('miter').rect(472, 107, 97, 17).stroke();
-      doc.lineJoin('miter').rect(569, 90, 155, 17).stroke();
-      doc.lineJoin('miter').rect(569, 107, 80, 17).stroke();
-      doc.lineJoin('miter').rect(649, 107, 75, 17).stroke();
-      doc.lineJoin('miter').rect(724, 107, 30, 34).stroke();
-      doc.lineJoin('miter').rect(35, 124, 217, 17).stroke();
-      doc.lineJoin('miter').rect(252, 124, 220, 17).stroke();
-      doc.lineJoin('miter').rect(472, 124, 97, 17).stroke();
-      doc.lineJoin('miter').rect(569, 124, 80, 17).stroke();
-      doc.lineJoin('miter').rect(649, 124, 75, 17).stroke();
+      doc.lineJoin('miter').rect(35, 97, 217, 17).stroke();
+      doc.lineJoin('miter').rect(252, 97, 220, 17).stroke();
+      doc.lineJoin('miter').rect(472, 97, 97, 17).stroke();
+      doc.lineJoin('miter').rect(569, 80, 155, 17).stroke();
+      doc.lineJoin('miter').rect(569, 97, 80, 17).stroke();
+      doc.lineJoin('miter').rect(649, 97, 75, 17).stroke();
+      doc.lineJoin('miter').rect(724, 97, 30, 34).stroke();
+      doc.lineJoin('miter').rect(35, 114, 217, 17).stroke();
+      doc.lineJoin('miter').rect(252, 114, 220, 17).stroke();
+      doc.lineJoin('miter').rect(472, 114, 97, 17).stroke();
+      doc.lineJoin('miter').rect(569, 114, 80, 17).stroke();
+      doc.lineJoin('miter').rect(649, 114, 75, 17).stroke();
     } else {
-      doc.y = 112;
+      doc.y = 102;
       doc.x = 252;
       doc.text('CLIENTE', {
         align: 'center',
@@ -268,83 +270,83 @@ class RelacionDespachoService {
       });
 
       if (data.tipo == 'C' && data.visible == 'N') {
-        doc.y = 112;
+        doc.y = 102;
         doc.x = 545;
         doc.text('DATOS DEL DOCUMENTO', {
           align: 'center',
           columns: 1,
           width: 209,
         });
-        doc.y = 130;
+        doc.y = 120;
         doc.x = 545;
         doc.text('Números Factura Cliente', {
           align: 'center',
           columns: 1,
           width: 209,
         });
-        doc.y = 130;
+        doc.y = 120;
         doc.x = 255;
         doc.text('Remitente');
-        doc.y = 130;
+        doc.y = 120;
         doc.x = 384;
         doc.text('Destinatario');
-        doc.lineJoin('miter').rect(35, 107, 217, 17).stroke();
-        doc.lineJoin('miter').rect(252, 107, 293, 17).stroke();
-        doc.lineJoin('miter').rect(545, 107, 209, 17).stroke();
-        doc.lineJoin('miter').rect(35, 124, 217, 17).stroke();
-        doc.lineJoin('miter').rect(252, 124, 293, 17).stroke();
-        doc.lineJoin('miter').rect(545, 124, 209, 17).stroke();
+        doc.lineJoin('miter').rect(35, 97, 217, 17).stroke();
+        doc.lineJoin('miter').rect(252, 97, 293, 17).stroke();
+        doc.lineJoin('miter').rect(545, 97, 209, 17).stroke();
+        doc.lineJoin('miter').rect(35, 114, 217, 17).stroke();
+        doc.lineJoin('miter').rect(252, 114, 293, 17).stroke();
+        doc.lineJoin('miter').rect(545, 114, 209, 17).stroke();
       } else {
-        doc.y = 96;
+        doc.y = 86;
         doc.x = 545;
         doc.text('MODALIDAD DE PAGO', {
           align: 'center',
           columns: 1,
           width: 209,
         });
-        doc.y = 130;
+        doc.y = 120;
         doc.x = 255;
         doc.text('Remitente');
-        doc.y = 130;
+        doc.y = 120;
         doc.x = 384;
         doc.text('Destinatario');
 
-        doc.y = 112;
+        doc.y = 102;
         doc.x = 545;
         doc.text('CRÉDITO', {
           align: 'center',
           columns: 1,
           width: 105,
         });
-        doc.y = 130;
+        doc.y = 120;
         doc.x = 555;
         doc.text('Origen');
-        doc.y = 130;
+        doc.y = 120;
         doc.x = 604;
         doc.text('Destino');
 
-        doc.y = 112;
+        doc.y = 102;
         doc.x = 650;
         doc.text('CONTADO', {
           align: 'center',
           columns: 1,
           width: 104,
         });
-        doc.y = 130;
+        doc.y = 120;
         doc.x = 660;
         doc.text('Origen');
-        doc.y = 130;
+        doc.y = 120;
         doc.x = 705;
         doc.text('Destino');
-        doc.lineJoin('miter').rect(35, 107, 217, 17).stroke();
-        doc.lineJoin('miter').rect(252, 107, 293, 17).stroke();
-        doc.lineJoin('miter').rect(545, 107, 105, 17).stroke();
-        doc.lineJoin('miter').rect(650, 107, 104, 17).stroke();
-        doc.lineJoin('miter').rect(545, 90, 209, 17).stroke();
-        doc.lineJoin('miter').rect(35, 124, 217, 17).stroke();
-        doc.lineJoin('miter').rect(252, 124, 293, 17).stroke();
-        doc.lineJoin('miter').rect(545, 124, 105, 17).stroke();
-        doc.lineJoin('miter').rect(650, 124, 104, 17).stroke();
+        doc.lineJoin('miter').rect(35, 97, 217, 17).stroke();
+        doc.lineJoin('miter').rect(252, 97, 293, 17).stroke();
+        doc.lineJoin('miter').rect(545, 97, 105, 17).stroke();
+        doc.lineJoin('miter').rect(650, 97, 104, 17).stroke();
+        doc.lineJoin('miter').rect(545, 80, 209, 17).stroke();
+        doc.lineJoin('miter').rect(35, 114, 217, 17).stroke();
+        doc.lineJoin('miter').rect(252, 114, 293, 17).stroke();
+        doc.lineJoin('miter').rect(545, 114, 105, 17).stroke();
+        doc.lineJoin('miter').rect(650, 114, 104, 17).stroke();
       }
     }
   }
@@ -352,7 +354,7 @@ class RelacionDespachoService {
   async generateCustomerInformation(doc, data, detalle) {
     var i = 0;
     var page = 0;
-    var ymin = 150;
+    var ymin = 140;
 
     let credito_orig = 0;
     let credito_dest = 0;
@@ -392,7 +394,7 @@ class RelacionDespachoService {
 
     for (var item = 0; item < detalle.length; item++) {
       doc.font('Helvetica');
-      doc.fontSize(6);
+      doc.fontSize(7);
       let monto_total = new Intl.NumberFormat('de-DE', {
         style: 'currency',
         currency: 'EUR',
@@ -481,7 +483,7 @@ class RelacionDespachoService {
           doc.text(total + group_len, {
             align: 'center',
             columns: 1,
-            width: 70,
+            width: 100,
           });
           doc.y = ymin + i;
           doc.x = 161;
@@ -745,7 +747,7 @@ class RelacionDespachoService {
           });
           i += 15;
         }
-        doc.fontSize(6);
+        doc.fontSize(7);
       }
       group_len++;
       group_piezas += utils.parseFloatN(detalle[item].nro_piezas);
@@ -817,13 +819,13 @@ class RelacionDespachoService {
       doc.x = 160;
       doc.text(
         detalle[item]['zonas_dest.nb_zona']
-          ? detalle[item]['zonas_dest.nb_zona'].substring(0, 14)
+          ? detalle[item]['zonas_dest.nb_zona'].substring(0, 12)
           : ''
       );
       doc.y = ymin + i;
-      doc.x = 185;
+      doc.x = 200;
       doc.text(detalle[item].nro_piezas, {
-        align: 'right',
+        align: 'center',
         columns: 1,
         width: 40,
       });
@@ -859,7 +861,7 @@ class RelacionDespachoService {
         doc.x = 260;
         doc.text(
           detalle[item].cliente_orig_desc
-            ? detalle[item].cliente_orig_desc.substring(0, 30)
+            ? detalle[item].cliente_orig_desc.substring(0, 24)
             : '',
           {
             align: 'left',
@@ -872,7 +874,7 @@ class RelacionDespachoService {
         if (detalle[item].cliente_dest_desc) {
           doc.text(
             detalle[item].cliente_dest_desc
-              ? detalle[item].cliente_dest_desc.substring(0, 27)
+              ? detalle[item].cliente_dest_desc.substring(0, 26)
               : '',
             {
               align: 'left',
@@ -992,7 +994,7 @@ class RelacionDespachoService {
         doc.x = 260;
         doc.text(
           detalle[item].cliente_orig_desc
-            ? detalle[item].cliente_orig_desc.substring(0, 30)
+            ? detalle[item].cliente_orig_desc.substring(0, 28)
             : '',
           {
             align: 'left',
@@ -1005,7 +1007,7 @@ class RelacionDespachoService {
         if (detalle[item].cliente_dest_desc) {
           doc.text(
             detalle[item].cliente_dest_desc
-              ? detalle[item].cliente_dest_desc.substring(0, 30)
+              ? detalle[item].cliente_dest_desc.substring(0, 28)
               : '',
             {
               align: 'left',
@@ -1082,7 +1084,7 @@ class RelacionDespachoService {
       }
 
       i += 9;
-      if (i >= 320 || item >= detalle.length - 1) {
+      if (i >= 360 || item >= detalle.length - 1) {
         doc.lineJoin('square').rect(35, 510, 350, 60).stroke();
         doc.fontSize(12);
         doc.font('Helvetica-Bold');
@@ -1194,7 +1196,7 @@ class RelacionDespachoService {
     }
 
     let y = ymin + i + 8;
-    doc.fontSize(6);
+    doc.fontSize(7);
     doc.font('Helvetica-Bold');
 
     if (data.tipoReporte == 'APZ' || data.tipoReporte == 'MAD') {
@@ -1713,7 +1715,7 @@ class RelacionDespachoService {
       doc.fontSize(10);
       doc.fillColor('#444444');
       doc.x = 640;
-      doc.y = 50;
+      doc.y = 42;
       doc.text(`Pagina ${i + 1} de ${range.count}`, {
         align: 'right',
         columns: 1,
