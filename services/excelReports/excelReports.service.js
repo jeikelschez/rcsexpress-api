@@ -11,6 +11,8 @@ const LibroComprasService = require('./libroCompras.service');
 const libroComprasService = new LibroComprasService();
 const LibroVentasService = require('./libroVentas.service');
 const libroVentasService = new LibroVentasService();
+const RelacionFpoService = require('./relacionFpo.service');
+const relacionFpoService = new RelacionFpoService();
 
 class ExcelReportsService {
   constructor() {}
@@ -100,6 +102,22 @@ class ExcelReportsService {
       hasta,
       detalle,
       correlativo
+    );
+    workbook.xlsx.writeFile(reportsPath + resPath);
+
+    return { validDoc: validDoc, resPath: resPath };
+  }
+
+  // RELACION FPO
+  async relacionFpo(tipo, data) {
+    let resPath = 'relacionFpo' + tipo + '.xlsx';
+    const workbook = new ExcelDocument.Workbook();
+    const worksheet = workbook.addWorksheet('relacion_fpo');
+
+    let validDoc = await relacionFpoService.mainReport(
+      worksheet,
+      tipo,
+      data
     );
     workbook.xlsx.writeFile(reportsPath + resPath);
 

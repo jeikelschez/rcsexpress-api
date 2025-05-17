@@ -109,4 +109,18 @@ router.get('/libroVentas', authenticateJWT, async (req, res, next) => {
   }
 });
 
+router.get('/relacionFpo', authenticateJWT, async (req, res, next) => {
+  try {
+    const { tipo, data } = req.headers;
+    const response = await service.relacionFpo(tipo, data);
+    res.status(200).json({
+      message: 'Excel Generado',
+      excelPath: response.resPath,
+      validDoc: response.validDoc,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
