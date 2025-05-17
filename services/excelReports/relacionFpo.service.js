@@ -672,7 +672,7 @@ class RelacionFpoService {
         var i = 10;
         for (var item = 0; item < detalles.length; item++) {
           worksheet.getCell('A' + i).value = detalles[item].desc_fpo;
-          
+
           let monto_total =
             utils.parseFloatN(detalles[item].monto_base) +
             utils.parseFloatN(detalles[item].monto_seguro);
@@ -704,21 +704,37 @@ class RelacionFpoService {
         var i = 3;
         for (var item = 0; item < detalles.length; item++) {
           worksheet.getCell('A' + i).value = item + 1;
-          worksheet.getCell('B' + i).value = moment(detalles[item].fecha_fact).format('DD/MM/YYYY');
-          worksheet.getCell('C' + i).value = detalles[item]['movimientos.clientes_org.rif_cedula'];
-          worksheet.getCell('D' + i).value = detalles[item]['movimientos.clientes_org.nb_cliente'];
-          worksheet.getCell('E' + i).value = parseFloat(detalles[item]['movimientos.nro_documento']);
-          worksheet.getCell('F' + i).value = moment(detalles[item]['movimientos.fecha_emision']).format(
-                        'DD/MM/YYYY'
-                      );
+          worksheet.getCell('B' + i).value = moment(
+            detalles[item].fecha_fact
+          ).format('DD/MM/YYYY');
+          worksheet.getCell('C' + i).value =
+            detalles[item]['movimientos.clientes_org.rif_cedula'];
+          worksheet.getCell('D' + i).value =
+            detalles[item]['movimientos.clientes_org.nb_cliente'];
+          worksheet.getCell('E' + i).value = parseFloat(
+            detalles[item]['movimientos.nro_documento']
+          );
+          worksheet.getCell('F' + i).value = moment(
+            detalles[item]['movimientos.fecha_emision']
+          ).format('DD/MM/YYYY');
           worksheet.getCell('G' + i).value = 'N/A';
-          worksheet.getCell('H' + i).value = parseFloat(detalles[item]['movimientos.nro_ctrl_doc_ppal']);
-          worksheet.getCell('I' + i).value = detalles[item]['movimientos.nro_ctrl_doc_ppal_new'].padStart(
-              9,
-              '00-000000'
-            );
-          worksheet.getCell('J' + i).value = utils.parseFloatN(detalles[item].valor_dolar);
-          worksheet.getCell('K' + i).value = utils.parseFloatN(detalles[item].peso_kgs);
+          worksheet.getCell('H' + i).value = parseFloat(
+            detalles[item]['movimientos.nro_ctrl_doc_ppal']
+          );
+          worksheet.getCell('I' + i).value = detalles[item][
+            'movimientos.nro_ctrl_doc_ppal_new'
+          ]
+            ? detalles[item]['movimientos.nro_ctrl_doc_ppal_new'].padStart(
+                9,
+                '00-000000'
+              )
+            : '';
+          worksheet.getCell('J' + i).value = utils.parseFloatN(
+            detalles[item].valor_dolar
+          );
+          worksheet.getCell('K' + i).value = utils.parseFloatN(
+            detalles[item].peso_kgs
+          );
           worksheet.getCell('L' + i).value = 'N/A';
           worksheet.getCell('M' + i).value = 'N/A';
 
@@ -727,7 +743,8 @@ class RelacionFpoService {
             utils.parseFloatN(detalles[item].monto_seguro);
           worksheet.getCell('N' + i).value = utils.parseFloatN(monto_total);
           worksheet.getCell('O' + i).value = 'N/A';
-          worksheet.getCell('P' + i).value = detalles[item]['movimientos.monto_fpo'] + '%';
+          worksheet.getCell('P' + i).value =
+            detalles[item]['movimientos.monto_fpo'] + '%';
           worksheet.getCell('Q' + i).value = 'N/A';
 
           let fpo =
@@ -735,13 +752,15 @@ class RelacionFpoService {
             (utils.parseFloatN(detalles[item]['movimientos.monto_fpo']) / 100);
           worksheet.getCell('R' + i).value = utils.parseFloatN(fpo);
           worksheet.getCell('S' + i).value = 'VALENCIA';
-          worksheet.getCell('T' + i).value = detalles[item]['movimientos.agencias_dest.ciudades.desc_ciudad'];
-          worksheet.getCell('U' + i).value = detalles[item]['movimientos.clientes_org.contenido'];
+          worksheet.getCell('T' + i).value =
+            detalles[item]['movimientos.agencias_dest.ciudades.desc_ciudad'];
+          worksheet.getCell('U' + i).value =
+            detalles[item]['movimientos.clientes_org.contenido'];
 
           total_peso += utils.parseFloatN(detalles[item].peso_kgs);
           total_base += utils.parseFloatN(monto_total);
           total_fpo += utils.parseFloatN(fpo);
-          
+
           i++;
         }
 

@@ -1693,10 +1693,12 @@ class RelacionFpoService {
           doc.y = ymin + i;
           doc.x = 535;
           doc.text(
-            detalles[item]['movimientos.nro_ctrl_doc_ppal_new'].padStart(
-              9,
-              '00-000000'
-            ),
+            detalles[item]['movimientos.nro_ctrl_doc_ppal_new']
+              ? detalles[item]['movimientos.nro_ctrl_doc_ppal_new'].padStart(
+                  9,
+                  '00-000000'
+                )
+              : '',
             {
               align: 'center',
               columns: 1,
