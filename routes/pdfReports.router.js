@@ -95,10 +95,11 @@ router.get('/anexoFactura', authenticateJWT, async (req, res, next) => {
   }
 });
 
-router.get('/relacionDespacho', authenticateJWT, async (req, res, next) => {
+router.post('/relacionDespacho', authenticateJWT, async (req, res, next) => {
   try {
-    const { data, detalle } = req.headers;
+    const { data, detalle } = req.body;
     const response = await service.relacionDespacho(data, detalle);
+
     res.status(200).json({
       message: 'PDF Generado',
       pdfPath: response.resPath,
