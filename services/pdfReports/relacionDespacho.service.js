@@ -3212,19 +3212,18 @@ class RelacionDespachoService {
 
     // El bloque de observaciones solo se imprime si hay data.observacion Y data.tipo es 'C'
     if (data.observacion && data.tipo == 'C') {
-      doc.fontSize(6);
       doc
         .lineJoin('square')
         .rect(35, 565 + boxesOffsetY, 725, 53)
         .stroke(); // Caja "Observación"
       doc.y = 569 + boxesOffsetY;
       doc.x = 40;
-      doc.font('Helvetica-Bold').text('Observación:', {
+      doc.font('Helvetica-Bold').text('OBSERVACION: ', {
         continued: true,
         width: 715,
         align: 'justify',
       });
-      doc.font('Helvetica').text(' ' + utils.truncate(data.observacion, 1650), {
+      doc.font('Helvetica').text(' ' + utils.truncate(data.observacion, 1000), {
         width: 715,
         align: 'justify',
       });
