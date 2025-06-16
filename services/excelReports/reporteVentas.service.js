@@ -204,6 +204,7 @@ class ReporteVentasService {
             'valor_declarado_seg',
             'porc_apl_seguro',
             'dimensiones',
+            'monto_ref_cte_sin_imp',
             [Sequelize.literal(clienteDestDesc), 'cliente_dest_desc'],
             [Sequelize.literal(valorDolar), 'valor_dolar'],
           ],
@@ -630,7 +631,8 @@ class ReporteVentasService {
           { key: 'Q', width: 15 },
           { key: 'R', width: 1 },
           { key: 'S', width: 1 },
-          { key: 'T', width: 1 },
+          { key: 'T', width: 15 },
+          { key: 'U', width: 1 },
         ];
         worksheet.getCell('A11').value = '#:';
         worksheet.getCell('B11').value = 'Fecha:';
@@ -650,17 +652,18 @@ class ReporteVentasService {
         worksheet.getCell('N11').value = 'Imp.';
         worksheet.getCell('O11').value = 'Otros';
         worksheet.getCell('Q11').value = 'TOTAL VENTAS';
+        worksheet.getCell('T11').value = 'VALOR DECLARADO';
         if (data.dolar == true) {
           worksheet.columns = [
-            { key: 'P', width: 30 },
-            { key: 'R', width: 30 },
-            { key: 'S', width: 30 },
-            { key: 'T', width: 30 },
+            { key: 'P', width: 15 },
+            { key: 'R', width: 15 },
+            { key: 'S', width: 15 },
+            { key: 'U', width: 15 },
           ];
           worksheet.getCell('P11').value = 'Otros $';
           worksheet.getCell('R11').value = 'TOTAL $';
           worksheet.getCell('S11').value = 'VALOR DOLAR';
-          worksheet.getCell('T11').value = 'VALOR DECLARADO $';
+          worksheet.getCell('U11').value = 'VALOR DECLARADO $';
         }
         break;
       case 'VCM':
@@ -1079,7 +1082,9 @@ class ReporteVentasService {
             ? data.ventas[item].carga_neta
             : data.ventas[item].peso_kgs;
 
-          worksheet.getCell('H' + i).value = parseFloat(monto_kgs);
+          worksheet.getCell('H' + i).value = parseFloat(
+            monto_kgs ? monto_kgs : 0
+          );
 
           let contadoOrig = 0;
           let contadoDest = 0;
@@ -1091,6 +1096,8 @@ class ReporteVentasService {
           let otrosDolar = 0;
           let montoOtros = 0;
           let ventaDolar = 0;
+          let declarado = 0;
+          let declaradoDolar = 0;
 
           if (data.visible == 'SI') {
             if (data.ventas[item].modalidad_pago == 'CO') {
@@ -1160,6 +1167,23 @@ class ReporteVentasService {
               );
               worksheet.getCell('S' + i).value = parseFloat(
                 data.ventas[item].valor_dolar
+              );
+            }
+
+            declarado = data.ventas[item].monto_ref_cte_sin_imp
+              ? data.ventas[item].monto_ref_cte_sin_imp
+              : 0;
+
+            worksheet.getCell('T' + i).value = parseFloat(declarado);
+
+            if (data.dolar == true) {
+              if (data.ventas[item].valor_dolar > 0) {
+                declaradoDolar =
+                  declarado /
+                  utils.parseFloatN(data.ventas[item].valor_dolar);
+              }
+              worksheet.getCell('U' + i).value = parseFloat(
+                declaradoDolar.toFixed(2)
               );
             }
           }

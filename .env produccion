@@ -1,0 +1,11 @@
+PORT=3000
+DB_USER='jamb1810_app'
+DB_PASSWORD='X.]2cbU]+!YK'
+DB_HOST='rcsexpress.com'
+DB_NAME='jamb1810_scen2024'
+DB_PORT='3306'
+ATS = 'a576d3dd476dee51db6e03e8454cbbc0'
+RTS = 'f08856c651f3079587a03baf9315bc4f'
+MAIL_APP_USER = 'invitaciones@rcsexpress.com'
+MAIL_APP_PSWD = 'X6,1])#i~jb&'
+
