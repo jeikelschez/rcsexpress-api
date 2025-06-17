@@ -1104,14 +1104,14 @@ class ReporteVentasService {
         if (data.dolar == true) doc.text('Venta $.', 735, 190);
         break;
       case 'VC':
-        doc.image('./img/logo_rc.png', 35, 25, { width: 80 });
-        doc.fontSize(9);
-        doc.text('RCS EXPRESS, S.A', 35, 155);
-        doc.text('RIF. J-31028463-6', 35, 170);
+        doc.image('./img/logo_rc.png', 30, 25, { width: 40 });
+        doc.fontSize(8);
+        doc.text('RCS EXPRESS, S.A', 30, 88);
+        doc.text('RIF. J-31028463-6', 30, 96);
         doc.font('Helvetica-Bold');
-
         doc.fontSize(18);
-        doc.y = 90;
+
+        doc.y = 60;
         doc.x = 285;
         doc.text('Ventas Generales por Cliente', {
           align: 'center',
@@ -1119,57 +1119,57 @@ class ReporteVentasService {
           width: 300,
         });
         doc.fontSize(12);
-        doc.y = 115;
-        doc.x = 320;
-        doc.text('Desde: ' + data.fecha_desde, {
-          align: 'left',
-          columns: 1,
-          width: 300,
-        });
-        doc.y = 115;
-        doc.x = 440;
-        doc.text('Hasta: ' + data.fecha_hasta, {
-          align: 'left',
-          columns: 1,
-          width: 300,
-        });
-        doc.y = 135;
+        doc.y = 82;
         doc.x = 285;
+        doc.text('Desde: ' + data.fecha_desde + '     ' + 'Hasta: ' + data.fecha_hasta, {
+          align: 'center',
+          columns: 1,
+          width: 300,
+        });
+
+        doc.fontSize(9);
+        doc.y = 110;
+        doc.x = 30;
         doc.text('Agencia: ' + data.ventas[0]['agencias.nb_agencia'], {
-          align: 'center',
+          align: 'left',
           columns: 1,
           width: 300,
         });
-        doc.y = 150;
-        doc.x = 285;
+        doc.y = 120;
+        doc.x = 30;
         doc.text('Cliente: ' + data.ventas[0]['clientes_org.nb_cliente'], {
-          align: 'center',
+          align: 'left',
           columns: 1,
           width: 300,
         });
+
+        doc.lineCap('butt').moveTo(460, 135).lineTo(575, 135).stroke();
+        doc.lineCap('butt').moveTo(582, 135).lineTo(640, 135).stroke();
+        doc.lineCap('butt').moveTo(30, 153).lineTo(770, 153).stroke();
+
         doc.fontSize(9);
         doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 670, 35);
-        doc.text('#', 35, 190);
-        doc.text('Fecha', 47, 190);
-        doc.text('Nro. Guía', 80, 190);
-        doc.text('Nro. Fact. Cliente', 150, 190);
-        doc.text('Destinatario', 280, 190);
-        doc.text('Dest.', 380, 190);
-        doc.text('Pzas', 410, 190);
-        doc.text(data.neta ? 'Neta' : 'Kgs', 437, 190);
-        doc.text('CONTADO', 495, 178);
-        doc.text('Origen', 460, 190);
-        doc.text('Imp.', 495, 190);
-        doc.text('Destino', 520, 190);
-        doc.text('Imp.', 560, 190);
-        doc.text('CRÉDITO', 590, 178);
-        doc.text('Monto', 585, 190);
-        doc.text('Imp.', 620, 190);
-        doc.text('Otros.', 645, 190);
-        if (data.dolar == true) doc.text('Otr $.', 675, 190);
-        doc.text('Total', 705, 183);
-        doc.text('Venta', 705, 190);
-        if (data.dolar == true) doc.text('Venta $.', 735, 190);
+        doc.text('#', 35, 140);
+        doc.text('Fecha', 47, 140);
+        doc.text('Nro. Guía', 80, 140);
+        doc.text('Nro. Fact. Cliente', 150, 140);
+        doc.text('Destinatario', 280, 140);
+        doc.text('Dest.', 380, 140);
+        doc.text('Pzas', 410, 140);
+        doc.text(data.neta ? 'Neta' : 'Kgs', 437, 140);
+        doc.text('CONTADO', 495, 125);
+        doc.text('Origen', 460, 140);
+        doc.text('Imp.', 495, 140);
+        doc.text('Destino', 520, 140);
+        doc.text('Imp.', 560, 140);
+        doc.text('CRÉDITO', 590, 125);
+        doc.text('Monto', 585, 140);
+        doc.text('Imp.', 620, 140);
+        doc.text('Otros.', 645, 140);
+        if (data.dolar == true) doc.text('Otr $.', 675, 140);
+        doc.text('Total', 706, 132);
+        doc.text('Venta', 705, 140);
+        if (data.dolar == true) doc.text('Venta $.', 735, 140);
         break;
       case 'VCM':
       case 'VCD':
@@ -2338,9 +2338,9 @@ class ReporteVentasService {
         var i = 0;
         var page = 0;
         var ymin;
-        ymin = 205;
+        ymin = 160;
         for (var item = 0; item < data.ventas.length; item++) {
-          doc.fontSize(6);
+          doc.fontSize(7);
           doc.font('Helvetica');
 
           doc.y = ymin + i;
@@ -2369,14 +2369,14 @@ class ReporteVentasService {
           });
           doc.y = ymin + i;
           doc.x = 123;
-          doc.text(utils.truncate(data.ventas[item].dimensiones, 29), {
+          doc.text(utils.truncate(data.ventas[item].dimensiones, 22), {
             align: 'left',
             columns: 1,
             width: 120,
           });
           doc.y = ymin + i;
           doc.x = 233;
-          doc.text(utils.truncate(data.ventas[item].cliente_dest_desc, 38), {
+          doc.text(utils.truncate(data.ventas[item].cliente_dest_desc, 32), {
             align: 'left',
             columns: 1,
             width: 150,
@@ -2549,7 +2549,7 @@ class ReporteVentasService {
           totalVentaDolar += utils.parseFloatN(ventaDolar);
 
           i += 8;
-          if (i >= 370) {
+          if (i >= 420) {
             doc.fillColor('#BLACK');
             doc.addPage();
             page = page + 1;
@@ -2559,18 +2559,20 @@ class ReporteVentasService {
           }
         }
 
+        i += 5;
+        doc.lineCap('butt').moveTo(30, ymin + i).lineTo(770, ymin + i).stroke();
+
         // Totales Finales
-        i += 10;
+        i += 5;
         doc.font('Helvetica-Bold');
+        doc.fontSize(6);
         doc.y = ymin + i;
         doc.x = 358;
-        doc.fontSize(7);
         doc.text('Total General:', {
           align: 'left',
           columns: 1,
           width: 100,
         });
-        doc.fontSize(5);
         doc.y = ymin + i;
         doc.x = 400;
         doc.text(totalNroPiezas, {
@@ -5202,6 +5204,7 @@ class ReporteVentasService {
           ? 485
           : 646;
       doc.y = 46;
+      doc.fontSize(9);
       doc.text(`Pagina ${i + 1} de ${range.count}`, {
         align: 'right',
         columns: 1,
