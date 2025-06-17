@@ -248,7 +248,13 @@ class ReporteVentasService {
           ],
           raw: true,
         });
+
+        let cliente = await models.Clientes.findByPk(data.cliente, {
+          raw: true,
+        });
+
         if (ventas.length == 0) return false;
+        ventas.cliente_desc = cliente.nb_cliente;
         break;
       case 'VCM':
       case 'VCD':
@@ -1121,11 +1127,14 @@ class ReporteVentasService {
         doc.fontSize(12);
         doc.y = 82;
         doc.x = 285;
-        doc.text('Desde: ' + data.fecha_desde + '     ' + 'Hasta: ' + data.fecha_hasta, {
-          align: 'center',
-          columns: 1,
-          width: 300,
-        });
+        doc.text(
+          'Desde: ' + data.fecha_desde + '     ' + 'Hasta: ' + data.fecha_hasta,
+          {
+            align: 'center',
+            columns: 1,
+            width: 300,
+          }
+        );
 
         doc.fontSize(9);
         doc.y = 110;
@@ -1137,7 +1146,7 @@ class ReporteVentasService {
         });
         doc.y = 120;
         doc.x = 30;
-        doc.text('Cliente: ' + data.ventas[0]['clientes_org.nb_cliente'], {
+        doc.text('Cliente: ' + data.ventas.cliente_desc, {
           align: 'left',
           columns: 1,
           width: 300,
@@ -1189,10 +1198,10 @@ class ReporteVentasService {
         } else if (tipo == 'RD') {
           labelDoc = ' Relación de Despacho para las Agencias';
         }
-        doc.image('./img/logo_rc.png', 30, 25, { width: 50 });
+        doc.image('./img/logo_rc.png', 30, 25, { width: 40 });
         doc.fontSize(8);
-        doc.text('RCS EXPRESS, S.A', 30, 105);
-        doc.text('RIF. J-31028463-6', 30, 115);
+        doc.text('RCS EXPRESS, S.A', 30, 88);
+        doc.text('RIF. J-31028463-6', 30, 96);
         doc.font('Helvetica-Bold');
         doc.fontSize(18);
         doc.y = 60;
@@ -1214,41 +1223,42 @@ class ReporteVentasService {
           }
         );
 
+        doc.fontSize(9);
         if (tipo == 'VCM' || tipo == 'VCD') {
-          doc.y = 99;
-          doc.x = 235;
+          doc.y = 110;
+          doc.x = 30;
           doc.text('Agencia: ' + data.ventas.agencia, {
-            align: 'center',
+            align: 'left',
             columns: 1,
-            width: 400,
+            width: 300,
           });
-          doc.y = 114;
-          doc.x = 235;
+          doc.y = 120;
+          doc.x = 30;
           doc.text('Cliente: ' + data.ventas.cliente, {
-            align: 'center',
+            align: 'left',
             columns: 1,
-            width: 400,
+            width: 300,
           });
         }
 
-        if (tipo == 'RD' || tipo == 'TVD' || tipo == 'TVC') {
+        if (tipo == 'RD' || tipo == 'TVD' || tipo == 'TVC' || tipo == 'TV') {
           if (data.agencia) {
-            doc.y = 99;
-            doc.x = 235;
+            doc.y = 110;
+            doc.x = 30;
             doc.text('Origen: ' + data.ventas.agencia, {
-              align: 'center',
+              align: 'left',
               columns: 1,
-              width: 400,
+              width: 300,
             });
           }
 
-          if (data.cliente) {
-            doc.y = 114;
-            doc.x = 235;
+          if (data.ventas.cliente) {
+            doc.y = 120;
+            doc.x = 30;
             doc.text('Cliente: ' + data.ventas.cliente, {
-              align: 'center',
+              align: 'left',
               columns: 1,
-              width: 400,
+              width: 300,
             });
           }
         }
@@ -1264,36 +1274,36 @@ class ReporteVentasService {
           labelFirst = 'Cliente';
         }
 
-        doc.lineCap('butt').moveTo(280, 145).lineTo(455, 145).stroke();
-        doc.lineCap('butt').moveTo(465, 145).lineTo(545, 145).stroke();
-        doc.lineCap('butt').moveTo(30, 163).lineTo(760, 163).stroke();
+        doc.lineCap('butt').moveTo(280, 135).lineTo(455, 135).stroke();
+        doc.lineCap('butt').moveTo(465, 135).lineTo(545, 135).stroke();
+        doc.lineCap('butt').moveTo(30, 153).lineTo(760, 153).stroke();
 
         doc.fontSize(9);
         doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 670, 35);
-        doc.text(labelFirst, tipo != 'TVC' ? 50 : 70, 150);
+        doc.text(labelFirst, tipo != 'TVC' ? 50 : 70, 140);
         doc.text(
           'Guías',
           tipo == 'TVC' || tipo == 'TV' || tipo == 'RD' ? 175 : 145,
-          150
+          140
         );
         doc.text(
           'Pzas',
           tipo == 'TVC' || tipo == 'TV' || tipo == 'RD' ? 210 : 200,
-          150
+          140
         );
-        doc.text(data.neta ? 'Neta' : 'Kgs', 255, 150);
-        doc.text('CONTADO', 340, 135);
-        doc.text('Origen', 290, 150);
-        doc.text('Imp.', 340, 150);
-        doc.text('Destino', 380, 150);
-        doc.text('Imp.', 430, 150);
-        doc.text('CRÉDITO', 485, 135);
-        doc.text('Monto', 480, 150);
-        doc.text('Imp.', 520, 150);
-        doc.text('Otros.', 560, 150);
-        if (data.dolar == true) doc.text('Otr $.', 600, 150);
-        doc.text('Total Venta', 645, 150);
-        if (data.dolar == true) doc.text('Venta $.', 720, 150);
+        doc.text(data.neta ? 'Neta' : 'Kgs', 255, 140);
+        doc.text('CONTADO', 340, 125);
+        doc.text('Origen', 290, 140);
+        doc.text('Imp.', 340, 140);
+        doc.text('Destino', 380, 140);
+        doc.text('Imp.', 430, 140);
+        doc.text('CRÉDITO', 485, 125);
+        doc.text('Monto', 480, 140);
+        doc.text('Imp.', 520, 140);
+        doc.text('Otros.', 560, 140);
+        if (data.dolar == true) doc.text('Otr $.', 600, 140);
+        doc.text('Total Venta', 645, 140);
+        if (data.dolar == true) doc.text('Venta $.', 720, 140);
         break;
       case 'GC':
       case 'FA':
@@ -2560,7 +2570,11 @@ class ReporteVentasService {
         }
 
         i += 5;
-        doc.lineCap('butt').moveTo(30, ymin + i).lineTo(770, ymin + i).stroke();
+        doc
+          .lineCap('butt')
+          .moveTo(30, ymin + i)
+          .lineTo(770, ymin + i)
+          .stroke();
 
         // Totales Finales
         i += 5;
@@ -2673,7 +2687,7 @@ class ReporteVentasService {
       case 'RD':
         var i = 0;
         var page = 0;
-        var ymin = 170;
+        var ymin = 160;
         for (var item = 0; item < data.ventas.length; item++) {
           doc.font('Helvetica');
           doc.fontSize(8);
@@ -2875,7 +2889,11 @@ class ReporteVentasService {
           }
         }
 
-        doc.lineCap('butt').moveTo(30, ymin + i).lineTo(760, ymin + i).stroke();
+        doc
+          .lineCap('butt')
+          .moveTo(30, ymin + i)
+          .lineTo(760, ymin + i)
+          .stroke();
 
         // Totales Finales
         i += 10;
