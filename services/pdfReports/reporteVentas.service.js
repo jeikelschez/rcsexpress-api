@@ -1139,7 +1139,7 @@ class ReporteVentasService {
         doc.fontSize(9);
         doc.y = 110;
         doc.x = 30;
-        doc.text('Agencia: ' + data.ventas[0]['agencias.nb_agencia'], {
+        doc.text('Origen: ' + data.ventas[0]['agencias.nb_agencia'], {
           align: 'left',
           columns: 1,
           width: 300,
@@ -1227,7 +1227,7 @@ class ReporteVentasService {
         if (tipo == 'VCM' || tipo == 'VCD') {
           doc.y = 110;
           doc.x = 30;
-          doc.text('Agencia: ' + data.ventas.agencia, {
+          doc.text('Origen: ' + data.ventas.agencia, {
             align: 'left',
             columns: 1,
             width: 300,
