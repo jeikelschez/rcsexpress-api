@@ -9,12 +9,11 @@ const accessTokenSecret = config.accessToken;
 const refreshTokenSecret = config.refreshToken;
 refreshTokens = [];
 
-const { models, Sequelize }= require('./../libs/sequelize');
+const { models, Sequelize } = require('./../libs/sequelize');
 
 const caseActivo = '(CASE activo WHEN "1" THEN "ACTIVO" ELSE "INACTIVO" END)';
 
 class UsuariosService {
-
   constructor() {}
 
   async create(data) {
@@ -24,30 +23,24 @@ class UsuariosService {
 
   async find(agencia) {
     let params = {};
-    if(agencia) params.cod_agencia = agencia;
+    if (agencia) params.cod_agencia = agencia;
     const usuarios = await models.Usuarios.findAll({
       where: params,
       include: ['roles'],
       attributes: {
-        include: [
-          [Sequelize.literal(caseActivo), 'activo_desc']
-        ]
-      }
+        include: [[Sequelize.literal(caseActivo), 'activo_desc']],
+      },
     });
     return usuarios;
   }
 
   async findOne(login) {
-    const usuario = await models.Usuarios.findByPk(login,
-      {
-        include: ['roles'],
-        attributes: {
-          include: [
-            [Sequelize.literal(caseActivo), 'activo_desc']
-          ]
-        }
-      }
-    );
+    const usuario = await models.Usuarios.findByPk(login, {
+      include: ['roles'],
+      attributes: {
+        include: [[Sequelize.literal(caseActivo), 'activo_desc']],
+      },
+    });
     if (!usuario) {
       throw boom.notFound('Usuario no existe');
     }
@@ -75,15 +68,17 @@ class UsuariosService {
   async login(username, password) {
     const usuario = await models.Usuarios.findOne({
       where: {
-        login: username
+        login: username,
       },
-      include: ['roles']
+      include: ['roles'],
     });
 
     if (usuario) {
-      if(bcrypt.compareSync(password, usuario.password)) {
-        const accessToken = jwt.sign({ "usuario": usuario }, accessTokenSecret, { expiresIn: '20m' });
-        const refreshToken = jwt.sign({ }, refreshTokenSecret);
+      if (bcrypt.compareSync(password, usuario.password)) {
+        const accessToken = jwt.sign({ usuario: usuario }, accessTokenSecret, {
+          expiresIn: '20m',
+        });
+        const refreshToken = jwt.sign({}, refreshTokenSecret);
         refreshTokens.push(refreshToken);
         return { accessToken, refreshToken };
       } else {
@@ -94,13 +89,23 @@ class UsuariosService {
     }
   }
 
+  async generateHash(password) {
+    const saltRounds = 10;
+    try {
+      const hash = await bcrypt.hash(password, saltRounds);
+      return hash;
+    } catch (err) {
+      throw boom.notFound('Error al generar el hash');
+    }
+  }
+
   async refresh(username, token) {
     if (!token) {
       throw boom.unauthorized('Token Vacio');
     }
 
     if (!refreshTokens.includes(token)) {
-      throw boom.forbidden('Token Invalido')
+      throw boom.forbidden('Token Invalido');
     }
 
     jwt.verify(token, refreshTokenSecret, (err, user) => {
@@ -111,13 +116,15 @@ class UsuariosService {
 
     const usuario = await models.Usuarios.findOne({
       where: {
-        login: username
+        login: username,
       },
-      include: ['roles']
+      include: ['roles'],
     });
 
     if (usuario) {
-      const accessToken = jwt.sign({ "usuario": usuario }, accessTokenSecret, { expiresIn: '20m' });
+      const accessToken = jwt.sign({ usuario: usuario }, accessTokenSecret, {
+        expiresIn: '20m',
+      });
       return { accessToken };
     } else {
       throw boom.notFound('Usuario No existe');
@@ -125,8 +132,8 @@ class UsuariosService {
   }
 
   async logout(token) {
-    refreshTokens = refreshTokens.filter(t => t !== token);
-    return "Logout exitoso";
+    refreshTokens = refreshTokens.filter((t) => t !== token);
+    return 'Logout exitoso';
   }
 }
 

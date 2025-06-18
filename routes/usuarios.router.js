@@ -88,6 +88,16 @@ router.post('/login', async (req, res, next) => {
   }
 });
 
+router.post('/generateHash', async (req, res, next) => {
+  try {
+    const { password } = req.body;
+    const data = await service.generateHash(password);
+    res.json({data});
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.post('/refresh', async (req, res, next) => {
   try {
     const { username, token } = req.body;
