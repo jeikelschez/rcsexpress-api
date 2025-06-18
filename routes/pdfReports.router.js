@@ -81,6 +81,20 @@ router.get('/notaPreimpreso', authenticateJWT, async (req, res, next) => {
   }
 });
 
+router.get('/guiaIndividual', authenticateJWT, async (req, res, next) => {
+  try {
+    const { guia } = req.headers;
+    const response = await service.guiaIndividual(guia);
+    res.status(200).json({
+      message: 'PDF Generado',
+      pdfPath: response.resPath,
+      validDoc: response.validDoc,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get('/anexoFactura', authenticateJWT, async (req, res, next) => {
   try {
     const { data } = req.headers;

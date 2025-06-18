@@ -11,6 +11,8 @@ const FacturaPreimpresoService = require('./facturaPreimpreso.service');
 const facturaPreimpresoService = new FacturaPreimpresoService();
 const NotaPreimpresoService = require('./notaPreimpreso.service');
 const notaPreimpresoService = new NotaPreimpresoService();
+const GuiaIndividualService = require('./guiaIndividual.service');
+const guiaIndividualService = new GuiaIndividualService();
 const AnexoFacturaService = require('./anexoFactura.service');
 const anexoFacturaService = new AnexoFacturaService();
 const RelacionDespachoService = require('./relacionDespacho.service');
@@ -109,6 +111,18 @@ class PdfReportsService {
     });
     doc.pipe(fs.createWriteStream(reportsPath + resPath));
     await notaPreimpresoService.mainReport(doc, data);
+    doc.end();
+    return { validDoc: true, resPath: resPath };
+  }
+
+  // REPORTE GUIA INDIVIDUAL
+  async guiaIndividual(guia) {
+    let resPath = 'guiaIndividual.pdf';
+    let doc = new PDFDocument({
+      margin: 20,
+    });
+    doc.pipe(fs.createWriteStream(reportsPath + resPath));
+    await guiaIndividualService.mainReport(doc, guia);
     doc.end();
     return { validDoc: true, resPath: resPath };
   }
