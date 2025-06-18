@@ -56,6 +56,11 @@ class DcostosgService {
         as: 'movimientos',
         attributes: ['id', 'monto_subtotal'],
       },
+      {
+        model: models.Costos,
+        as: 'costos',
+        attributes: ['fecha_envio'],
+      },
     ];
 
     return await utils.paginate(

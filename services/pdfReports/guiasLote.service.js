@@ -925,7 +925,7 @@ class GuiasLoteService {
             .lineTo(68, y + 36)
             .stroke();
           doc.text('Remitente', 32, y + 33);
-          
+
           doc.fontSize(8);
           doc.font('Helvetica-Bold');
           doc.y = y + 45;
@@ -1046,7 +1046,7 @@ class GuiasLoteService {
             .lineTo(360, y + 36)
             .stroke();
           doc.text('Destinatario', 317, y + 33);
-          
+
           doc.fontSize(8);
           doc.font('Helvetica-Bold');
           doc.y = y + 45;
@@ -1142,14 +1142,11 @@ class GuiasLoteService {
           doc.fontSize(14);
           doc.y = y + 150;
           doc.x = 308;
-          doc.text(
-            detalles[item].zona_desc,
-            {
-              align: 'center',
-              columns: 1,
-              width: 280,
-            }
-          );
+          doc.text(detalles[item].zona_desc, {
+            align: 'center',
+            columns: 1,
+            width: 280,
+          });
 
           doc.lineWidth(0.5);
           doc.fontSize(7);
@@ -1242,14 +1239,19 @@ class GuiasLoteService {
             .lineTo(100, y + 210)
             .stroke();
           doc.text('Facturas Asociadas', 32, y + 207);
-          doc.fontSize(11);
+          doc.fontSize(8);
           doc.y = y + 222;
           doc.x = 28;
-          doc.text(detalles[item].dimensiones, {
-            align: 'left',
-            columns: 1,
-            width: 217,
-          });
+          doc.text(
+            detalles[item].dimensiones
+              ? detalles[item].dimensiones.substr(0, 105)
+              : '',
+            {
+              align: 'left',
+              columns: 1,
+              width: 217,
+            }
+          );
 
           doc.lineWidth(0.5);
           doc.fontSize(7);
