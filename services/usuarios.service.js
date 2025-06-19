@@ -123,7 +123,7 @@ class UsuariosService {
 
     if (usuario) {
       const accessToken = jwt.sign({ usuario: usuario }, accessTokenSecret, {
-        expiresIn: '20m',
+        expiresIn: '120m',
       });
       return { accessToken };
     } else {
