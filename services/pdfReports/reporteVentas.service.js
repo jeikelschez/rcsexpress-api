@@ -1123,7 +1123,7 @@ class ReporteVentasService {
         doc.fontSize(18);
 
         doc.y = 60;
-        doc.x = 285;
+        doc.x = 270;
         doc.text('Ventas Generales por Cliente', {
           align: 'center',
           columns: 1,
@@ -1131,7 +1131,7 @@ class ReporteVentasService {
         });
         doc.fontSize(12);
         doc.y = 82;
-        doc.x = 285;
+        doc.x = 270;
         doc.text(
           'Desde: ' + data.fecha_desde + '     ' + 'Hasta: ' + data.fecha_hasta,
           {
@@ -1157,11 +1157,11 @@ class ReporteVentasService {
           width: 300,
         });
 
-        doc.lineCap('butt').moveTo(460, 135).lineTo(575, 135).stroke();
-        doc.lineCap('butt').moveTo(582, 135).lineTo(640, 135).stroke();
+        doc.lineCap('butt').moveTo(460, 140).lineTo(575, 140).stroke();
+        doc.lineCap('butt').moveTo(582, 140).lineTo(640, 140).stroke();
         doc.lineCap('butt').moveTo(30, 153).lineTo(770, 153).stroke();
 
-        doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 670, 35);
+        doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 679, 35);
         doc.text('#', 35, 140);
         doc.text('Fecha', 47, 140);
         doc.text('Nro. Guía', 80, 140);
@@ -1170,12 +1170,12 @@ class ReporteVentasService {
         doc.text('Dest.', 380, 140);
         doc.text('Pzas', 410, 140);
         doc.text(data.neta ? 'Neta' : 'Kgs', 437, 140);
-        doc.text('CONTADO', 495, 125);
+        doc.text('CONTADO', 495, 128);
         doc.text('Origen', 460, 140);
         doc.text('Imp.', 495, 140);
         doc.text('Destino', 520, 140);
         doc.text('Imp.', 560, 140);
-        doc.text('CRÉDITO', 590, 125);
+        doc.text('CRÉDITO', 594, 128);
         doc.text('Monto', 585, 140);
         doc.text('Imp.', 620, 140);
         doc.text('Otros.', 645, 140);
@@ -1280,12 +1280,12 @@ class ReporteVentasService {
           labelFirst = 'Cliente';
         }
 
-        doc.lineCap('butt').moveTo(280, 135).lineTo(455, 135).stroke();
-        doc.lineCap('butt').moveTo(465, 135).lineTo(545, 135).stroke();
+        doc.lineCap('butt').moveTo(280, 140).lineTo(455, 140).stroke();
+        doc.lineCap('butt').moveTo(465, 140).lineTo(545, 140).stroke();
         doc.lineCap('butt').moveTo(30, 153).lineTo(760, 153).stroke();
 
         doc.fontSize(9);
-        doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 670, 35);
+        doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 679, 35);
         doc.text(labelFirst, tipo != 'TVC' ? 50 : 70, 140);
         doc.text(
           'Guías',
@@ -1298,12 +1298,12 @@ class ReporteVentasService {
           140
         );
         doc.text(data.neta ? 'Neta' : 'Kgs', 255, 140);
-        doc.text('CONTADO', 340, 125);
+        doc.text('CONTADO', 340, 128);
         doc.text('Origen', 290, 140);
         doc.text('Imp.', 340, 140);
         doc.text('Destino', 380, 140);
         doc.text('Imp.', 430, 140);
-        doc.text('CRÉDITO', 485, 125);
+        doc.text('CRÉDITO', 485, 128);
         doc.text('Monto', 480, 140);
         doc.text('Imp.', 520, 140);
         doc.text('Otros.', 560, 140);
@@ -2089,7 +2089,9 @@ class ReporteVentasService {
               }
             }
             doc.fontSize(6);
-            doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf');
+            doc.font(
+              './libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf'
+            );
             i += 3;
 
             subTotalNroPiezas = 0;
@@ -2142,14 +2144,6 @@ class ReporteVentasService {
             await this.generateHeader(doc, tipo, data);
           }
         }
-
-        i += 5;
-
-        doc
-          .lineCap('butt')
-          .moveTo(30, ymin + i)
-          .lineTo(770, ymin + i)
-          .stroke();
 
         // Sub Totales por Agencia Finales
         i += 5;
@@ -2255,8 +2249,15 @@ class ReporteVentasService {
           }
         }
 
+        i += 15;
+        doc
+          .lineCap('butt')
+          .moveTo(30, ymin + i)
+          .lineTo(770, ymin + i)
+          .stroke();
+
         // Totales Finales
-        i += 10;
+        i += 5;
         doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
         doc.y = ymin + i;
         doc.x = 358;
@@ -2894,7 +2895,7 @@ class ReporteVentasService {
           );
 
           i += 15;
-          if (i >= 370) {
+          if (i >= 430) {
             doc.fillColor('#BLACK');
             doc.addPage();
             page = page + 1;
@@ -3043,7 +3044,9 @@ class ReporteVentasService {
               ) {
                 if (item > 0) i += 20;
                 doc.fontSize(12);
-                doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
+                doc.font(
+                  './libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf'
+                );
                 doc.text(
                   data.ventas[item]['agencias.nb_agencia'],
                   35,
@@ -3053,7 +3056,9 @@ class ReporteVentasService {
               }
 
               doc.fontSize(7);
-              doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf');
+              doc.font(
+                './libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf'
+              );
 
               doc.y = ymin + i;
               doc.x = 25;
@@ -3210,7 +3215,9 @@ class ReporteVentasService {
                   data.ventas[item - 1].cod_agencia &&
                 data.visible == 'SI'
               ) {
-                doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
+                doc.font(
+                  './libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf'
+                );
                 doc.y = ymin + i - 36;
                 doc.x = 300;
                 doc.text('Sub-Totales por Agencia:', {
@@ -3240,7 +3247,9 @@ class ReporteVentasService {
                   width: 60,
                 });
 
-                doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf');
+                doc.font(
+                  './libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf'
+                );
                 i += 3;
 
                 subTotalSubtotal = 0;
@@ -3271,7 +3280,9 @@ class ReporteVentasService {
             // Sub Totales por Agencia Finales
             if (!data.correlativo && data.visible == 'SI') {
               i += 10;
-              doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
+              doc.font(
+                './libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf'
+              );
               doc.y = ymin + i;
               doc.x = 300;
               doc.text('Sub-Totales por Agencia:', {
@@ -3305,7 +3316,9 @@ class ReporteVentasService {
             // Totales Finales
             if (data.visible == 'SI') {
               i += 10;
-              doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
+              doc.font(
+                './libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf'
+              );
               doc.y = ymin + i;
               doc.x = 338;
               doc.text('Total General:', {
@@ -3345,7 +3358,9 @@ class ReporteVentasService {
               ) {
                 if (item > 0) i += 20;
                 doc.fontSize(12);
-                doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
+                doc.font(
+                  './libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf'
+                );
                 doc.text(
                   data.ventas[item]['agencias.nb_agencia'],
                   35,
@@ -3355,7 +3370,9 @@ class ReporteVentasService {
               }
 
               doc.fontSize(7);
-              doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf');
+              doc.font(
+                './libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf'
+              );
 
               doc.y = ymin + i;
               doc.x = 25;
@@ -3511,7 +3528,9 @@ class ReporteVentasService {
                   data.ventas[item - 1].cod_agencia &&
                 data.visible == 'SI'
               ) {
-                doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
+                doc.font(
+                  './libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf'
+                );
                 doc.y = ymin + i - 36;
                 doc.x = 270;
                 doc.text('Sub-Totales por Agencia:', {
@@ -3548,7 +3567,9 @@ class ReporteVentasService {
                   width: 60,
                 });
 
-                doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf');
+                doc.font(
+                  './libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf'
+                );
                 i += 3;
 
                 subTotalSubtotal = 0;
@@ -3581,7 +3602,9 @@ class ReporteVentasService {
             // Sub Totales por Agencia Finales
             if (!data.correlativo && data.visible == 'SI') {
               i += 10;
-              doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
+              doc.font(
+                './libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf'
+              );
               doc.y = ymin + i;
               doc.x = 270;
               doc.text('Sub-Totales por Agencia:', {
@@ -3622,7 +3645,9 @@ class ReporteVentasService {
             // Totales Finales
             if (data.visible == 'SI') {
               i += 10;
-              doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
+              doc.font(
+                './libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf'
+              );
               doc.y = ymin + i;
               doc.x = 308;
               doc.text('Total General:', {
@@ -3670,13 +3695,17 @@ class ReporteVentasService {
             ) {
               if (item > 0) i += 20;
               doc.fontSize(12);
-              doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
+              doc.font(
+                './libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf'
+              );
               doc.text(data.ventas[item]['agencias.nb_agencia'], 35, ymin + i);
               i += 20;
             }
 
             doc.fontSize(7);
-            doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf');
+            doc.font(
+              './libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf'
+            );
 
             doc.y = ymin + i;
             doc.x = 25;
@@ -3831,7 +3860,9 @@ class ReporteVentasService {
                 data.ventas[item - 1].cod_agencia &&
               data.visible == 'SI'
             ) {
-              doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
+              doc.font(
+                './libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf'
+              );
               doc.y = ymin + i - 36;
               doc.x = 300;
               doc.text('Sub-Totales por Agencia:', {
@@ -3847,7 +3878,9 @@ class ReporteVentasService {
                 width: 50,
               });
 
-              doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf');
+              doc.font(
+                './libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf'
+              );
               i += 3;
               subTotalMontoVenta = 0;
             }
@@ -4322,7 +4355,9 @@ class ReporteVentasService {
               width: 60,
             });
 
-            doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf');
+            doc.font(
+              './libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf'
+            );
             i += 3;
 
             subTotalSubtotal = 0;
@@ -4618,7 +4653,9 @@ class ReporteVentasService {
               width: 50,
             });
 
-            doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf');
+            doc.font(
+              './libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf'
+            );
             i += 3;
             subTotalMontoVenta = 0;
             subTotalCobrado = 0;
