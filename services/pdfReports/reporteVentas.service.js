@@ -1086,8 +1086,8 @@ class ReporteVentasService {
           );
         }
 
-        doc.lineCap('butt').moveTo(460, 140).lineTo(575, 140).stroke();
-        doc.lineCap('butt').moveTo(582, 140).lineTo(640, 140).stroke();
+        doc.lineCap('butt').moveTo(416, 140).lineTo(530, 140).stroke();
+        doc.lineCap('butt').moveTo(542, 140).lineTo(600, 140).stroke();
         doc.lineCap('butt').moveTo(30, 153).lineTo(770, 153).stroke();
 
         doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 679, 35);
@@ -1095,22 +1095,22 @@ class ReporteVentasService {
         doc.text('Fecha', 47, 140);
         doc.text('Nro. Guía', 80, 140);
         doc.text('Remitente', 150, 140);
-        doc.text('Destinatario', 280, 140);
-        doc.text('Dest.', 380, 140);
-        doc.text('Pzas', 410, 140);
-        doc.text('Kgs.', 437, 140);
-        doc.text('CONTADO', 495, 128);
-        doc.text('Origen', 460, 140);
-        doc.text('Imp.', 495, 140);
-        doc.text('Destino', 520, 140);
-        doc.text('Imp.', 560, 140);
-        doc.text('CRÉDITO', 594, 128);
-        doc.text('Monto', 585, 140);
-        doc.text('Imp.', 620, 140);
-        doc.text('Otros.', 645, 140);
-        if (data.dolar == true) doc.text('Otr $.', 675, 140);
-        doc.text('Total', 705, 132);
-        doc.text('Venta', 705, 140);
+        doc.text('Destinatario', 265, 140);
+        doc.text('Dest.', 350, 140);
+        doc.text('Pzas', 375, 140);
+        doc.text('Kgs.', 400, 140);
+        doc.text('CONTADO', 455, 128);
+        doc.text('Origen', 422, 140);
+        doc.text('Imp.', 455, 140);
+        doc.text('Destino', 480, 140);
+        doc.text('Imp.', 515, 140);
+        doc.text('CRÉDITO', 554, 128);
+        doc.text('Monto', 545, 140);
+        doc.text('Imp.', 580, 140);
+        doc.text('Otros.', 612, 140);
+        if (data.dolar == true) doc.text('Otros $.', 645, 140);
+        doc.text('Total', 696, 132);
+        doc.text('Venta', 695, 140);
         if (data.dolar == true) doc.text('Venta $.', 735, 140);
         break;
       case 'VC':
@@ -1792,7 +1792,7 @@ class ReporteVentasService {
             doc.text(data.ventas[item]['agencias.nb_agencia'], 35, ymin + i);
             i += 17;
           }
-          doc.fontSize(6);
+          doc.fontSize(7);
           doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf');
 
           doc.y = ymin + i;
@@ -1821,38 +1821,38 @@ class ReporteVentasService {
           });
           doc.y = ymin + i;
           doc.x = 123;
-          doc.text(utils.truncate(data.ventas[item].cliente_orig_desc, 29), {
+          doc.text(utils.truncate(data.ventas[item].cliente_orig_desc, 25), {
             align: 'left',
             columns: 1,
             width: 120,
           });
           doc.y = ymin + i;
-          doc.x = 233;
-          doc.text(utils.truncate(data.ventas[item].cliente_dest_desc, 38), {
+          doc.x = 218;
+          doc.text(utils.truncate(data.ventas[item].cliente_dest_desc, 36), {
             align: 'left',
             columns: 1,
             width: 150,
           });
           doc.y = ymin + i;
-          doc.x = 375;
+          doc.x = 345;
           doc.text(data.ventas[item]['agencias_dest.ciudades.siglas'], {
             align: 'center',
             columns: 1,
             width: 30,
           });
           doc.y = ymin + i;
-          doc.x = 400;
+          doc.x = 355;
           doc.text(data.ventas[item].nro_piezas, {
             align: 'right',
             columns: 1,
             width: 30,
           });
           doc.y = ymin + i;
-          doc.x = 430;
+          doc.x = 380;
           doc.text(utils.formatNumber(data.ventas[item].peso_kgs), {
             align: 'right',
             columns: 1,
-            width: 30,
+            width: 40,
           });
 
           let contadoOrig = 0;
@@ -1889,28 +1889,28 @@ class ReporteVentasService {
               utils.parseFloatN(impCreditoOrig);
 
             doc.y = ymin + i;
-            doc.x = 450;
+            doc.x = 410;
             doc.text(utils.formatNumber(contadoOrig), {
               align: 'right',
               columns: 1,
               width: 40,
             });
             doc.y = ymin + i;
-            doc.x = 485;
+            doc.x = 445;
             doc.text(utils.formatNumber(impContadoOrig), {
               align: 'right',
               columns: 1,
               width: 30,
             });
             doc.y = ymin + i;
-            doc.x = 515;
+            doc.x = 465;
             doc.text(utils.formatNumber(contadoDest), {
               align: 'right',
               columns: 1,
               width: 40,
             });
             doc.y = ymin + i;
-            doc.x = 550;
+            doc.x = 500;
             doc.text(utils.formatNumber(impContadoDest), {
               align: 'right',
               columns: 1,
@@ -1918,14 +1918,14 @@ class ReporteVentasService {
             });
 
             doc.y = ymin + i;
-            doc.x = 575;
+            doc.x = 525;
             doc.text(utils.formatNumber(creditoOrig), {
               align: 'right',
               columns: 1,
-              width: 40,
+              width: 50,
             });
             doc.y = ymin + i;
-            doc.x = 610;
+            doc.x = 570;
             doc.text(utils.formatNumber(impCreditoOrig), {
               align: 'right',
               columns: 1,
@@ -1938,11 +1938,11 @@ class ReporteVentasService {
               100;
 
             doc.y = ymin + i;
-            doc.x = 640;
+            doc.x = 600;
             doc.text(utils.formatNumber(montoOtros), {
               align: 'right',
               columns: 1,
-              width: 30,
+              width: 40,
             });
 
             if (data.dolar == true) {
@@ -1951,7 +1951,7 @@ class ReporteVentasService {
                   montoOtros / utils.parseFloatN(data.ventas[item].valor_dolar);
               }
               doc.y = ymin + i;
-              doc.x = 655;
+              doc.x = 635;
               doc.text(utils.formatNumber(otrosDolar.toFixed(2)), {
                 align: 'right',
                 columns: 1,
@@ -1960,7 +1960,7 @@ class ReporteVentasService {
             }
 
             doc.y = ymin + i;
-            doc.x = 685;
+            doc.x = 675;
             doc.text(utils.formatNumber(montoVenta), {
               align: 'right',
               columns: 1,
@@ -1989,81 +1989,81 @@ class ReporteVentasService {
           ) {
             doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
             doc.y = ymin + i - 32;
-            doc.x = 320;
-            doc.fontSize(7);
+            doc.x = 270;
+            doc.fontSize(8);
             doc.text('Sub-Totales por Agencia:', {
               align: 'left',
               columns: 1,
               width: 100,
             });
-            doc.fontSize(6);
+            doc.fontSize(7);
             doc.y = ymin + i - 32;
-            doc.x = 400;
+            doc.x = 355;
             doc.text(subTotalNroPiezas, {
               align: 'right',
               columns: 1,
               width: 30,
             });
             doc.y = ymin + i - 32;
-            doc.x = 430;
+            doc.x = 380;
             doc.text(utils.formatNumber(subTotalPesoKgs), {
               align: 'right',
               columns: 1,
-              width: 30,
+              width: 40,
             });
             if (data.visible == 'SI') {
               doc.y = ymin + i - 32;
-              doc.x = 450;
+              doc.x = 410;
               doc.text(utils.formatNumber(subTotalContadoOrig), {
                 align: 'right',
                 columns: 1,
                 width: 40,
               });
               doc.y = ymin + i - 32;
-              doc.x = 485;
+              doc.x = 445;
               doc.text(utils.formatNumber(subTotalImpContadoOrig), {
                 align: 'right',
                 columns: 1,
                 width: 30,
               });
               doc.y = ymin + i - 32;
-              doc.x = 515;
+              doc.x = 465;
               doc.text(utils.formatNumber(subTotalContadoDest), {
                 align: 'right',
                 columns: 1,
                 width: 40,
               });
               doc.y = ymin + i - 32;
-              doc.x = 550;
+              doc.x = 500;
               doc.text(utils.formatNumber(subTotalImpContadoDest), {
                 align: 'right',
                 columns: 1,
                 width: 30,
               });
               doc.y = ymin + i - 32;
-              doc.x = 575;
+              doc.x = 525;
               doc.text(utils.formatNumber(subTotalCreditoOrig), {
                 align: 'right',
                 columns: 1,
-                width: 40,
+                width: 50,
               });
               doc.y = ymin + i - 32;
-              doc.x = 610;
+              doc.x = 570;
               doc.text(utils.formatNumber(subTotalImpCreditoOrig), {
                 align: 'right',
                 columns: 1,
                 width: 30,
               });
               doc.y = ymin + i - 32;
-              doc.x = 640;
+              doc.x = 600;
               doc.text(utils.formatNumber(subTotalMontoOtros), {
                 align: 'right',
                 columns: 1,
-                width: 30,
+                width: 40,
               });
               if (data.dolar == true) {
                 doc.y = ymin + i - 32;
-                doc.x = 655;
+                doc.x = 635;
                 doc.text(utils.formatNumber(subTotalOtrosDolar), {
                   align: 'right',
                   columns: 1,
@@ -2071,7 +2071,7 @@ class ReporteVentasService {
                 });
               }
               doc.y = ymin + i - 32;
-              doc.x = 685;
+              doc.x = 675;
               doc.text(utils.formatNumber(subTotalMontoVenta), {
                 align: 'right',
                 columns: 1,
@@ -2088,11 +2088,11 @@ class ReporteVentasService {
                 });
               }
             }
-            doc.fontSize(6);
+            doc.fontSize(7);
             doc.font(
               './libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf'
             );
-            i += 3;
+            i += 2;
 
             subTotalNroPiezas = 0;
             subTotalPesoKgs = 0;
@@ -2134,8 +2134,8 @@ class ReporteVentasService {
           subTotalMontoOtros += utils.parseFloatN(montoOtros);
           subTotalVentaDolar += utils.parseFloatN(ventaDolar);
 
-          i += 8;
-          if (i >= 400) {
+          i += 11;
+          if (i >= 390) {
             doc.fillColor('#BLACK');
             doc.addPage();
             page = page + 1;
@@ -2149,81 +2149,81 @@ class ReporteVentasService {
         i += 5;
         doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
         doc.y = ymin + i;
-        doc.x = 320;
-        doc.fontSize(7);
+        doc.x = 270;
+        doc.fontSize(8);
         doc.text('Sub-Totales por Agencia:', {
           align: 'left',
           columns: 1,
           width: 100,
         });
-        doc.fontSize(6);
+        doc.fontSize(7);
         doc.y = ymin + i;
-        doc.x = 400;
+        doc.x = 355;
         doc.text(subTotalNroPiezas, {
           align: 'right',
           columns: 1,
           width: 30,
         });
         doc.y = ymin + i;
-        doc.x = 430;
+        doc.x = 380;
         doc.text(utils.formatNumber(subTotalPesoKgs), {
           align: 'right',
           columns: 1,
-          width: 30,
+          width: 40,
         });
         if (data.visible == 'SI') {
           doc.y = ymin + i;
-          doc.x = 450;
+          doc.x = 410;
           doc.text(utils.formatNumber(subTotalContadoOrig), {
             align: 'right',
             columns: 1,
             width: 40,
           });
           doc.y = ymin + i;
-          doc.x = 485;
+          doc.x = 445;
           doc.text(utils.formatNumber(subTotalImpContadoOrig), {
             align: 'right',
             columns: 1,
             width: 30,
           });
           doc.y = ymin + i;
-          doc.x = 515;
+          doc.x = 465;
           doc.text(utils.formatNumber(subTotalContadoDest), {
             align: 'right',
             columns: 1,
             width: 40,
           });
           doc.y = ymin + i;
-          doc.x = 550;
+          doc.x = 500;
           doc.text(utils.formatNumber(subTotalImpContadoDest), {
             align: 'right',
             columns: 1,
             width: 30,
           });
           doc.y = ymin + i;
-          doc.x = 575;
+          doc.x = 525;
           doc.text(utils.formatNumber(subTotalCreditoOrig), {
             align: 'right',
             columns: 1,
-            width: 40,
+            width: 50,
           });
           doc.y = ymin + i;
-          doc.x = 610;
+          doc.x = 570;
           doc.text(utils.formatNumber(subTotalImpCreditoOrig), {
             align: 'right',
             columns: 1,
             width: 30,
           });
           doc.y = ymin + i;
-          doc.x = 640;
+          doc.x = 600;
           doc.text(utils.formatNumber(subTotalMontoOtros), {
             align: 'right',
             columns: 1,
-            width: 30,
+            width: 40,
           });
           if (data.dolar == true) {
             doc.y = ymin + i;
-            doc.x = 655;
+            doc.x = 635;
             doc.text(utils.formatNumber(subTotalOtrosDolar), {
               align: 'right',
               columns: 1,
@@ -2231,7 +2231,7 @@ class ReporteVentasService {
             });
           }
           doc.y = ymin + i;
-          doc.x = 685;
+          doc.x = 675;
           doc.text(utils.formatNumber(subTotalMontoVenta), {
             align: 'right',
             columns: 1,
@@ -2260,81 +2260,81 @@ class ReporteVentasService {
         i += 5;
         doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
         doc.y = ymin + i;
-        doc.x = 358;
-        doc.fontSize(7);
+        doc.x = 310;
+        doc.fontSize(8);
         doc.text('Total General:', {
           align: 'left',
           columns: 1,
           width: 100,
         });
-        doc.fontSize(6);
+        doc.fontSize(7);
         doc.y = ymin + i;
-        doc.x = 400;
+        doc.x = 355;
         doc.text(totalNroPiezas, {
           align: 'right',
           columns: 1,
           width: 30,
         });
         doc.y = ymin + i;
-        doc.x = 430;
+        doc.x = 380;
         doc.text(utils.formatNumber(totalPesoKgs), {
           align: 'right',
           columns: 1,
-          width: 30,
+          width: 40,
         });
         if (data.visible == 'SI') {
           doc.y = ymin + i;
-          doc.x = 450;
+          doc.x = 410;
           doc.text(utils.formatNumber(totalContadoOrig), {
             align: 'right',
             columns: 1,
             width: 40,
           });
           doc.y = ymin + i;
-          doc.x = 485;
+          doc.x = 445;
           doc.text(utils.formatNumber(totalImpContadoOrig), {
             align: 'right',
             columns: 1,
             width: 30,
           });
           doc.y = ymin + i;
-          doc.x = 515;
+          doc.x = 465;
           doc.text(utils.formatNumber(totalContadoDest), {
             align: 'right',
             columns: 1,
             width: 40,
           });
           doc.y = ymin + i;
-          doc.x = 550;
+          doc.x = 500;
           doc.text(utils.formatNumber(totalImpContadoDest), {
             align: 'right',
             columns: 1,
             width: 30,
           });
           doc.y = ymin + i;
-          doc.x = 575;
+          doc.x = 525;
           doc.text(utils.formatNumber(totalCreditoOrig), {
             align: 'right',
             columns: 1,
-            width: 40,
+            width: 50,
           });
           doc.y = ymin + i;
-          doc.x = 610;
+          doc.x = 570;
           doc.text(utils.formatNumber(totalImpCreditoOrig), {
             align: 'right',
             columns: 1,
             width: 30,
           });
           doc.y = ymin + i;
-          doc.x = 640;
+          doc.x = 600;
           doc.text(utils.formatNumber(totalMontoOtros), {
             align: 'right',
             columns: 1,
-            width: 30,
+            width: 40,
           });
           if (data.dolar == true) {
             doc.y = ymin + i;
-            doc.x = 655;
+            doc.x = 635;
             doc.text(utils.formatNumber(totalOtrosDolar), {
               align: 'right',
               columns: 1,
@@ -2342,7 +2342,7 @@ class ReporteVentasService {
             });
           }
           doc.y = ymin + i;
-          doc.x = 685;
+          doc.x = 675;
           doc.text(utils.formatNumber(totalMontoVenta), {
             align: 'right',
             columns: 1,
