@@ -289,11 +289,11 @@ class GuiasLoteService {
           doc.fontSize(8);
           doc.font('Helvetica-Bold');
           doc.y = y + 73;
-          doc.x = 28;
+          doc.x = 23;
           doc.text(detalles[item]['clientes_org.razon_social'], {
-            align: 'left',
+            align: 'center',
             columns: 1,
-            width: 270,
+            width: 280,
           });
           doc.fontSize(7);
           doc.font('Helvetica-Bold');
@@ -495,11 +495,11 @@ class GuiasLoteService {
           doc.fontSize(8);
           doc.font('Helvetica-Bold');
           doc.y = y + 73;
-          doc.x = 313;
+          doc.x = 308;
           doc.text(detalles[item]['cliente_particular.nb_cliente'], {
-            align: 'left',
+            align: 'center',
             columns: 1,
-            width: 270,
+            width: 280,
           });
           doc.fontSize(7);
           doc.font('Helvetica-Bold');
@@ -925,14 +925,19 @@ class GuiasLoteService {
             .lineTo(68, y + 36)
             .stroke();
           doc.text('Remitente', 32, y + 33);
-          doc.fontSize(7);
+          
+          doc.fontSize(8);
+          doc.font('Helvetica-Bold');
           doc.y = y + 45;
-          doc.x = 28;
+          doc.x = 23;
           doc.text(detalles[item]['clientes_org.razon_social'], {
-            align: 'right',
+            align: 'center',
             columns: 1,
-            width: 270,
+            width: 280,
           });
+
+          doc.fontSize(7);
+          doc.font('Helvetica');
           doc.y = y + 60;
           doc.x = 28;
           doc.text(detalles[item]['clientes_org.rif_cedula'], {
@@ -1041,14 +1046,19 @@ class GuiasLoteService {
             .lineTo(360, y + 36)
             .stroke();
           doc.text('Destinatario', 317, y + 33);
-          doc.fontSize(7);
+          
+          doc.fontSize(8);
+          doc.font('Helvetica-Bold');
           doc.y = y + 45;
-          doc.x = 313;
+          doc.x = 308;
           doc.text(detalles[item]['cliente_particular.nb_cliente'], {
-            align: 'right',
+            align: 'center',
             columns: 1,
-            width: 270,
+            width: 280,
           });
+
+          doc.fontSize(7);
+          doc.font('Helvetica');
           doc.y = y + 60;
           doc.x = 313;
           doc.text(detalles[item]['cliente_particular.rif_ci'], {

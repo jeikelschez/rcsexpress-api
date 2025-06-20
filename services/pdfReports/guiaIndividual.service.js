@@ -420,8 +420,8 @@ class GuiaIndividualService {
         .lineTo(68, y + 36)
         .stroke();
       doc.text('Remitente', 32, y + 33);
-      doc.fontSize(7);
-
+      
+      doc.fontSize(8);
       doc.font('Helvetica-Bold');
       doc.y = y + 45;
       doc.x = 23;
@@ -431,6 +431,7 @@ class GuiaIndividualService {
         width: 280,
       });
 
+      doc.fontSize(7);
       doc.font('Helvetica');
       doc.y = y + 60;
       doc.x = 28;
@@ -547,8 +548,8 @@ class GuiaIndividualService {
         .lineTo(360, y + 36)
         .stroke();
       doc.text('Destinatario', 317, y + 33);
-      doc.fontSize(7);
-
+      
+      doc.fontSize(8);
       doc.font('Helvetica-Bold');
       doc.y = y + 45;
       doc.x = 308;
@@ -558,6 +559,7 @@ class GuiaIndividualService {
         width: 280,
       });
 
+      doc.fontSize(7);
       doc.font('Helvetica');
       doc.y = y + 60;
       doc.x = 313;
