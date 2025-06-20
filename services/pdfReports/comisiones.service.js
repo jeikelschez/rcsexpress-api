@@ -127,7 +127,7 @@ class ComisionesService {
   }
 
   async generateHeader(doc, desde, hasta, dolar, group) {
-    if (group == 'true') {
+    if (group) {
       doc.image('./img/logo_rc.png', 35, 25, { width: 60 });
       doc.fontSize(8);
       doc.text('RCS EXPRESS, S.A', 35, 120);
@@ -179,7 +179,7 @@ class ComisionesService {
       doc.text('Comisión', 509, 160);
       doc.text('Seguro', 514, 170);
 
-      if (dolar == 'true') {
+      if (dolar) {
         doc.text('Monto', 366, 160);
         doc.text('Total $', 365, 170);
         doc.text('Com', 470, 160);
@@ -250,7 +250,7 @@ class ComisionesService {
       doc.text('Comisión', 700, 110);
       doc.text('Seguro', 706, 120);
 
-      if (dolar == 'true') {
+      if (dolar) {
         doc.text('Monto', 600, 110);
         doc.text('Total $', 600, 120);
         doc.text('Com', 675, 110);
@@ -322,7 +322,7 @@ class ComisionesService {
       countAgencia++;
       countAgente++;
 
-      if (dolar == 'true') {
+      if (dolar) {
         monto_total_dolar =
           detalles[item].valor_dolar == 0
             ? 0
@@ -347,7 +347,7 @@ class ComisionesService {
         totalGeneralSeguroDolar += comision_seguro_dolar;
       }
 
-      if (group == 'true') {
+      if (group) {
         ymin = 192;
         doc.fontSize(8);
         if (item == 0) {
@@ -457,7 +457,7 @@ class ComisionesService {
             }
           );
 
-          if (dolar == 'true') {
+          if (dolar) {
             doc.y = ymin + i;
             doc.x = 353;
             doc.text(
@@ -582,7 +582,7 @@ class ComisionesService {
               }
             );
 
-            if (dolar == 'true') {
+            if (dolar) {
               doc.y = ymin + i;
               doc.x = 353;
               doc.text(
@@ -788,7 +788,7 @@ class ComisionesService {
               }
             );
 
-            if (dolar == 'true') {
+            if (dolar) {
               doc.y = ymin + i;
               doc.x = 590;
               doc.text(
@@ -994,7 +994,7 @@ class ComisionesService {
                 }
               );
 
-              if (dolar == 'true') {
+              if (dolar) {
                 doc.y = ymin + i - 15;
                 doc.x = 590;
                 doc.text(
@@ -1218,7 +1218,7 @@ class ComisionesService {
               }
             );
 
-            if (dolar == 'true') {
+            if (dolar) {
               doc.y = ymin + i;
               doc.x = 590;
               doc.text(
@@ -1459,7 +1459,7 @@ class ComisionesService {
           width: 40,
         });
 
-        if (dolar == 'true') {
+        if (dolar) {
           doc.y = ymin + i;
           doc.x = 590;
           doc.text(utils.formatNumber(monto_total_dolar), {
@@ -1497,7 +1497,7 @@ class ComisionesService {
       }
     }
 
-    if (group == 'true') {
+    if (group) {
       doc.font('Helvetica');
       doc.fillColor('#444444');
       doc.y = ymin + i;
@@ -1571,7 +1571,7 @@ class ComisionesService {
         width: 40,
       });
 
-      if (dolar == 'true') {
+      if (dolar) {
         doc.y = ymin + i;
         doc.x = 353;
         doc.text(utils.formatNumber(subTotalAgenteTotalDolar), {
@@ -1637,7 +1637,7 @@ class ComisionesService {
         width: 40,
       });
 
-      if (dolar == 'true') {
+      if (dolar) {
         doc.y = ymin + i;
         doc.x = 353;
         doc.text(utils.formatNumber(subTotalAgenciaTotalDolar), {
@@ -1703,7 +1703,7 @@ class ComisionesService {
         width: 40,
       });
 
-      if (dolar == 'true') {
+      if (dolar) {
         doc.y = ymin + i;
         doc.x = 353;
         doc.text(utils.formatNumber(totalGeneralTotalDolar), {
@@ -1805,7 +1805,7 @@ class ComisionesService {
         width: 40,
       });
 
-      if (dolar == 'true') {
+      if (dolar) {
         doc.y = ymin + i;
         doc.x = 590;
         doc.text(utils.formatNumber(subTotalAgenteTotalDolar), {
@@ -1934,7 +1934,7 @@ class ComisionesService {
         width: 40,
       });
 
-      if (dolar == 'true') {
+      if (dolar) {
         doc.y = ymin + i;
         doc.x = 590;
         doc.text(utils.formatNumber(subTotalAgenciaTotalDolar), {
@@ -2058,7 +2058,7 @@ class ComisionesService {
         width: 40,
       });
 
-      if (dolar == 'true') {
+      if (dolar) {
         doc.y = ymin + i;
         doc.x = 590;
         doc.text(utils.formatNumber(totalGeneralTotalDolar), {
@@ -2112,9 +2112,9 @@ class ComisionesService {
       i++
     ) {
       doc.switchToPage(i);
-      doc.fontSize(group == 'true' ? 8 : 10);
+      doc.fontSize(group ? 8 : 10);
       doc.fillColor('#444444');
-      doc.x = group == 'true' ? 485 : 640;
+      doc.x = group ? 485 : 640;
       doc.y = 50;
       doc.text(`Pagina ${i + 1} de ${range.count}`, {
         align: 'right',
