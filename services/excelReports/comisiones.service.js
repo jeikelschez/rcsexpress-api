@@ -138,11 +138,11 @@ class ComisionesService {
       { key: 'L', width: 30 },
       { key: 'M', width: 15 },
       { key: 'N', width: 10 },
-      { key: 'O', width: dolar == 'true' ? 10 : 0 },
+      { key: 'O', width: dolar ? 10 : 0 },
       { key: 'P', width: 10 },
-      { key: 'Q', width: dolar == 'true' ? 10 : 0 },
+      { key: 'Q', width: dolar ? 10 : 0 },
       { key: 'R', width: 10 },
-      { key: 'S', width: dolar == 'true' ? 10 : 0 },
+      { key: 'S', width: dolar ? 10 : 0 },
     ];
 
     worksheet.getCell('A7').value = '#';
@@ -161,7 +161,7 @@ class ComisionesService {
     worksheet.getCell('N7').value = 'Total';
     worksheet.getCell('P7').value = 'Entrega';
     worksheet.getCell('R7').value = 'Seguro';
-    if (dolar == 'true') {
+    if (dolar) {
       worksheet.getCell('O7').value = 'Total $';
       worksheet.getCell('Q7').value = 'Entrega $ ';
       worksheet.getCell('S7').value = 'Seguro $';
@@ -218,7 +218,7 @@ class ComisionesService {
         detalles[item].comision_seguro
       );
 
-      if (dolar == 'true') {
+      if (dolar) {
         let monto_total_dolar =
           detalles[item].valor_dolar == 0
             ? 0

@@ -132,7 +132,7 @@ class ComisionesService {
       doc.fontSize(8);
       doc.text('RCS EXPRESS, S.A', 35, 120);
       doc.text('RIF. J-31028463-6', 35, 130);
-      doc.font('Helvetica-Bold');
+      doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
       doc.fillColor('#444444');
 
       doc.lineCap('butt').moveTo(25, 182).lineTo(595, 182).stroke();
@@ -163,7 +163,7 @@ class ComisionesService {
       });
 
       doc.fontSize(9);
-      doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 510, 35);
+      doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 520, 35);
 
       doc.text('Agente / Responsable', 45, 170);
       doc.text('% Com.', 160, 160);
@@ -198,7 +198,7 @@ class ComisionesService {
         .text('Fecha: ' + moment().format('DD/MM/YYYY'), 647, 35)
         .fontSize(8);
 
-      doc.lineCap('butt').moveTo(25, 135).lineTo(755, 135).stroke();
+      doc.lineCap('butt').moveTo(25, 135).lineTo(765, 135).stroke();
 
       doc.fontSize(16);
       doc.y = 40;
@@ -351,7 +351,7 @@ class ComisionesService {
         ymin = 192;
         doc.fontSize(8);
         if (item == 0) {
-          doc.font('Helvetica-Bold');
+          doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
           doc.text(detalles[item]['agencias_dest.nb_agencia'], 28, ymin + i);
           i += 17;
         }
@@ -361,7 +361,7 @@ class ComisionesService {
           detalles[item].cod_agente_entrega !=
             detalles[item - 1].cod_agente_entrega
         ) {
-          doc.font('Helvetica');
+          doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf');
           doc.fillColor('#444444');
           doc.y = ymin + i;
           doc.x = 45;
@@ -515,7 +515,7 @@ class ComisionesService {
             detalles[item].cod_agencia_dest !=
             detalles[item - 1].cod_agencia_dest
           ) {
-            doc.font('Helvetica-Bold');
+            doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
             doc.text('Totales por Agencia', 140, ymin + i);
 
             doc.y = ymin + i;
@@ -668,7 +668,7 @@ class ComisionesService {
           detalles[item].cod_agencia_dest != detalles[item - 1].cod_agencia_dest
         ) {
           if (item > 0) {
-            doc.font('Helvetica-Bold');
+            doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
             doc.fontSize(7);
             i += 15;
             doc.y = ymin + i;
@@ -1091,7 +1091,7 @@ class ComisionesService {
             }
           }
           doc.fontSize(10);
-          doc.font('Helvetica-Bold');
+          doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
           doc.text(detalles[item]['agencias_dest.nb_agencia'], 28, ymin + i);
           i += 17;
         } else {
@@ -1101,7 +1101,7 @@ class ComisionesService {
             detalles[item].cod_agente_entrega !=
               detalles[item - 1].cod_agente_entrega
           ) {
-            doc.font('Helvetica-Bold');
+            doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
             doc.fontSize(7);
             doc.y = ymin + i;
             doc.x = 25;
@@ -1310,7 +1310,7 @@ class ComisionesService {
             detalles[item - 1].cod_agente_entrega
         ) {
           doc.fontSize(10);
-          doc.font('Helvetica');
+          doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf');
           doc.fillColor('#444444');
           doc.text(
             'Agente de Entrega: ' +
@@ -1337,7 +1337,7 @@ class ComisionesService {
           i += 17;
         }
 
-        doc.font('Helvetica');
+        doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf');
         doc.fillColor('#444444');
         doc.fontSize(8);
 
@@ -1419,7 +1419,7 @@ class ComisionesService {
 
         doc.y = ymin + i;
         doc.x = 315;
-        doc.text(utils.truncate(cliente_desc, 41), {
+        doc.text(utils.truncate(cliente_desc, 43), {
           align: 'left',
           columns: 1,
           width: 200,
@@ -1486,7 +1486,7 @@ class ComisionesService {
         }
 
         i += 15;
-        if (i >= 410) {
+        if (i >= 400) {
           doc.fillColor('#BLACK');
           doc.addPage();
           page = page + 1;
@@ -1498,7 +1498,7 @@ class ComisionesService {
     }
 
     if (group) {
-      doc.font('Helvetica');
+      doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf');
       doc.fillColor('#444444');
       doc.y = ymin + i;
       doc.x = 45;
@@ -1598,7 +1598,7 @@ class ComisionesService {
       i += 17;
 
       // Subtotales por Agencia Finales
-      doc.font('Helvetica-Bold');
+      doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
       doc.text('Totales por Agencia', 140, ymin + i);
 
       doc.y = ymin + i;
@@ -1664,7 +1664,7 @@ class ComisionesService {
       i += 17;
 
       // Totales Generales
-      doc.font('Helvetica-Bold');
+      doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
       doc.text('Total General', 140, ymin + i);
 
       doc.y = ymin + i;
@@ -1682,25 +1682,25 @@ class ComisionesService {
         width: 40,
       });
       doc.y = ymin + i;
-      doc.x = 310;
+      doc.x = 300;
       doc.text(utils.formatNumber(totalGeneralTotal), {
         align: 'right',
         columns: 1,
-        width: 40,
+        width: 50,
       });
       doc.y = ymin + i;
-      doc.x = 410;
+      doc.x = 400;
       doc.text(utils.formatNumber(totalGeneralEntrega), {
         align: 'right',
         columns: 1,
-        width: 40,
+        width: 50,
       });
       doc.y = ymin + i;
-      doc.x = 506;
+      doc.x = 496;
       doc.text(utils.formatNumber(totalGeneralSeguro), {
         align: 'right',
         columns: 1,
-        width: 40,
+        width: 50,
       });
 
       if (dolar) {
@@ -1727,7 +1727,7 @@ class ComisionesService {
         });
       }
     } else {
-      doc.font('Helvetica-Bold');
+      doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
       doc.fontSize(7);
 
       //Subtotales por agente Finales
@@ -2112,7 +2112,7 @@ class ComisionesService {
       i++
     ) {
       doc.switchToPage(i);
-      doc.fontSize(group ? 8 : 10);
+      doc.fontSize(group ? 9 : 11);
       doc.fillColor('#444444');
       doc.x = group ? 485 : 640;
       doc.y = 50;

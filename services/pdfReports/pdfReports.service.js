@@ -448,7 +448,7 @@ class PdfReportsService {
       layout: 'landscape',
     });
 
-    if (group == 'true') {
+    if (group) {
       doc = new PDFDocument({
         margin: 20,
         bufferPages: true,
