@@ -76,7 +76,7 @@ class UsuariosService {
     if (usuario) {
       if (bcrypt.compareSync(password, usuario.password)) {
         const accessToken = jwt.sign({ usuario: usuario }, accessTokenSecret, {
-          expiresIn: '20m',
+          expiresIn: '120m',
         });
         const refreshToken = jwt.sign({}, refreshTokenSecret);
         refreshTokens.push(refreshToken);
