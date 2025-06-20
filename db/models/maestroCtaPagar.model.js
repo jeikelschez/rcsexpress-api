@@ -121,7 +121,7 @@ const MctapagarSchema = {
     type: DataTypes.DECIMAL,
   },
   cod_tipo_persona: {
-    type: DataTypes.DECIMAL,
+    type: DataTypes.STRING,
   },
   cod_tipo_retencion: {
     type: DataTypes.STRING,

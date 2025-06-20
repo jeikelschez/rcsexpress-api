@@ -8,19 +8,19 @@ const nbTipoRetencion =
   '(SELECT nb_tipo_retencion FROM maestro_retenciones' +
   ' WHERE fecha_ini_val <= `Cislr`.`fecha_comprobante`' +
   ' AND fecha_fin_val >= `Cislr`.`fecha_comprobante`' +
-  ' AND cod_tipo_retencion = `Cislr`.`cod_tipo_retencion`' +
+  ' AND id = `Cislr`.`cod_tipo_retencion`' +
   ' AND cod_tipo_persona = `retenciones->compras`.cod_tipo_persona)';
 const sustraendo =
   '(SELECT sustraendo FROM maestro_retenciones' +
   ' WHERE fecha_ini_val <= `Cislr`.`fecha_comprobante`' +
   ' AND fecha_fin_val >= `Cislr`.`fecha_comprobante`' +
-  ' AND cod_tipo_retencion = `Cislr`.`cod_tipo_retencion`' +
+  ' AND id = `Cislr`.`cod_tipo_retencion`' +
   ' AND cod_tipo_persona = `retenciones->compras`.cod_tipo_persona)';
 const sustraendo2 =
   'SUM((SELECT sustraendo FROM maestro_retenciones' +
   ' WHERE fecha_ini_val <= `ctaspagar->compras->retenciones`.`fecha_comprobante`' +
   ' AND fecha_fin_val >= `ctaspagar->compras->retenciones`.`fecha_comprobante`' +
-  ' AND cod_tipo_retencion = `ctaspagar->compras->retenciones`.`cod_tipo_retencion`' +
+  ' AND id = `ctaspagar->compras->retenciones`.`cod_tipo_retencion`' +
   ' AND cod_tipo_persona = `ctaspagar`.cod_tipo_persona))';
 
 class RetencionesIslrService {
@@ -399,10 +399,10 @@ class RetencionesIslrService {
         });
         doc.y = 169;
         doc.x = 110;
-        doc.text(detalles[0]['retenciones.proveedores.direccion_fiscal'], {
+        doc.text(detalles[0]['retenciones.proveedores.direccion_fiscal'].substr(0, 120), {
           align: 'left',
           columns: 1,
-          width: 500,
+          width: 635,
         });
         doc.y = 182;
         doc.x = 40;
