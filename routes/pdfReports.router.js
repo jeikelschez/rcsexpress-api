@@ -334,9 +334,9 @@ router.get('/cobranza', authenticateJWT, async (req, res, next) => {
   }
 });
 
-router.get('/comisiones', authenticateJWT, async (req, res, next) => {
+router.post('/comisiones', authenticateJWT, async (req, res, next) => {
   try {
-    const { data, desde, hasta, dolar, group } = req.headers;
+    const { data, desde, hasta, dolar, group } = req.body;
     const response = await service.comisiones(data, desde, hasta, dolar, group);
     res.status(200).json({
       message: 'PDF Generado',
