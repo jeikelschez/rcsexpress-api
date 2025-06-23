@@ -775,7 +775,7 @@ class RelacionDespachoService {
     });
 
     for (var item = 0; item < detalle.length; item++) {
-      doc.font('Helvetica');
+      doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf');
       doc.fontSize(7);
       let monto_total = new Intl.NumberFormat('de-DE', {
         style: 'currency',
@@ -833,7 +833,7 @@ class RelacionDespachoService {
       }
       total_declarado_dolar += utils.parseFloatN(declarado_dolar);
 
-      doc.font('Helvetica-Bold');
+      doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
 
       if (data.tipoReporte == 'APZ') {
         label = 'Zona Destino: ';
@@ -1173,7 +1173,7 @@ class RelacionDespachoService {
 
         total_declarado_dolar_group += utils.parseFloatN(declarado_dolar_group);
 
-        doc.font('Helvetica');
+        doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf');
 
         if (data.visibleGuia) {
           doc.y = ymin + i;
@@ -1246,7 +1246,7 @@ class RelacionDespachoService {
           doc.x = 260 - zonaOff;
           doc.text(
             detalle[item].cliente_orig_desc
-              ? detalle[item].cliente_orig_desc.substring(0, 24)
+              ? detalle[item].cliente_orig_desc.substring(0, 30)
               : '',
             {
               align: 'left',
@@ -1259,7 +1259,7 @@ class RelacionDespachoService {
           if (detalle[item].cliente_dest_desc) {
             doc.text(
               detalle[item].cliente_dest_desc
-                ? detalle[item].cliente_dest_desc.substring(0, 23)
+                ? detalle[item].cliente_dest_desc.substring(0, 33)
                 : '',
               {
                 align: 'left',
@@ -1379,12 +1379,12 @@ class RelacionDespachoService {
           doc.x = 260 - zonaOff;
           doc.text(
             detalle[item].cliente_orig_desc
-              ? detalle[item].cliente_orig_desc.substring(0, 28)
+              ? detalle[item].cliente_orig_desc.substring(0, 35)
               : '',
             {
               align: 'left',
               columns: 1,
-              width: 150,
+              width: 180,
             }
           );
           doc.y = ymin + i;
@@ -1392,12 +1392,12 @@ class RelacionDespachoService {
           if (detalle[item].cliente_dest_desc) {
             doc.text(
               detalle[item].cliente_dest_desc
-                ? detalle[item].cliente_dest_desc.substring(0, 28)
+                ? detalle[item].cliente_dest_desc.substring(0, 50)
                 : '',
               {
                 align: 'left',
                 columns: 1,
-                width: 150,
+                width: 180,
               }
             );
           }
@@ -1823,7 +1823,7 @@ class RelacionDespachoService {
 
         total_declarado_dolar_group += utils.parseFloatN(declarado_dolar_group);
 
-        doc.font('Helvetica');
+        doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf');
 
         if (data.visibleGuia) {
           doc.y = ymin + i;
@@ -1902,7 +1902,7 @@ class RelacionDespachoService {
           doc.x = 260;
           doc.text(
             detalle[item].cliente_orig_desc
-              ? detalle[item].cliente_orig_desc.substring(0, 24)
+              ? detalle[item].cliente_orig_desc.substring(0, 30)
               : '',
             {
               align: 'left',
@@ -1915,7 +1915,7 @@ class RelacionDespachoService {
           if (detalle[item].cliente_dest_desc) {
             doc.text(
               detalle[item].cliente_dest_desc
-                ? detalle[item].cliente_dest_desc.substring(0, 23)
+                ? detalle[item].cliente_dest_desc.substring(0, 30)
                 : '',
               {
                 align: 'left',
@@ -2035,12 +2035,12 @@ class RelacionDespachoService {
           doc.x = 260;
           doc.text(
             detalle[item].cliente_orig_desc
-              ? detalle[item].cliente_orig_desc.substring(0, 28)
+              ? detalle[item].cliente_orig_desc.substring(0, 35)
               : '',
             {
               align: 'left',
               columns: 1,
-              width: 150,
+              width: 180,
             }
           );
           doc.y = ymin + i;
@@ -2048,12 +2048,12 @@ class RelacionDespachoService {
           if (detalle[item].cliente_dest_desc) {
             doc.text(
               detalle[item].cliente_dest_desc
-                ? detalle[item].cliente_dest_desc.substring(0, 32)
+                ? detalle[item].cliente_dest_desc.substring(0, 50)
                 : '',
               {
                 align: 'left',
                 columns: 1,
-                width: 150,
+                width: 180,
               }
             );
           }
@@ -2153,7 +2153,7 @@ class RelacionDespachoService {
 
     let y = ymin + i + 8;
     doc.fontSize(7);
-    doc.font('Helvetica-Bold');
+    doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
 
     if (data.tipoReporte == 'APZ') {
       doc.y = y;
@@ -2658,8 +2658,8 @@ class RelacionDespachoService {
       .stroke();
     doc
       .lineCap('butt')
-      .moveTo(35, y + 9)
-      .lineTo(755, y + 9)
+      .moveTo(35, y + 13)
+      .lineTo(755, y + 13)
       .stroke();
 
     doc.y = y;
@@ -3111,7 +3111,7 @@ class RelacionDespachoService {
       doc.fontSize(9);
       doc.fillColor('#444444');
       doc.x = 640;
-      doc.y = 37;
+      doc.y = 33;
       doc.text(`Pagina ${i + 1} de ${range.count}`, {
         align: 'right',
         columns: 1,
@@ -3134,7 +3134,7 @@ class RelacionDespachoService {
         .rect(35, 510 + boxesOffsetY, 350, 50)
         .stroke(); // Caja "Autorizado para Traslado"
       doc.fontSize(10);
-      doc.font('Helvetica-Bold');
+      doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
       doc.y = 515 + boxesOffsetY;
       doc.x = 140;
       doc.text('Autorizado para Traslado');

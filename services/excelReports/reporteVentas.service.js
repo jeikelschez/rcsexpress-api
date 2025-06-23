@@ -187,6 +187,16 @@ class ReporteVentasService {
           ],
         };
 
+        if (!data.serie.includes('44'))
+          where.nro_documento = {
+            [Sequelize.Op.gt]: 550000000,
+          };
+
+        if (!data.serie.includes('55'))
+          where.nro_documento = {
+            [Sequelize.Op.lte]: 550000000,
+          };
+
         ventas = await models.Mmovimientos.findAll({
           where: where,
           attributes: [
@@ -1179,8 +1189,7 @@ class ReporteVentasService {
             if (data.dolar == true) {
               if (data.ventas[item].valor_dolar > 0) {
                 declaradoDolar =
-                  declarado /
-                  utils.parseFloatN(data.ventas[item].valor_dolar);
+                  declarado / utils.parseFloatN(data.ventas[item].valor_dolar);
               }
               worksheet.getCell('U' + i).value = parseFloat(
                 declaradoDolar.toFixed(2)
