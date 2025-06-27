@@ -601,6 +601,17 @@ class ReporteVentasService {
           where.cod_agencia = data.agencia;
         }
 
+
+        if (tipo == 'GC' && !data.serie.includes('44'))
+          where.nro_documento = {
+            [Sequelize.Op.gt]: 550000000,
+          };
+
+        if (tipo == 'GC' && !data.serie.includes('55'))
+          where.nro_documento = {
+            [Sequelize.Op.lte]: 550000000,
+          };
+
         if (data.estatus_admin) where.estatus_administra = data.estatus_admin;
         if (data.pagado_en) where.pagado_en = data.pagado_en;
         if (data.modalidad) where.modalidad_pago = data.modalidad;
@@ -1371,7 +1382,7 @@ class ReporteVentasService {
         }
 
         doc.fontSize(9);
-        doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 510, 35);
+        doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 518, 35);
         if (data.estatus_admin != 'A') {
           if (tipo == 'GC') {
             doc.text('Fecha', 30, 190);

@@ -11241,6 +11241,59 @@
         }
       }
     },
+    "/mmovimientos/update-estatus-masivo": {
+      "put": {
+        "tags": ["Maestro_Movimientos"],
+        "summary": "Actualizar masivamente el estatus administrativo de guías",
+        "description": "Actualiza el estatus_administra de todas las guías en un rango de fechas, con nro_documento >= 550000000, estatus_administra = 'F' y t_de_documento = 'GC'.",
+        "requestBody": {
+          "description": "Datos para la actualización masiva",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "desde": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "01/06/2025"
+                  },
+                  "hasta": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "02/06/2025"
+                  },
+                  "nuevoEstatus": { "type": "string", "example": "N" },
+                  "agencia": { "type": "integer", "example": 1 },
+                  "cliente": { "type": "integer", "example": 123 }
+                },
+                "required": ["desde", "hasta", "nuevoEstatus"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Actualización masiva completada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "result": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error Interno del Sistema"
+          }
+        }
+      }
+    },
     "/mretenciones": {
       "get": {
         "tags": ["Maestro_Retenciones"],

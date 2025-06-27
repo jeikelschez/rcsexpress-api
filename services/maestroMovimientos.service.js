@@ -1,5 +1,6 @@
 const boom = require('@hapi/boom');
 const logger = require('./../config/logger');
+const moment = require('moment');
 
 const { models, Sequelize } = require('./../libs/sequelize');
 const UtilsService = require('./utils.service');
@@ -83,7 +84,7 @@ class MmovimientosService {
 
     if (ciudad) {
       params2.id = ciudad;
-    }    
+    }
 
     const guias = await models.Mmovimientos.findAll({
       where: params,
@@ -309,14 +310,8 @@ class MmovimientosService {
         Sequelize.literal(fechaEnvioCosto),
         'fecha_envio_costo',
       ]);
-      attributes.include.push([
-        Sequelize.literal(comisionEnt),
-        'com_entrega',
-      ]);
-      attributes.include.push([
-        Sequelize.literal(comisionSeg),
-        'com_seguro',
-      ]);
+      attributes.include.push([Sequelize.literal(comisionEnt), 'com_entrega']);
+      attributes.include.push([Sequelize.literal(comisionSeg), 'com_seguro']);
     }
 
     if (filters.include_zona) {
@@ -396,6 +391,32 @@ class MmovimientosService {
     }
     arrayLote['data'] = arrayDisp;
     return arrayLote;
+  }
+
+  async updateEstatusMasivo(desde, hasta, nuevoEstatus, agencia, cliente) {
+    console.log(nuevoEstatus)
+    const where = {
+      fecha_emision: {
+        [Sequelize.Op.between]: [
+          moment(desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+          moment(hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+        ],
+      },
+      nro_documento: {
+        [Sequelize.Op.gte]: 550000000,
+      },
+      estatus_administra: 'F',
+      t_de_documento: 'GC',
+    };
+
+    if (agencia) where.cod_agencia = agencia;
+    if (cliente) where.cod_cliente_org = cliente;
+
+    const [updatedRows] = await models.Mmovimientos.update(
+      { estatus_administra: nuevoEstatus },
+      { where }
+    );
+    return updatedRows;
   }
 }
 

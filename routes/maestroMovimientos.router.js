@@ -91,6 +91,26 @@ router.post(
 );
 
 router.put(
+  '/update-estatus-masivo',
+  authenticateJWT,
+  async (req, res, next) => {
+    try {
+      const { desde, hasta, nuevoEstatus, agencia, cliente } = req.body;
+      const result = await service.updateEstatusMasivo(
+        desde,
+        hasta,
+        nuevoEstatus,
+        agencia,
+        cliente
+      );
+      res.json({ message: 'Actualización masiva completada', cantidad: result });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.put(
   '/:id',
   authenticateJWT,
   validatorHandler(getMmovimientosSchema, 'params'),
