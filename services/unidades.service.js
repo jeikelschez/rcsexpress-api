@@ -2,7 +2,7 @@ const boom = require('@hapi/boom');
 
 const { models, Sequelize } = require('./../libs/sequelize');
 
-const unidadDesc = "CONCAT(placas, ' - Vehículo: ', descripcion, ' - ', chofer)";
+const unidadDesc = "CONCAT(placas, ' - Vehículo: ', descripcion)";
 
 class UnidadesService {
 
@@ -20,7 +20,7 @@ class UnidadesService {
           [Sequelize.literal(unidadDesc), 'unidad_desc']
         ]        
       },
-      order: [['placas', 'ASC']],
+      order: [['descripcion', 'ASC']],
     });
     return unidades;
   }
