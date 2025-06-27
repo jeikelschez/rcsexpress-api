@@ -20,7 +20,7 @@ class UnidadesService {
           [Sequelize.literal(unidadDesc), 'unidad_desc']
         ]        
       },
-      order: [['descripcion', 'ASC']],
+      order: [['chofer', 'ASC']],
     });
     return unidades;
   }
