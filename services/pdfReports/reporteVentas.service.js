@@ -5118,8 +5118,7 @@ class ReporteVentasService {
       case 'CCC':
         var i = 0;
         var page = 0;
-        var ymin;
-        ymin = 210;
+        var ymin = 210;
         for (var item = 0; item < data.ventas.length; item++) {
           doc.fontSize(9);
           doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf');

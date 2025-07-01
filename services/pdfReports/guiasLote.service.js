@@ -850,8 +850,8 @@ class GuiasLoteService {
             .lineTo(444, y + 3)
             .stroke();
           doc.text('Peso', 425, y);
-          doc.fontSize(11);
-          doc.y = y + 13;
+          doc.fontSize(9);
+          doc.y = y + 14;
           doc.x = 418;
           doc.text(utils.formatNumber(detalles[item].peso_kgs), {
             align: 'center',

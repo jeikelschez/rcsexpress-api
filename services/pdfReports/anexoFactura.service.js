@@ -64,35 +64,66 @@ class AnexoFacturaService {
       detalle[detalle.length - 1].fecha_emision
     ).format('DD/MM/YYYY');
 
-    doc
-      .image('./img/logo_rc.png', 50, 45, { width: 50 })
-      .fillColor('#444444')
-      .fontSize(13)
-      .font('Helvetica-Bold')
-      .text('RCS Express, S.A', 110, 50)
-      .text('R.I.F. J-31028463-6', 110, 70)
-      .fontSize(12)
-      .text('Valencia, ' + moment().format('DD/MM/YYYY'), 200, 50, {
-        align: 'right',
-      })
-      .fontSize(16)
-      .text('Informe de Ventas Realizadas', 200, 110)
-      .fontSize(11);
-    doc.y = 130;
-    doc.x = 213;
+    doc.image('./img/logo_rc.png', 40, 25, { width: 40 });
+    doc.fontSize(8);
+    doc.text('RCS EXPRESS, S.A', 40, 88);
+    doc.text('RIF. J-31028463-6', 40, 96);
+
+    doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
+
+    doc.fontSize(16);
+    doc.y = 60;
+    doc.x = 170;
+    doc.text('Informe de Ventas Realizadas', {
+      align: 'center',
+      columns: 1,
+      width: 300,
+    });
+
+    doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf');
+
+    doc.fontSize(12);
+    doc.y = 82;
+    doc.x = 170;
     doc.text(cliente_orig.nb_cliente, {
       align: 'center',
       columns: 1,
-      width: 200,
+      width: 300,
     });
-    doc.text('Desde: ' + fecha_emision_init, 200, 160);
-    doc.text('Hasta: ' + fecha_emision_end, 320, 160);
-    doc.text('Nro. Factura: ' + data.nroFact, 50, 140);
-    doc.text('Nro. Control: ' + data.nroControl, 50, 160);
-    doc.moveDown();
+    doc.y = 100;
+    doc.x = 170;
+    doc.text(
+      'Desde: ' + fecha_emision_init + '     ' + 'Hasta: ' + fecha_emision_end,
+      {
+        align: 'center',
+        columns: 1,
+        width: 300,
+      }
+    );
+
     doc.fontSize(9);
-    doc.y = 186;
-    doc.x = 40;
+    doc.x = 485;
+    doc.y = 35;
+    doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), {
+      align: 'right',
+      columns: 1,
+      width: 100,
+    });
+
+    doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
+    doc.text('Nro. Factura: ', 45, 115, { continued: true });
+    doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf');
+    doc.text(data.nroFact);
+
+    doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
+    doc.text('Nro. Control: ', 45, 126, { continued: true });
+    doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf');
+    doc.text(data.nroControl);
+
+    doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
+    doc.fontSize(9);
+    doc.y = 150;
+    doc.x = 42;
     doc.fillColor('black');
     doc.text('Mes/Año', {
       paragraphGap: 5,
@@ -100,8 +131,8 @@ class AnexoFacturaService {
       align: 'justify',
       columns: 1,
     });
-    doc.y = 186;
-    doc.x = 82;
+    doc.y = 150;
+    doc.x = 85;
     doc.fillColor('black');
     doc.text('Fecha Envio', {
       paragraphGap: 5,
@@ -109,8 +140,8 @@ class AnexoFacturaService {
       align: 'justify',
       columns: 1,
     });
-    doc.y = 186;
-    doc.x = 148;
+    doc.y = 150;
+    doc.x = 150;
     doc.fillColor('black');
     doc.text('Nro. Guía', {
       paragraphGap: 5,
@@ -118,8 +149,8 @@ class AnexoFacturaService {
       align: 'justify',
       columns: 1,
     });
-    doc.y = 186;
-    doc.x = 223;
+    doc.y = 150;
+    doc.x = 226;
     doc.fillColor('black');
     doc.text('Facturas Cliente', {
       paragraphGap: 5,
@@ -127,8 +158,8 @@ class AnexoFacturaService {
       align: 'justify',
       columns: 1,
     });
-    doc.y = 186;
-    doc.x = 318;
+    doc.y = 150;
+    doc.x = 321;
     doc.fillColor('black');
     doc.text('Origen', {
       paragraphGap: 5,
@@ -136,8 +167,8 @@ class AnexoFacturaService {
       align: 'justify',
       columns: 1,
     });
-    doc.y = 186;
-    doc.x = 353;
+    doc.y = 150;
+    doc.x = 356;
     doc.fillColor('black');
     doc.text('Destino', {
       paragraphGap: 5,
@@ -145,8 +176,8 @@ class AnexoFacturaService {
       align: 'justify',
       columns: 1,
     });
-    doc.y = 186;
-    doc.x = 394;
+    doc.y = 150;
+    doc.x = 400;
     doc.fillColor('black');
     doc.text('Monto Base', {
       paragraphGap: 5,
@@ -154,8 +185,8 @@ class AnexoFacturaService {
       align: 'justify',
       columns: 1,
     });
-    doc.y = 186;
-    doc.x = 456;
+    doc.y = 150;
+    doc.x = 460;
     doc.fillColor('black');
     doc.text('Impuesto', {
       paragraphGap: 5,
@@ -163,17 +194,18 @@ class AnexoFacturaService {
       align: 'justify',
       columns: 1,
     });
-    doc.y = 186;
-    doc.x = 510;
+    doc.y = 150;
+    doc.x = 513;
     doc.fillColor('black');
     doc.text('Monto Total');
-    doc.lineCap('butt').moveTo(40, 200).lineTo(565, 200).stroke();
+
+    doc.lineCap('butt').moveTo(40, 163).lineTo(565, 163).stroke();
   }
 
   async generateCustomerInformation(doc, data, detalle) {
     var i = 0;
     var page = 0;
-    var ymin = 210;
+    var ymin = 170;
     let base = 0;
     let impuesto = 0;
     let total = 0;
@@ -182,7 +214,9 @@ class AnexoFacturaService {
     let descuento_impuesto =
       (descuento * utils.parseFloatN(data.porc_impuesto)) / 100;
 
+    doc.fontSize(8);
     for (var item = 0; item <= detalle.length - 1; item++) {
+      doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf');
       let fecha_envio =
         detalle[item].fecha_envio.substring(8, 10) +
         '/' +
@@ -222,11 +256,16 @@ class AnexoFacturaService {
       });
       doc.y = ymin + i;
       doc.x = 210;
-      doc.text(detalle[item].dimensiones.substring(0, 20), {
-        align: 'center',
-        columns: 1,
-        width: 105,
-      });
+      doc.text(
+        detalle[item].dimensiones
+          ? detalle[item].dimensiones.substring(0, 25)
+          : '',
+        {
+          align: 'center',
+          columns: 1,
+          width: 105,
+        }
+      );
       doc.y = ymin + i;
       doc.x = 326;
       doc.text(detalle[item]['agencias.ciudades.siglas'], {
@@ -270,8 +309,8 @@ class AnexoFacturaService {
           width: 65,
         }
       );
-      i = i + 17;
-      if (i >= 500) {
+      i = i + 12;
+      if (i >= 560) {
         doc.addPage();
         page = page + 1;
         doc.switchToPage(page);
@@ -279,15 +318,9 @@ class AnexoFacturaService {
         await this.generateHeader(doc, data, detalle);
       }
     }
-    if (i >= 500) {
-      doc.addPage();
-      page = page + 1;
-      doc.switchToPage(page);
-      await this.generateHeader(doc, data, detalle);
-      i = 0;
-      ymin = 50;
-    }
-    doc.font('Helvetica-Bold');
+
+    i = i + 5;
+    doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Bold.ttf');
     doc.text('Totales:', 310, ymin + i);
     doc.y = ymin + i;
     doc.x = 388;
@@ -374,9 +407,16 @@ class AnexoFacturaService {
       i++
     ) {
       doc.switchToPage(i);
-      doc.x = 275;
-      doc.y = 800;
-      doc.text(`Pagina ${i + 1} de ${range.count}`);
+      doc.fontSize(9);
+      doc.font('./libs/fonts/roboto-condensed/RobotoCondensed-Regular.ttf');
+
+      doc.x = 483;
+      doc.y = 50;
+      doc.text(`Pagina ${i + 1} de ${range.count}`, {
+        align: 'right',
+        columns: 1,
+        width: 100,
+      });
     }
   }
 }

@@ -130,7 +130,7 @@ class PdfReportsService {
   // REPORTE ANEXO FACTURACION
   async anexoFactura(data) {
     let resPath = 'anexoFactura.pdf';
-    let doc = new PDFDocument({ margin: 50 });
+    let doc = new PDFDocument({ margin: 50, bufferPages: true });
     doc.pipe(fs.createWriteStream(reportsPath + resPath));
     let validDoc = await anexoFacturaService.mainReport(doc, data);
     doc.end();
@@ -532,7 +532,7 @@ class PdfReportsService {
     let doc = new PDFDocument({
       margin: 20,
     });
-    if(tipo == 1) {
+    if (tipo == 1) {
       doc = new PDFDocument({
         margin: 10,
         bufferPages: true,
