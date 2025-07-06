@@ -34,14 +34,16 @@ router.get('/asignacionGuias', authenticateJWT, async (req, res, next) => {
 
 router.get('/cartaCliente', authenticateJWT, async (req, res, next) => {
   try {
-    const { data, cliente, contacto, cargo, ciudad, usuario } = req.headers;
+    const { data, cliente, contacto, cargo, ciudad, usuario, monto } =
+      req.headers;
     const response = await service.cartaCliente(
       data,
       cliente,
       contacto,
       cargo,
       ciudad,
-      usuario
+      usuario,
+      monto
     );
     res.status(200).json({
       message: 'PDF Generado',

@@ -394,7 +394,6 @@ class MmovimientosService {
   }
 
   async updateEstatusMasivo(desde, hasta, nuevoEstatus, agencia, cliente) {
-    console.log(nuevoEstatus)
     const where = {
       fecha_emision: {
         [Sequelize.Op.between]: [
@@ -409,8 +408,26 @@ class MmovimientosService {
       t_de_documento: 'GC',
     };
 
-    if (agencia) where.cod_agencia = agencia;
-    if (cliente) where.cod_cliente_org = cliente;
+    if (agencia && cliente) {
+      where[Sequelize.Op.or] = [
+        {
+          [Sequelize.Op.and]: [
+            { cod_agencia: agencia },
+            { cod_cliente_org: cliente },
+            { pagado_en: 'O' },
+          ],
+        },
+        {
+          [Sequelize.Op.and]: [
+            { cod_agencia_dest: agencia },
+            { cod_cliente_dest: cliente },
+            { pagado_en: 'D' },
+          ],
+        },
+      ];
+    } else if (agencia) {
+      where.cod_agencia = agencia;
+    }
 
     const [updatedRows] = await models.Mmovimientos.update(
       { estatus_administra: nuevoEstatus },

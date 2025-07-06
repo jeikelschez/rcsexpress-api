@@ -70,7 +70,7 @@ class PdfReportsService {
   }
 
   // REPORTE EMITIR CARTA CLIENTE
-  async cartaCliente(data, cliente, contacto, cargo, ciudad, usuario) {
+  async cartaCliente(data, cliente, contacto, cargo, ciudad, usuario, monto) {
     let resPath = 'cartaCliente.pdf';
     let doc = new PDFDocument({
       margin: 50,
@@ -84,7 +84,8 @@ class PdfReportsService {
       contacto,
       cargo,
       ciudad,
-      usuario
+      usuario,
+      monto
     );
     doc.end();
     return { validDoc: true, resPath: resPath };
