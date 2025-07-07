@@ -95,9 +95,8 @@ class PdfReportsService {
   async facturaPreimpreso(data) {
     let resPath = 'facturaPreimpreso.pdf';
     let doc = new PDFDocument({
-      size: [612, 396], 
+      size: 'LETTER',
       margin: 20,
-      layout: 'portrait'
     });
     doc.pipe(fs.createWriteStream(reportsPath + resPath));
     await facturaPreimpresoService.mainReport(doc, data);
