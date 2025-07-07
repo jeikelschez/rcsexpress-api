@@ -5,7 +5,9 @@ const utils = new UtilsService();
 
 class FacturaPreimpresoService {
   async mainReport(doc, data) {
-    await this.generateData(doc, JSON.parse(data));
+    data = JSON.parse(data);
+    data.nroControl = '13266';
+    await this.generateData(doc, data);
   }
 
   async generateData(doc, data) {
@@ -36,7 +38,7 @@ class FacturaPreimpresoService {
 
     // CLIENTE
     doc.text('CLIENTE:', 30, 60, { continued: true });
-    doc.font('Helvetica-Bold'); 
+    doc.font('Helvetica-Bold');
     doc.text(' ' + cliente_orig.nb_cliente);
     doc.font('Helvetica');
 
@@ -71,12 +73,42 @@ class FacturaPreimpresoService {
         width: 190,
         align: 'justify',
       }
-    );
-    doc.text('DOCUMENTO', 250, 40);
-    doc.text('FACTURA', 250, 58);
-    doc.text('NUMERO', 370, 40);
-    doc.text(data.nroControl, 370, 58);
-    doc.text('CONDICIONES DE PAGO', 250, 90);
+    );*/
+
+    // DOCUMENTO
+    doc.font('Helvetica-Bold');
+    doc.y = 60;
+    doc.x = 430;
+    doc.fillColor('black');
+    doc.text('DOCUMENTO', {
+      width: 70,
+      align: 'center',
+    });
+    doc.y = 75;
+    doc.x = 430;
+    doc.fillColor('black');
+    doc.text('FACTURA', {
+      width: 70,
+      align: 'center',
+    });
+
+    // NÚMERO DE CONTROL
+    doc.y = 60;
+    doc.x = 520;
+    doc.fillColor('black');
+    doc.text('NÚMERO', {
+      width: 70,
+      align: 'center',
+    });
+    doc.y = 75;
+    doc.x = 520;
+    doc.fillColor('black');
+    doc.text(data.nroControl, {
+      width: 70,
+      align: 'center',
+    });
+
+    /*doc.text('CONDICIONES DE PAGO', 250, 90);
     doc.text(data.formaPago, 250, 110);
     doc.text('FECHA DE EMISION', 370, 90);
     doc.text(data.fecha_emision, 370, 110);
