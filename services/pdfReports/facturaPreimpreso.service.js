@@ -6,10 +6,6 @@ const utils = new UtilsService();
 class FacturaPreimpresoService {
   async mainReport(doc, data) {
     data = JSON.parse(data);
-    data.nroControl = '13266';
-    data.formaPago = 'CONTADO';
-    data.fecha_emision = '28/04/2025';
-    data.nroDocumento = '9-1597';
     await this.generateData(doc, data);
   }
 
@@ -69,8 +65,8 @@ class FacturaPreimpresoService {
 
     // DIRECCIÓN FISCAL
     const direccionFiscal = cliente_orig.dir_fiscal
-  ? cliente_orig.dir_fiscal
-  : cliente_orig.direccion;
+      ? cliente_orig.dir_fiscal
+      : cliente_orig.direccion;
 
     const labelX = 30;
     const y1 = 105; // "DIRECCIÓN"
@@ -162,170 +158,115 @@ class FacturaPreimpresoService {
       align: 'center',
     });
 
+    // ENCABEZADO
     doc.font('Helvetica-Bold');
-    doc.text('DESCRIPCIÓN', 30, 160);
-    doc.text('CANTIDAD', 270, 160);
-    doc.text('PRECIO UNITARIO', 360, 160);
-    doc.text('%IVA', 470, 160);
-    doc.text('PRECIO TOTAL', 510, 160);
-    doc.lineCap('butt').moveTo(30, 170).lineTo(578, 170).stroke();
-    /*doc.text('DESCRIPCIÓN', 30, 255);
-    doc.fontSize(8);
-    doc.text('FORMA DE PAGO:', 30, 310);
-    doc.lineJoin('square').rect(30, 325, 230, 45).stroke();
-    doc.text('EFECTIVO', 40, 335);
-    doc.lineJoin('square').rect(90, 334, 10, 10).stroke();
-    doc.text('CHEQUE', 110, 335);
-    doc.text('NRO.', 40, 355);
-    doc.lineCap('butt').moveTo(65, 362).lineTo(180, 362).stroke();
-    doc.fontSize(7);*/
-    doc.font('Helvetica');
-    doc.text('SON: ' + total, 30, 340);
-    doc.text(data.nroDocumento, 30, 365);
-    /*doc.text('SUBTOTAL: ', 340, 300);
-    doc.y = 300;
-    doc.x = 340;
-    doc.text(utils.truncate(data.subtotal, 10), {
-      width: 125,
-      align: 'right',
-    });
-    doc.text('DESCUENTO(' + data.porc_desc + '%): ', 340, 315);
-    doc.y = 315;
-    doc.x = 340;
-    doc.text(utils.truncate(data.descuento, 10), {
-      width: 125,
-      align: 'right',
-    });
-    doc.text('BASE IMPONIBLE: ', 340, 330);
-    doc.y = 330;
-    doc.x = 340;
-    doc.text(utils.truncate(data.base, 10), {
-      width: 125,
-      align: 'right',
-    });
-    doc.text('MONTO EXENTO: ', 340, 345);
-    doc.y = 345;
-    doc.x = 340;
-    doc.text(utils.truncate(data.exento, 10), {
-      width: 125,
-      align: 'right',
-    });
-    doc.text('IVA(' + data.iva + '%): ', 340, 360);
-    doc.y = 360;
-    doc.x = 340;
-    doc.text(utils.truncate(data.impuesto, 10), {
-      width: 125,
-      align: 'right',
-    });
-    doc.text('TARIFA POSTAL (E): ', 340, 375);
-    doc.y = 375;
-    doc.x = 340;
-    doc.text(utils.truncate(data.fpo, 10), {
-      width: 125,
-      align: 'right',
-    });
-    doc.text('TOTAL: ', 340, 390);
-    doc.y = 390;
-    doc.x = 340;
-    doc.text(utils.truncate(data.total, 10), {
-      width: 125,
-      align: 'right',
-    });
-    doc.y = 275;
-    doc.x = 30;
-    doc.fontSize(8);
-    if (data.monto_divisas != '0,00') {
-      doc.text(
-        'PROVIDENCIA ADMINISTRATIVA N° SNAT 2022/000013 que designan a los Sujetos Pasivos Especiales como Agentes de Percepción del IGTF',
-        {
-          width: 280,
-          align: 'justify',
-        }
-      );
-      doc.y = 400;
-      doc.x = 30;
-      doc.fontSize(8);
-      doc.text(
-        'PROVIDENCIA ADMINISTRATIVA N° SNAT 2022/000013 que designan a los Sujetos Pasivos Especiales como Agentes de Percepción del IGTF',
-        {
-          width: 280,
-          align: 'justify',
-        }
-      );
-      doc.lineJoin('square').rect(100, 430, 340, 45).stroke();
-      doc.lineCap('butt').moveTo(100, 453).lineTo(440, 453).stroke();
-      doc.lineCap('butt').moveTo(185, 430).lineTo(185, 475).stroke();
-      doc.lineCap('butt').moveTo(250, 430).lineTo(250, 475).stroke();
-      doc.lineCap('butt').moveTo(320, 430).lineTo(320, 475).stroke();
-      doc.lineCap('butt').moveTo(380, 430).lineTo(380, 475).stroke();
-      doc.text('PAGO EN DIVISA', 108, 438);
-      doc.text('ALICUOTA', 197, 438);
-      doc.text('IGTF DIVISA', 260, 438);
-      doc.text('TAZA BCV', 329, 438);
-      doc.text('IGTF BS', 394, 438);
-      doc.y = 460;
-      doc.x = 108;
-      doc.text(data.monto_divisas, {
-        width: 280,
-        align: 'justify',
-      });
-      doc.text('3%', 211, 460);
-      doc.y = 460;
-      doc.x = 275;
-      doc.text(data.monto_igtf, {
-        width: 100,
-        align: 'justify',
-      });
-      doc.y = 460;
-      doc.x = 347;
-      doc.text(data.valor_dolar, {
-        width: 100,
-        align: 'justify',
-      });
-      doc.y = 460;
-      doc.x = 402;
-      doc.text(data.igtf_bs, {
-        width: 100,
-        align: 'justify',
-      });
-    }
+    doc.text('DESCRIPCIÓN', 30, 150);
+    doc.text('CANTIDAD', 270, 150);
+    doc.text('PRECIO UNITARIO', 360, 150);
+    doc.text('%IVA', 470, 150);
+    doc.text('PRECIO TOTAL', 510, 150);
+    doc.lineCap('butt').moveTo(30, 160).lineTo(578, 160).stroke();
 
-    var i = 0;
-    console.log(data.detalles);
-    for (var item = 0; item <= data.detalles.length - 1; item++) {
-      doc.fontSize(8);
-      doc.text(data.detalles[item].concepto, 30, 195 + i);
-      doc.y = 195 + i;
-      doc.x = 193;
-      doc.fillColor('black');
-      doc.text(data.detalles[item].cantidad, {
-        width: 57,
-        align: 'center',
-      });
-      doc.y = 195 + i;
-      doc.x = 240;
-      doc.fillColor('black');
-      doc.text(utils.truncate(data.detalles[item].costo_unitario, 10), {
-        width: 97,
-        align: 'right',
-      });
-      doc.y = 195 + i;
-      doc.x = 340;
-      doc.fillColor('black');
-      doc.text(utils.truncate(data.iva, 5), {
-        width: 30,
-        align: 'right',
-      });
-      doc.y = 195 + i;
-      doc.x = 380;
-      doc.fillColor('black');
-      doc.text(utils.truncate(data.detalles[item].subtotal, 10), {
-        width: 86,
-        align: 'right',
-      });
-      i = i + 20;
-      if (item === 2) item = data.detalles.length + 2;
-    }*/
+    doc.font('Helvetica');
+    doc.y = 230;
+    doc.x = 30;
+    doc.text('OBSERVACIÓN: ' + data.observacion, {
+      width: 350,
+      align: 'left',
+    });
+
+    // EFECTIVO Y CHEQUE
+    doc.roundedRect(30, 250, 360, 25, 3).stroke();
+    doc.text('EFECTIVO', 40, 255);
+    doc.lineJoin('square').rect(90, 254, 10, 10).stroke();
+    doc.text('CHEQUE', 110, 255);
+    doc.lineJoin('square').rect(155, 254, 10, 10).stroke();
+    doc.text('NRO.', 40, 265);
+
+    // MONTO TOTAL
+    doc.text('SON: ' + total, 30, 290);
+    doc.text(data.nroDocumento, 30, 335);
+
+    // SUBTOTAL, DESCUENTO, BASE IMPONIBLE, MONTO EXENTO, IVA, TARIFA POSTAL, TOTAL
+    doc.text('Sub-Total: ', 450, 200);
+    doc.y = 200;
+    doc.x = 500;
+    doc.text(data.subtotal, {
+      width: 70,
+      align: 'right',
+    });
+    doc.text('Base Imponible: ', 450, 215);
+    doc.y = 215;
+    doc.x = 500;
+    doc.text(parseFloat(data.base) > 0 ? data.base : '0.00', {
+      width: 70,
+      align: 'right',
+    });
+    doc.text('Monto Exento: ', 450, 230);
+    doc.y = 230;
+    doc.x = 500;
+    doc.text(parseFloat(data.exento) > 0 ? data.exento : '0.00', {
+      width: 70,
+      align: 'right',
+    });
+    doc.text('IVA %: ', 450, 245);
+    doc.y = 245;
+    doc.x = 500;
+    doc.text(parseFloat(data.iva) > 0 ? data.iva : '0.00', {
+      width: 70,
+      align: 'right',
+    });
+    doc.text('Tarifa Postal (E): ', 450, 260);
+    doc.y = 260;
+    doc.x = 500;
+    doc.text(parseFloat(data.fpo) > 0 ? data.fpo : '0.00', {
+      width: 70,
+      align: 'right',
+    });
+    doc.text('Total Bs: ', 450, 275);
+    doc.y = 275;
+    doc.x = 500;
+    doc.text(data.total, {
+      width: 70,
+      align: 'right',
+    });
+
+    // DETALLES DE LA FACTURA
+
+    // CONCEPTO
+    doc.text(data.detalles[0].concepto, 30, 170);
+
+    // CANTIDAD
+    doc.y = 170;
+    doc.x = 270;
+    doc.text(data.detalles[0].cantidad, {
+      width: 56,
+      align: 'center',
+    });
+
+    // COSTO UNITARIO
+    doc.y = 170;
+    doc.x = 350;
+    doc.text(data.detalles[0].costo_unitario, {
+      width: 70,
+      align: 'right',
+    });
+
+    // IVA
+    doc.y = 170;
+    doc.x = 420;
+    doc.text(utils.formatNumber(data.iva), {
+      width: 70,
+      align: 'right',
+    });
+
+    // SUB TOTAL
+    doc.y = 170;
+    doc.x = 500;
+    doc.text(data.detalles[0].subtotal, {
+      width: 70,
+      align: 'right',
+    });
   }
 
   // Función auxiliar para dividir texto en líneas según ancho
