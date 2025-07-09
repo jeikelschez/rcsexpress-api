@@ -170,7 +170,7 @@ class FacturaPreimpresoService {
     doc.font('Helvetica');
     doc.y = 230;
     doc.x = 30;
-    doc.text('OBSERVACIÓN: ' + data.observacion, {
+    doc.text('OBSERVACIÓN: ' + (data.observacion ? data.observacion : ''), {
       width: 350,
       align: 'left',
     });
