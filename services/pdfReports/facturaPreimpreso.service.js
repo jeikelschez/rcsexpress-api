@@ -184,7 +184,9 @@ class FacturaPreimpresoService {
     doc.text('NRO.', 40, 265);
 
     // MONTO TOTAL
+    doc.fontSize(7);
     doc.text('SON: ' + total, 30, 290);
+    doc.fontSize(9);
     doc.text(data.nroDocumento, 30, 335);
 
     // SUBTOTAL, DESCUENTO, BASE IMPONIBLE, MONTO EXENTO, IVA, TARIFA POSTAL, TOTAL
