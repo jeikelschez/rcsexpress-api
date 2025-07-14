@@ -38,6 +38,9 @@ const CostosSchema = {
   monto_anticipo: {
     type: DataTypes.DECIMAL,
   },
+  anticipo_ayudante: {
+    type: DataTypes.DECIMAL,
+  },
   cod_agencia: {
     allowNull: false,
     type: DataTypes.INTEGER,

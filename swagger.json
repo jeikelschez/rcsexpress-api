@@ -16858,6 +16858,9 @@
           },
           "cod_ayudante": {
             "type": "number"
+          },
+          "anticipo_ayudante": {
+            "type": "number"
           }
         }
       },

@@ -34,6 +34,12 @@ const montoDolarCostoDesc =
   ' THEN 0 ELSE ROUND(`Costos`.monto_anticipo /' +
   ' (SELECT valor FROM historico_dolar' +
   ' WHERE historico_dolar.fecha = `Costos`.fecha_envio), 2) END';
+const montoDolarAyudanteDesc =
+  'CASE WHEN ((SELECT valor FROM historico_dolar' +
+  ' WHERE historico_dolar.fecha = `Costos`.fecha_envio) = 0)' +
+  ' THEN 0 ELSE ROUND(`Costos`.anticipo_ayudante /' +
+  ' (SELECT valor FROM historico_dolar' +
+  ' WHERE historico_dolar.fecha = `Costos`.fecha_envio), 2) END';
 const totalDolarDesc =
   'SUM(CASE WHEN ((SELECT valor FROM historico_dolar' +
   ' WHERE historico_dolar.fecha = movimientos.fecha_emision) = 0)' +
@@ -306,8 +312,10 @@ class CostosTransporteService {
             'fecha_envio',
             'destino',
             'monto_anticipo',
+            'anticipo_ayudante',
             'observacion_gnral',
             [Sequelize.literal(montoDolarCostoDesc), 'monto_dolar'],
+            [Sequelize.literal(montoDolarAyudanteDesc), 'monto_dolar_ayudante'],
           ],
           include: [
             {
@@ -335,10 +343,18 @@ class CostosTransporteService {
         });
 
         let totalAnticipo = 0;
+        let totalAnticipoAyudante = 0;
         let totalDolar = 0;
+        let totalDolarAyudante = 0;
         for (var i = 0; i < costos.length; i++) {
           totalAnticipo += utils.parseFloatN(costos[i].monto_anticipo);
+          totalAnticipoAyudante += utils.parseFloatN(
+            costos[i].anticipo_ayudante
+          );
           totalDolar += utils.parseFloatN(costos[i].monto_dolar);
+          totalDolarAyudante += utils.parseFloatN(
+            costos[i].monto_dolar_ayudante
+          );
         }
 
         data.desde = desde;
@@ -346,7 +362,9 @@ class CostosTransporteService {
         data.tipo = tipo;
         data.dolar = dolar;
         data.totalAnticipo = totalAnticipo;
+        data.totalAnticipoAyudante = totalAnticipoAyudante;
         data.totalDolar = totalDolar;
+        data.totalDolarAyudante = totalDolarAyudante;
         break;
       case 'CO':
         costos = await models.Costos.findAll({
@@ -449,7 +467,6 @@ class CostosTransporteService {
 
         doc.image('./img/logo_rc.png', 35, 42, { width: 80 });
         doc.font('Helvetica-Bold');
-        doc.fillColor('#444444');
         doc.fontSize(18);
         doc.y = 50;
         doc.x = 130;
@@ -469,7 +486,6 @@ class CostosTransporteService {
           .text('Origen: ' + data.agencia, 130, 117)
           .text('Destino: ' + data.costos.destino, 130, 134)
           .text('Observacion: ' + observacion, 130, 150);
-        doc.fillColor('black');
         doc
           .fillColor('#444444')
           .text('Anticipo: ' + anticipo, 400, 83)
@@ -556,7 +572,6 @@ class CostosTransporteService {
 
         doc.image('./img/logo_rc.png', 35, 42, { width: 70 });
         doc.font('Helvetica-Bold');
-        doc.fillColor('#444444');
         doc.fontSize(15);
         doc.y = 40;
         doc.x = 130;
@@ -576,7 +591,6 @@ class CostosTransporteService {
           .text('Origen: ' + data.agencia, 130, 117)
           .text('Destino: ' + data.costos.destino, 130, 134)
           .text('Observacion: ' + observacion, 130, 150);
-        doc.fillColor('black');
         doc
           .fillColor('#444444')
           .text('Anticipo: ' + anticipo, 400, 83)
@@ -644,7 +658,6 @@ class CostosTransporteService {
       case 'GE':
         doc.image('./img/logo_rc.png', 35, 42, { width: 70 });
         doc.font('Helvetica-Bold');
-        doc.fillColor('#444444');
         doc.fontSize(18);
         doc.y = 100;
         doc.x = 190;
@@ -709,35 +722,45 @@ class CostosTransporteService {
         if (data.dolar == 'true') doc.text('Venta $', 530, 245);
         break;
       case 'DI':
-        doc.image('./img/logo_rc.png', 35, 42, { width: 70 });
+        doc.font('Helvetica');
+        doc.image('./img/logo_rc.png', 30, 25, { width: 40 });
+        doc.fontSize(8);
+        doc.text('RCS EXPRESS, S.A', 30, 88);
+        doc.text('RIF. J-31028463-6', 30, 96);
+
         doc.font('Helvetica-Bold');
-        doc.fillColor('#444444');
-        doc
-          .fontSize(12)
-          .text('Fecha: ' + moment().format('DD/MM/YYYY'), 650, 30);
-        doc.text('Ruta VLN: ___________________', 550, 75);
-        doc.text('Ruta VLN: ___________________', 550, 95);
-        doc.text('Hidroca: _____________________', 550, 115);
-        doc.text('Hidroca: _____________________', 550, 135);
-        doc.fontSize(20);
-        doc.y = 120;
-        doc.x = 180;
-        doc.text('Relación de Transporte Diario', {
-          align: 'left',
-          columns: 1,
-          width: 300,
-        });
-        doc.fontSize(22);
-        doc.y = 50;
-        doc.x = 180;
+        doc.fontSize(16);
+        doc.y = 30;
+        doc.x = 150;
         doc.text('Fecha', {
-          align: 'left',
+          align: 'center',
           columns: 1,
-          width: 300,
+          width: 100,
         });
-        doc.y = 75;
-        doc.x = 180;
+        doc.font('Helvetica');
+        doc.fontSize(16);
+        doc.y = 50;
+        doc.x = 150;
         doc.text(data.desde, {
+          align: 'center',
+          columns: 1,
+          width: 100,
+        });
+
+        doc
+          .fontSize(10)
+          .text('Fecha: ' + moment().format('DD/MM/YYYY'), 668, 30);
+
+        doc.text('Ruta VLN: ___________________', 595, 60);
+        doc.text('Ruta VLN: ___________________', 595, 75);
+        doc.text('   Hidroca: ___________________', 595, 90);
+        doc.text('   Hidroca: ___________________', 595, 105);
+
+        doc.font('Helvetica-Bold');
+        doc.fontSize(20);
+        doc.y = 100;
+        doc.x = 220;
+        doc.text('Relación de Transporte Diario', {
           align: 'left',
           columns: 1,
           width: 300,
@@ -746,7 +769,6 @@ class CostosTransporteService {
       case 'CO':
         doc.image('./img/logo_rc.png', 35, 42, { width: 70 });
         doc.font('Helvetica-Bold');
-        doc.fillColor('#444444');
         doc.fontSize(16);
         doc.y = 80;
         doc.x = 270;
@@ -758,7 +780,9 @@ class CostosTransporteService {
         doc.fontSize(12);
         doc.text('Desde: ' + data.desde, 300, 110);
         doc.text('Hasta: ' + data.hasta, 420, 110);
-        doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 650, 30);
+
+        doc.fontSize(10);
+        doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 668, 30);
         doc.y = 190;
         doc.x = 50;
         doc.fontSize(9);
@@ -842,7 +866,6 @@ class CostosTransporteService {
         ymin = 270;
         for (var item = 0; item < data.detalle.length; item++) {
           doc.fontSize(7);
-          doc.fillColor('#444444');
           doc.y = ymin + i;
           doc.x = 18;
           doc.text(item + 1, {
@@ -956,7 +979,6 @@ class CostosTransporteService {
 
           i += 22;
           if (i >= 440 || item >= 100) {
-            doc.fillColor('#BLACK');
             doc.addPage();
             page = page + 1;
             doc.switchToPage(page);
@@ -964,7 +986,6 @@ class CostosTransporteService {
             await this.generateHeader(doc, data);
           }
         }
-        doc.fillColor('#BLACK');
         doc.y = ymin + i + 5;
         doc.x = 360;
         doc.text('TOTALES:', {
@@ -1012,7 +1033,6 @@ class CostosTransporteService {
         ymin = 280;
         for (var item = 0; item < data.detalle.length; item++) {
           doc.fontSize(9);
-          doc.fillColor('#444444');
           doc.y = ymin + i;
           doc.x = 35;
           doc.text(
@@ -1115,7 +1135,6 @@ class CostosTransporteService {
             await this.generateHeader(doc, data);
           }
         }
-        doc.fillColor('#BLACK');
         doc.y = ymin + i + 5;
         doc.x = 35;
         doc.text('TOTALES:', {
@@ -1177,7 +1196,6 @@ class CostosTransporteService {
         ymin = 270;
         for (var item = 0; item < data.costos.length; item++) {
           doc.fontSize(9);
-          doc.fillColor('#444444');
           doc.y = ymin + i;
           doc.x = 40;
           doc.text(
@@ -1291,7 +1309,6 @@ class CostosTransporteService {
             await this.generateHeader(doc, data);
           }
         }
-        doc.fillColor('#BLACK');
         doc.y = ymin + i + 5;
         doc.x = 35;
         doc.text('TOTALES:', {
@@ -1350,44 +1367,65 @@ class CostosTransporteService {
         }
         break;
       case 'DI':
-        ymin = 160;
+        ymin = 130;
         for (var item = 0; item < data.costos.length; item++) {
-          doc.fillColor('#444444');
+          doc.lineWidth(0.5);
           doc
             .lineJoin('miter')
-            .rect(35, ymin + i, 720, 70)
+            .rect(35, ymin + i, 720, 50)
             .stroke();
-          doc.fontSize(10);
+
+          doc.fontSize(9);
+
+          doc.font('Helvetica-Bold');
+          doc.text('Origen: ', 50, ymin + i + 8, { continued: true });
+          doc.font('Helvetica');
+          doc.text(data.costos[item]['agencias.nb_agencia']);
+
+          doc.font('Helvetica-Bold');
+          doc.text('Chofer: ', 50, ymin + i + 22, { continued: true });
+          doc.font('Helvetica');
+          doc.text(data.costos[item]['agentes.persona_responsable']);
+
+          doc.font('Helvetica-Bold');
+          doc.text('Ayudante: ', 50, ymin + i + 36, { continued: true });
+          doc.font('Helvetica');
           doc.text(
-            'Origen: ' + data.costos[item]['agencias.nb_agencia'],
-            50,
-            ymin + i + 13
-          );
-          doc.text(
-            'Chofer: ' + data.costos[item]['agentes.persona_responsable'],
-            50,
-            ymin + i + 33
-          );
-          let ayudante =
             data.costos[item]['ayudantes.nb_ayudante'] == null
               ? ''
-              : data.costos[item]['ayudantes.nb_ayudante'];
-          doc.text('Ayudante: ' + ayudante, 50, ymin + i + 51);
-          doc.text(
-            'Destinos: ' + data.costos[item].destino,
-            270,
-            ymin + i + 13
+              : data.costos[item]['ayudantes.nb_ayudante']
           );
+
+          doc.font('Helvetica-Bold');
+          doc.text('Destinos: ', 270, ymin + i + 8, { continued: true });
+          doc.font('Helvetica');
+          doc.text(data.costos[item].destino);
+
+          doc.font('Helvetica-Bold');
+          doc.text('Anticipo: ', 270, ymin + i + 22, { continued: true });
+          doc.font('Helvetica');
           doc.text(
-            'Anticipo: ' + data.costos[item].monto_anticipo,
-            270,
-            ymin + i + 33
+            data.costos[item].monto_anticipo
+              ? utils.formatNumber(data.costos[item].monto_anticipo)
+              : '0,00'
           );
-          doc.y = ymin + i + 13;
-          doc.x = 490;
+
+          doc.font('Helvetica-Bold');
+          doc.text('Anticipo: ', 270, ymin + i + 36, { continued: true });
+          doc.font('Helvetica');
           doc.text(
-            'Vehiculo: ' +
-              data.costos[item]['unidades.placas'] +
+            data.costos[item].anticipo_ayudante
+              ? utils.formatNumber(data.costos[item].anticipo_ayudante)
+              : '0,00'
+          );
+
+          doc.font('Helvetica-Bold');
+          doc.text('Vehículo: ', 460, ymin + i + 8);
+          doc.font('Helvetica');
+          doc.y = ymin + i + 8;
+          doc.x = 503;
+          doc.text(
+            data.costos[item]['unidades.placas'] +
               ' - Vehículo: ' +
               data.costos[item]['unidades.descripcion'],
             {
@@ -1396,19 +1434,24 @@ class CostosTransporteService {
               width: 250,
             }
           );
+
           let observacion =
             data.costos[item].observacion_gnral == null
               ? ''
               : data.costos[item].observacion_gnral;
-          doc.y = ymin + i + 43;
-          doc.x = 490;
-          doc.text('Observacion: ' + observacion, {
+          doc.font('Helvetica-Bold');
+          doc.text('Observación: ', 460, ymin + i + 28);
+          doc.font('Helvetica');
+          doc.y = ymin + i + 28;
+          doc.x = 520;
+          doc.text(observacion, {
             align: 'left',
             columns: 1,
-            width: 250,
+            width: 220,
           });
-          i += 80;
-          if (i >= 350 || item >= 100) {
+
+          i += 53;
+          if (i >= 380 || item >= 120) {
             doc.addPage();
             page = page + 1;
             doc.switchToPage(page);
@@ -1417,27 +1460,54 @@ class CostosTransporteService {
           }
         }
         doc.font('Helvetica-Bold');
-        doc.fontSize(18);
-        doc.fillColor('#BLACK');
+        doc.fontSize(16);
+        doc.y = ymin + i + 10;
+        doc.x = 250;
+        doc.text('Resumen General:', {
+          align: 'left',
+          columns: 1,
+          width: 200,
+        });
+        doc.fontSize(12);
         doc.y = ymin + i + 10;
         doc.x = 450;
-        doc.text('Total Anticipo:', {
+        doc.text('Total Anticipo Choferes:', {
           align: 'left',
           columns: 1,
           width: 300,
         });
-        doc.fontSize(12);
-        doc.y = ymin + i + 12;
+        doc.y = ymin + i + 10;
         doc.x = 520;
         doc.text(utils.formatNumber(data.totalAnticipo), {
           align: 'right',
           columns: 1,
           width: 150,
         });
+        doc.y = ymin + i + 30;
+        doc.x = 450;
+        doc.text('Total Anticipo Ayudantes:', {
+          align: 'left',
+          columns: 1,
+          width: 300,
+        });
+        doc.y = ymin + i + 30;
+        doc.x = 520;
+        doc.text(utils.formatNumber(data.totalAnticipoAyudante), {
+          align: 'right',
+          columns: 1,
+          width: 150,
+        });
         if (data.dolar == 'true') {
-          doc.y = ymin + i + 12;
+          doc.y = ymin + i + 10;
           doc.x = 590;
           doc.text(utils.formatNumber(data.totalDolar) + '$', {
+            align: 'right',
+            columns: 1,
+            width: 150,
+          });
+          doc.y = ymin + i + 30;
+          doc.x = 590;
+          doc.text(utils.formatNumber(data.totalDolarAyudante) + '$', {
             align: 'right',
             columns: 1,
             width: 150,
@@ -1447,7 +1517,6 @@ class CostosTransporteService {
       case 'CO':
         ymin = 185;
         for (var item = 0; item < data.costos.length; item++) {
-          doc.fillColor('#BLACK');
           doc.y = ymin + i + 5;
           doc.x = 33;
           doc.text(moment(data.costos[item].fecha_envio).format('DD/MM/YYYY'), {
@@ -1688,10 +1757,9 @@ class CostosTransporteService {
     ) {
       doc.switchToPage(i);
       if (data.tipo == 'DI' || data.tipo == 'CO') {
-        doc.fontSize(12);
-        doc.fillColor('#444444');
+        doc.fontSize(10);
         doc.x = 650;
-        doc.y = 50;
+        doc.y = 42;
         doc.text(`Pagina ${i + 1} de ${range.count}`, {
           align: 'right',
           columns: 1,
@@ -1699,7 +1767,6 @@ class CostosTransporteService {
         });
       } else {
         doc.fontSize(8);
-        doc.fillColor('#444444');
         doc.x = 446;
         doc.y = 50;
         doc.text(`Pagina ${i + 1} de ${range.count}`, {
