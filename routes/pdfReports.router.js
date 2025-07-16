@@ -32,6 +32,20 @@ router.get('/asignacionGuias', authenticateJWT, async (req, res, next) => {
   }
 });
 
+router.get('/cartaAsignacion', authenticateJWT, async (req, res, next) => {
+  try {
+    const { id, usuario } = req.headers;
+    const response = await service.cartaAsignacion(id, usuario);
+    res.status(200).json({
+      message: 'PDF Generado',
+      pdfPath: response.resPath,
+      validDoc: response.validDoc,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get('/cartaCliente', authenticateJWT, async (req, res, next) => {
   try {
     const { data, cliente, contacto, cargo, ciudad, usuario, monto } =

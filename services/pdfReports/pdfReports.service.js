@@ -5,6 +5,8 @@ const reportsPath = './services/pdfReports/pdf/';
 
 const AsignacionGuiasService = require('./asignacionGuias.service');
 const asignacionGuiasService = new AsignacionGuiasService();
+const CartaAsignacionService = require('./cartaAsignacion.service');
+const cartaAsignacionService = new CartaAsignacionService();
 const CartaClienteService = require('./cartaCliente.service');
 const cartaClienteService = new CartaClienteService();
 const FacturaPreimpresoService = require('./facturaPreimpreso.service');
@@ -65,6 +67,16 @@ class PdfReportsService {
     let doc = new PDFDocument({ margin: 50 });
     doc.pipe(fs.createWriteStream(reportsPath + resPath));
     await asignacionGuiasService.mainReport(doc, id);
+    doc.end();
+    return { validDoc: true, resPath: resPath };
+  }
+
+  // REPORTE DE CARTA DE ASIGNACION
+  async cartaAsignacion(id, usuario) {
+    let resPath = 'cartaAsignacion.pdf';
+    let doc = new PDFDocument({ margin: 20 });
+    doc.pipe(fs.createWriteStream(reportsPath + resPath));
+    await cartaAsignacionService.mainReport(doc, id, usuario);
     doc.end();
     return { validDoc: true, resPath: resPath };
   }
