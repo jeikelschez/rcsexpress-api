@@ -25,115 +25,219 @@ const clienteDestDesc =
 
 class RelacionDespachoService {
   async mainReport(doc, data, detalle) {
-    data = JSON.parse(data);
     detalle = detalle.join(',');
-    let dataDetalle = [];
 
-    switch (data.tipoReporte) {
-      case 'GPA':
-      case 'APZ':
-      case 'MAD':
-        dataDetalle = await models.Mmovimientos.findAll({
-          where: {
-            nro_documento: {
-              [Sequelize.Op.in]: detalle.split(','),
-            },
+    let dataDetalle = await models.Mmovimientos.findAll({
+      where: {
+        nro_documento: {
+          [Sequelize.Op.in]: detalle.split(','),
+        },
+      },
+      include: [
+        {
+          model: models.Agencias,
+          as: 'agencias',
+          include: {
+            model: models.Ciudades,
+            as: 'ciudades',
           },
-          include: [
-            {
-              model: models.Agencias,
-              as: 'agencias',
-              include: {
-                model: models.Ciudades,
-                as: 'ciudades',
-              },
-            },
-            {
-              model: models.Agencias,
-              as: 'agencias_dest',
-              include: {
-                model: models.Ciudades,
-                as: 'ciudades',
-              },
-            },
-            {
-              model: models.Zonas,
-              as: 'zonas_dest',
-            },
+        },
+        {
+          model: models.Agencias,
+          as: 'agencias_dest',
+          include: {
+            model: models.Ciudades,
+            as: 'ciudades',
+          },
+        },
+        {
+          model: models.Zonas,
+          as: 'zonas_dest',
+        },
+      ],
+      attributes: {
+        include: [
+          [Sequelize.literal(clienteOrigDesc), 'cliente_orig_desc'],
+          [Sequelize.literal(clienteDestDesc), 'cliente_dest_desc'],
+        ],
+      },
+      order: JSON.parse(data.sortBy),
+      raw: true,
+    });
+
+    let hDolar = await models.Hdolar.findAll({
+      where: {
+        fecha: {
+          [Sequelize.Op.between]: [
+            moment(data.fecha_desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+            moment(data.fecha_hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
           ],
-          attributes: {
-            include: [
-              [Sequelize.literal(clienteOrigDesc), 'cliente_orig_desc'],
-              [Sequelize.literal(clienteDestDesc), 'cliente_dest_desc'],
-            ],
-          },
-          order: JSON.parse(data.sortBy),
-          raw: true,
-        });
-      default:
-        break;
+        },
+      },
+      raw: true,
+    });
+
+    let agenciaAgrupado = [];
+
+    if (data.tipoReporte == 'MAA') {
+      // Totales generales
+      let totales = {
+        piezas: 0,
+        peso: 0,
+        carga_neta: 0,
+        credito_origen: 0,
+        credito_destino: 0,
+        contado_origen: 0,
+        contado_destino: 0,
+        monto_dolar: 0,
+        valor_declarado: 0,
+        valor_declarado_dolar: 0,
+      };
+
+      for (let i = 0; i < dataDetalle.length; i++) {
+        const guiaActual = dataDetalle[i];
+        const codAgenciaDestino = guiaActual.cod_agencia_dest;
+        let valor_dolar = 0;
+        if (data.dolar) {
+          let find_dolar = hDolar.findIndex(
+            (arr) => arr.fecha == guiaActual.fecha_emision
+          );
+          if (find_dolar >= 0) valor_dolar = hDolar[find_dolar].valor;
+        }
+
+        totales.piezas += parseFloat(guiaActual.nro_piezas);
+        totales.peso += parseFloat(guiaActual.peso_kgs);
+        totales.carga_neta += parseFloat(guiaActual.carga_neta);
+        totales.valor_declarado +=
+          guiaActual.monto_ref_cte_sin_imp > 0
+            ? parseFloat(guiaActual.monto_ref_cte_sin_imp)
+            : 0;
+        totales.valor_declarado_dolar +=
+          valor_dolar > 0 && guiaActual.monto_ref_cte_sin_imp > 0
+            ? guiaActual.monto_ref_cte_sin_imp / valor_dolar
+            : 0;
+
+        let agenciaIndex = agenciaAgrupado.findIndex(
+          (a) => a.codAgenciaDestino === codAgenciaDestino
+        );
+        if (agenciaIndex === -1) {
+          agenciaAgrupado.push({
+            codAgenciaDestino,
+            agencia: guiaActual['agencias_dest.nb_agencia'],
+            piezas: 0,
+            peso: 0,
+            carga_neta: 0,
+            credito_origen: 0,
+            credito_destino: 0,
+            contado_origen: 0,
+            contado_destino: 0,
+            monto_dolar: 0,
+            valor_declarado: 0,
+            valor_declarado_dolar: 0,
+            count: 0,
+          });
+          agenciaIndex = agenciaAgrupado.length - 1;
+        }
+        let agencia = agenciaAgrupado[agenciaIndex];
+        agencia.piezas += parseFloat(guiaActual.nro_piezas);
+        agencia.peso += parseFloat(guiaActual.peso_kgs);
+        agencia.carga_neta += parseFloat(guiaActual.carga_neta);
+        agencia.valor_declarado +=
+          guiaActual.monto_ref_cte_sin_imp > 0
+            ? parseFloat(guiaActual.monto_ref_cte_sin_imp)
+            : 0;
+        agencia.valor_declarado_dolar +=
+          valor_dolar > 0 && guiaActual.monto_ref_cte_sin_imp > 0
+            ? guiaActual.monto_ref_cte_sin_imp / valor_dolar
+            : 0;
+        agencia.count += 1;
+
+        const monto = parseFloat(guiaActual.monto_total) || 0;
+        agencia.monto_dolar += valor_dolar > 0 ? monto / valor_dolar : 0;
+        totales.monto_dolar += valor_dolar > 0 ? monto / valor_dolar : 0;
+        if (guiaActual.modalidad_pago == 'CR') {
+          if (guiaActual.pagado_en == 'O') {
+            agencia.credito_origen += monto;
+            totales.credito_origen += monto;
+          } else if (guiaActual.pagado_en == 'D') {
+            agencia.credito_destino += monto;
+            totales.credito_destino += monto;
+          }
+        } else {
+          if (guiaActual.pagado_en == 'O') {
+            agencia.contado_origen += monto;
+            totales.contado_origen += monto;
+          } else if (guiaActual.pagado_en == 'D') {
+            agencia.contado_destino += monto;
+            totales.contado_destino += monto;
+          }
+        }
+      }
+      // Puedes devolver los totales generales junto con el arreglo si lo necesitas
+      agenciaAgrupado.totales = totales;
     }
+
+    dataDetalle.agenciaAgrupado = agenciaAgrupado;
+    dataDetalle.hDolar = hDolar;
+
     await this.generateHeader(doc, data);
     await this.generateCustomerInformation(doc, data, dataDetalle);
     return true;
   }
 
   async generateHeader(doc, data) {
+    // Sección de información de la empresa y encabezado del reporte
+    doc
+      .image('./img/logo_rc.png', 50, 22, { width: 25 })
+      .fontSize(11)
+      .font('Helvetica-Bold')
+      .text('RCS Express, S.A', 80, 32)
+      .text('R.I.F. J-31028463-6', 80, 45)
+      .fontSize(9);
+
+    doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 665, 25);
+
+    doc.fontSize(7);
+    doc.y = 48;
+    doc.x = 590;
+    doc.text('Autorizado Por: ' + data.usuario, {
+      align: 'right',
+      columns: 1,
+      width: 150,
+    });
+    doc.y = 55;
+    doc.x = 590;
+    doc.text('Impreso Por: ' + data.usuario, {
+      align: 'right',
+      columns: 1,
+      width: 150,
+    });
+
+    doc.fontSize(14);
+    doc.y = 25;
+    doc.x = 150;
+    doc.text(data.nombreReporte, {
+      align: 'center',
+      columns: 1,
+      width: 490,
+    });
+
+    doc.fontSize(11);
+    doc.y = 41;
+    doc.x = 240;
+    doc.text(data.agencia, {
+      align: 'center',
+      columns: 1,
+      width: 300,
+    });
+    doc.fontSize(10);
+    doc.text('Desde: ' + data.fecha_desde, 280, 55);
+    doc.text('Hasta: ' + data.fecha_hasta, 400, 55);
     switch (data.tipoReporte) {
       case 'GPA':
       case 'APZ':
       case 'MAD':
         const headerOffsetY = -28;
-
-        // Sección de información de la empresa y encabezado del reporte
-        doc
-          .image('./img/logo_rc.png', 50, 22, { width: 25 })
-          .fillColor('#444444')
-          .fontSize(11)
-          .font('Helvetica-Bold')
-          .text('RCS Express, S.A', 80, 32)
-          .text('R.I.F. J-31028463-6', 80, 45)
-          .fontSize(9);
-
-        doc.text('Fecha: ' + moment().format('DD/MM/YYYY'), 665, 25);
-        doc.fontSize(8);
-
-        doc.y = 48;
-        doc.x = 590;
-        doc.text('Autorizado Por: ' + data.usuario, {
-          align: 'right',
-          columns: 1,
-          width: 150,
-        });
-        doc.y = 55;
-        doc.x = 590;
-        doc.text('Impreso Por: ' + data.usuario, {
-          align: 'right',
-          columns: 1,
-          width: 150,
-        });
-
-        doc.fontSize(14);
-        doc.y = 25;
-        doc.x = 150;
-        doc.text(data.nombreReporte, {
-          align: 'center',
-          columns: 1,
-          width: 490,
-        });
-
-        doc.fontSize(11);
-        doc.y = 41;
-        doc.x = 240;
-        doc.text(data.agencia, {
-          align: 'center',
-          columns: 1,
-          width: 300,
-        });
-        doc.fontSize(10);
-        doc.text('Desde: ' + data.fecha_desde, 280, 55);
-        doc.text('Hasta: ' + data.fecha_hasta, 400, 55);
-
         if (data.tipoReporte == 'APZ') {
           // Sección de Encabezados de Columnas de Datos del Documento
           // Se aplica el offset a todas las coordenadas 'y' dentro de esta sección
@@ -742,6 +846,26 @@ class RelacionDespachoService {
             }
           }
         }
+        break;
+      case 'MAA':
+        doc.fontSize(9);
+        doc.text('Agencia Destino', 35, 100);
+        doc.text('Guías', 233, 100);
+        doc.text('Piezas', 265, 100);
+        doc.text('Kgs.', 310, 100);
+        doc.text('Neto', 360, 100);
+        doc.text('VALOR DECLARADO', 405, 88);
+        doc.text('Bolivares', 408, 100);
+        if (data.dolar == true) doc.text('$', 480, 100);
+        doc.text('CRÉDITO', 550, 88);
+        doc.text('Origen', 530, 100);
+        doc.text('Destino', 580, 100);
+        doc.text('CONTADO', 645, 88);
+        doc.text('Origen', 630, 100);
+        doc.text('Destino', 675, 100);
+        if (data.dolar == true) doc.text('Total $', 728, 100);
+        doc.lineCap('butt').moveTo(30, 115).lineTo(760, 115).stroke();
+        break;
       default:
         break;
     }
@@ -777,18 +901,6 @@ class RelacionDespachoService {
     let total_declarado_dolar_group = 0;
     let total;
     let zonaOff = 41;
-
-    let hDolar = await models.Hdolar.findAll({
-      where: {
-        fecha: {
-          [Sequelize.Op.between]: [
-            moment(data.fecha_desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
-            moment(data.fecha_hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
-          ],
-        },
-      },
-      raw: true,
-    });
 
     switch (data.tipoReporte) {
       case 'GPA':
@@ -830,10 +942,10 @@ class RelacionDespachoService {
           let monto_dolar = 0;
           let declarado_dolar = 0;
 
-          let find_dolar = hDolar.findIndex(
+          let find_dolar = detalle.hDolar.findIndex(
             (arr) => arr.fecha == detalle[item].fecha_emision
           );
-          if (find_dolar >= 0) valor_dolar = hDolar[find_dolar].valor;
+          if (find_dolar >= 0) valor_dolar = detalle.hDolar[find_dolar].valor;
 
           if (valor_dolar > 0) {
             monto_dolar = (
@@ -3142,6 +3254,261 @@ class RelacionDespachoService {
             }
           }
         }
+        break;
+      case 'MAA':
+        ymin = 128;
+        for (var item = 0; item < detalle.agenciaAgrupado.length; item++) {
+          doc.fontSize(8);
+          doc.font('Helvetica');
+
+          doc.y = ymin + i;
+          doc.x = 35;
+          doc.text(detalle.agenciaAgrupado[item].agencia, {
+            align: 'left',
+            columns: 1,
+            width: 250,
+          });
+          doc.y = ymin + i;
+          doc.x = 220;
+          doc.text(detalle.agenciaAgrupado[item].count, {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = ymin + i;
+          doc.x = 255;
+          doc.text(detalle.agenciaAgrupado[item].piezas, {
+            align: 'center',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = ymin + i;
+          doc.x = 285;
+          doc.text(utils.formatNumber(detalle.agenciaAgrupado[item].peso), {
+            align: 'right',
+            columns: 1,
+            width: 50,
+          });
+          doc.y = ymin + i;
+          doc.x = 335;
+          doc.text(
+            utils.formatNumber(detalle.agenciaAgrupado[item].carga_neta),
+            {
+              align: 'right',
+              columns: 1,
+              width: 50,
+            }
+          );
+          doc.y = ymin + i;
+          doc.x = 390;
+          doc.text(
+            utils.formatNumber(detalle.agenciaAgrupado[item].valor_declarado),
+            {
+              align: 'right',
+              columns: 1,
+              width: 60,
+            }
+          );
+          doc.y = ymin + i;
+          doc.x = 520;
+          doc.text(
+            utils.formatNumber(detalle.agenciaAgrupado[item].credito_origen),
+            {
+              align: 'right',
+              columns: 1,
+              width: 50,
+            }
+          );
+          doc.y = ymin + i;
+          doc.x = 570;
+          doc.text(
+            utils.formatNumber(detalle.agenciaAgrupado[item].credito_destino),
+            {
+              align: 'right',
+              columns: 1,
+              width: 50,
+            }
+          );
+          doc.y = ymin + i;
+          doc.x = 615;
+          doc.text(
+            utils.formatNumber(detalle.agenciaAgrupado[item].contado_origen),
+            {
+              align: 'right',
+              columns: 1,
+              width: 50,
+            }
+          );
+          doc.y = ymin + i;
+          doc.x = 660;
+          doc.text(
+            utils.formatNumber(detalle.agenciaAgrupado[item].contado_destino),
+            {
+              align: 'right',
+              columns: 1,
+              width: 50,
+            }
+          );
+          if (data.dolar == true) {
+            doc.y = ymin + i;
+            doc.x = 455;
+            doc.text(
+              utils.formatNumber(
+                detalle.agenciaAgrupado[item].valor_declarado_dolar
+              ),
+              {
+                align: 'right',
+                columns: 1,
+                width: 50,
+              }
+            );
+
+            doc.y = ymin + i;
+            doc.x = 710;
+            doc.text(
+              utils.formatNumber(detalle.agenciaAgrupado[item].monto_dolar),
+              {
+                align: 'right',
+                columns: 1,
+                width: 50,
+              }
+            );
+          }
+
+          i += 18;
+          if (i >= 430) {
+            doc.fillColor('#BLACK');
+            doc.addPage();
+            page = page + 1;
+            doc.switchToPage(page);
+            i = 0;
+            await this.generateHeader(doc, data);
+          }
+        }
+
+        let z = ymin + i;
+        doc.lineWidth(1);
+        doc.font('Helvetica-Bold');
+
+        doc.lineCap('butt').moveTo(30, z).lineTo(760, z).stroke();
+
+        z += 10;
+
+        doc.y = z;
+        doc.x = 100;
+        doc.text('TOTALES', {
+          align: 'center',
+          columns: 1,
+          width: 50,
+        });
+
+        doc.y = z;
+        doc.x = 220;
+        doc.text(detalle.length, {
+          align: 'center',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = z;
+        doc.x = 255;
+        doc.text(detalle.agenciaAgrupado.totales.piezas, {
+          align: 'center',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = z;
+        doc.x = 285;
+        doc.text(utils.formatNumber(detalle.agenciaAgrupado.totales.peso), {
+          align: 'right',
+          columns: 1,
+          width: 50,
+        });
+        doc.y = z;
+        doc.x = 335;
+        doc.text(
+          utils.formatNumber(detalle.agenciaAgrupado.totales.carga_neta),
+          {
+            align: 'right',
+            columns: 1,
+            width: 50,
+          }
+        );
+        doc.y = z;
+        doc.x = 390;
+        doc.text(
+          utils.formatNumber(detalle.agenciaAgrupado.totales.valor_declarado),
+          {
+            align: 'right',
+            columns: 1,
+            width: 60,
+          }
+        );
+        doc.y = z;
+        doc.x = 515;
+        doc.text(
+          utils.formatNumber(detalle.agenciaAgrupado.totales.credito_origen),
+          {
+            align: 'right',
+            columns: 1,
+            width: 55,
+          }
+        );
+        doc.y = z;
+        doc.x = 570;
+        doc.text(
+          utils.formatNumber(detalle.agenciaAgrupado.totales.credito_destino),
+          {
+            align: 'right',
+            columns: 1,
+            width: 50,
+          }
+        );
+        doc.y = z;
+        doc.x = 615;
+        doc.text(
+          utils.formatNumber(detalle.agenciaAgrupado.totales.contado_origen),
+          {
+            align: 'right',
+            columns: 1,
+            width: 50,
+          }
+        );
+        doc.y = z;
+        doc.x = 660;
+        doc.text(
+          utils.formatNumber(detalle.agenciaAgrupado.totales.contado_destino),
+          {
+            align: 'right',
+            columns: 1,
+            width: 50,
+          }
+        );
+        if (data.dolar == true) {
+          doc.y = z;
+          doc.x = 455;
+          doc.text(
+            utils.formatNumber(
+              detalle.agenciaAgrupado.totales.valor_declarado_dolar
+            ),
+            {
+              align: 'right',
+              columns: 1,
+              width: 50,
+            }
+          );
+
+          doc.y = z;
+          doc.x = 710;
+          doc.text(
+            utils.formatNumber(detalle.agenciaAgrupado.totales.monto_dolar),
+            {
+              align: 'right',
+              columns: 1,
+              width: 50,
+            }
+          );
+        }
+        break;
       default:
         break;
     }
@@ -3155,7 +3522,6 @@ class RelacionDespachoService {
     ) {
       doc.switchToPage(i);
       doc.fontSize(9);
-      doc.fillColor('#444444');
       doc.x = 640;
       doc.y = 35;
       doc.text(`Pagina ${i + 1} de ${range.count}`, {

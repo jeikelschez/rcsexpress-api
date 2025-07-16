@@ -140,6 +140,7 @@ class PdfReportsService {
 
   // REPORTE RELACION DESPACHO
   async relacionDespacho(data, detalle) {
+    data = JSON.parse(data);
     let resPath = 'relacionDespacho.pdf';
     let doc = new PDFDocument({
       margin: 10,
