@@ -865,6 +865,7 @@ class CostosTransporteService {
       case 'DE':
         ymin = 270;
         for (var item = 0; item < data.detalle.length; item++) {
+          doc.font('Helvetica');
           doc.fontSize(7);
           doc.y = ymin + i;
           doc.x = 18;
@@ -986,8 +987,9 @@ class CostosTransporteService {
             await this.generateHeader(doc, data);
           }
         }
+        doc.font('Helvetica-Bold');
         doc.y = ymin + i + 5;
-        doc.x = 360;
+        doc.x = 360;        
         doc.text('TOTALES:', {
           align: 'center',
           columns: 1,
@@ -1032,6 +1034,7 @@ class CostosTransporteService {
       case 'RE':
         ymin = 280;
         for (var item = 0; item < data.detalle.length; item++) {
+          doc.font('Helvetica');
           doc.fontSize(9);
           doc.y = ymin + i;
           doc.x = 35;
@@ -1135,8 +1138,9 @@ class CostosTransporteService {
             await this.generateHeader(doc, data);
           }
         }
+        doc.font('Helvetica-Bold');
         doc.y = ymin + i + 5;
-        doc.x = 35;
+        doc.x = 35;        
         doc.text('TOTALES:', {
           align: 'left',
           columns: 1,
@@ -1195,6 +1199,7 @@ class CostosTransporteService {
       case 'GE':
         ymin = 270;
         for (var item = 0; item < data.costos.length; item++) {
+          doc.font('Helvetica');
           doc.fontSize(9);
           doc.y = ymin + i;
           doc.x = 40;
@@ -1309,8 +1314,9 @@ class CostosTransporteService {
             await this.generateHeader(doc, data);
           }
         }
+        doc.font('Helvetica-Bold');
         doc.y = ymin + i + 5;
-        doc.x = 35;
+        doc.x = 35;        
         doc.text('TOTALES:', {
           align: 'left',
           columns: 1,
@@ -1517,6 +1523,7 @@ class CostosTransporteService {
       case 'CO':
         ymin = 185;
         for (var item = 0; item < data.costos.length; item++) {
+          doc.font('Helvetica');
           doc.y = ymin + i + 5;
           doc.x = 33;
           doc.text(moment(data.costos[item].fecha_envio).format('DD/MM/YYYY'), {
@@ -1676,6 +1683,7 @@ class CostosTransporteService {
             await this.generateHeader(doc, data);
           }
         }
+        doc.font('Helvetica-Bold');
         doc.y = ymin + i + 5;
         doc.x = 360;
         doc.text('TOTALES:', {

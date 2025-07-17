@@ -123,4 +123,23 @@ router.get('/relacionFpo', authenticateJWT, async (req, res, next) => {
   }
 });
 
+router.get('/costosTransporte', authenticateJWT, async (req, res, next) => {
+  try {
+    const { desde, hasta, neta, dolar } = req.headers;
+    const response = await service.costosTransporte(
+      desde,
+      hasta,
+      neta,
+      dolar
+    );
+    res.status(200).json({
+      message: 'Excel Generado',
+      excelPath: response.resPath,
+      validDoc: response.validDoc,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
