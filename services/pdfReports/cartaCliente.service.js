@@ -96,7 +96,7 @@ class CartaClienteService {
     var i = 0;
     var page = 0;
     var y = 310;
-    var ymax = 280;
+    var ymax = 250;
     let montoTotal = 0;
 
     doc.font('Helvetica');
@@ -119,7 +119,8 @@ class CartaClienteService {
       });
 
       // Obtener las guías asociadas
-      let guiasAsoc = await this.getGuiasAsoc(dataMovimiento);
+      //let guiasAsoc = await this.getGuiasAsoc(dataMovimiento);
+      let guiasAsoc = [];
 
       doc
         .lineJoin('miter')
@@ -233,16 +234,6 @@ class CartaClienteService {
       }
     }
 
-    if (i >= 600) {
-      doc.addPage();
-      y = 160;
-      ymax = 280;
-      page = page + 1;
-      doc.switchToPage(page);
-      await this.generateHeader(doc);
-      i = 0;
-    }
-
     // Si hay monto, dibujar la sección de total
     if (monto) {
       doc.font('Helvetica-Bold');
@@ -270,6 +261,16 @@ class CartaClienteService {
         .moveTo(240, y + i)
         .lineTo(240, y + 20 + i)
         .stroke();
+    }
+
+    if (i >= 200) {
+      doc.addPage();
+      y = 160;
+      ymax = 280;
+      page = page + 1;
+      doc.switchToPage(page);
+      await this.generateHeader(doc);
+      i = 0;
     }
 
     doc.fontSize(13);
@@ -307,6 +308,25 @@ class CartaClienteService {
       i < end;
       i++
     ) {
+      // Bloque informativo en la parte inferior
+      const blockLeft = 30;
+      const blockY = 720;
+      const blockWidth = 180;
+      const blockLines = [
+        'SE ENTREGA',
+        'FACTURA ORIGINAL',
+        'PARA PROCESAR',
+        'PAGO',
+      ];
+      doc.fontSize(12);
+      doc.font('Helvetica-Bold');
+      for (let j = 0; j < blockLines.length; j++) {
+        doc.text(blockLines[j], blockLeft, blockY + j * 15, {
+          width: blockWidth,
+          align: 'center',
+        });
+      }
+
       doc.switchToPage(i);
       doc.x = 500;
       doc.y = 85;

@@ -85,7 +85,7 @@ class PdfReportsService {
   async cartaCliente(data, cliente, contacto, cargo, ciudad, usuario, monto) {
     let resPath = 'cartaCliente.pdf';
     let doc = new PDFDocument({
-      margin: 50,
+      margins: { top: 50, left: 50, right: 50, bottom: 10 },
       bufferPages: true,
     });
     doc.pipe(fs.createWriteStream(reportsPath + resPath));

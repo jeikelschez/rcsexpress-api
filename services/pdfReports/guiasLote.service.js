@@ -23,6 +23,8 @@ class GuiasLoteService {
   async mainReport(doc, tipo, data) {
     let params = {};
     data = JSON.parse(data);
+    let cliente_orig;
+    let cliente_dest;
 
     params.id = {
       [Sequelize.Op.in]: data.toString().split(','),
@@ -32,6 +34,7 @@ class GuiasLoteService {
       where: params,
       attributes: [
         'cod_cliente_org',
+        'cod_cliente_dest',
         'nro_documento',
         'dimensiones',
         'nro_piezas',
@@ -48,115 +51,13 @@ class GuiasLoteService {
         'cod_agencia_transito',
         'pagado_en',
         'tipo_carga',
+        'id_clte_part_orig',
+        'id_clte_part_dest',
         [Sequelize.literal(siglasOrg), 'siglas_org'],
         [Sequelize.literal(siglasDest), 'siglas_dest'],
         [Sequelize.literal(zonaDesc), 'zona_desc'],
       ],
       include: [
-        {
-          model: models.Clientes,
-          as: 'clientes_org',
-          include: [
-            {
-              model: models.Agencias,
-              as: 'agencias',
-              attributes: ['id'],
-              include: [
-                {
-                  model: models.Ciudades,
-                  as: 'ciudades',
-                  attributes: ['desc_ciudad'],
-                },
-              ],
-            },
-            {
-              model: models.Ciudades,
-              as: 'ciudades',
-              attributes: ['desc_ciudad'],
-              include: [
-                {
-                  model: models.Estados,
-                  as: 'estados',
-                  attributes: ['desc_estado'],
-                  include: [
-                    {
-                      model: models.Paises,
-                      as: 'paises',
-                      attributes: ['desc_pais'],
-                    },
-                  ],
-                },
-              ],
-            },
-            {
-              model: models.Municipios,
-              as: 'municipios',
-              attributes: ['desc_municipio'],
-            },
-            {
-              model: models.Parroquias,
-              as: 'parroquias',
-              attributes: ['desc_parroquia'],
-            },
-            {
-              model: models.Localidades,
-              as: 'localidades',
-              attributes: ['cod_postal'],
-            },
-          ],
-        },
-        {
-          model: models.Cparticulares,
-          as: 'cliente_particular',
-          include: [
-            {
-              model: models.Agencias,
-              as: 'agencias',
-              attributes: ['id'],
-              include: [
-                {
-                  model: models.Ciudades,
-                  as: 'ciudades',
-                  attributes: ['desc_ciudad'],
-                },
-              ],
-            },
-            {
-              model: models.Ciudades,
-              as: 'ciudades',
-              attributes: ['desc_ciudad'],
-              include: [
-                {
-                  model: models.Estados,
-                  as: 'estados',
-                  attributes: ['desc_estado'],
-                  include: [
-                    {
-                      model: models.Paises,
-                      as: 'paises',
-                      attributes: ['desc_pais'],
-                    },
-                  ],
-                },
-              ],
-            },
-            {
-              model: models.Municipios,
-              as: 'municipios',
-              attributes: ['desc_municipio'],
-            },
-            {
-              model: models.Parroquias,
-              as: 'parroquias',
-              attributes: ['desc_parroquia'],
-            },
-            {
-              model: models.Localidades,
-              as: 'localidades',
-              attributes: ['cod_postal'],
-            },
-          ],
-        },
         {
           model: models.Agentes,
           as: 'agentes_venta',
@@ -165,6 +66,235 @@ class GuiasLoteService {
       order: [['nro_documento', 'ASC']],
       raw: true,
     });
+
+    for (var item = 0; item < detalles.length; item++) {
+      if (detalles[item].id_clte_part_orig) {
+        cliente_orig = await models.Cparticulares.findByPk(
+          detalles[item].id_clte_part_orig,
+          {
+            include: [
+              {
+                model: models.Agencias,
+                as: 'agencias',
+                attributes: ['id'],
+                include: [
+                  {
+                    model: models.Ciudades,
+                    as: 'ciudades',
+                    attributes: ['desc_ciudad'],
+                  },
+                ],
+              },
+              {
+                model: models.Ciudades,
+                as: 'ciudades',
+                attributes: ['desc_ciudad'],
+                include: [
+                  {
+                    model: models.Estados,
+                    as: 'estados',
+                    attributes: ['desc_estado'],
+                    include: [
+                      {
+                        model: models.Paises,
+                        as: 'paises',
+                        attributes: ['desc_pais'],
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                model: models.Municipios,
+                as: 'municipios',
+                attributes: ['desc_municipio'],
+              },
+              {
+                model: models.Parroquias,
+                as: 'parroquias',
+                attributes: ['desc_parroquia'],
+              },
+              {
+                model: models.Localidades,
+                as: 'localidades',
+                attributes: ['cod_postal'],
+              },
+            ],
+            raw: true,
+          }
+        );
+      } else {
+        cliente_orig = await models.Clientes.findByPk(
+          detalles[item].cod_cliente_org,
+          {
+            include: [
+              {
+                model: models.Agencias,
+                as: 'agencias',
+                attributes: ['id'],
+                include: [
+                  {
+                    model: models.Ciudades,
+                    as: 'ciudades',
+                    attributes: ['desc_ciudad'],
+                  },
+                ],
+              },
+              {
+                model: models.Ciudades,
+                as: 'ciudades',
+                attributes: ['desc_ciudad'],
+                include: [
+                  {
+                    model: models.Estados,
+                    as: 'estados',
+                    attributes: ['desc_estado'],
+                    include: [
+                      {
+                        model: models.Paises,
+                        as: 'paises',
+                        attributes: ['desc_pais'],
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                model: models.Municipios,
+                as: 'municipios',
+                attributes: ['desc_municipio'],
+              },
+              {
+                model: models.Parroquias,
+                as: 'parroquias',
+                attributes: ['desc_parroquia'],
+              },
+              {
+                model: models.Localidades,
+                as: 'localidades',
+                attributes: ['cod_postal'],
+              },
+            ],
+            raw: true,
+          }
+        );
+      }
+
+      if (detalles[item].id_clte_part_dest) {
+        cliente_dest = await models.Cparticulares.findByPk(
+          detalles[item].id_clte_part_dest,
+          {
+            include: [
+              {
+                model: models.Agencias,
+                as: 'agencias',
+                attributes: ['id'],
+                include: [
+                  {
+                    model: models.Ciudades,
+                    as: 'ciudades',
+                    attributes: ['desc_ciudad'],
+                  },
+                ],
+              },
+              {
+                model: models.Ciudades,
+                as: 'ciudades',
+                attributes: ['desc_ciudad'],
+                include: [
+                  {
+                    model: models.Estados,
+                    as: 'estados',
+                    attributes: ['desc_estado'],
+                    include: [
+                      {
+                        model: models.Paises,
+                        as: 'paises',
+                        attributes: ['desc_pais'],
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                model: models.Municipios,
+                as: 'municipios',
+                attributes: ['desc_municipio'],
+              },
+              {
+                model: models.Parroquias,
+                as: 'parroquias',
+                attributes: ['desc_parroquia'],
+              },
+              {
+                model: models.Localidades,
+                as: 'localidades',
+                attributes: ['cod_postal'],
+              },
+            ],
+            raw: true,
+          }
+        );
+      } else {
+        cliente_dest = await models.Clientes.findByPk(
+          detalles[item].cod_cliente_dest,
+          {
+            include: [
+              {
+                model: models.Agencias,
+                as: 'agencias',
+                attributes: ['id'],
+                include: [
+                  {
+                    model: models.Ciudades,
+                    as: 'ciudades',
+                    attributes: ['desc_ciudad'],
+                  },
+                ],
+              },
+              {
+                model: models.Ciudades,
+                as: 'ciudades',
+                attributes: ['desc_ciudad'],
+                include: [
+                  {
+                    model: models.Estados,
+                    as: 'estados',
+                    attributes: ['desc_estado'],
+                    include: [
+                      {
+                        model: models.Paises,
+                        as: 'paises',
+                        attributes: ['desc_pais'],
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                model: models.Municipios,
+                as: 'municipios',
+                attributes: ['desc_municipio'],
+              },
+              {
+                model: models.Parroquias,
+                as: 'parroquias',
+                attributes: ['desc_parroquia'],
+              },
+              {
+                model: models.Localidades,
+                as: 'localidades',
+                attributes: ['cod_postal'],
+              },
+            ],
+            raw: true,
+          }
+        );
+      }
+
+      detalles[item].cliente_orig = cliente_orig;
+      detalles[item].cliente_dest = cliente_dest;
+    }
 
     await this.generateCustomerInformation(doc, tipo, detalles);
   }
@@ -290,7 +420,7 @@ class GuiasLoteService {
           doc.font('Helvetica-Bold');
           doc.y = y + 73;
           doc.x = 23;
-          doc.text(detalles[item]['clientes_org.razon_social'], {
+          doc.text(detalles[item].cliente_orig.nb_cliente, {
             align: 'center',
             columns: 1,
             width: 280,
@@ -315,11 +445,16 @@ class GuiasLoteService {
           doc.font('Helvetica');
           doc.y = y + 92;
           doc.x = 100;
-          doc.text(detalles[item]['clientes_org.rif_cedula'], {
-            align: 'left',
-            columns: 1,
-            width: 270,
-          });
+          doc.text(
+            detalles[item].cliente_orig.rif_cedula
+              ? detalles[item].cliente_orig.rif_cedula
+              : detalles[item].cliente_orig.rif_ci,
+            {
+              align: 'left',
+              columns: 1,
+              width: 270,
+            }
+          );
           doc.font('Helvetica-Bold');
           doc.y = y + 104;
           doc.x = 28;
@@ -331,11 +466,16 @@ class GuiasLoteService {
           doc.font('Helvetica');
           doc.y = y + 104;
           doc.x = 100;
-          doc.text(detalles[item]['clientes_org.tlf_cliente'], {
-            align: 'left',
-            columns: 1,
-            width: 270,
-          });
+          doc.text(
+            detalles[item].cliente_orig.tlf_cliente
+              ? detalles[item].cliente_orig.tlf_cliente
+              : detalles[item].cliente_orig.telefonos,
+            {
+              align: 'left',
+              columns: 1,
+              width: 270,
+            }
+          );
           doc.font('Helvetica-Bold');
           doc.y = y + 116;
           doc.x = 28;
@@ -355,7 +495,12 @@ class GuiasLoteService {
           doc.y = y + 116;
           doc.x = 100;
           doc.text(
-            utils.truncate(detalles[item]['clientes_org.dir_fiscal'], 132),
+            utils.truncate(
+              detalles[item].cliente_orig.dir_fiscal
+                ? detalles[item].cliente_orig.dir_fiscal
+                : detalles[item].cliente_orig.direccion,
+              132
+            ),
             {
               align: 'left',
               columns: 1,
@@ -373,7 +518,7 @@ class GuiasLoteService {
           doc.font('Helvetica');
           doc.y = y + 144;
           doc.x = 100;
-          doc.text(detalles[item]['clientes_org.parroquias.desc_parroquia'], {
+          doc.text(detalles[item].cliente_orig['parroquias.desc_parroquia'], {
             align: 'left',
             columns: 1,
             width: 100,
@@ -389,7 +534,7 @@ class GuiasLoteService {
           doc.font('Helvetica');
           doc.y = y + 144;
           doc.x = 235;
-          doc.text(detalles[item]['clientes_org.municipios.desc_municipio'], {
+          doc.text(detalles[item].cliente_orig['municipios.desc_municipio'], {
             align: 'left',
             columns: 1,
             width: 100,
@@ -405,7 +550,7 @@ class GuiasLoteService {
           doc.font('Helvetica');
           doc.y = y + 155;
           doc.x = 100;
-          doc.text(detalles[item]['clientes_org.ciudades.desc_ciudad'], {
+          doc.text(detalles[item].cliente_orig['ciudades.desc_ciudad'], {
             align: 'left',
             columns: 1,
             width: 100,
@@ -422,7 +567,7 @@ class GuiasLoteService {
           doc.y = y + 155;
           doc.x = 235;
           doc.text(
-            detalles[item]['clientes_org.ciudades.estados.desc_estado'],
+            detalles[item].cliente_orig['ciudades.estados.desc_estado'],
             {
               align: 'left',
               columns: 1,
@@ -440,7 +585,7 @@ class GuiasLoteService {
           doc.font('Helvetica');
           doc.y = y + 166;
           doc.x = 100;
-          doc.text(detalles[item]['clientes_org.localidades.cod_postal'], {
+          doc.text(detalles[item].cliente_orig['localidades.cod_postal'], {
             align: 'left',
             columns: 1,
             width: 100,
@@ -457,7 +602,7 @@ class GuiasLoteService {
           doc.y = y + 166;
           doc.x = 235;
           doc.text(
-            detalles[item]['clientes_org.ciudades.estados.paises.desc_pais'],
+            detalles[item].cliente_orig['ciudades.estados.paises.desc_pais'],
             {
               align: 'left',
               columns: 1,
@@ -469,7 +614,7 @@ class GuiasLoteService {
           doc.x = 23;
           doc.text(
             'ORIGEN: ' +
-              detalles[item]['clientes_org.agencias.ciudades.desc_ciudad'],
+              detalles[item].cliente_orig['agencias.ciudades.desc_ciudad'],
             {
               align: 'center',
               columns: 1,
@@ -496,7 +641,7 @@ class GuiasLoteService {
           doc.font('Helvetica-Bold');
           doc.y = y + 73;
           doc.x = 308;
-          doc.text(detalles[item]['cliente_particular.nb_cliente'], {
+          doc.text(detalles[item].cliente_dest.nb_cliente, {
             align: 'center',
             columns: 1,
             width: 280,
@@ -521,11 +666,16 @@ class GuiasLoteService {
           doc.font('Helvetica');
           doc.y = y + 92;
           doc.x = 385;
-          doc.text(detalles[item]['cliente_particular.rif_ci'], {
-            align: 'left',
-            columns: 1,
-            width: 270,
-          });
+          doc.text(
+            detalles[item].cliente_dest.rif_ci
+              ? detalles[item].cliente_dest.rif_ci
+              : detalles[item].cliente_dest.rif_cedula,
+            {
+              align: 'left',
+              columns: 1,
+              width: 270,
+            }
+          );
           doc.font('Helvetica-Bold');
           doc.y = y + 104;
           doc.x = 313;
@@ -537,10 +687,14 @@ class GuiasLoteService {
           doc.font('Helvetica');
           doc.y = y + 104;
           doc.x = 385;
-          doc.text(detalles[item]['cliente_particular.telefonos'], {
-            align: 'left',
-            columns: 1,
-            width: 270,
+          doc.text(
+            detalles[item].cliente_dest.telefonos
+              ? detalles[item].cliente_dest.telefonos
+              : detalles[item].cliente_dest.tlf_cliente,
+            {
+              align: 'left',
+              columns: 1,
+              width: 270,
           });
           doc.font('Helvetica-Bold');
           doc.y = y + 116;
@@ -561,7 +715,9 @@ class GuiasLoteService {
           doc.y = y + 116;
           doc.x = 385;
           doc.text(
-            utils.truncate(detalles[item]['cliente_particular.direccion'], 132),
+            utils.truncate(detalles[item].cliente_dest.direccion
+          ? detalles[item].cliente_dest.direccion
+          : detalles[item].cliente_dest.dir_fiscal, 132),
             {
               align: 'left',
               columns: 1,
@@ -580,7 +736,7 @@ class GuiasLoteService {
           doc.y = y + 144;
           doc.x = 385;
           doc.text(
-            detalles[item]['cliente_particular.parroquias.desc_parroquia'],
+            detalles[item].cliente_dest['parroquias.desc_parroquia'],
             {
               align: 'left',
               columns: 1,
@@ -599,7 +755,7 @@ class GuiasLoteService {
           doc.y = y + 144;
           doc.x = 520;
           doc.text(
-            detalles[item]['cliente_particular.municipios.desc_municipio'],
+            detalles[item].cliente_dest['municipios.desc_municipio'],
             {
               align: 'left',
               columns: 1,
@@ -617,7 +773,7 @@ class GuiasLoteService {
           doc.font('Helvetica');
           doc.y = y + 155;
           doc.x = 385;
-          doc.text(detalles[item]['cliente_particular.ciudades.desc_ciudad'], {
+          doc.text(detalles[item].cliente_dest['ciudades.desc_ciudad'], {
             align: 'left',
             columns: 1,
             width: 100,
@@ -634,7 +790,7 @@ class GuiasLoteService {
           doc.y = y + 155;
           doc.x = 520;
           doc.text(
-            detalles[item]['cliente_particular.ciudades.estados.desc_estado'],
+            detalles[item].cliente_dest['ciudades.estados.desc_estado'],
             {
               align: 'left',
               columns: 1,
@@ -653,7 +809,7 @@ class GuiasLoteService {
           doc.y = y + 166;
           doc.x = 385;
           doc.text(
-            detalles[item]['cliente_particular.localidades.cod_postal'],
+            detalles[item].cliente_dest['localidades.cod_postal'],
             {
               align: 'left',
               columns: 1,
@@ -672,9 +828,7 @@ class GuiasLoteService {
           doc.y = y + 166;
           doc.x = 520;
           doc.text(
-            detalles[item][
-              'cliente_particular.ciudades.estados.paises.desc_pais'
-            ],
+            detalles[item].cliente_dest['ciudades.estados.paises.desc_pais'],
             {
               align: 'left',
               columns: 1,
@@ -930,7 +1084,7 @@ class GuiasLoteService {
           doc.font('Helvetica-Bold');
           doc.y = y + 45;
           doc.x = 23;
-          doc.text(detalles[item]['clientes_org.razon_social'], {
+          doc.text(detalles[item].cliente_orig.nb_cliente, {
             align: 'center',
             columns: 1,
             width: 280,
@@ -940,17 +1094,23 @@ class GuiasLoteService {
           doc.font('Helvetica');
           doc.y = y + 60;
           doc.x = 28;
-          doc.text(detalles[item]['clientes_org.rif_cedula'], {
-            align: 'left',
-            columns: 1,
-            width: 270,
-          });
+          doc.text(
+            detalles[item].cliente_orig.rif_cedula
+              ? detalles[item].cliente_orig.rif_cedula
+              : detalles[item].cliente_orig.rif_ci,
+            {
+              align: 'left',
+              columns: 1,
+              width: 270,
+            }
+          );
           doc.y = y + 60;
           doc.x = 28;
           doc.text(
-            detalles[item]['clientes_org.dir_correo'] == '0'
+            !detalles[item].cliente_orig.dir_correo ||
+              detalles[item].cliente_orig.dir_correo == '0'
               ? ''
-              : detalles[item]['clientes_org.dir_correo'],
+              : detalles[item].cliente_orig.dir_correo.substr(0, 30),
             {
               align: 'right',
               columns: 1,
@@ -959,35 +1119,45 @@ class GuiasLoteService {
           );
           doc.y = y + 72;
           doc.x = 28;
-          doc.text(detalles[item]['clientes_org.tlf_cliente'], {
-            align: 'left',
-            columns: 1,
-            width: 270,
-          });
+          doc.text(
+            detalles[item].cliente_orig.tlf_cliente
+              ? detalles[item].cliente_orig.tlf_cliente
+              : detalles[item].cliente_orig.telefonos,
+            {
+              align: 'left',
+              columns: 1,
+              width: 270,
+            }
+          );
           doc.y = y + 84;
           doc.x = 28;
-          doc.text(detalles[item]['clientes_org.dir_fiscal'], {
-            align: 'left',
-            columns: 1,
-            width: 270,
-          });
+          doc.text(
+            detalles[item].cliente_orig.dir_fiscal
+              ? detalles[item].cliente_orig.dir_fiscal
+              : detalles[item].cliente_orig.direccion,
+            {
+              align: 'left',
+              columns: 1,
+              width: 270,
+            }
+          );
           doc.y = y + 108;
           doc.x = 40;
-          doc.text(detalles[item]['clientes_org.parroquias.desc_parroquia'], {
+          doc.text(detalles[item].cliente_orig['parroquias.desc_parroquia'], {
             align: 'left',
             columns: 1,
             width: 100,
           });
           doc.y = y + 108;
           doc.x = 150;
-          doc.text(detalles[item]['clientes_org.municipios.desc_municipio'], {
+          doc.text(detalles[item].cliente_orig['municipios.desc_municipio'], {
             align: 'left',
             columns: 1,
             width: 100,
           });
           doc.y = y + 120;
           doc.x = 40;
-          doc.text(detalles[item]['clientes_org.ciudades.desc_ciudad'], {
+          doc.text(detalles[item].cliente_orig['ciudades.desc_ciudad'], {
             align: 'left',
             columns: 1,
             width: 100,
@@ -995,7 +1165,7 @@ class GuiasLoteService {
           doc.y = y + 120;
           doc.x = 150;
           doc.text(
-            detalles[item]['clientes_org.ciudades.estados.desc_estado'],
+            detalles[item].cliente_orig['ciudades.estados.desc_estado'],
             {
               align: 'left',
               columns: 1,
@@ -1004,7 +1174,7 @@ class GuiasLoteService {
           );
           doc.y = y + 132;
           doc.x = 40;
-          doc.text(detalles[item]['clientes_org.localidades.cod_postal'], {
+          doc.text(detalles[item].cliente_orig['localidades.cod_postal'], {
             align: 'left',
             columns: 1,
             width: 100,
@@ -1012,7 +1182,7 @@ class GuiasLoteService {
           doc.y = y + 132;
           doc.x = 150;
           doc.text(
-            detalles[item]['clientes_org.ciudades.estados.paises.desc_pais'],
+            detalles[item].cliente_orig['ciudades.estados.paises.desc_pais'],
             {
               align: 'left',
               columns: 1,
@@ -1023,7 +1193,7 @@ class GuiasLoteService {
           doc.y = y + 150;
           doc.x = 23;
           doc.text(
-            detalles[item]['clientes_org.agencias.ciudades.desc_ciudad'],
+            detalles[item].cliente_orig['agencias.ciudades.desc_ciudad'],
             {
               align: 'center',
               columns: 1,
@@ -1051,7 +1221,7 @@ class GuiasLoteService {
           doc.font('Helvetica-Bold');
           doc.y = y + 45;
           doc.x = 308;
-          doc.text(detalles[item]['cliente_particular.nb_cliente'], {
+          doc.text(detalles[item].cliente_dest.nb_cliente, {
             align: 'center',
             columns: 1,
             width: 280,
@@ -1061,29 +1231,42 @@ class GuiasLoteService {
           doc.font('Helvetica');
           doc.y = y + 60;
           doc.x = 313;
-          doc.text(detalles[item]['cliente_particular.rif_ci'], {
-            align: 'left',
-            columns: 1,
-            width: 270,
-          });
+          doc.text(
+            detalles[item].cliente_dest.rif_ci
+              ? detalles[item].cliente_dest.rif_ci
+              : detalles[item].cliente_dest.rif_cedula,
+            {
+              align: 'left',
+              columns: 1,
+              width: 270,
+            }
+          );
           doc.y = y + 72;
           doc.x = 313;
-          doc.text(detalles[item]['cliente_particular.telefonos'], {
-            align: 'left',
-            columns: 1,
-            width: 270,
+          doc.text(
+            detalles[item].cliente_dest.telefonos
+              ? detalles[item].cliente_dest.telefonos
+              : detalles[item].cliente_dest.tlf_cliente,
+            {
+              align: 'left',
+              columns: 1,
+              width: 270,
           });
           doc.y = y + 84;
           doc.x = 313;
-          doc.text(detalles[item]['cliente_particular.direccion'], {
-            align: 'left',
-            columns: 1,
-            width: 270,
+          doc.text(
+            detalles[item].cliente_dest.direccion
+              ? detalles[item].cliente_dest.direccion
+              : detalles[item].cliente_dest.dir_fiscal,
+            {
+              align: 'left',
+              columns: 1,
+              width: 270,
           });
           doc.y = y + 108;
           doc.x = 330;
           doc.text(
-            detalles[item]['cliente_particular.parroquias.desc_parroquia'],
+            detalles[item].cliente_dest['parroquias.desc_parroquia'],
             {
               align: 'left',
               columns: 1,
@@ -1093,7 +1276,7 @@ class GuiasLoteService {
           doc.y = y + 108;
           doc.x = 440;
           doc.text(
-            detalles[item]['cliente_particular.municipios.desc_municipio'],
+            detalles[item].cliente_dest['municipios.desc_municipio'],
             {
               align: 'left',
               columns: 1,
@@ -1102,7 +1285,7 @@ class GuiasLoteService {
           );
           doc.y = y + 120;
           doc.x = 330;
-          doc.text(detalles[item]['cliente_particular.ciudades.desc_ciudad'], {
+          doc.text(detalles[item].cliente_dest['ciudades.desc_ciudad'], {
             align: 'left',
             columns: 1,
             width: 100,
@@ -1110,7 +1293,7 @@ class GuiasLoteService {
           doc.y = y + 120;
           doc.x = 440;
           doc.text(
-            detalles[item]['cliente_particular.ciudades.estados.desc_estado'],
+            detalles[item].cliente_dest['ciudades.estados.desc_estado'],
             {
               align: 'left',
               columns: 1,
@@ -1120,7 +1303,7 @@ class GuiasLoteService {
           doc.y = y + 132;
           doc.x = 330;
           doc.text(
-            detalles[item]['cliente_particular.localidades.cod_postal'],
+            detalles[item].cliente_dest['localidades.cod_postal'],
             {
               align: 'left',
               columns: 1,
@@ -1130,9 +1313,7 @@ class GuiasLoteService {
           doc.y = y + 132;
           doc.x = 440;
           doc.text(
-            detalles[item][
-              'cliente_particular.ciudades.estados.paises.desc_pais'
-            ],
+            detalles[item].cliente_dest['ciudades.estados.paises.desc_pais'],
             {
               align: 'left',
               columns: 1,
