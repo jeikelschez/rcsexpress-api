@@ -1043,7 +1043,7 @@ class RelacionDespachoService {
               if (data.visible == 'V') {
                 if (data.dolar) {
                   doc.y = ymin + i;
-                  doc.x = 480 - zonaOff;
+                  doc.x = 470 - zonaOff;
                   doc.text(
                     new Intl.NumberFormat('de-DE', {
                       style: 'currency',
@@ -1056,7 +1056,7 @@ class RelacionDespachoService {
                     {
                       align: 'right',
                       columns: 1,
-                      width: 40,
+                      width: 50,
                     }
                   );
                   doc.y = ymin + i;
@@ -1077,7 +1077,7 @@ class RelacionDespachoService {
                     }
                   );
                   doc.y = ymin + i;
-                  doc.x = 580 - zonaOff;
+                  doc.x = 570 - zonaOff;
                   doc.text(
                     new Intl.NumberFormat('de-DE', {
                       style: 'currency',
@@ -1090,7 +1090,7 @@ class RelacionDespachoService {
                     {
                       align: 'right',
                       columns: 1,
-                      width: 40,
+                      width: 50,
                     }
                   );
                   doc.y = ymin + i;
@@ -1390,7 +1390,7 @@ class RelacionDespachoService {
               doc.x = 260 - zonaOff;
               doc.text(
                 detalle[item].cliente_orig_desc
-                  ? detalle[item].cliente_orig_desc.substring(0, 47)
+                  ? detalle[item].cliente_orig_desc.substring(0, 36)
                   : '',
                 {
                   align: 'left',
@@ -1415,7 +1415,7 @@ class RelacionDespachoService {
 
               if (data.visible == 'V') {
                 doc.y = ymin + i;
-                doc.x = 480 - zonaOff;
+                doc.x = 470 - zonaOff;
                 doc.text(
                   new Intl.NumberFormat('de-DE', {
                     style: 'currency',
@@ -1428,7 +1428,7 @@ class RelacionDespachoService {
                   {
                     align: 'right',
                     columns: 1,
-                    width: 40,
+                    width: 50,
                   }
                 );
                 doc.y = ymin + i;
@@ -1449,7 +1449,7 @@ class RelacionDespachoService {
                   }
                 );
                 doc.y = ymin + i;
-                doc.x = 580 - zonaOff;
+                doc.x = 570 - zonaOff;
                 doc.text(
                   detalle[item].modalidad_pago == 'CR' &&
                     detalle[item].pagado_en == 'O'
@@ -1458,7 +1458,7 @@ class RelacionDespachoService {
                   {
                     align: 'right',
                     columns: 1,
-                    width: 40,
+                    width: 50,
                   }
                 );
                 doc.y = ymin + i;
@@ -1536,7 +1536,7 @@ class RelacionDespachoService {
               if (detalle[item].cliente_dest_desc) {
                 doc.text(
                   detalle[item].cliente_dest_desc
-                    ? detalle[item].cliente_dest_desc.substring(0, 70)
+                    ? detalle[item].cliente_dest_desc.substring(0, 60)
                     : '',
                   {
                     align: 'left',
@@ -1614,7 +1614,7 @@ class RelacionDespachoService {
 
             i += 18;
 
-            maxlength = 410;
+            maxlength = 400;
             if (!data.chofer && !data.receptor) maxlength += 50;
             if (data.observacion && data.tipo == 'C') maxlength -= 50;
 
@@ -1703,7 +1703,7 @@ class RelacionDespachoService {
                 if (data.visible == 'V') {
                   if (data.dolar) {
                     doc.y = ymin + i;
-                    doc.x = 480;
+                    doc.x = 470;
                     doc.text(
                       new Intl.NumberFormat('de-DE', {
                         style: 'currency',
@@ -1716,7 +1716,7 @@ class RelacionDespachoService {
                       {
                         align: 'right',
                         columns: 1,
-                        width: 40,
+                        width: 50,
                       }
                     );
                     doc.y = ymin + i;
@@ -2056,7 +2056,7 @@ class RelacionDespachoService {
               doc.x = 260;
               doc.text(
                 detalle[item].cliente_orig_desc
-                  ? detalle[item].cliente_orig_desc.substring(0, 43)
+                  ? detalle[item].cliente_orig_desc.substring(0, 36)
                   : '',
                 {
                   align: 'left',
@@ -2081,7 +2081,7 @@ class RelacionDespachoService {
 
               if (data.visible == 'V') {
                 doc.y = ymin + i;
-                doc.x = 480;
+                doc.x = 470;
                 doc.text(
                   new Intl.NumberFormat('de-DE', {
                     style: 'currency',
@@ -2094,7 +2094,7 @@ class RelacionDespachoService {
                   {
                     align: 'right',
                     columns: 1,
-                    width: 40,
+                    width: 50,
                   }
                 );
                 doc.y = ymin + i;
@@ -2202,7 +2202,7 @@ class RelacionDespachoService {
               if (detalle[item].cliente_dest_desc) {
                 doc.text(
                   detalle[item].cliente_dest_desc
-                    ? detalle[item].cliente_dest_desc.substring(0, 70)
+                    ? detalle[item].cliente_dest_desc.substring(0, 60)
                     : '',
                   {
                     align: 'left',
@@ -2280,7 +2280,7 @@ class RelacionDespachoService {
 
             i += 18;
 
-            maxlength = 410;
+            maxlength = 400;
             if (!data.chofer && !data.receptor) maxlength += 50;
             if (data.observacion && data.tipo == 'C') maxlength -= 50;
 
@@ -2366,7 +2366,7 @@ class RelacionDespachoService {
           if (data.visible == 'V') {
             if (data.dolar) {
               doc.y = y;
-              doc.x = 480 - zonaOff;
+              doc.x = 470 - zonaOff;
               doc.text(
                 new Intl.NumberFormat('de-DE', {
                   style: 'currency',
@@ -2379,7 +2379,7 @@ class RelacionDespachoService {
                 {
                   align: 'right',
                   columns: 1,
-                  width: 40,
+                  width: 50,
                 }
               );
               doc.y = y;
@@ -2400,7 +2400,7 @@ class RelacionDespachoService {
                 }
               );
               doc.y = y;
-              doc.x = 580 - zonaOff;
+              doc.x = 570 - zonaOff;
               doc.text(
                 new Intl.NumberFormat('de-DE', {
                   style: 'currency',
@@ -2413,7 +2413,7 @@ class RelacionDespachoService {
                 {
                   align: 'right',
                   columns: 1,
-                  width: 40,
+                  width: 50,
                 }
               );
               doc.y = y;
@@ -2613,7 +2613,7 @@ class RelacionDespachoService {
           if (data.visible == 'V') {
             if (data.dolar) {
               doc.y = y;
-              doc.x = 480;
+              doc.x = 470;
               doc.text(
                 new Intl.NumberFormat('de-DE', {
                   style: 'currency',
@@ -2626,7 +2626,7 @@ class RelacionDespachoService {
                 {
                   align: 'right',
                   columns: 1,
-                  width: 40,
+                  width: 50,
                 }
               );
               doc.y = y;
@@ -2907,7 +2907,7 @@ class RelacionDespachoService {
                 }
               );
               doc.y = y;
-              doc.x = 580 - zonaOff;
+              doc.x = 570 - zonaOff;
               doc.text(
                 new Intl.NumberFormat('de-DE', {
                   style: 'currency',
@@ -2920,7 +2920,7 @@ class RelacionDespachoService {
                 {
                   align: 'right',
                   columns: 1,
-                  width: 40,
+                  width: 50,
                 }
               );
               doc.y = y;
