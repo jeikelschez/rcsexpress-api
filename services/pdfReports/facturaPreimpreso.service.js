@@ -190,50 +190,50 @@ class FacturaPreimpresoService {
     doc.text(data.nroDocumento, 30, 335);
 
     // SUBTOTAL, DESCUENTO, BASE IMPONIBLE, MONTO EXENTO, IVA, TARIFA POSTAL, TOTAL
-    doc.text('Sub-Total: ', 450, 200);
-    doc.y = 200;
+    doc.text('Sub-Total: ', 450, 220);
+    doc.y = 220;
     doc.x = 500;
     doc.text(data.subtotal, {
       width: 70,
       align: 'right',
     });
-    doc.text('Base Imponible: ', 450, 215);
-    doc.y = 215;
+    doc.text('Base Imponible: ', 450, 235);
+    doc.y = 235;
     doc.x = 500;
     doc.text(parseFloat(data.base) > 0 ? data.base : '0.00', {
       width: 70,
       align: 'right',
     });
-    doc.text('Monto Exento: ', 450, 230);
-    doc.y = 230;
+    doc.text('Monto Exento: ', 450, 250);
+    doc.y = 250;
     doc.x = 500;
     doc.text(parseFloat(data.exento) > 0 ? data.exento : '0.00', {
       width: 70,
       align: 'right',
     });
-    doc.text('IVA %: ', 450, 245);
-    doc.y = 245;
+    doc.text('IVA %: ', 450, 265);
+    doc.y = 265;
     doc.x = 500;
     doc.text(parseFloat(data.iva) > 0 ? data.iva : '0.00', {
       width: 70,
       align: 'right',
     });
-    doc.text('Tarifa Postal (E): ', 450, 260);
-    doc.y = 260;
+    doc.text('Tarifa Postal (E): ', 450, 280);
+    doc.y = 280;
     doc.x = 500;
     doc.text(parseFloat(data.fpo) > 0 ? data.fpo : '0.00', {
       width: 70,
       align: 'right',
     });
-    doc.text('Total Bs: ', 450, 275);
-    doc.y = 275;
+    doc.text('Total Bs: ', 450, 295);
+    doc.y = 295;
     doc.x = 500;
     doc.text(data.total, {
       width: 70,
       align: 'right',
     });
 
-    // DETALLES DE LA FACTURA
+    // DETALLES DE LA FACTURA - 1er Detalle
 
     // CONCEPTO
     doc.text(data.detalles[0].concepto, 30, 170);
@@ -269,6 +269,44 @@ class FacturaPreimpresoService {
       width: 70,
       align: 'right',
     });
+
+    // DETALLES DE LA FACTURA - 2do Detalle (si existe)
+    if (data.detalles.length > 1) {
+      // CONCEPTO
+      doc.text(data.detalles[1].concepto, 30, 185);
+
+      // CANTIDAD
+      doc.y = 185;
+      doc.x = 270;
+      doc.text(data.detalles[1].cantidad, {
+        width: 56,
+        align: 'center',
+      });
+
+      // COSTO UNITARIO
+      doc.y = 185;
+      doc.x = 350;
+      doc.text(data.detalles[1].costo_unitario, {
+        width: 70,
+        align: 'right',
+      });
+
+      // IVA
+      doc.y = 185;
+      doc.x = 420;
+      doc.text(utils.formatNumber(data.iva), {
+        width: 70,
+        align: 'right',
+      });
+
+      // SUB TOTAL
+      doc.y = 185;
+      doc.x = 500;
+      doc.text(data.detalles[1].subtotal, {
+        width: 70,
+        align: 'right',
+      });
+    }
   }
 
   // Función auxiliar para dividir texto en líneas según ancho

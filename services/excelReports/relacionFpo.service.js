@@ -319,8 +319,8 @@ class RelacionFpoService {
           { key: 'B', width: 16 },
           { key: 'C', width: 11 },
           { key: 'D', width: 11 },
-          { key: 'E', width: 15 },
-          { key: 'F', width: 15 },
+          { key: 'E', width: 1 },
+          { key: 'F', width: 1 },
           { key: 'G', width: 15 },
           { key: 'H', width: 11 },
           { key: 'I', width: 15 },
@@ -332,9 +332,15 @@ class RelacionFpoService {
         worksheet.getCell('B9').value = 'Carga';
         worksheet.getCell('C9').value = 'Piezas';
         worksheet.getCell('D9').value = 'Peso';
-        worksheet.getCell('E9').value = 'Monto Base';
-        worksheet.getCell('F8').value = 'Protección';
-        worksheet.getCell('F9').value = 'Envío';
+        if (data.checkProtect) {
+          worksheet.columns = [
+            { key: 'E', width: 15 },
+            { key: 'F', width: 15 },
+          ];
+          worksheet.getCell('E9').value = 'Monto Base';
+          worksheet.getCell('F8').value = 'Protección';
+          worksheet.getCell('F9').value = 'Envío';
+        }
         worksheet.getCell('G8').value = 'Total';
         worksheet.getCell('G9').value = 'Flete';
         worksheet.getCell('H9').value = 'Porcentaje';
@@ -369,8 +375,8 @@ class RelacionFpoService {
           { key: 'A', width: 25 },
           { key: 'B', width: 11 },
           { key: 'C', width: 11 },
-          { key: 'D', width: 15 },
-          { key: 'E', width: 15 },
+          { key: 'D', width: 1 },
+          { key: 'E', width: 1 },
           { key: 'F', width: 15 },
           { key: 'G', width: 11 },
           { key: 'H', width: 13 },
@@ -379,9 +385,17 @@ class RelacionFpoService {
         worksheet.getCell('A9').value = 'Rangos';
         worksheet.getCell('B9').value = 'Peso';
         worksheet.getCell('C9').value = 'Piezas';
-        worksheet.getCell('D9').value = 'Monto Base';
-        worksheet.getCell('E8').value = 'Protección';
-        worksheet.getCell('E9').value = 'Envío';
+
+        if (data.checkProtect) {
+          worksheet.columns = [
+            { key: 'D', width: 15 },
+            { key: 'E', width: 15 },
+          ];
+          worksheet.getCell('D9').value = 'Monto Base';
+          worksheet.getCell('E8').value = 'Protección';
+          worksheet.getCell('E9').value = 'Envío';
+        }
+        
         worksheet.getCell('F8').value = 'Total';
         worksheet.getCell('F9').value = 'Flete';
         worksheet.getCell('G9').value = 'Porcentaje';
@@ -528,12 +542,15 @@ class RelacionFpoService {
           worksheet.getCell('D' + i).value = utils.parseFloatN(
             detalles[item].peso_kgs
           );
-          worksheet.getCell('E' + i).value = utils.parseFloatN(
-            detalles[item].monto_base
-          );
-          worksheet.getCell('F' + i).value = utils.parseFloatN(
-            detalles[item].monto_seguro
-          );
+
+          if (data.checkProtect) {
+            worksheet.getCell('E' + i).value = utils.parseFloatN(
+              detalles[item].monto_base
+            );
+            worksheet.getCell('F' + i).value = utils.parseFloatN(
+              detalles[item].monto_seguro
+            );
+          }
 
           let monto_total =
             utils.parseFloatN(detalles[item].monto_base) +
@@ -560,8 +577,10 @@ class RelacionFpoService {
         worksheet.getCell('A' + i).value = 'TOTALES:';
         worksheet.getCell('C' + i).value = parseFloat(total_piezas);
         worksheet.getCell('D' + i).value = parseFloat(total_peso);
-        worksheet.getCell('E' + i).value = parseFloat(total_base);
-        worksheet.getCell('F' + i).value = parseFloat(total_seguro);
+        if (data.checkProtect) {
+          worksheet.getCell('E' + i).value = parseFloat(total_base);
+          worksheet.getCell('F' + i).value = parseFloat(total_seguro);
+        }
         worksheet.getCell('G' + i).value = parseFloat(total_total);
         worksheet.getCell('I' + i).value = parseFloat(total_fpo);
         break;
@@ -575,12 +594,15 @@ class RelacionFpoService {
           worksheet.getCell('C' + i).value = parseInt(
             detalles[item].nro_piezas
           );
-          worksheet.getCell('D' + i).value = utils.parseFloatN(
-            detalles[item].monto_base
-          );
-          worksheet.getCell('E' + i).value = utils.parseFloatN(
-            detalles[item].monto_seguro
-          );
+
+          if (data.checkProtect) {
+            worksheet.getCell('D' + i).value = utils.parseFloatN(
+              detalles[item].monto_base
+            );
+            worksheet.getCell('E' + i).value = utils.parseFloatN(
+              detalles[item].monto_seguro
+            );
+          }
 
           let monto_total =
             utils.parseFloatN(detalles[item].monto_base) +
@@ -604,8 +626,10 @@ class RelacionFpoService {
         worksheet.getCell('A' + i).value = 'TOTALES:';
         worksheet.getCell('B' + i).value = parseFloat(total_peso);
         worksheet.getCell('C' + i).value = parseFloat(total_piezas);
-        worksheet.getCell('D' + i).value = parseFloat(total_base);
-        worksheet.getCell('E' + i).value = parseFloat(total_seguro);
+        if (data.checkProtect) {
+          worksheet.getCell('D' + i).value = parseFloat(total_base);
+          worksheet.getCell('E' + i).value = parseFloat(total_seguro);
+        }
         worksheet.getCell('F' + i).value = parseFloat(total_total);
         worksheet.getCell('H' + i).value = parseFloat(total_fpo);
         break;
@@ -634,12 +658,15 @@ class RelacionFpoService {
           worksheet.getCell('C' + i).value = parseInt(
             detalles[item].nro_piezas
           );
-          worksheet.getCell('D' + i).value = utils.parseFloatN(
-            detalles[item].monto_base
-          );
-          worksheet.getCell('E' + i).value = utils.parseFloatN(
-            detalles[item].monto_seguro
-          );
+
+          if (data.checkProtect) {
+            worksheet.getCell('D' + i).value = utils.parseFloatN(
+              detalles[item].monto_base
+            );
+            worksheet.getCell('E' + i).value = utils.parseFloatN(
+              detalles[item].monto_seguro
+            );
+          }
 
           let monto_total =
             utils.parseFloatN(detalles[item].monto_base) +
@@ -663,8 +690,10 @@ class RelacionFpoService {
         worksheet.getCell('A' + i).value = 'TOTALES:';
         worksheet.getCell('B' + i).value = parseFloat(total_peso);
         worksheet.getCell('C' + i).value = parseFloat(total_piezas);
-        worksheet.getCell('D' + i).value = parseFloat(total_base);
-        worksheet.getCell('E' + i).value = parseFloat(total_seguro);
+        if (data.checkProtect) {
+          worksheet.getCell('D' + i).value = parseFloat(total_base);
+          worksheet.getCell('E' + i).value = parseFloat(total_seguro);
+        }
         worksheet.getCell('F' + i).value = parseFloat(total_total);
         worksheet.getCell('H' + i).value = parseFloat(total_fpo);
         break;

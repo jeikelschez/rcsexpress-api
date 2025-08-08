@@ -53,32 +53,6 @@ const clienteDesc =
   ' WHERE cl.id = cod_cliente_org)' +
   ' ELSE (SELECT nb_cliente FROM clientes cl' +
   ' WHERE cl.id = cod_cliente_dest) END)';
-const montoFpo =
-  '(SELECT SUM(d.importe_renglon) FROM detalle_de_movimientos d' +
-  ' WHERE `Mmovimientos`.id = d.cod_movimiento AND d.cod_concepto >= 15)';
-const estatus_administrativo = [
-  { label: 'En Elaboración', value: 'E' },
-  { label: 'Por Facturar', value: 'F' },
-  { label: 'Facturada', value: 'G' },
-  { label: 'Anulada', value: 'A' },
-  { label: 'Por Cobrar', value: 'P' },
-  { label: 'Cancelada', value: 'C' },
-  { label: 'Por Imprimir', value: 'I' },
-  { label: 'Modificada', value: 'M' },
-];
-const estatus_operativo = [
-  { label: 'En Envío', value: 'PR' },
-  { label: 'Por Entregar', value: 'PE' },
-  { label: 'Conforme', value: 'CO' },
-  { label: 'No Conforme', value: 'NC' },
-];
-const tipo_factura = [
-  { label: 'Fact. Guía', value: 'FG' },
-  { label: 'Prepago', value: 'FP' },
-  { label: 'Otros Ing.', value: 'FO' },
-  { label: 'Fact. Guía', value: 'FC' },
-  { label: '', value: null },
-];
 
 class ReporteVentasService {
   async mainReport(worksheet, tipo, data) {

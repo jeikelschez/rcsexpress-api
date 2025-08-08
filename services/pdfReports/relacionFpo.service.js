@@ -362,8 +362,10 @@ class RelacionFpoService {
         doc.text('Nro. Guía Carga', 110, 135);
         doc.text('Piezas', 185, 135);
         doc.text('Peso', 230, 135);
-        doc.text('Monto Base', 270, 135);
-        doc.text('Protección Envío', 330, 135);
+        if (data.checkProtect) {
+          doc.text('Monto Base', 270, 135);
+          doc.text('Protección Envío', 330, 135);
+        }
         doc.text('Total Flete', 415, 135);
         doc.text('Porcentaje', 475, 135);
         doc.text('Monto FPO', 530, 135);
@@ -440,8 +442,10 @@ class RelacionFpoService {
         doc.text('Rangos', 100, 135);
         doc.text('Peso', 185, 135);
         doc.text('Piezas', 225, 135);
-        doc.text('Monto Base', 270, 135);
-        doc.text('Protección Envío', 330, 135);
+        if (data.checkProtect) {
+          doc.text('Monto Base', 270, 135);
+          doc.text('Protección Envío', 330, 135);
+        }
         doc.text('Total Flete', 415, 135);
         doc.text('Porcentaje', 475, 135);
         doc.text('Monto FPO', 530, 135);
@@ -948,20 +952,24 @@ class RelacionFpoService {
             columns: 1,
             width: 40,
           });
-          doc.y = ymin + i;
-          doc.x = 260;
-          doc.text(utils.formatNumber(detalles[item].monto_base), {
-            align: 'right',
-            columns: 1,
-            width: 60,
-          });
-          doc.y = ymin + i;
-          doc.x = 310;
-          doc.text(utils.formatNumber(detalles[item].monto_seguro), {
-            align: 'right',
-            columns: 1,
-            width: 80,
-          });
+
+          if (data.checkProtect) {
+            doc.y = ymin + i;
+            doc.x = 260;
+            doc.text(utils.formatNumber(detalles[item].monto_base), {
+              align: 'right',
+              columns: 1,
+              width: 60,
+            });
+            doc.y = ymin + i;
+            doc.x = 310;
+            doc.text(utils.formatNumber(detalles[item].monto_seguro), {
+              align: 'right',
+              columns: 1,
+              width: 80,
+            });
+          }
+
           let monto_total =
             utils.parseFloatN(detalles[item].monto_base) +
             utils.parseFloatN(detalles[item].monto_seguro);
@@ -1039,20 +1047,24 @@ class RelacionFpoService {
           columns: 1,
           width: 40,
         });
-        doc.y = ymin + i;
-        doc.x = 260;
-        doc.text(utils.formatNumber(total_base), {
-          align: 'right',
-          columns: 1,
-          width: 60,
-        });
-        doc.y = ymin + i;
-        doc.x = 310;
-        doc.text(utils.formatNumber(total_seguro), {
-          align: 'right',
-          columns: 1,
-          width: 80,
-        });
+
+        if (data.checkProtect) {
+          doc.y = ymin + i;
+          doc.x = 260;
+          doc.text(utils.formatNumber(total_base), {
+            align: 'right',
+            columns: 1,
+            width: 60,
+          });
+          doc.y = ymin + i;
+          doc.x = 310;
+          doc.text(utils.formatNumber(total_seguro), {
+            align: 'right',
+            columns: 1,
+            width: 80,
+          });
+        }
+
         doc.y = ymin + i;
         doc.x = 395;
         doc.text(utils.formatNumber(total_total), {
@@ -1092,20 +1104,24 @@ class RelacionFpoService {
             columns: 1,
             width: 40,
           });
-          doc.y = ymin + i;
-          doc.x = 260;
-          doc.text(utils.formatNumber(detalles[item].monto_base), {
-            align: 'right',
-            columns: 1,
-            width: 60,
-          });
-          doc.y = ymin + i;
-          doc.x = 310;
-          doc.text(utils.formatNumber(detalles[item].monto_seguro), {
-            align: 'right',
-            columns: 1,
-            width: 80,
-          });
+
+          if (data.checkProtect) {
+            doc.y = ymin + i;
+            doc.x = 260;
+            doc.text(utils.formatNumber(detalles[item].monto_base), {
+              align: 'right',
+              columns: 1,
+              width: 60,
+            });
+            doc.y = ymin + i;
+            doc.x = 310;
+            doc.text(utils.formatNumber(detalles[item].monto_seguro), {
+              align: 'right',
+              columns: 1,
+              width: 80,
+            });
+          }
+
           let monto_total =
             utils.parseFloatN(detalles[item].monto_base) +
             utils.parseFloatN(detalles[item].monto_seguro);
@@ -1174,20 +1190,24 @@ class RelacionFpoService {
           columns: 1,
           width: 40,
         });
-        doc.y = ymin + i;
-        doc.x = 260;
-        doc.text(utils.formatNumber(total_base), {
-          align: 'right',
-          columns: 1,
-          width: 60,
-        });
-        doc.y = ymin + i;
-        doc.x = 310;
-        doc.text(utils.formatNumber(total_seguro), {
-          align: 'right',
-          columns: 1,
-          width: 80,
-        });
+
+        if (data.checkProtect) {
+          doc.y = ymin + i;
+          doc.x = 260;
+          doc.text(utils.formatNumber(total_base), {
+            align: 'right',
+            columns: 1,
+            width: 60,
+          });
+          doc.y = ymin + i;
+          doc.x = 310;
+          doc.text(utils.formatNumber(total_seguro), {
+            align: 'right',
+            columns: 1,
+            width: 80,
+          });
+        }
+
         doc.y = ymin + i;
         doc.x = 395;
         doc.text(utils.formatNumber(total_total), {
@@ -1337,20 +1357,24 @@ class RelacionFpoService {
             columns: 1,
             width: 40,
           });
-          doc.y = ymin + i;
-          doc.x = 260;
-          doc.text(utils.formatNumber(detalles[item].monto_base), {
-            align: 'right',
-            columns: 1,
-            width: 60,
-          });
-          doc.y = ymin + i;
-          doc.x = 310;
-          doc.text(utils.formatNumber(detalles[item].monto_seguro), {
-            align: 'right',
-            columns: 1,
-            width: 80,
-          });
+
+          if (data.checkProtect) {
+            doc.y = ymin + i;
+            doc.x = 260;
+            doc.text(utils.formatNumber(detalles[item].monto_base), {
+              align: 'right',
+              columns: 1,
+              width: 60,
+            });
+            doc.y = ymin + i;
+            doc.x = 310;
+            doc.text(utils.formatNumber(detalles[item].monto_seguro), {
+              align: 'right',
+              columns: 1,
+              width: 80,
+            });
+          }
+
           let monto_total =
             utils.parseFloatN(detalles[item].monto_base) +
             utils.parseFloatN(detalles[item].monto_seguro);
@@ -1404,20 +1428,24 @@ class RelacionFpoService {
               columns: 1,
               width: 40,
             });
-            doc.y = ymin + i - 36;
-            doc.x = 260;
-            doc.text(utils.formatNumber(subtotal_base), {
-              align: 'right',
-              columns: 1,
-              width: 60,
-            });
-            doc.y = ymin + i - 36;
-            doc.x = 310;
-            doc.text(utils.formatNumber(subtotal_seguro), {
-              align: 'right',
-              columns: 1,
-              width: 80,
-            });
+            
+            if (data.checkProtect) {
+              doc.y = ymin + i - 36;
+              doc.x = 260;
+              doc.text(utils.formatNumber(subtotal_base), {
+                align: 'right',
+                columns: 1,
+                width: 60,
+              });
+              doc.y = ymin + i - 36;
+              doc.x = 310;
+              doc.text(utils.formatNumber(subtotal_seguro), {
+                align: 'right',
+                columns: 1,
+                width: 80,
+              });
+            }
+
             doc.y = ymin + i - 36;
             doc.x = 395;
             doc.text(utils.formatNumber(subtotal_total), {
@@ -1459,7 +1487,7 @@ class RelacionFpoService {
           subtotal_fpo += utils.parseFloatN(fpo);
 
           i += 15;
-          if (i >= 580) {
+          if (i >= 570) {
             doc.fillColor('#BLACK');
             doc.addPage();
             page = page + 1;
@@ -1492,20 +1520,24 @@ class RelacionFpoService {
           columns: 1,
           width: 40,
         });
-        doc.y = ymin + i;
-        doc.x = 260;
-        doc.text(utils.formatNumber(subtotal_base), {
-          align: 'right',
-          columns: 1,
-          width: 60,
-        });
-        doc.y = ymin + i;
-        doc.x = 310;
-        doc.text(utils.formatNumber(subtotal_seguro), {
-          align: 'right',
-          columns: 1,
-          width: 80,
-        });
+        
+        if (data.checkProtect) {
+          doc.y = ymin + i;
+          doc.x = 260;
+          doc.text(utils.formatNumber(subtotal_base), {
+            align: 'right',
+            columns: 1,
+            width: 60,
+          });
+          doc.y = ymin + i;
+          doc.x = 310;
+          doc.text(utils.formatNumber(subtotal_seguro), {
+            align: 'right',
+            columns: 1,
+            width: 80,
+          });
+        }
+
         doc.y = ymin + i;
         doc.x = 395;
         doc.text(utils.formatNumber(subtotal_total), {
@@ -1546,20 +1578,24 @@ class RelacionFpoService {
           columns: 1,
           width: 40,
         });
-        doc.y = ymin + i;
-        doc.x = 260;
-        doc.text(utils.formatNumber(total_base), {
-          align: 'right',
-          columns: 1,
-          width: 60,
-        });
-        doc.y = ymin + i;
-        doc.x = 310;
-        doc.text(utils.formatNumber(total_seguro), {
-          align: 'right',
-          columns: 1,
-          width: 80,
-        });
+
+        if (data.checkProtect) {
+          doc.y = ymin + i;
+          doc.x = 260;
+          doc.text(utils.formatNumber(total_base), {
+            align: 'right',
+            columns: 1,
+            width: 60,
+          });
+          doc.y = ymin + i;
+          doc.x = 310;
+          doc.text(utils.formatNumber(total_seguro), {
+            align: 'right',
+            columns: 1,
+            width: 80,
+          });
+        }
+        
         doc.y = ymin + i;
         doc.x = 395;
         doc.text(utils.formatNumber(total_total), {

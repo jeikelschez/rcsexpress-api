@@ -207,11 +207,6 @@ class LibroVentasService {
     let total_base_imp = 0;
     let total_impuesto = 0;
     let total_fpo = 0;
-    let subTotal_venta = 0;
-    let subTotal_base = 0;
-    let subTotal_base_imp = 0;
-    let subTotal_impuesto = 0;
-    let subTotal_fpo = 0;
 
     for (var item = 0; item < detalles.length; item++) {
       worksheet.getCell('A' + i).value = item + 1;

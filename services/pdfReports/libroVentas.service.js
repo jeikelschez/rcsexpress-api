@@ -292,7 +292,7 @@ class LibroVentasService {
 
       let nro_factura = '';
       if (detalles[item].t_de_documento == 'FA') {
-        nro_factura = 'FC-';
+        nro_factura = '000';
         if (detalles[item].nro_control) {
           nro_factura += detalles[item].nro_control.padStart(4, '0000');
         } else {
@@ -424,7 +424,8 @@ class LibroVentasService {
       }
 
       let monto_alicuota = 0;
-      if (monto_impuesto > 0) monto_alicuota = utils.parseFloatN(detalles[item].porc_impuesto);
+      if (monto_impuesto > 0)
+        monto_alicuota = utils.parseFloatN(detalles[item].porc_impuesto);
       let monto_fpo =
         detalles[item].estatus_administra != 'A' ? detalles[item].monto_fpo : 0;
 
