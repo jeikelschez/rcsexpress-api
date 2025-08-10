@@ -79,6 +79,16 @@ class ReporteVentasService {
         if (data.agencia) where.cod_agencia = data.agencia;
         if (data.agente) where.cod_agente_venta = data.agente;
 
+        if (!data.serie.includes('44'))
+          where.nro_documento = {
+            [Sequelize.Op.gt]: 550000000,
+          };
+
+        if (!data.serie.includes('55'))
+          where.nro_documento = {
+            [Sequelize.Op.lte]: 550000000,
+          };
+
         ventas = await models.Mmovimientos.findAll({
           where: where,
           attributes: [
