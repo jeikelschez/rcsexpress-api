@@ -425,10 +425,20 @@ class PdfReportsService {
     if (!print) return { validDoc: true, resPath: 'reporteBase.pdf' };
 
     let resPath = 'relacionFpo' + tipo + '.pdf';
-    let doc = new PDFDocument({
-      margin: 20,
-      bufferPages: true,
-    });
+
+    let doc;
+    if (tipo === 'RD') {
+      doc = new PDFDocument({
+        margin: 50,
+        bufferPages: true,
+        size: 'LEGAL', // Hoja tipo oficio
+      });
+    } else {
+      doc = new PDFDocument({
+        margin: 50,
+        bufferPages: true,
+      });
+    }
 
     doc.pipe(fs.createWriteStream(reportsPath + resPath));
     let validDoc = await relacionFpoService.mainReport(doc, tipo, data);

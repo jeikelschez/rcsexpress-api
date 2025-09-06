@@ -15,6 +15,8 @@ const RelacionFpoService = require('./relacionFpo.service');
 const relacionFpoService = new RelacionFpoService();
 const CostosTransporteService = require('./costosTransporte.service');
 const costosTransporteService = new CostosTransporteService();
+const RelacionDespachoService = require('./relacionDespacho.service');
+const relacionDespachoService = new RelacionDespachoService();
 
 class ExcelReportsService {
   constructor() {}
@@ -116,11 +118,7 @@ class ExcelReportsService {
     const workbook = new ExcelDocument.Workbook();
     const worksheet = workbook.addWorksheet('relacion_fpo');
 
-    let validDoc = await relacionFpoService.mainReport(
-      worksheet,
-      tipo,
-      data
-    );
+    let validDoc = await relacionFpoService.mainReport(worksheet, tipo, data);
     workbook.xlsx.writeFile(reportsPath + resPath);
 
     return { validDoc: validDoc, resPath: resPath };
@@ -138,6 +136,23 @@ class ExcelReportsService {
       hasta,
       neta,
       dolar
+    );
+    workbook.xlsx.writeFile(reportsPath + resPath);
+
+    return { validDoc: validDoc, resPath: resPath };
+  }
+
+  // REPORTE RELACION DESPACHO
+  async relacionDespacho(data, detalle) {
+    data = JSON.parse(data);
+    let resPath = 'relacionDespacho.xlsx';
+    const workbook = new ExcelDocument.Workbook();
+    const worksheet = workbook.addWorksheet('relacion_despacho');
+
+    let validDoc = await relacionDespachoService.mainReport(
+      worksheet,
+      data,
+      detalle
     );
     workbook.xlsx.writeFile(reportsPath + resPath);
 

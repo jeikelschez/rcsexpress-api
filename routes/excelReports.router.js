@@ -142,4 +142,18 @@ router.get('/costosTransporte', authenticateJWT, async (req, res, next) => {
   }
 });
 
+router.post('/relacionDespacho', authenticateJWT, async (req, res, next) => {
+  try {
+    const { data, detalle } = req.body;
+    const response = await service.relacionDespacho(data, detalle);
+    res.status(200).json({
+      message: 'Excel Generado',
+      excelPath: response.resPath,
+      validDoc: response.validDoc,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

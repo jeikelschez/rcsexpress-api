@@ -294,7 +294,6 @@ class RelacionFpoService {
         doc.image('./img/logo_rc.png', 35, 25, { width: 50 });
         doc.fontSize(10);
         doc.font('Helvetica-Bold');
-        doc.fillColor('#444444');
         doc.text('R.C.S EXPRESS, S.A', 35, 105);
         doc.fontSize(8);
         doc.font('Helvetica');
@@ -375,7 +374,6 @@ class RelacionFpoService {
         doc.image('./img/logo_rc.png', 35, 25, { width: 50 });
         doc.fontSize(10);
         doc.font('Helvetica-Bold');
-        doc.fillColor('#444444');
         doc.text('R.C.S EXPRESS, S.A', 35, 105);
         doc.fontSize(8);
         doc.font('Helvetica');
@@ -454,7 +452,6 @@ class RelacionFpoService {
         doc.image('./img/logo_rc.png', 35, 25, { width: 50 });
         doc.fontSize(10);
         doc.font('Helvetica-Bold');
-        doc.fillColor('#444444');
         doc.text('R.C.S EXPRESS, S.A', 35, 105);
         doc.fontSize(8);
         doc.font('Helvetica');
@@ -533,8 +530,13 @@ class RelacionFpoService {
         doc.fontSize(9);
         doc.font('Helvetica-Bold');
 
-        doc.lineJoin('square').rect(20, 20, 575, 15).stroke();
-        doc.y = 25;
+        let ymin = 140;
+
+        doc
+          .lineJoin('square')
+          .rect(20, 20 + ymin, 575, 15)
+          .stroke();
+        doc.y = 25 + ymin;
         doc.x = 20;
         doc.text('R.C.S. EXPRESS, S.A. RIF J31028463-6 CP N° IP 20-22-15-40', {
           align: 'center',
@@ -542,8 +544,11 @@ class RelacionFpoService {
           width: 575,
         });
 
-        doc.lineJoin('square').rect(20, 35, 575, 15).stroke();
-        doc.y = 40;
+        doc
+          .lineJoin('square')
+          .rect(20, 35 + ymin, 575, 15)
+          .stroke();
+        doc.y = 40 + ymin;
         doc.x = 20;
         doc.text(
           'RESUMEN ' +
@@ -560,15 +565,18 @@ class RelacionFpoService {
         );
 
         if (page % 2 === 0) {
-          doc.lineJoin('square').rect(20, 50, 50, 45).stroke();
-          doc.y = 65;
+          doc
+            .lineJoin('square')
+            .rect(20, 50 + ymin, 50, 45)
+            .stroke();
+          doc.y = 65 + ymin;
           doc.x = 20;
           doc.text('N° de', {
             align: 'center',
             columns: 1,
             width: 50,
           });
-          doc.y = 75;
+          doc.y = 75 + ymin;
           doc.x = 20;
           doc.text('Operación', {
             align: 'center',
@@ -576,15 +584,18 @@ class RelacionFpoService {
             width: 50,
           });
 
-          doc.lineJoin('square').rect(70, 50, 60, 45).stroke();
-          doc.y = 65;
+          doc
+            .lineJoin('square')
+            .rect(70, 50 + ymin, 60, 45)
+            .stroke();
+          doc.y = 65 + ymin;
           doc.x = 70;
           doc.text('Fecha de', {
             align: 'center',
             columns: 1,
             width: 60,
           });
-          doc.y = 75;
+          doc.y = 75 + ymin;
           doc.x = 70;
           doc.text('Factura', {
             align: 'center',
@@ -592,8 +603,11 @@ class RelacionFpoService {
             width: 60,
           });
 
-          doc.lineJoin('square').rect(130, 50, 80, 45).stroke();
-          doc.y = 70;
+          doc
+            .lineJoin('square')
+            .rect(130, 50 + ymin, 80, 45)
+            .stroke();
+          doc.y = 70 + ymin;
           doc.x = 130;
           doc.text('Nº R.I.F.', {
             align: 'center',
@@ -601,8 +615,11 @@ class RelacionFpoService {
             width: 80,
           });
 
-          doc.lineJoin('square').rect(210, 50, 120, 45).stroke();
-          doc.y = 70;
+          doc
+            .lineJoin('square')
+            .rect(210, 50 + ymin, 120, 45)
+            .stroke();
+          doc.y = 70 + ymin;
           doc.x = 210;
           doc.text('Proveedor o Razón Social', {
             align: 'center',
@@ -610,15 +627,18 @@ class RelacionFpoService {
             width: 120,
           });
 
-          doc.lineJoin('square').rect(330, 50, 60, 45).stroke();
-          doc.y = 65;
+          doc
+            .lineJoin('square')
+            .rect(330, 50 + ymin, 60, 45)
+            .stroke();
+          doc.y = 65 + ymin;
           doc.x = 330;
           doc.text('N° de', {
             align: 'center',
             columns: 1,
             width: 60,
           });
-          doc.y = 75;
+          doc.y = 75 + ymin;
           doc.x = 330;
           doc.text('Guía', {
             align: 'center',
@@ -626,15 +646,18 @@ class RelacionFpoService {
             width: 60,
           });
 
-          doc.lineJoin('square').rect(390, 50, 60, 45).stroke();
-          doc.y = 65;
+          doc
+            .lineJoin('square')
+            .rect(390, 50 + ymin, 60, 45)
+            .stroke();
+          doc.y = 65 + ymin;
           doc.x = 390;
           doc.text('Fecha de', {
             align: 'center',
             columns: 1,
             width: 60,
           });
-          doc.y = 75;
+          doc.y = 75 + ymin;
           doc.x = 390;
           doc.text('Guía', {
             align: 'center',
@@ -642,8 +665,11 @@ class RelacionFpoService {
             width: 60,
           });
 
-          doc.lineJoin('square').rect(450, 50, 30, 45).stroke();
-          doc.y = 70;
+          doc
+            .lineJoin('square')
+            .rect(450, 50 + ymin, 30, 45)
+            .stroke();
+          doc.y = 70 + ymin;
           doc.x = 450;
           doc.text('Serie', {
             align: 'center',
@@ -651,15 +677,18 @@ class RelacionFpoService {
             width: 30,
           });
 
-          doc.lineJoin('square').rect(480, 50, 55, 45).stroke();
-          doc.y = 65;
+          doc
+            .lineJoin('square')
+            .rect(480, 50 + ymin, 55, 45)
+            .stroke();
+          doc.y = 65 + ymin;
           doc.x = 480;
           doc.text('N° de', {
             align: 'center',
             columns: 1,
             width: 55,
           });
-          doc.y = 75;
+          doc.y = 75 + ymin;
           doc.x = 480;
           doc.text('Factura', {
             align: 'center',
@@ -667,15 +696,18 @@ class RelacionFpoService {
             width: 55,
           });
 
-          doc.lineJoin('square').rect(535, 50, 60, 45).stroke();
-          doc.y = 65;
+          doc
+            .lineJoin('square')
+            .rect(535, 50 + ymin, 60, 45)
+            .stroke();
+          doc.y = 65 + ymin;
           doc.x = 535;
           doc.text('N° de', {
             align: 'center',
             columns: 1,
             width: 60,
           });
-          doc.y = 75;
+          doc.y = 75 + ymin;
           doc.x = 535;
           doc.text('Control', {
             align: 'center',
@@ -683,15 +715,18 @@ class RelacionFpoService {
             width: 60,
           });
         } else {
-          doc.lineJoin('square').rect(20, 50, 45, 45).stroke();
-          doc.y = 65;
+          doc
+            .lineJoin('square')
+            .rect(20, 50 + ymin, 45, 45)
+            .stroke();
+          doc.y = 65 + ymin;
           doc.x = 20;
           doc.text('Tasa de', {
             align: 'center',
             columns: 1,
             width: 45,
           });
-          doc.y = 75;
+          doc.y = 75 + ymin;
           doc.x = 20;
           doc.text('Cambio', {
             align: 'center',
@@ -699,8 +734,11 @@ class RelacionFpoService {
             width: 45,
           });
 
-          doc.lineJoin('square').rect(65, 50, 50, 45).stroke();
-          doc.y = 70;
+          doc
+            .lineJoin('square')
+            .rect(65, 50 + ymin, 50, 45)
+            .stroke();
+          doc.y = 70 + ymin;
           doc.x = 65;
           doc.text('Peso', {
             align: 'center',
@@ -708,36 +746,39 @@ class RelacionFpoService {
             width: 50,
           });
 
-          doc.lineJoin('square').rect(115, 50, 50, 45).stroke();
-          doc.y = 54;
+          doc
+            .lineJoin('square')
+            .rect(115, 50 + ymin, 50, 45)
+            .stroke();
+          doc.y = 54 + ymin;
           doc.x = 115;
           doc.text('Total', {
             align: 'center',
             columns: 1,
             width: 50,
           });
-          doc.y = 62;
+          doc.y = 62 + ymin;
           doc.x = 115;
           doc.text('Ventas', {
             align: 'center',
             columns: 1,
             width: 50,
           });
-          doc.y = 70;
+          doc.y = 70 + ymin;
           doc.x = 115;
           doc.text('Internas', {
             align: 'center',
             columns: 1,
             width: 50,
           });
-          doc.y = 78;
+          doc.y = 78 + ymin;
           doc.x = 115;
           doc.text('Incluyendo', {
             align: 'center',
             columns: 1,
             width: 50,
           });
-          doc.y = 86;
+          doc.y = 86 + ymin;
           doc.x = 115;
           doc.text('el Iva', {
             align: 'center',
@@ -745,15 +786,18 @@ class RelacionFpoService {
             width: 50,
           });
 
-          doc.lineJoin('square').rect(165, 50, 45, 45).stroke();
-          doc.y = 65;
+          doc
+            .lineJoin('square')
+            .rect(165, 50 + ymin, 45, 45)
+            .stroke();
+          doc.y = 65 + ymin;
           doc.x = 165;
           doc.text('Base', {
             align: 'center',
             columns: 1,
             width: 45,
           });
-          doc.y = 75;
+          doc.y = 75 + ymin;
           doc.x = 165;
           doc.text('Imponible', {
             align: 'center',
@@ -761,15 +805,18 @@ class RelacionFpoService {
             width: 45,
           });
 
-          doc.lineJoin('square').rect(210, 50, 55, 45).stroke();
-          doc.y = 65;
+          doc
+            .lineJoin('square')
+            .rect(210, 50 + ymin, 55, 45)
+            .stroke();
+          doc.y = 65 + ymin;
           doc.x = 210;
           doc.text('Monto', {
             align: 'center',
             columns: 1,
             width: 55,
           });
-          doc.y = 75;
+          doc.y = 75 + ymin;
           doc.x = 210;
           doc.text('Exento', {
             align: 'center',
@@ -777,15 +824,18 @@ class RelacionFpoService {
             width: 55,
           });
 
-          doc.lineJoin('square').rect(265, 50, 25, 45).stroke();
-          doc.y = 65;
+          doc
+            .lineJoin('square')
+            .rect(265, 50 + ymin, 25, 45)
+            .stroke();
+          doc.y = 65 + ymin;
           doc.x = 265;
           doc.text('%', {
             align: 'center',
             columns: 1,
             width: 25,
           });
-          doc.y = 75;
+          doc.y = 75 + ymin;
           doc.x = 265;
           doc.text('IVA', {
             align: 'center',
@@ -793,29 +843,32 @@ class RelacionFpoService {
             width: 25,
           });
 
-          doc.lineJoin('square').rect(290, 50, 50, 45).stroke();
-          doc.y = 55;
+          doc
+            .lineJoin('square')
+            .rect(290, 50 + ymin, 50, 45)
+            .stroke();
+          doc.y = 55 + ymin;
           doc.x = 290;
           doc.text('%', {
             align: 'center',
             columns: 1,
             width: 50,
           });
-          doc.y = 64;
+          doc.y = 64 + ymin;
           doc.x = 290;
           doc.text('Franqueo', {
             align: 'center',
             columns: 1,
             width: 50,
           });
-          doc.y = 73;
+          doc.y = 73 + ymin;
           doc.x = 290;
           doc.text('Postal', {
             align: 'center',
             columns: 1,
             width: 50,
           });
-          doc.y = 82;
+          doc.y = 82 + ymin;
           doc.x = 290;
           doc.text('Obligatorio', {
             align: 'center',
@@ -823,15 +876,18 @@ class RelacionFpoService {
             width: 50,
           });
 
-          doc.lineJoin('square').rect(340, 50, 50, 45).stroke();
-          doc.y = 65;
+          doc
+            .lineJoin('square')
+            .rect(340, 50 + ymin, 50, 45)
+            .stroke();
+          doc.y = 65 + ymin;
           doc.x = 340;
           doc.text('Impuesto', {
             align: 'center',
             columns: 1,
             width: 50,
           });
-          doc.y = 75;
+          doc.y = 75 + ymin;
           doc.x = 340;
           doc.text('IVA', {
             align: 'center',
@@ -839,22 +895,25 @@ class RelacionFpoService {
             width: 50,
           });
 
-          doc.lineJoin('square').rect(390, 50, 50, 45).stroke();
-          doc.y = 60;
+          doc
+            .lineJoin('square')
+            .rect(390, 50 + ymin, 50, 45)
+            .stroke();
+          doc.y = 60 + ymin;
           doc.x = 390;
           doc.text('Franqueo', {
             align: 'center',
             columns: 1,
             width: 50,
           });
-          doc.y = 70;
+          doc.y = 70 + ymin;
           doc.x = 390;
           doc.text('Postal', {
             align: 'center',
             columns: 1,
             width: 50,
           });
-          doc.y = 80;
+          doc.y = 80 + ymin;
           doc.x = 390;
           doc.text('Obligatorio', {
             align: 'center',
@@ -862,8 +921,11 @@ class RelacionFpoService {
             width: 50,
           });
 
-          doc.lineJoin('square').rect(440, 50, 50, 45).stroke();
-          doc.y = 70;
+          doc
+            .lineJoin('square')
+            .rect(440, 50 + ymin, 50, 45)
+            .stroke();
+          doc.y = 70 + ymin;
           doc.x = 440;
           doc.text('Origen', {
             align: 'center',
@@ -871,8 +933,11 @@ class RelacionFpoService {
             width: 50,
           });
 
-          doc.lineJoin('square').rect(490, 50, 50, 45).stroke();
-          doc.y = 70;
+          doc
+            .lineJoin('square')
+            .rect(490, 50 + ymin, 50, 45)
+            .stroke();
+          doc.y = 70 + ymin;
           doc.x = 490;
           doc.text('Destino', {
             align: 'center',
@@ -880,8 +945,11 @@ class RelacionFpoService {
             width: 50,
           });
 
-          doc.lineJoin('square').rect(540, 50, 55, 45).stroke();
-          doc.y = 70;
+          doc
+            .lineJoin('square')
+            .rect(540, 50 + ymin, 55, 45)
+            .stroke();
+          doc.y = 70 + ymin;
           doc.x = 540;
           doc.text('Contenido', {
             align: 'center',
@@ -1008,7 +1076,6 @@ class RelacionFpoService {
 
           i += 15;
           if (i >= 580) {
-            doc.fillColor('#BLACK');
             doc.addPage();
             page = page + 1;
             doc.switchToPage(page);
@@ -1158,7 +1225,6 @@ class RelacionFpoService {
 
           i += 15;
           if (i >= 580) {
-            doc.fillColor('#BLACK');
             doc.addPage();
             page = page + 1;
             doc.switchToPage(page);
@@ -1287,7 +1353,6 @@ class RelacionFpoService {
 
           i += 15;
           if (i >= 580) {
-            doc.fillColor('#BLACK');
             doc.addPage();
             page = page + 1;
             doc.switchToPage(page);
@@ -1428,7 +1493,7 @@ class RelacionFpoService {
               columns: 1,
               width: 40,
             });
-            
+
             if (data.checkProtect) {
               doc.y = ymin + i - 36;
               doc.x = 260;
@@ -1488,7 +1553,6 @@ class RelacionFpoService {
 
           i += 15;
           if (i >= 570) {
-            doc.fillColor('#BLACK');
             doc.addPage();
             page = page + 1;
             doc.switchToPage(page);
@@ -1520,7 +1584,7 @@ class RelacionFpoService {
           columns: 1,
           width: 40,
         });
-        
+
         if (data.checkProtect) {
           doc.y = ymin + i;
           doc.x = 260;
@@ -1595,7 +1659,7 @@ class RelacionFpoService {
             width: 80,
           });
         }
-        
+
         doc.y = ymin + i;
         doc.x = 395;
         doc.text(utils.formatNumber(total_total), {
@@ -1612,16 +1676,16 @@ class RelacionFpoService {
         });
         break;
       case 'RD':
-        ymin = 105;
+        ymin = 245;
 
         // Primera pagina
         for (var item = 0; item < detalles.length; item++) {
           doc.font('Helvetica');
-          doc.fontSize(9);
+          doc.fontSize(7);
 
           doc
             .lineJoin('square')
-            .rect(20, ymin + i - 10, 50, 27)
+            .rect(20, ymin + i - 10, 50, 20)
             .stroke();
           doc.y = ymin + i;
           doc.x = 20;
@@ -1633,19 +1697,24 @@ class RelacionFpoService {
 
           doc
             .lineJoin('square')
-            .rect(70, ymin + i - 10, 60, 27)
+            .rect(70, ymin + i - 10, 60, 20)
             .stroke();
           doc.y = ymin + i;
           doc.x = 70;
-          doc.text(moment(detalles[item].fecha_fact).format('DD/MM/YYYY'), {
-            align: 'center',
-            columns: 1,
-            width: 60,
-          });
+          doc.text(
+            detalles[item].fecha_fact
+              ? moment(detalles[item].fecha_fact).format('DD/MM/YYYY')
+              : '',
+            {
+              align: 'center',
+              columns: 1,
+              width: 60,
+            }
+          );
 
           doc
             .lineJoin('square')
-            .rect(130, ymin + i - 10, 80, 27)
+            .rect(130, ymin + i - 10, 80, 20)
             .stroke();
           doc.y = ymin + i;
           doc.x = 130;
@@ -1657,21 +1726,34 @@ class RelacionFpoService {
 
           doc
             .lineJoin('square')
-            .rect(210, ymin + i - 10, 120, 27)
+            .rect(210, ymin + i - 10, 120, 20)
             .stroke();
-          doc.y = ymin + i;
+
+          let rectY = ymin + i - 10; // Y del rectángulo
+          let rectHeight = 20; // Altura del rectángulo
+          let rectWidth = 120; // Ancho del rectángulo
+          let text = detalles[item]['movimientos.clientes_org.nb_cliente'];
+
+          // Calcula la altura real del texto
+          let textHeight = doc.heightOfString(text, {
+            width: rectWidth,
+            align: 'center',
+          });
+
+          // Calcula la posición Y centrada
+          let textY = rectY + (rectHeight - textHeight) / 2;
+
+          doc.y = textY + 2;
           doc.x = 210;
-          doc.text(detalles[item]['movimientos.clientes_org.nb_cliente'], {
+          doc.text(text, {
             align: 'center',
             columns: 1,
-            width: 120,
-            height: 27,
-            baseline: 'middle',
+            width: rectWidth,
           });
 
           doc
             .lineJoin('square')
-            .rect(330, ymin + i - 10, 60, 27)
+            .rect(330, ymin + i - 10, 60, 20)
             .stroke();
           doc.y = ymin + i;
           doc.x = 330;
@@ -1683,7 +1765,7 @@ class RelacionFpoService {
 
           doc
             .lineJoin('square')
-            .rect(390, ymin + i - 10, 60, 27)
+            .rect(390, ymin + i - 10, 60, 20)
             .stroke();
           doc.y = ymin + i;
           doc.x = 390;
@@ -1700,7 +1782,7 @@ class RelacionFpoService {
 
           doc
             .lineJoin('square')
-            .rect(450, ymin + i - 10, 30, 27)
+            .rect(450, ymin + i - 10, 30, 20)
             .stroke();
           doc.y = ymin + i;
           doc.x = 450;
@@ -1712,7 +1794,7 @@ class RelacionFpoService {
 
           doc
             .lineJoin('square')
-            .rect(480, ymin + i - 10, 55, 27)
+            .rect(480, ymin + i - 10, 55, 20)
             .stroke();
           doc.y = ymin + i;
           doc.x = 480;
@@ -1724,7 +1806,7 @@ class RelacionFpoService {
 
           doc
             .lineJoin('square')
-            .rect(535, ymin + i - 10, 60, 27)
+            .rect(535, ymin + i - 10, 60, 20)
             .stroke();
           doc.y = ymin + i;
           doc.x = 535;
@@ -1742,9 +1824,8 @@ class RelacionFpoService {
             }
           );
 
-          i += 27;
-          if (i >= 650) {
-            doc.fillColor('#BLACK');
+          i += 20;
+          if (i >= 550) {
             doc.addPage();
             doc.addPage();
             page = page + 2;
@@ -1755,7 +1836,7 @@ class RelacionFpoService {
         }
 
         let maxPage = page + 1;
-        ymin = 105;
+        ymin = 245;
         i = 0;
         page = 1;
         doc.addPage();
@@ -1765,11 +1846,11 @@ class RelacionFpoService {
         // Segunda pagina
         for (var item = 0; item < detalles.length; item++) {
           doc.font('Helvetica');
-          doc.fontSize(9);
+          doc.fontSize(7);
 
           doc
             .lineJoin('square')
-            .rect(20, ymin + i - 10, 45, 27)
+            .rect(20, ymin + i - 10, 45, 20)
             .stroke();
           doc.y = ymin + i;
           doc.x = 18;
@@ -1781,7 +1862,7 @@ class RelacionFpoService {
 
           doc
             .lineJoin('square')
-            .rect(65, ymin + i - 10, 50, 27)
+            .rect(65, ymin + i - 10, 50, 20)
             .stroke();
           doc.y = ymin + i;
           doc.x = 63;
@@ -1793,7 +1874,7 @@ class RelacionFpoService {
 
           doc
             .lineJoin('square')
-            .rect(115, ymin + i - 10, 50, 27)
+            .rect(115, ymin + i - 10, 50, 20)
             .stroke();
           doc.y = ymin + i;
           doc.x = 115;
@@ -1805,7 +1886,7 @@ class RelacionFpoService {
 
           doc
             .lineJoin('square')
-            .rect(165, ymin + i - 10, 45, 27)
+            .rect(165, ymin + i - 10, 45, 20)
             .stroke();
           doc.y = ymin + i;
           doc.x = 165;
@@ -1821,7 +1902,7 @@ class RelacionFpoService {
 
           doc
             .lineJoin('square')
-            .rect(210, ymin + i - 10, 55, 27)
+            .rect(210, ymin + i - 10, 55, 20)
             .stroke();
           doc.y = ymin + i;
           doc.x = 208;
@@ -1833,7 +1914,7 @@ class RelacionFpoService {
 
           doc
             .lineJoin('square')
-            .rect(265, ymin + i - 10, 25, 27)
+            .rect(265, ymin + i - 10, 25, 20)
             .stroke();
           doc.y = ymin + i;
           doc.x = 265;
@@ -1845,7 +1926,7 @@ class RelacionFpoService {
 
           doc
             .lineJoin('square')
-            .rect(290, ymin + i - 10, 50, 27)
+            .rect(290, ymin + i - 10, 50, 20)
             .stroke();
           doc.y = ymin + i;
           doc.x = 290;
@@ -1860,7 +1941,7 @@ class RelacionFpoService {
 
           doc
             .lineJoin('square')
-            .rect(340, ymin + i - 10, 50, 27)
+            .rect(340, ymin + i - 10, 50, 20)
             .stroke();
           doc.y = ymin + i;
           doc.x = 340;
@@ -1876,7 +1957,7 @@ class RelacionFpoService {
 
           doc
             .lineJoin('square')
-            .rect(390, ymin + i - 10, 50, 27)
+            .rect(390, ymin + i - 10, 50, 20)
             .stroke();
           doc.y = ymin + i;
           doc.x = 388;
@@ -1888,7 +1969,7 @@ class RelacionFpoService {
 
           doc
             .lineJoin('square')
-            .rect(440, ymin + i - 10, 50, 27)
+            .rect(440, ymin + i - 10, 50, 20)
             .stroke();
           doc.y = ymin + i;
           doc.x = 440;
@@ -1900,42 +1981,66 @@ class RelacionFpoService {
 
           doc
             .lineJoin('square')
-            .rect(490, ymin + i - 10, 50, 27)
+            .rect(490, ymin + i - 10, 50, 20)
             .stroke();
-          doc.y = ymin + i;
-          doc.x = 490;
-          doc.text(
-            detalles[item]['movimientos.agencias_dest.ciudades.desc_ciudad'],
-            {
-              align: 'center',
-              columns: 1,
-              width: 50,
-              height: 27,
-              baseline: 'middle',
-            }
-          );
+          // Centrado vertical del texto de ciudad con menor interlineado
+          let rectYCiudad = ymin + i - 10;
+          let rectHeightCiudad = 20;
+          let rectWidthCiudad = 48;
+          let textCiudad =
+            detalles[item]['movimientos.agencias_dest.ciudades.desc_ciudad'];
+          doc.fontSize(6); // Reducir tamaño de fuente para más líneas
+          let textHeightCiudad = doc.heightOfString(textCiudad, {
+            width: rectWidthCiudad,
+            align: 'center',
+            lineGap: 1, // Menor interlineado
+          });
+          let textYCiudad =
+            rectYCiudad + (rectHeightCiudad - textHeightCiudad) / 2;
+          doc.y = textYCiudad + 2;
+          doc.x = 491;
+          doc.text(textCiudad, {
+            align: 'center',
+            columns: 1,
+            width: rectWidthCiudad,
+            lineGap: 1, // Menor interlineado
+          });
+          doc.fontSize(7); // Restaurar tamaño de fuente por defecto
 
           doc
             .lineJoin('square')
-            .rect(540, ymin + i - 10, 55, 27)
+            .rect(540, ymin + i - 10, 55, 20)
             .stroke();
-          doc.y = ymin + i;
-          doc.x = 540;
-          doc.text(detalles[item]['movimientos.clientes_org.contenido'], {
+          // Centrado vertical y menor interlineado para contenido
+          let rectYContenido = ymin + i - 10;
+          let rectHeightContenido = 20;
+          let rectWidthContenido = 53;
+          let textContenido =
+            detalles[item]['movimientos.clientes_org.contenido'];
+          doc.fontSize(6); // Reducir tamaño de fuente para más líneas
+          let textHeightContenido = doc.heightOfString(textContenido, {
+            width: rectWidthContenido,
+            align: 'center',
+            lineGap: 1, // Menor interlineado
+          });
+          let textYContenido =
+            rectYContenido + (rectHeightContenido - textHeightContenido) / 2;
+          doc.y = textYContenido + 2;
+          doc.x = 541;
+          doc.text(textContenido, {
             align: 'center',
             columns: 1,
-            width: 55,
-            height: 27,
-            baseline: 'middle',
+            width: rectWidthContenido,
+            lineGap: 1, // Menor interlineado
           });
+          doc.fontSize(7); // Restaurar tamaño de fuente por defecto
 
           total_peso += utils.parseFloatN(detalles[item].peso_kgs);
           total_total += utils.parseFloatN(monto_total);
           total_fpo += utils.parseFloatN(fpo);
 
-          i += 27;
-          if (i >= 650) {
-            doc.fillColor('#BLACK');
+          i += 20;
+          if (i >= 550) {
             page = page + 2;
             if (page <= maxPage) {
               doc.switchToPage(page);
@@ -2037,7 +2142,6 @@ class RelacionFpoService {
       if (tipo != 'RD') {
         doc.fontSize(8);
         doc.font('Helvetica');
-        doc.fillColor('#444444');
         doc.x = 480;
         doc.y = 45;
         doc.text(`Pagina ${i + 1} de ${range.count}`, {
