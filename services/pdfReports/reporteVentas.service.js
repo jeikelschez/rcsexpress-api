@@ -559,9 +559,12 @@ class ReporteVentasService {
         }
         ventasAgrArray.agencia =
           ventas[ventas.length - 1]['agencias.nb_agencia'];
-        ventasAgrArray.sort(
-          (a, b) => parseFloat(b.monto_total) - parseFloat(a.monto_total)
-        );
+
+        if (tipo != 'TVD') {
+          ventasAgrArray.sort(
+            (a, b) => parseFloat(b.monto_total) - parseFloat(a.monto_total)
+          );
+        }
         ventas = ventasAgrArray;
         break;
       case 'GC':
@@ -610,7 +613,6 @@ class ReporteVentasService {
         } else if (data.agencia) {
           where.cod_agencia = data.agencia;
         }
-
 
         if (tipo == 'GC' && !data.serie.includes('44'))
           where.nro_documento = {
