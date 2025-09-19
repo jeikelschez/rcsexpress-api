@@ -121,8 +121,8 @@ class RetencionesIvaService {
         doc.lineJoin('miter').rect(681, 68, 78, 13).stroke();
         doc.text('Fecha de Entrega', 688, 72);
         doc.lineJoin('miter').rect(681, 83, 78, 13).stroke();
-        doc.text(
-          moment(detalles[0].fecha_entrega).format('DD/MM/YYYY'),
+        doc.text(detalles[0].fecha_entrega ?
+          moment(detalles[0].fecha_entrega).format('DD/MM/YYYY') : '',
           700,
           87
         );
