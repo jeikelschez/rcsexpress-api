@@ -186,7 +186,8 @@ class RelacionDespachoService {
   }
 
   async generateHeader(worksheet, data) {
-    worksheet.getCell('A2').value = data.nombreReporte + ' ' + data.agencia;
+    worksheet.getCell('A2').value =
+      data.nombreReporte + ' ' + (data.agencia ? data.agencia : '');
     worksheet.getCell('A3').value = 'DESDE:';
     worksheet.getCell('B3').value = data.fecha_desde;
     worksheet.getCell('A4').value = 'HASTA:';
@@ -194,25 +195,190 @@ class RelacionDespachoService {
     worksheet.getCell('A5').value = 'FECHA:';
     worksheet.getCell('B5').value = moment().format('DD/MM/YYYY');
 
-    worksheet.getCell('A8').value = 'Guía:';
-    worksheet.getCell('B8').value = 'Emisión';
-    worksheet.getCell('C8').value = 'Origen';
-    worksheet.getCell('D8').value = 'Destino';
-    worksheet.getCell('E8').value = 'Zona D.';
-    worksheet.getCell('F8').value = 'Piezas';
-    worksheet.getCell('G8').value = data.neta === 'N' ? 'Neto' : 'Kgs.';
-    worksheet.getCell('H8').value = 'Remitente';
-    worksheet.getCell('I8').value = 'Destinatario';
-    worksheet.getCell('J8').value = 'Bolivares';
-    worksheet.getCell('K8').value = 'USD';
-    worksheet.getCell('L8').value = 'Origen';
-    worksheet.getCell('M8').value = 'Destino';
-    worksheet.getCell('N8').value = 'Origen';
-    worksheet.getCell('O8').value = 'Destino';
-    worksheet.getCell('P8').value = 'Total (USD)';
+    switch (data.tipoReporte) {
+      case 'GPA':
+      case 'APZ':
+      case 'MAD':
+        worksheet.columns = [
+          { key: 'A', width: 13 },
+          { key: 'B', width: 11 },
+          { key: 'C', width: 8 },
+          { key: 'D', width: 8 },
+          { key: 'E', width: 12 },
+          { key: 'F', width: 10 },
+          { key: 'G', width: 10 },
+          { key: 'H', width: 20 },
+          { key: 'I', width: 20 },
+          { key: 'J', width: 0 },
+          { key: 'K', width: 0 },
+          { key: 'L', width: 0 },
+          { key: 'M', width: 0 },
+          { key: 'N', width: 0 },
+          { key: 'O', width: 0 },
+          { key: 'P', width: 0 },
+          { key: 'Q', width: 0 },
+        ];
+
+        if (data.visible === 'V') {
+          if (data.dolar) {
+            worksheet.getColumn('J').width = 10;
+            worksheet.getColumn('K').width = 13;
+            worksheet.getColumn('P').width = 10;
+          }
+          worksheet.getColumn('L').width = 13;
+          worksheet.getColumn('M').width = 13;
+          worksheet.getColumn('N').width = 13;
+          worksheet.getColumn('O').width = 13;
+        } else {
+          if (data.tipo === 'C') {
+            worksheet.getColumn('Q').width = 30;
+          }
+        }
+
+        worksheet.getCell('A8').value = 'DATOS DEL DOCUMENTO';
+        worksheet.mergeCells('A8:G8');
+        worksheet.getCell('A8').alignment = { horizontal: 'center' };
+        worksheet.getCell('A9').value = 'Guía';
+        worksheet.getCell('B9').value = 'Emisión';
+        worksheet.getCell('C9').value = 'O.';
+        worksheet.getCell('D9').value = 'D.';
+        worksheet.getCell('E9').value = 'Zona D.';
+        worksheet.getCell('F9').value = 'Piezas';
+        worksheet.getCell('G9').value = data.neta === 'N' ? 'Neto' : 'Kgs.';
+
+        worksheet.getCell('H8').value = 'CLIENTE';
+        worksheet.mergeCells('H8:I8');
+        worksheet.getCell('H8').alignment = { horizontal: 'center' };
+        worksheet.getCell('H9').value = 'Remitente';
+        worksheet.getCell('I9').value = 'Destinatario';
+
+        if (data.visible === 'V') {
+          if (data.dolar) {
+            worksheet.getCell('J8').value = 'VALOR DECLARADO';
+            worksheet.mergeCells('J8:K8');
+            worksheet.getCell('J8').alignment = { horizontal: 'center' };
+            worksheet.getCell('J9').value = '$';
+            worksheet.getCell('K9').value = 'Bolivares';
+            worksheet.getCell('P9').value = '$';
+          }
+
+          worksheet.getCell('L8').value = 'CRÉDITO';
+          worksheet.mergeCells('L8:M8');
+          worksheet.getCell('L8').alignment = { horizontal: 'center' };
+          worksheet.getCell('L9').value = 'Origen';
+          worksheet.getCell('M9').value = 'Destino';
+
+          worksheet.getCell('N8').value = 'CONTADO';
+          worksheet.mergeCells('N8:O8');
+          worksheet.getCell('N8').alignment = { horizontal: 'center' };
+          worksheet.getCell('N9').value = 'Origen';
+          worksheet.getCell('O9').value = 'Destino';
+        } else {
+          if (data.tipo === 'C') {
+            worksheet.getCell('Q8').value = 'DATOS DEL DOCUMENTO';
+            worksheet.getCell('Q8').alignment = { horizontal: 'center' };
+            worksheet.getCell('Q9').value = 'Números Factura Cliente';
+          }
+        }
+        break;
+      case 'MAA':
+      /*doc.fontSize(9);
+        doc.text('Agencia Destino', 35, 100);
+        doc.text('Guías', 233, 100);
+        doc.text('Piezas', 265, 100);
+        doc.text('Kgs.', 310, 100);
+        doc.text('Neto', 360, 100);
+        doc.text('VALOR DECLARADO', 405, 88);
+        doc.text('Bolivares', 408, 100);
+        if (data.dolar == true) doc.text('$', 480, 100);
+        doc.text('CRÉDITO', 550, 88);
+        doc.text('Origen', 530, 100);
+        doc.text('Destino', 580, 100);
+        doc.text('CONTADO', 645, 88);
+        doc.text('Origen', 630, 100);
+        doc.text('Destino', 675, 100);
+        if (data.dolar == true) doc.text('Total $', 728, 100);
+        doc.lineCap('butt').moveTo(30, 115).lineTo(760, 115).stroke();
+        break;*/
+      default:
+        break;
+    }
   }
 
-  async generateCustomerInformation(worksheet, data, dataDetalle) {}
+  async generateCustomerInformation(worksheet, data, detalle) {
+    switch (data.tipoReporte) {
+      case 'GPA':
+      case 'APZ':
+      case 'MAD':
+        var i = 10;
+        for (var item = 0; item < detalle.length; item++) {
+          let valor_dolar = 0;
+          
+          worksheet.getCell('A' + i).value = parseFloat(
+            detalle[item].nro_documento
+          );
+          worksheet.getCell('B' + i).value = moment(
+            detalle[item].fecha_emision
+          ).format('DD/MM/YYYY');
+          worksheet.getCell('C' + i).value =
+            detalle[item]['agencias.ciudades.siglas'];
+          worksheet.getCell('D' + i).value =
+            detalle[item]['agencias_dest.ciudades.siglas'];
+          worksheet.getCell('E' + i).value = detalle[item]['zonas_dest.nb_zona']
+            ? detalle[item]['zonas_dest.nb_zona']
+            : '';
+          worksheet.getCell('F' + i).value = detalle[item].nro_piezas;
+          worksheet.getCell('G' + i).value =
+            data.neta === 'N'
+              ? detalle[item].carga_neta
+              : detalle[item].peso_kgs;
+          worksheet.getCell('H' + i).value = detalle[item].cliente_orig_desc;
+          worksheet.getCell('I' + i).value = detalle[item].cliente_dest_desc;
+
+          if (data.visible === 'V') {
+            worksheet.getCell('J' + i).value = utils.parseFloatN(detalle[item].monto_ref_cte_sin_imp);
+            worksheet.getCell('K' + i).value = utils.parseFloatN(declarado_dolar);
+          }
+
+          i++;
+          /*
+
+          if (data.visible === 'V') {
+            if (data.dolar) {
+              worksheet.getCell('J8').value = 'VALOR DECLARADO';
+              worksheet.mergeCells('J8:K8');
+              worksheet.getCell('J8').alignment = { horizontal: 'center' };
+              worksheet.getCell('J9').value = '$';
+              worksheet.getCell('K9').value = 'Bolivares';
+              worksheet.getCell('P9').value = '$';
+            }
+
+            worksheet.getCell('L8').value = 'CRÉDITO';
+            worksheet.mergeCells('L8:M8');
+            worksheet.getCell('L8').alignment = { horizontal: 'center' };
+            worksheet.getCell('L9').value = 'Origen';
+            worksheet.getCell('M9').value = 'Destino';
+
+            worksheet.getCell('N8').value = 'CONTADO';
+            worksheet.mergeCells('N8:O8');
+            worksheet.getCell('N8').alignment = { horizontal: 'center' };
+            worksheet.getCell('N9').value = 'Origen';
+            worksheet.getCell('O9').value = 'Destino';
+          } else {
+            if (data.tipo === 'C') {
+              worksheet.getCell('Q8').value = 'DATOS DEL DOCUMENTO';
+              worksheet.getCell('Q8').alignment = { horizontal: 'center' };
+              worksheet.getCell('Q9').value = 'Números Factura Cliente';
+            }
+          }*/
+        }
+        break;
+      case 'MAA':
+        break;
+      default:
+        break;
+    }
+  }
 }
 
 module.exports = RelacionDespachoService;
