@@ -1440,7 +1440,7 @@ class RetencionesIslrService {
             let monto_total =
               utils.parseFloatN(detalles2[item2].monto_base) *
                 (utils.parseFloatN(detalles2[item2].porc_retencion) / 100) -
-              utils.parseFloatN(detalles2[item2].sustraendo);
+              (utils.parseFloatN(detalles2[item2].sustraendo) * utils.parseFloatN(detalles2[item2].cantidad));
             doc.y = ymin + i + 60;
             doc.x = 390;
             doc.text(utils.formatNumber(monto_total), {
