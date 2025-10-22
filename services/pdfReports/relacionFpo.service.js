@@ -202,24 +202,27 @@ class RelacionFpoService {
         if (data.nbCliente) detalles.cliente = data.nbCliente;
         break;
       case 'RD':
-        where = {
-          fecha_emision: {
-            [Sequelize.Op.between]: [
-              moment(data.desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
-              moment(data.hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
-            ],
-          },
-          peso_kgs: {
-            [Sequelize.Op.gt]: data.kgs_min,
-            [Sequelize.Op.lte]: data.kgs_max,
-          },
-          estatus_administra: {
-            [Sequelize.Op.not]: 'A',
-          },
-          monto_fpo: {
-            [Sequelize.Op.not]: 0,
-          },
+        where.fecha_emision = {
+          [Sequelize.Op.between]: [
+            moment(data.desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+            moment(data.hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+          ],
         };
+
+        where.peso_kgs = {
+          [Sequelize.Op.gt]: data.kgs_min,
+          [Sequelize.Op.lte]: data.kgs_max,
+        };
+
+        where.estatus_administra = {
+          [Sequelize.Op.not]: 'A',
+        };
+
+        if (data.kgs_max !== 10000) {
+          where.monto_fpo = {
+            [Sequelize.Op.not]: 0,
+          };
+        }
 
         if (data.cliente) where.cod_cliente_org = data.cliente;
 
