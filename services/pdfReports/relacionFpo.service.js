@@ -217,12 +217,17 @@ class RelacionFpoService {
         where.estatus_administra = {
           [Sequelize.Op.not]: 'A',
         };
+        q;
 
         if (data.kgs_max !== 10000) {
           where.monto_fpo = {
             [Sequelize.Op.not]: 0,
           };
         }
+
+        where.nro_documento = {
+          [Sequelize.Op.lte]: 550000000,
+        };
 
         if (data.cliente) where.cod_cliente_org = data.cliente;
 
