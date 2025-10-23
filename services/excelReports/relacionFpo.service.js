@@ -202,26 +202,31 @@ class RelacionFpoService {
         if (data.nbCliente) detalles.cliente = data.nbCliente;
         break;
       case 'RD':
-        where = {
-          fecha_emision: {
-            [Sequelize.Op.between]: [
-              moment(data.desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
-              moment(data.hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
-            ],
-          },
-          peso_kgs: {
-            [Sequelize.Op.gt]: data.kgs_min,
-            [Sequelize.Op.lte]: data.kgs_max,
-          },
-          estatus_administra: {
-            [Sequelize.Op.not]: 'A',
-          },
-          monto_fpo: {
-            [Sequelize.Op.not]: 0,
-          },
+        where.fecha_emision = {
+          [Sequelize.Op.between]: [
+            moment(data.desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+            moment(data.hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+          ],
         };
 
-        if (data.cliente) where.cod_cliente_org = data.cliente;
+        where.peso_kgs = {
+          [Sequelize.Op.gt]: data.kgs_min,
+          [Sequelize.Op.lte]: data.kgs_max,
+        };
+
+        where.estatus_administra = {
+          [Sequelize.Op.not]: 'A',
+        };
+
+        if (data.kgs_max !== 10000) {
+          where.monto_fpo = {
+            [Sequelize.Op.not]: 0,
+          };
+        }
+
+        where.nro_documento = {
+          [Sequelize.Op.lte]: 550000000,
+        };
 
         detalles = await models.Dmovimientos.findAll({
           attributes: [
@@ -395,7 +400,7 @@ class RelacionFpoService {
           worksheet.getCell('E8').value = 'Protección';
           worksheet.getCell('E9').value = 'Envío';
         }
-        
+
         worksheet.getCell('F8').value = 'Total';
         worksheet.getCell('F9').value = 'Flete';
         worksheet.getCell('G9').value = 'Porcentaje';
@@ -747,9 +752,9 @@ class RelacionFpoService {
             detalles[item]['movimientos.fecha_emision']
           ).format('DD/MM/YYYY');
           worksheet.getCell('G' + i).value = 'N/A';
-          worksheet.getCell('H' + i).value = parseFloat(
+          worksheet.getCell('H' + i).value = detalles[item]['movimientos.nro_ctrl_doc_ppal'] ? parseFloat(
             detalles[item]['movimientos.nro_ctrl_doc_ppal']
-          );
+          ) : "";
           worksheet.getCell('I' + i).value = detalles[item][
             'movimientos.nro_ctrl_doc_ppal_new'
           ]
