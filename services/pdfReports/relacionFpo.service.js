@@ -217,7 +217,6 @@ class RelacionFpoService {
         where.estatus_administra = {
           [Sequelize.Op.not]: 'A',
         };
-        q;
 
         if (data.kgs_max !== 10000) {
           where.monto_fpo = {
