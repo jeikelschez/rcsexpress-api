@@ -386,7 +386,7 @@ class LibroVentasService {
       let monto_total = 0;
       if (detalles[item].estatus_administra != 'A') {
         if (detalles[item].t_de_documento == 'NC') {
-          monto_total = utils.parseFloatN(detalles[item].monto_total) * -1;
+          monto_total = utils.parseFloatN(detalles[item].monto_base) * -1;
         } else {
           monto_total = detalles[item].monto_total;
         }
@@ -396,7 +396,7 @@ class LibroVentasService {
       let monto_base = 0;
       if (detalles[item].estatus_administra != 'A') {
         if (detalles[item].t_de_documento == 'NC') {
-          monto_base = utils.parseFloatN(detalles[item].monto_total) * -1;
+          monto_base = utils.parseFloatN(detalles[item].monto_base) * -1;
         } else {
           monto_base = detalles[item].monto_base;
         }
@@ -413,6 +413,8 @@ class LibroVentasService {
       }
       if (base_imp < 0) base_imp = 0;
 
+      if (detalles[item].t_de_documento == 'NC') base_imp = 0;
+
       let monto_impuesto = 0;
       if (detalles[item].estatus_administra != 'A') {
         if (detalles[item].t_de_documento == 'NC') {
@@ -428,6 +430,13 @@ class LibroVentasService {
         monto_alicuota = utils.parseFloatN(detalles[item].porc_impuesto);
       let monto_fpo =
         detalles[item].estatus_administra != 'A' ? detalles[item].monto_fpo : 0;
+
+      if (detalles[item].t_de_documento == 'NC') {
+        monto_fpo =
+          (utils.parseFloatN(detalles[item].monto_subtotal) -
+            utils.parseFloatN(detalles[item].monto_base)) *
+          -1;
+      }
 
       doc.y = ymin + i;
       doc.x = 675;

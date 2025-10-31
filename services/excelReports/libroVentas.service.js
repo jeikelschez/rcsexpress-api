@@ -290,7 +290,7 @@ class LibroVentasService {
       let monto_total = 0;
       if (detalles[item].estatus_administra != 'A') {
         if (detalles[item].t_de_documento == 'NC') {
-          monto_total = utils.parseFloatN(detalles[item].monto_total) * -1;
+          monto_total = utils.parseFloatN(detalles[item].monto_base) * -1;
         } else {
           monto_total = detalles[item].monto_total;
         }
@@ -300,7 +300,7 @@ class LibroVentasService {
       let monto_base = 0;
       if (detalles[item].estatus_administra != 'A') {
         if (detalles[item].t_de_documento == 'NC') {
-          monto_base = utils.parseFloatN(detalles[item].monto_total) * -1;
+          monto_base = utils.parseFloatN(detalles[item].monto_base) * -1;
         } else {
           monto_base = detalles[item].monto_base;
         }
@@ -317,6 +317,8 @@ class LibroVentasService {
       }
       if (base_imp < 0) base_imp = 0;
 
+      if (detalles[item].t_de_documento == 'NC') base_imp = 0;
+
       let monto_impuesto = 0;
       if (detalles[item].estatus_administra != 'A') {
         if (detalles[item].t_de_documento == 'NC') {
@@ -332,6 +334,13 @@ class LibroVentasService {
       let monto_fpo =
         detalles[item].estatus_administra != 'A' ? detalles[item].monto_fpo : 0;
 
+      if (detalles[item].t_de_documento == 'NC') {
+        monto_fpo =
+          (utils.parseFloatN(detalles[item].monto_subtotal) -
+            utils.parseFloatN(detalles[item].monto_base)) *
+          -1;
+      }
+
       total_venta += utils.parseFloatN(monto_total);
       total_base += utils.parseFloatN(monto_base);
       total_base_imp += utils.parseFloatN(base_imp);
@@ -344,7 +353,9 @@ class LibroVentasService {
       worksheet.getCell('Q' + i).value = parseFloat(monto_alicuota.toFixed(1));
       worksheet.getCell('R' + i).value = parseFloat(monto_impuesto);
       worksheet.getCell('S' + i).value = parseFloat(0);
-      worksheet.getCell('T' + i).value = monto_fpo ? parseFloat(monto_fpo) : parseFloat(0);      
+      worksheet.getCell('T' + i).value = monto_fpo
+        ? parseFloat(monto_fpo)
+        : parseFloat(0);
       i++;
     }
 
@@ -370,15 +381,13 @@ class LibroVentasService {
 
       i++;
 
-      worksheet.getCell('N' + i).value =
-        'Ventas Internas No Gravadas';
+      worksheet.getCell('N' + i).value = 'Ventas Internas No Gravadas';
       worksheet.mergeCells('N' + i + ':Q' + i);
       worksheet.getCell('R' + i).value = parseFloat(total_base);
       worksheet.getCell('S' + i).value = parseFloat(0);
       worksheet.getCell('T' + i).value = parseFloat(0);
       i++;
-      worksheet.getCell('N' + i).value =
-        'Ventas de Exportación';
+      worksheet.getCell('N' + i).value = 'Ventas de Exportación';
       worksheet.mergeCells('N' + i + ':Q' + i);
       worksheet.getCell('R' + i).value = parseFloat(0);
       worksheet.getCell('S' + i).value = parseFloat(0);
@@ -404,7 +413,7 @@ class LibroVentasService {
       worksheet.getCell('R' + i).value = parseFloat(0);
       worksheet.getCell('S' + i).value = parseFloat(0);
       worksheet.getCell('T' + i).value = parseFloat(0);
-      i++;      
+      i++;
 
       worksheet.getCell('S' + i).value = parseFloat(total_impuesto);
       worksheet.getCell('T' + i).value = parseFloat(0);
