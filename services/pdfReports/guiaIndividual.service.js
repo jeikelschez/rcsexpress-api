@@ -298,34 +298,25 @@ class GuiaIndividualService {
   async generateCustomerInformation(doc, detalleGuia) {
     let y = 17;
     for (var x = 0; x < 3; x++) {
-      doc.image('./img/logo_rc.png', 25, y + 8, { width: 20, height: 20 });
-      doc.fontSize(7);
-      doc.font('Helvetica-Bold');
-      doc.text('RCS EXPRESS, S.A', 50, y + 11);
-      doc.text('RIF. J-31028463-6', 50, y + 21);
-      doc.fontSize(11);
-      doc.text('GUIA DE CARGA Nº', 130, y + 13);
-      doc.fontSize(16);
-      doc.text(detalleGuia[0].nro_documento, 240, y + 11);
-
+      doc.font('Helvetica');
       doc.lineWidth(0.5);
       doc.fontSize(7);
       doc.strokeColor('grey');
       doc
         .lineJoin('miter')
-        .rect(333, y + 3, 80, 28)
+        .rect(23, y + 2, 80, 28)
         .stroke();
       doc.strokeColor('white');
       doc.lineWidth(3);
       doc
         .lineCap('butt')
-        .moveTo(341, y + 3)
-        .lineTo(394, y + 3)
+        .moveTo(31, y + 2)
+        .lineTo(84, y + 2)
         .stroke();
-      doc.text('Fecha Emisión', 343, y);
+      doc.text('Fecha Emisión', 35, y - 1);
       doc.fontSize(11);
-      doc.y = y + 13;
-      doc.x = 333;
+      doc.y = y + 12;
+      doc.x = 23;
       doc.text(moment(detalleGuia[0].fecha_emision).format('DD/MM/YYYY'), {
         align: 'center',
         columns: 1,
@@ -334,23 +325,22 @@ class GuiaIndividualService {
 
       doc.lineWidth(0.5);
       doc.fontSize(7);
-      doc.font('Helvetica');
       doc.strokeColor('grey');
       doc
         .lineJoin('miter')
-        .rect(418, y + 3, 40, 28)
+        .rect(108, y + 2, 40, 28)
         .stroke();
       doc.strokeColor('white');
       doc.lineWidth(3);
       doc
         .lineCap('butt')
-        .moveTo(423, y + 3)
-        .lineTo(444, y + 3)
+        .moveTo(113, y + 2)
+        .lineTo(134, y + 2)
         .stroke();
-      doc.text('Peso', 425, y);
+      doc.text('Peso', 116, y - 1);
       doc.fontSize(9);
-      doc.y = y + 14;
-      doc.x = 418;
+      doc.y = y + 13;
+      doc.x = 108;
       doc.text(utils.formatNumber(detalleGuia[0].peso_kgs), {
         align: 'center',
         columns: 1,
@@ -362,19 +352,19 @@ class GuiaIndividualService {
       doc.strokeColor('grey');
       doc
         .lineJoin('miter')
-        .rect(463, y + 3, 40, 28)
+        .rect(153, y + 2, 40, 28)
         .stroke();
       doc.strokeColor('white');
       doc.lineWidth(3);
       doc
         .lineCap('butt')
-        .moveTo(466, y + 3)
-        .lineTo(496, y + 3)
+        .moveTo(156, y + 2)
+        .lineTo(186, y + 2)
         .stroke();
-      doc.text('# Piezas', 467, y);
+      doc.text('# Piezas', 158, y - 1);
       doc.fontSize(11);
-      doc.y = y + 13;
-      doc.x = 463;
+      doc.y = y + 12;
+      doc.x = 153;
       doc.text(detalleGuia[0].nro_piezas, {
         align: 'center',
         columns: 1,
@@ -386,24 +376,58 @@ class GuiaIndividualService {
       doc.strokeColor('grey');
       doc
         .lineJoin('miter')
-        .rect(508, y + 3, 80, 28)
+        .rect(198, y + 2, 80, 28)
         .stroke();
       doc.strokeColor('white');
       doc.lineWidth(3);
       doc
         .lineCap('butt')
-        .moveTo(512, y + 3)
-        .lineTo(570, y + 3)
+        .moveTo(202, y + 2)
+        .lineTo(260, y + 2)
         .stroke();
-      doc.text('Origen / Destino', 514, y);
+      doc.text('Origen / Destino', 205, y - 1);
       doc.fontSize(11);
-      doc.y = y + 13;
-      doc.x = 508;
+      doc.y = y + 12;
+      doc.x = 198;
       doc.text(detalleGuia[0].siglas_org + '/' + detalleGuia[0].siglas_dest, {
         align: 'center',
         columns: 1,
         width: 80,
       });
+
+      doc.font('Helvetica-Oblique');
+      doc.lineWidth(0.5);
+      doc.strokeColor('grey');
+      doc
+        .lineJoin('miter')
+        .rect(283, y + 2, 153, 28)
+        .stroke();
+      doc.fontSize(8);
+      doc.y = y + 5;
+      doc.x = 283;
+      doc.text('Se agradece verificar el embalaje y', {
+        align: 'center',
+        columns: 1,
+        width: 153,
+      });
+      doc.y = y + 13;
+      doc.x = 283;
+      doc.text('cantidad de bultos recibidos, pasadas las', {
+        align: 'center',
+        columns: 1,
+        width: 153,
+      });
+      doc.y = y + 21;
+      doc.x = 283;
+      doc.text('24 horas no se aceptan reclamos', {
+        align: 'center',
+        columns: 1,
+        width: 153,
+      });
+
+      doc.font('Helvetica-Bold');
+      doc.fontSize(16);
+      doc.text('GUIA Nº ' + detalleGuia[0].nro_documento, 440, y + 10);
 
       doc.lineWidth(0.5);
       doc.fontSize(7);

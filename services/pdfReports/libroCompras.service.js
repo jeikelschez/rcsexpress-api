@@ -125,20 +125,20 @@ class LibroComprasService {
     doc.text('Nombre o Razón Social del Proveedor', 140, 125);
     doc.text('Tipo', 276, 125);
     doc.text('Prov.', 275, 133);
-    doc.text('  N°', 297, 125);
-    doc.text('  de', 297, 133);
-    doc.text('Comp.', 295, 141);
-    doc.text(' Num.', 322, 125);
-    doc.text(' Plan.', 322, 133);
-    doc.text('Import.', 322, 141);
-    doc.text(' Num.', 352, 125);
-    doc.text('Exped.', 352, 133);
-    doc.text('Import.', 352, 141);
-    doc.text('Número', 382, 125);
-    doc.text('Factura', 382, 133);
-    doc.text('Número', 417, 125);
-    doc.text('Control.', 417, 133);
-    doc.text('de Doc.', 417, 141);
+    doc.text('  N°', 295, 125);
+    doc.text('  de', 295, 133);
+    doc.text('Comp.', 293, 141);
+    doc.text(' Num.', 317, 125);
+    doc.text(' Plan.', 317, 133);
+    doc.text('Import.', 317, 141);
+    doc.text(' Num.', 345, 125);
+    doc.text('Exped.', 345, 133);
+    doc.text('Import.', 345, 141);
+    doc.text('Número', 379, 125);
+    doc.text('Factura', 379, 133);
+    doc.text('Número', 419, 125);
+    doc.text('Control.', 419, 133);
+    doc.text('de Doc.', 419, 141);
     doc.text('   N°', 455, 125);
     doc.text(' Nota', 455, 133);
     doc.text('Débito', 455, 141);
@@ -246,7 +246,7 @@ class LibroComprasService {
         width: 30,
       });
       doc.y = ymin + i;
-      doc.x = 375;
+      doc.x = 367;
       doc.text(
         detalles[item].tipo_documento == 'FA'
           ? detalles[item].nro_documento
@@ -254,11 +254,11 @@ class LibroComprasService {
         {
           align: 'center',
           columns: 1,
-          width: 35,
+          width: 45,
         }
       );
       doc.y = ymin + i;
-      doc.x = 409;
+      doc.x = 412;
       doc.text(
         detalles[item].tipo_documento == 'FA'
           ? detalles[item].nro_ctrl_doc
