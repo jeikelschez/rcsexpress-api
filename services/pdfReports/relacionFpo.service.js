@@ -38,6 +38,24 @@ const fechaFact =
 const valorDolar =
   '(SELECT valor FROM historico_dolar ' +
   ' WHERE historico_dolar.fecha = `movimientos`.fecha_emision)';
+const clienteOrigDesc =
+  '(CASE WHEN (id_clte_part_orig IS NULL || id_clte_part_orig = "")' +
+  ' THEN (SELECT nb_cliente' +
+  ' FROM clientes ' +
+  ' WHERE `movimientos`.cod_cliente_org = clientes.id)' +
+  ' ELSE (SELECT nb_cliente' +
+  ' FROM clientes_particulares' +
+  ' WHERE `movimientos`.id_clte_part_orig = clientes_particulares.id)' +
+  ' END)';
+const clienteOrigRif =
+  '(CASE WHEN (id_clte_part_dest IS NULL || id_clte_part_dest = "")' +
+  ' THEN (SELECT rif_cedula' +
+  ' FROM clientes ' +
+  ' WHERE `movimientos`.cod_cliente_dest = clientes.id)' +
+  ' ELSE (SELECT rif_ci' +
+  ' FROM clientes_particulares' +
+  ' WHERE `movimientos`.id_clte_part_dest = clientes_particulares.id)' +
+  ' END)';
 
 class RelacionFpoService {
   async mainReport(doc, tipo, data) {
@@ -250,6 +268,8 @@ class RelacionFpoService {
                 'monto_fpo',
                 'nro_ctrl_doc_ppal',
                 'nro_ctrl_doc_ppal_new',
+                [Sequelize.literal(clienteOrigDesc), 'cliente_orig_desc'],
+                [Sequelize.literal(clienteOrigRif), 'cliente_orig_rif'],
               ],
               include: [
                 {
@@ -1725,7 +1745,7 @@ class RelacionFpoService {
             .stroke();
           doc.y = ymin + i;
           doc.x = 130;
-          doc.text(detalles[item]['movimientos.clientes_org.rif_cedula'], {
+          doc.text(detalles[item]['movimientos.cliente_orig_rif'], {
             align: 'center',
             columns: 1,
             width: 80,
@@ -1739,7 +1759,7 @@ class RelacionFpoService {
           let rectY = ymin + i - 10; // Y del rectángulo
           let rectHeight = 20; // Altura del rectángulo
           let rectWidth = 120; // Ancho del rectángulo
-          let text = detalles[item]['movimientos.clientes_org.nb_cliente'];
+          let text = detalles[item]['movimientos.cliente_orig_desc'];
 
           // Calcula la altura real del texto
           let textHeight = doc.heightOfString(text, {
