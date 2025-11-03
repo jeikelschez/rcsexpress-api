@@ -15,6 +15,7 @@ const DcostosSchema = {
   cod_costo: {
     allowNull: false,
     type: DataTypes.INTEGER,
+    unique: 'uniqueTag',
     references: {
       model: COSTOS_TABLE,
       key: 'id',
@@ -24,6 +25,7 @@ const DcostosSchema = {
   },
   cod_concepto: {
     type: DataTypes.INTEGER,
+    unique: 'uniqueTag',
     references: {
       model: COPERACION_TABLE,
       key: 'id',
