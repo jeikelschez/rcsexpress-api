@@ -753,7 +753,7 @@ class RetencionesIslrService {
           doc.y = ymin + i;
           doc.x = 32;
           doc.text(
-            moment(detalles[item].fecha_comprobante).format('DD/MM/YYYY'),
+            moment(detalles[item]['retenciones.compras.fecha_registro']).format('DD/MM/YYYY'),
             {
               align: 'center',
               columns: 1,
