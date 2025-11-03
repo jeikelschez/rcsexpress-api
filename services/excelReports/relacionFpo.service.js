@@ -38,6 +38,24 @@ const fechaFact =
 const valorDolar =
   '(SELECT valor FROM historico_dolar ' +
   ' WHERE historico_dolar.fecha = `movimientos`.fecha_emision)';
+const clienteOrigDesc =
+  '(CASE WHEN (id_clte_part_orig IS NULL || id_clte_part_orig = "")' +
+  ' THEN (SELECT nb_cliente' +
+  ' FROM clientes ' +
+  ' WHERE `movimientos`.cod_cliente_org = clientes.id)' +
+  ' ELSE (SELECT nb_cliente' +
+  ' FROM clientes_particulares' +
+  ' WHERE `movimientos`.id_clte_part_orig = clientes_particulares.id)' +
+  ' END)';
+const clienteOrigRif =
+  '(CASE WHEN (id_clte_part_dest IS NULL || id_clte_part_dest = "")' +
+  ' THEN (SELECT rif_cedula' +
+  ' FROM clientes ' +
+  ' WHERE `movimientos`.cod_cliente_dest = clientes.id)' +
+  ' ELSE (SELECT rif_ci' +
+  ' FROM clientes_particulares' +
+  ' WHERE `movimientos`.id_clte_part_dest = clientes_particulares.id)' +
+  ' END)';
 
 class RelacionFpoService {
   async mainReport(worksheet, tipo, data) {
@@ -248,6 +266,8 @@ class RelacionFpoService {
                 'monto_fpo',
                 'nro_ctrl_doc_ppal',
                 'nro_ctrl_doc_ppal_new',
+                [Sequelize.literal(clienteOrigDesc), 'cliente_orig_desc'],
+                [Sequelize.literal(clienteOrigRif), 'cliente_orig_rif'],
               ],
               include: [
                 {
@@ -738,13 +758,13 @@ class RelacionFpoService {
         var i = 3;
         for (var item = 0; item < detalles.length; item++) {
           worksheet.getCell('A' + i).value = item + 1;
-          worksheet.getCell('B' + i).value = moment(
-            detalles[item].fecha_fact
-          ).format('DD/MM/YYYY');
+          worksheet.getCell('B' + i).value = detalles[item].fecha_fact
+            ? moment(detalles[item].fecha_fact).format('DD/MM/YYYY')
+            : '';
           worksheet.getCell('C' + i).value =
-            detalles[item]['movimientos.clientes_org.rif_cedula'];
+            detalles[item]['movimientos.cliente_orig_rif'];
           worksheet.getCell('D' + i).value =
-            detalles[item]['movimientos.clientes_org.nb_cliente'];
+            detalles[item]['movimientos.cliente_orig_desc'];
           worksheet.getCell('E' + i).value = parseFloat(
             detalles[item]['movimientos.nro_documento']
           );
@@ -752,9 +772,11 @@ class RelacionFpoService {
             detalles[item]['movimientos.fecha_emision']
           ).format('DD/MM/YYYY');
           worksheet.getCell('G' + i).value = 'N/A';
-          worksheet.getCell('H' + i).value = detalles[item]['movimientos.nro_ctrl_doc_ppal'] ? parseFloat(
-            detalles[item]['movimientos.nro_ctrl_doc_ppal']
-          ) : "";
+          worksheet.getCell('H' + i).value = detalles[item][
+            'movimientos.nro_ctrl_doc_ppal'
+          ]
+            ? parseFloat(detalles[item]['movimientos.nro_ctrl_doc_ppal'])
+            : '';
           worksheet.getCell('I' + i).value = detalles[item][
             'movimientos.nro_ctrl_doc_ppal_new'
           ]
