@@ -204,11 +204,11 @@ class RelacionDespachoService {
           { key: 'B', width: 11 },
           { key: 'C', width: 8 },
           { key: 'D', width: 8 },
-          { key: 'E', width: 12 },
+          { key: 'E', width: 18 },
           { key: 'F', width: 10 },
           { key: 'G', width: 10 },
-          { key: 'H', width: 20 },
-          { key: 'I', width: 20 },
+          { key: 'H', width: 40 },
+          { key: 'I', width: 40 },
           { key: 'J', width: 0 },
           { key: 'K', width: 0 },
           { key: 'L', width: 0 },
@@ -221,7 +221,7 @@ class RelacionDespachoService {
 
         if (data.visible === 'V') {
           if (data.dolar) {
-            worksheet.getColumn('J').width = 10;
+            worksheet.getColumn('J').width = 13;
             worksheet.getColumn('K').width = 13;
             worksheet.getColumn('P').width = 10;
           }
@@ -231,7 +231,7 @@ class RelacionDespachoService {
           worksheet.getColumn('O').width = 13;
         } else {
           if (data.tipo === 'C') {
-            worksheet.getColumn('Q').width = 30;
+            worksheet.getColumn('Q').width = 50;
           }
         }
 
@@ -257,8 +257,8 @@ class RelacionDespachoService {
             worksheet.getCell('J8').value = 'VALOR DECLARADO';
             worksheet.mergeCells('J8:K8');
             worksheet.getCell('J8').alignment = { horizontal: 'center' };
-            worksheet.getCell('J9').value = '$';
-            worksheet.getCell('K9').value = 'Bolivares';
+            worksheet.getCell('J9').value = 'Bolivares';
+            worksheet.getCell('K9').value = '$';
             worksheet.getCell('P9').value = '$';
           }
 
@@ -311,9 +311,169 @@ class RelacionDespachoService {
       case 'APZ':
       case 'MAD':
         var i = 10;
+        let nro_piezas = 0;
+        let peso_kgs = 0;
+        let carga_neta = 0;
+        let credito_orig = 0;
+        let credito_dest = 0;
+        let contado_orig = 0;
+        let contado_dest = 0;
+        let total_dolar = 0;
+        let total_declarado = 0;
+        let total_declarado_dolar = 0;
+        let total;
+        let group_piezas = 0;
+        let group_neta = 0;
+        let group_kgs = 0;
+        let credito_orig_group = 0;
+        let credito_dest_group = 0;
+        let contado_orig_group = 0;
+        let contado_dest_group = 0;
+        let total_dolar_group = 0;
+        let total_declarado_group = 0;
+        let total_declarado_dolar_group = 0;
+
         for (var item = 0; item < detalle.length; item++) {
+          let label;
+          let field;
           let valor_dolar = 0;
-          
+          let monto_dolar = 0;
+          let declarado_dolar = 0;
+
+          let find_dolar = detalle.hDolar.findIndex(
+            (arr) => arr.fecha == detalle[item].fecha_emision
+          );
+          if (find_dolar >= 0) valor_dolar = detalle.hDolar[find_dolar].valor;
+
+          if (valor_dolar > 0) {
+            monto_dolar = (
+              utils.parseFloatN(detalle[item].monto_total) /
+              utils.parseFloatN(valor_dolar)
+            ).toFixed(2);
+          }
+
+          if (data.tipoReporte == 'APZ') {
+            label = 'Zona Destino: ';
+            field = 'zonas_dest.nb_zona';
+            total = 'Total por Zona: ';
+          } else if (data.tipoReporte == 'MAD') {
+            label = 'Agencia Destino: ';
+            field = 'agencias_dest.nb_agencia';
+            total = 'Total por Agencia: ';
+          }
+
+          if (data.tipoReporte == 'APZ' || data.tipoReporte == 'MAD') {
+            // Aqui pinto el primer encabezado
+            if (item == 0) {
+              worksheet.getCell('A' + i).value = label + detalle[item][field];
+              i++;
+            } else if (detalle[item][field] != detalle[item - 1][field]) {
+              // Aqui pinto los totales del agrupado
+              worksheet.getCell('F' + i).value = parseFloat(group_piezas);
+              worksheet.getCell('G' + i).value =
+                data.neta === 'N'
+                  ? parseFloat(group_neta)
+                  : parseFloat(group_kgs);
+
+              if (data.visible === 'V') {
+                if (data.dolar) {
+                  worksheet.getCell('J' + i).value = parseFloat(
+                    total_declarado_group
+                  );
+                  worksheet.getCell('K' + i).value = parseFloat(
+                    total_declarado_dolar_group
+                  );
+                  worksheet.getCell('P' + i).value =
+                    parseFloat(total_dolar_group);
+                }
+                worksheet.getCell('L' + i).value =
+                  parseFloat(credito_orig_group);
+                worksheet.getCell('M' + i).value =
+                  parseFloat(credito_dest_group);
+                worksheet.getCell('N' + i).value =
+                  parseFloat(contado_orig_group);
+                worksheet.getCell('O' + i).value =
+                  parseFloat(contado_dest_group);
+              }
+              i++;
+              i++;
+
+              worksheet.getCell('A' + i).value = label + detalle[item][field];
+              i++;
+
+              group_piezas = 0;
+              group_neta = 0;
+              group_kgs = 0;
+              credito_orig_group = 0;
+              credito_dest_group = 0;
+              contado_orig_group = 0;
+              contado_dest_group = 0;
+              total_dolar_group = 0;
+              total_declarado_group = 0;
+              total_declarado_dolar_group = 0;
+            }
+
+            group_piezas += utils.parseFloatN(detalle[item].nro_piezas);
+            group_neta += utils.parseFloatN(detalle[item].carga_neta);
+            group_kgs += utils.parseFloatN(detalle[item].peso_kgs);
+
+            if (detalle[item].modalidad_pago == 'CR') {
+              if (detalle[item].pagado_en == 'O') {
+                credito_orig_group += utils.parseFloatN(
+                  detalle[item].monto_total
+                );
+              } else {
+                credito_dest_group += utils.parseFloatN(
+                  detalle[item].monto_total
+                );
+              }
+            } else {
+              if (detalle[item].pagado_en == 'O') {
+                contado_orig_group += utils.parseFloatN(
+                  detalle[item].monto_total
+                );
+              } else {
+                contado_dest_group += utils.parseFloatN(
+                  detalle[item].monto_total
+                );
+              }
+            }
+
+            let declarado_dolar_group = 0;
+            total_dolar_group += utils.parseFloatN(monto_dolar);
+            total_declarado_group += utils.parseFloatN(
+              detalle[item].monto_ref_cte_sin_imp
+            );
+            if (valor_dolar > 0) {
+              declarado_dolar_group = (
+                utils.parseFloatN(detalle[item].monto_ref_cte_sin_imp) /
+                utils.parseFloatN(valor_dolar)
+              ).toFixed(2);
+            }
+
+            total_declarado_dolar_group += utils.parseFloatN(
+              declarado_dolar_group
+            );
+          } // Fin de APZ y MAD
+
+          nro_piezas += utils.parseFloatN(detalle[item].nro_piezas);
+          peso_kgs += utils.parseFloatN(detalle[item].peso_kgs);
+          carga_neta += utils.parseFloatN(detalle[item].carga_neta);
+
+          if (detalle[item].modalidad_pago == 'CR') {
+            if (detalle[item].pagado_en == 'O') {
+              credito_orig += utils.parseFloatN(detalle[item].monto_total);
+            } else {
+              credito_dest += utils.parseFloatN(detalle[item].monto_total);
+            }
+          } else {
+            if (detalle[item].pagado_en == 'O') {
+              contado_orig += utils.parseFloatN(detalle[item].monto_total);
+            } else {
+              contado_dest += utils.parseFloatN(detalle[item].monto_total);
+            }
+          }
+
           worksheet.getCell('A' + i).value = parseFloat(
             detalle[item].nro_documento
           );
@@ -327,50 +487,106 @@ class RelacionDespachoService {
           worksheet.getCell('E' + i).value = detalle[item]['zonas_dest.nb_zona']
             ? detalle[item]['zonas_dest.nb_zona']
             : '';
-          worksheet.getCell('F' + i).value = detalle[item].nro_piezas;
+          worksheet.getCell('F' + i).value = parseFloat(
+            detalle[item].nro_piezas
+          );
           worksheet.getCell('G' + i).value =
             data.neta === 'N'
-              ? detalle[item].carga_neta
-              : detalle[item].peso_kgs;
+              ? parseFloat(detalle[item].carga_neta)
+              : parseFloat(detalle[item].peso_kgs);
           worksheet.getCell('H' + i).value = detalle[item].cliente_orig_desc;
           worksheet.getCell('I' + i).value = detalle[item].cliente_dest_desc;
 
           if (data.visible === 'V') {
-            worksheet.getCell('J' + i).value = utils.parseFloatN(detalle[item].monto_ref_cte_sin_imp);
-            worksheet.getCell('K' + i).value = utils.parseFloatN(declarado_dolar);
-          }
+            if (data.dolar) {
+              if (valor_dolar > 0) {
+                declarado_dolar = (
+                  utils.parseFloatN(detalle[item].monto_ref_cte_sin_imp) /
+                  utils.parseFloatN(valor_dolar)
+                ).toFixed(2);
 
+                total_declarado += utils.parseFloatN(
+                  detalle[item].monto_ref_cte_sin_imp
+                );
+                total_declarado_dolar += utils.parseFloatN(declarado_dolar);
+                total_dolar += utils.parseFloatN(monto_dolar);
+              }
+
+              worksheet.getCell('J' + i).value = parseFloat(
+                detalle[item].monto_ref_cte_sin_imp
+              );
+              worksheet.getCell('K' + i).value = parseFloat(declarado_dolar);
+              worksheet.getCell('P' + i).value = parseFloat(monto_dolar);
+            }
+
+            worksheet.getCell('L' + i).value =
+              detalle[item].modalidad_pago == 'CR' &&
+              detalle[item].pagado_en == 'O'
+                ? parseFloat(detalle[item].monto_total)
+                : parseFloat(0);
+            worksheet.getCell('M' + i).value =
+              detalle[item].modalidad_pago == 'CR' &&
+              detalle[item].pagado_en == 'D'
+                ? parseFloat(detalle[item].monto_total)
+                : parseFloat(0);
+            worksheet.getCell('N' + i).value =
+              detalle[item].modalidad_pago == 'CO' &&
+              detalle[item].pagado_en == 'O'
+                ? parseFloat(detalle[item].monto_total)
+                : parseFloat(0);
+            worksheet.getCell('O' + i).value =
+              detalle[item].modalidad_pago == 'CO' &&
+              detalle[item].pagado_en == 'D'
+                ? parseFloat(detalle[item].monto_total)
+                : parseFloat(0);
+          } else if (data.tipo === 'C') {
+            worksheet.getCell('Q' + i).value = detalle[item].dimensiones;
+          }
           i++;
-          /*
+        }
+
+        if (data.tipoReporte == 'APZ' || data.tipoReporte == 'MAD') {
+          // Totales del ultimo grupo
+          worksheet.getCell('F' + i).value = parseFloat(group_piezas);
+          worksheet.getCell('G' + i).value =
+            data.neta === 'N' ? parseFloat(group_neta) : parseFloat(group_kgs);
 
           if (data.visible === 'V') {
             if (data.dolar) {
-              worksheet.getCell('J8').value = 'VALOR DECLARADO';
-              worksheet.mergeCells('J8:K8');
-              worksheet.getCell('J8').alignment = { horizontal: 'center' };
-              worksheet.getCell('J9').value = '$';
-              worksheet.getCell('K9').value = 'Bolivares';
-              worksheet.getCell('P9').value = '$';
+              worksheet.getCell('J' + i).value = parseFloat(
+                total_declarado_group
+              );
+              worksheet.getCell('K' + i).value = parseFloat(
+                total_declarado_dolar_group
+              );
+              worksheet.getCell('P' + i).value = parseFloat(total_dolar_group);
             }
+            worksheet.getCell('L' + i).value = parseFloat(credito_orig_group);
+            worksheet.getCell('M' + i).value = parseFloat(credito_dest_group);
+            worksheet.getCell('N' + i).value = parseFloat(contado_orig_group);
+            worksheet.getCell('O' + i).value = parseFloat(contado_dest_group);
+          }
+          i++;
+          i++;
+        }
 
-            worksheet.getCell('L8').value = 'CRÉDITO';
-            worksheet.mergeCells('L8:M8');
-            worksheet.getCell('L8').alignment = { horizontal: 'center' };
-            worksheet.getCell('L9').value = 'Origen';
-            worksheet.getCell('M9').value = 'Destino';
+        // Totales generales
+        worksheet.getCell('F' + i).value = parseFloat(nro_piezas);
+        worksheet.getCell('G' + i).value =
+          data.neta === 'N' ? parseFloat(carga_neta) : parseFloat(peso_kgs);
 
-            worksheet.getCell('N8').value = 'CONTADO';
-            worksheet.mergeCells('N8:O8');
-            worksheet.getCell('N8').alignment = { horizontal: 'center' };
-            worksheet.getCell('N9').value = 'Origen';
-            worksheet.getCell('O9').value = 'Destino';
-          } else {
-            if (data.tipo === 'C') {
-              worksheet.getCell('Q8').value = 'DATOS DEL DOCUMENTO';
-              worksheet.getCell('Q8').alignment = { horizontal: 'center' };
-              worksheet.getCell('Q9').value = 'Números Factura Cliente';
-            }
-          }*/
+        if (data.visible === 'V') {
+          if (data.dolar) {
+            worksheet.getCell('J' + i).value = parseFloat(total_declarado);
+            worksheet.getCell('K' + i).value = parseFloat(
+              total_declarado_dolar
+            );
+            worksheet.getCell('P' + i).value = parseFloat(total_dolar);
+          }
+          worksheet.getCell('L' + i).value = parseFloat(credito_orig);
+          worksheet.getCell('M' + i).value = parseFloat(credito_dest);
+          worksheet.getCell('N' + i).value = parseFloat(contado_orig);
+          worksheet.getCell('O' + i).value = parseFloat(contado_dest);
         }
         break;
       case 'MAA':
