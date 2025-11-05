@@ -48,13 +48,13 @@ const clienteOrigDesc =
   ' WHERE `movimientos`.id_clte_part_orig = clientes_particulares.id)' +
   ' END)';
 const clienteOrigRif =
-  '(CASE WHEN (id_clte_part_dest IS NULL || id_clte_part_dest = "")' +
+  '(CASE WHEN (id_clte_part_orig IS NULL || id_clte_part_orig = "")' +
   ' THEN (SELECT rif_cedula' +
   ' FROM clientes ' +
-  ' WHERE `movimientos`.cod_cliente_dest = clientes.id)' +
+  ' WHERE `movimientos`.cod_cliente_org = clientes.id)' +
   ' ELSE (SELECT rif_ci' +
   ' FROM clientes_particulares' +
-  ' WHERE `movimientos`.id_clte_part_dest = clientes_particulares.id)' +
+  ' WHERE `movimientos`.id_clte_part_orig = clientes_particulares.id)' +
   ' END)';
 
 class RelacionFpoService {
