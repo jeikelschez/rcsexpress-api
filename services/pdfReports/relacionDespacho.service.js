@@ -3299,80 +3299,82 @@ class RelacionDespachoService {
               width: 50,
             }
           );
-          doc.y = ymin + i;
-          doc.x = 390;
-          doc.text(
-            utils.formatNumber(detalle.agenciaAgrupado[item].valor_declarado),
-            {
-              align: 'right',
-              columns: 1,
-              width: 60,
-            }
-          );
-          doc.y = ymin + i;
-          doc.x = 520;
-          doc.text(
-            utils.formatNumber(detalle.agenciaAgrupado[item].credito_origen),
-            {
-              align: 'right',
-              columns: 1,
-              width: 50,
-            }
-          );
-          doc.y = ymin + i;
-          doc.x = 570;
-          doc.text(
-            utils.formatNumber(detalle.agenciaAgrupado[item].credito_destino),
-            {
-              align: 'right',
-              columns: 1,
-              width: 50,
-            }
-          );
-          doc.y = ymin + i;
-          doc.x = 615;
-          doc.text(
-            utils.formatNumber(detalle.agenciaAgrupado[item].contado_origen),
-            {
-              align: 'right',
-              columns: 1,
-              width: 50,
-            }
-          );
-          doc.y = ymin + i;
-          doc.x = 660;
-          doc.text(
-            utils.formatNumber(detalle.agenciaAgrupado[item].contado_destino),
-            {
-              align: 'right',
-              columns: 1,
-              width: 50,
-            }
-          );
-          if (data.dolar == true) {
+          if (data.visible == 'V') {
             doc.y = ymin + i;
-            doc.x = 455;
+            doc.x = 390;
             doc.text(
-              utils.formatNumber(
-                detalle.agenciaAgrupado[item].valor_declarado_dolar
-              ),
+              utils.formatNumber(detalle.agenciaAgrupado[item].valor_declarado),
+              {
+                align: 'right',
+                columns: 1,
+                width: 60,
+              }
+            );
+            doc.y = ymin + i;
+            doc.x = 520;
+            doc.text(
+              utils.formatNumber(detalle.agenciaAgrupado[item].credito_origen),
               {
                 align: 'right',
                 columns: 1,
                 width: 50,
               }
             );
+            doc.y = ymin + i;
+            doc.x = 570;
+            doc.text(
+              utils.formatNumber(detalle.agenciaAgrupado[item].credito_destino),
+              {
+                align: 'right',
+                columns: 1,
+                width: 50,
+              }
+            );
+            doc.y = ymin + i;
+            doc.x = 615;
+            doc.text(
+              utils.formatNumber(detalle.agenciaAgrupado[item].contado_origen),
+              {
+                align: 'right',
+                columns: 1,
+                width: 50,
+              }
+            );
+            doc.y = ymin + i;
+            doc.x = 660;
+            doc.text(
+              utils.formatNumber(detalle.agenciaAgrupado[item].contado_destino),
+              {
+                align: 'right',
+                columns: 1,
+                width: 50,
+              }
+            );
+            if (data.dolar == true) {
+              doc.y = ymin + i;
+              doc.x = 455;
+              doc.text(
+                utils.formatNumber(
+                  detalle.agenciaAgrupado[item].valor_declarado_dolar
+                ),
+                {
+                  align: 'right',
+                  columns: 1,
+                  width: 50,
+                }
+              );
 
-            doc.y = ymin + i;
-            doc.x = 710;
-            doc.text(
-              utils.formatNumber(detalle.agenciaAgrupado[item].monto_dolar),
-              {
-                align: 'right',
-                columns: 1,
-                width: 50,
-              }
-            );
+              doc.y = ymin + i;
+              doc.x = 710;
+              doc.text(
+                utils.formatNumber(detalle.agenciaAgrupado[item].monto_dolar),
+                {
+                  align: 'right',
+                  columns: 1,
+                  width: 50,
+                }
+              );
+            }
           }
 
           i += 18;
@@ -3433,80 +3435,82 @@ class RelacionDespachoService {
             width: 50,
           }
         );
-        doc.y = z;
-        doc.x = 390;
-        doc.text(
-          utils.formatNumber(detalle.agenciaAgrupado.totales.valor_declarado),
-          {
-            align: 'right',
-            columns: 1,
-            width: 60,
-          }
-        );
-        doc.y = z;
-        doc.x = 515;
-        doc.text(
-          utils.formatNumber(detalle.agenciaAgrupado.totales.credito_origen),
-          {
-            align: 'right',
-            columns: 1,
-            width: 55,
-          }
-        );
-        doc.y = z;
-        doc.x = 570;
-        doc.text(
-          utils.formatNumber(detalle.agenciaAgrupado.totales.credito_destino),
-          {
-            align: 'right',
-            columns: 1,
-            width: 50,
-          }
-        );
-        doc.y = z;
-        doc.x = 615;
-        doc.text(
-          utils.formatNumber(detalle.agenciaAgrupado.totales.contado_origen),
-          {
-            align: 'right',
-            columns: 1,
-            width: 50,
-          }
-        );
-        doc.y = z;
-        doc.x = 660;
-        doc.text(
-          utils.formatNumber(detalle.agenciaAgrupado.totales.contado_destino),
-          {
-            align: 'right',
-            columns: 1,
-            width: 50,
-          }
-        );
-        if (data.dolar == true) {
+        if (data.visible == 'V') {
           doc.y = z;
-          doc.x = 455;
+          doc.x = 390;
           doc.text(
-            utils.formatNumber(
-              detalle.agenciaAgrupado.totales.valor_declarado_dolar
-            ),
+            utils.formatNumber(detalle.agenciaAgrupado.totales.valor_declarado),
+            {
+              align: 'right',
+              columns: 1,
+              width: 60,
+            }
+          );
+          doc.y = z;
+          doc.x = 515;
+          doc.text(
+            utils.formatNumber(detalle.agenciaAgrupado.totales.credito_origen),
+            {
+              align: 'right',
+              columns: 1,
+              width: 55,
+            }
+          );
+          doc.y = z;
+          doc.x = 570;
+          doc.text(
+            utils.formatNumber(detalle.agenciaAgrupado.totales.credito_destino),
             {
               align: 'right',
               columns: 1,
               width: 50,
             }
           );
+          doc.y = z;
+          doc.x = 615;
+          doc.text(
+            utils.formatNumber(detalle.agenciaAgrupado.totales.contado_origen),
+            {
+              align: 'right',
+              columns: 1,
+              width: 50,
+            }
+          );
+          doc.y = z;
+          doc.x = 660;
+          doc.text(
+            utils.formatNumber(detalle.agenciaAgrupado.totales.contado_destino),
+            {
+              align: 'right',
+              columns: 1,
+              width: 50,
+            }
+          );
+          if (data.dolar == true) {
+            doc.y = z;
+            doc.x = 455;
+            doc.text(
+              utils.formatNumber(
+                detalle.agenciaAgrupado.totales.valor_declarado_dolar
+              ),
+              {
+                align: 'right',
+                columns: 1,
+                width: 50,
+              }
+            );
 
-          doc.y = z;
-          doc.x = 710;
-          doc.text(
-            utils.formatNumber(detalle.agenciaAgrupado.totales.monto_dolar),
-            {
-              align: 'right',
-              columns: 1,
-              width: 50,
-            }
-          );
+            doc.y = z;
+            doc.x = 710;
+            doc.text(
+              utils.formatNumber(detalle.agenciaAgrupado.totales.monto_dolar),
+              {
+                align: 'right',
+                columns: 1,
+                width: 50,
+              }
+            );
+          }
         }
         break;
       default:
