@@ -366,6 +366,7 @@ class RelacionDespachoService {
         for (var item = 0; item < detalle.length; item++) {
           let label;
           let field;
+          let total;
           let valor_dolar = 0;
           let monto_dolar = 0;
           let declarado_dolar = 0;
