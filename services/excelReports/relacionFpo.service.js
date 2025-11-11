@@ -56,6 +56,24 @@ const clienteOrigRif =
   ' FROM clientes_particulares' +
   ' WHERE `movimientos`.id_clte_part_orig = clientes_particulares.id)' +
   ' END)';
+const clienteDestDesc =
+  '(CASE WHEN (id_clte_part_dest IS NULL || id_clte_part_dest = "")' +
+  ' THEN (SELECT nb_cliente' +
+  ' FROM clientes ' +
+  ' WHERE `movimientos`.cod_cliente_dest = clientes.id)' +
+  ' ELSE (SELECT nb_cliente' +
+  ' FROM clientes_particulares' +
+  ' WHERE `movimientos`.id_clte_part_dest = clientes_particulares.id)' +
+  ' END)';
+const clienteDestRif =
+  '(CASE WHEN (id_clte_part_dest IS NULL || id_clte_part_dest = "")' +
+  ' THEN (SELECT rif_cedula' +
+  ' FROM clientes ' +
+  ' WHERE `movimientos`.cod_cliente_dest = clientes.id)' +
+  ' ELSE (SELECT rif_ci' +
+  ' FROM clientes_particulares' +
+  ' WHERE `movimientos`.id_clte_part_dest = clientes_particulares.id)' +
+  ' END)';
 
 class RelacionFpoService {
   async mainReport(worksheet, tipo, data) {
@@ -266,8 +284,11 @@ class RelacionFpoService {
                 'monto_fpo',
                 'nro_ctrl_doc_ppal',
                 'nro_ctrl_doc_ppal_new',
+                'pagado_en',
                 [Sequelize.literal(clienteOrigDesc), 'cliente_orig_desc'],
                 [Sequelize.literal(clienteOrigRif), 'cliente_orig_rif'],
+                [Sequelize.literal(clienteDestDesc), 'cliente_dest_desc'],
+                [Sequelize.literal(clienteDestRif), 'cliente_dest_rif'],
               ],
               include: [
                 {
@@ -761,10 +782,19 @@ class RelacionFpoService {
           worksheet.getCell('B' + i).value = detalles[item].fecha_fact
             ? moment(detalles[item].fecha_fact).format('DD/MM/YYYY')
             : '';
-          worksheet.getCell('C' + i).value =
-            detalles[item]['movimientos.cliente_orig_rif'];
-          worksheet.getCell('D' + i).value =
-            detalles[item]['movimientos.cliente_orig_desc'];
+
+          if (detalles[item]['movimientos.pagado_en'] == 'O') {
+            worksheet.getCell('C' + i).value =
+              detalles[item]['movimientos.cliente_orig_rif'];
+            worksheet.getCell('D' + i).value =
+              detalles[item]['movimientos.cliente_orig_desc'];
+          } else {
+            worksheet.getCell('C' + i).value =
+              detalles[item]['movimientos.cliente_dest_rif'];
+            worksheet.getCell('D' + i).value =
+              detalles[item]['movimientos.cliente_dest_desc'];
+          }
+
           worksheet.getCell('E' + i).value = parseFloat(
             detalles[item]['movimientos.nro_documento']
           );

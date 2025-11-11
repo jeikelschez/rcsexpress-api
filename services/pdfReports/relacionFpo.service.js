@@ -56,6 +56,24 @@ const clienteOrigRif =
   ' FROM clientes_particulares' +
   ' WHERE `movimientos`.id_clte_part_orig = clientes_particulares.id)' +
   ' END)';
+const clienteDestDesc =
+  '(CASE WHEN (id_clte_part_dest IS NULL || id_clte_part_dest = "")' +
+  ' THEN (SELECT nb_cliente' +
+  ' FROM clientes ' +
+  ' WHERE `movimientos`.cod_cliente_dest = clientes.id)' +
+  ' ELSE (SELECT nb_cliente' +
+  ' FROM clientes_particulares' +
+  ' WHERE `movimientos`.id_clte_part_dest = clientes_particulares.id)' +
+  ' END)';
+const clienteDestRif =
+  '(CASE WHEN (id_clte_part_dest IS NULL || id_clte_part_dest = "")' +
+  ' THEN (SELECT rif_cedula' +
+  ' FROM clientes ' +
+  ' WHERE `movimientos`.cod_cliente_dest = clientes.id)' +
+  ' ELSE (SELECT rif_ci' +
+  ' FROM clientes_particulares' +
+  ' WHERE `movimientos`.id_clte_part_dest = clientes_particulares.id)' +
+  ' END)';
 
 class RelacionFpoService {
   async mainReport(doc, tipo, data) {
@@ -268,8 +286,11 @@ class RelacionFpoService {
                 'monto_fpo',
                 'nro_ctrl_doc_ppal',
                 'nro_ctrl_doc_ppal_new',
+                'pagado_en',
                 [Sequelize.literal(clienteOrigDesc), 'cliente_orig_desc'],
                 [Sequelize.literal(clienteOrigRif), 'cliente_orig_rif'],
+                [Sequelize.literal(clienteDestDesc), 'cliente_dest_desc'],
+                [Sequelize.literal(clienteDestRif), 'cliente_dest_rif'],
               ],
               include: [
                 {
@@ -1745,11 +1766,16 @@ class RelacionFpoService {
             .stroke();
           doc.y = ymin + i;
           doc.x = 130;
-          doc.text(detalles[item]['movimientos.cliente_orig_rif'], {
-            align: 'center',
-            columns: 1,
-            width: 80,
-          });
+          doc.text(
+            detalles[item]['movimientos.pagado_en'] == 'O'
+              ? detalles[item]['movimientos.cliente_orig_rif']
+              : detalles[item]['movimientos.cliente_dest_rif'],
+            {
+              align: 'center',
+              columns: 1,
+              width: 80,
+            }
+          );
 
           doc
             .lineJoin('square')
@@ -1759,7 +1785,10 @@ class RelacionFpoService {
           let rectY = ymin + i - 10; // Y del rectángulo
           let rectHeight = 20; // Altura del rectángulo
           let rectWidth = 120; // Ancho del rectángulo
-          let text = detalles[item]['movimientos.cliente_orig_desc'];
+          let text =
+            detalles[item]['movimientos.pagado_en'] == 'O'
+              ? detalles[item]['movimientos.cliente_orig_desc']
+              : detalles[item]['movimientos.cliente_dest_desc'];
 
           // Calcula la altura real del texto
           let textHeight = doc.heightOfString(text, {
