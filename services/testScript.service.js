@@ -61,6 +61,8 @@ class TestScriptService {
             let authorizedPersons = [];
             // Reportes anuales
             let annualReports = [];
+            // General Partner Detail
+            let generalPartnerDetail = [];
 
             $('.detailSection').each(function() {
                 const sectionTitle = $(this).find('span').first().text().trim();
@@ -89,6 +91,24 @@ class TestScriptService {
                         }
                     });
                 }
+                if (sectionTitle === 'General Partner Detail') {
+                    let generalPartner = {
+                        document: '',
+                        name: '',
+                        address: ''
+                    };
+                    // Document
+                    generalPartner.document = $(this).find('span').filter(function() {
+                        return $(this).text().trim().startsWith('Document Number');
+                    }).text().replace('Document Number', '').trim();
+                    // Name
+                    let html = $(this).html();
+                    let nameMatch = html.match(/<br\/>\s*([A-Z0-9\.\s,]+)\s*<span>/i);
+                    generalPartner.name = nameMatch ? nameMatch[1].trim() : '';
+                    // Address
+                    generalPartner.address = $(this).find('div').first().text().replace(/\n|\r/g, '').replace(/\s+/g, ' ').trim();
+                    generalPartnerDetail.push(generalPartner);
+                }
                 if (sectionTitle === 'Annual Reports') {
                     $(this).find('table tr').each(function(i) {
                         if (i === 0) return; // Saltar encabezado
@@ -113,7 +133,8 @@ class TestScriptService {
                 registeredAgent,
                 registeredAgentAddress,
                 authorizedPersons,
-                annualReports
+                annualReports,
+                generalPartnerDetail
             };
         } catch (error) {
             throw new Error('No se pudo obtener la información. ' + error.message);
