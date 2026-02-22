@@ -17,6 +17,8 @@ const CostosTransporteService = require('./costosTransporte.service');
 const costosTransporteService = new CostosTransporteService();
 const RelacionDespachoService = require('./relacionDespacho.service');
 const relacionDespachoService = new RelacionDespachoService();
+const RetencionesIslrService = require('./retencionesIslr.service');
+const retencionesIslrService = new RetencionesIslrService();
 
 class ExcelReportsService {
   constructor() {}
@@ -153,6 +155,22 @@ class ExcelReportsService {
       worksheet,
       data,
       detalle
+    );
+    workbook.xlsx.writeFile(reportsPath + resPath);
+
+    return { validDoc: validDoc, resPath: resPath };
+  }
+
+  // RETENCIONES ISLR
+  async retencionesIslr(data) {
+
+    let resPath = 'Retenciones Islr.xlsx';
+    const workbook = new ExcelDocument.Workbook();
+    const worksheet = workbook.addWorksheet('retenciones islr');
+
+    let validDoc = await retencionesIslrService.mainReport(
+      worksheet,
+      data
     );
     workbook.xlsx.writeFile(reportsPath + resPath);
 
