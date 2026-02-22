@@ -192,10 +192,7 @@ class RetencionesIslrService {
   }
 
   async generateCustomerInformation(worksheet, detalles, detalles2) {
-    var ymin;
     var i = 10;
-
-    ymin = 180;
     for (var item = 0; item < detalles.length; item++) {
       worksheet.getCell('A' + i).value = utils.parseFloatN(moment(detalles[item].fecha_comprobante).format('YYYY') +
         moment(detalles[item].fecha_comprobante).format('MM'));

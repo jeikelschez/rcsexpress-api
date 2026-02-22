@@ -19,6 +19,8 @@ const RelacionDespachoService = require('./relacionDespacho.service');
 const relacionDespachoService = new RelacionDespachoService();
 const RetencionesIslrService = require('./retencionesIslr.service');
 const retencionesIslrService = new RetencionesIslrService();
+const RetencionesIvaService = require('./retencionesIva.service');
+const retencionesIvaService = new RetencionesIvaService();
 
 class ExcelReportsService {
   constructor() {}
@@ -169,6 +171,22 @@ class ExcelReportsService {
     const worksheet = workbook.addWorksheet('retenciones islr');
 
     let validDoc = await retencionesIslrService.mainReport(
+      worksheet,
+      data
+    );
+    workbook.xlsx.writeFile(reportsPath + resPath);
+
+    return { validDoc: validDoc, resPath: resPath };
+  }
+
+  // RETENCIONES IVA
+  async retencionesIva(data) {
+
+    let resPath = 'Retenciones Iva.xlsx';
+    const workbook = new ExcelDocument.Workbook();
+    const worksheet = workbook.addWorksheet('retenciones iva');
+
+    let validDoc = await retencionesIvaService.mainReport(
       worksheet,
       data
     );
