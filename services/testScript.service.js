@@ -22,8 +22,18 @@ class TestScriptService {
                     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
                     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
                     'Referer': 'https://search.sunbiz.org/Inquiry/CorporationSearch/ByDocumentNumber'
-                }
+                },
+                timeout: 20000,
+                validateStatus: () => true
             });
+
+            if (response.status === 403) {
+                throw new Error('Sunbiz bloqueó la solicitud (HTTP 403). El sitio permite el acceso en navegador, pero bloquea tráfico automatizado desde backend.');
+            }
+
+            if (response.status < 200 || response.status >= 300) {
+                throw new Error(`Sunbiz respondió con estado HTTP ${response.status}.`);
+            }
 
             const htmlText = response.data;
             const $ = cheerio.load(htmlText);
@@ -33,7 +43,7 @@ class TestScriptService {
             const companyName = $('.corporationName p').eq(1).text().trim() || 'No encontrado';
 
             // Información de registro
-            let documentNumber = 'No encontrado';
+            let parsedDocumentNumber = 'No encontrado';
             let feiEinNumber = 'No encontrado';
             let fileDate = 'No encontrado';
             let effectiveDate = 'No encontrado';
@@ -42,7 +52,7 @@ class TestScriptService {
             $('.filingInformation label').each(function() {
                 const label = $(this).text().trim();
                 const value = $(this).next('span').text().trim();
-                if (label === 'Document Number') documentNumber = value;
+                if (label === 'Document Number') parsedDocumentNumber = value;
                 if (label === 'FEI/EIN Number') feiEinNumber = value;
                 if (label === 'Date Filed') fileDate = value;
                 if (label === 'Effective Date') effectiveDate = value;
@@ -122,7 +132,7 @@ class TestScriptService {
             return {
                 entityType,
                 companyName,
-                documentNumber,
+                documentNumber: parsedDocumentNumber,
                 feiEinNumber,
                 fileDate,
                 effectiveDate,
@@ -137,7 +147,7 @@ class TestScriptService {
                 generalPartnerDetail
             };
         } catch (error) {
-            throw new Error('No se pudo obtener la información. ' + error.message);
+            throw new Error(`No se pudo obtener la información desde Sunbiz. ${error.message}`);
         }
     }
 }
