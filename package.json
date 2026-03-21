@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
+    "playwright:install": "playwright install chromium",
+    "playwright:check": "node -e \"const { chromium } = require('playwright'); console.log(chromium.executablePath());\"",
     "lint": "eslint",
     "migrations:generate": "sequelize-cli migration:generate --name",
     "migrations:run": "sequelize-cli db:migrate",

@@ -30,9 +30,10 @@ class TestScriptService {
             let htmlText = response.data;
 
             if (response.status === 403) {
-                htmlText = await this.fetchByDocumentNumberWithPlaywright(documentNumber);
+                const fallbackResult = await this.fetchByDocumentNumberWithPlaywright(documentNumber);
+                htmlText = fallbackResult.html;
                 if (!htmlText) {
-                    throw new Error('Sunbiz bloqueó la solicitud (HTTP 403). Activa el fallback con navegador instalando Playwright: npm i playwright ; npx playwright install chromium.');
+                    throw new Error(`Sunbiz bloqueó la solicitud (HTTP 403). Falló fallback Playwright: ${fallbackResult.error}.`);
                 }
             }
 
@@ -164,12 +165,18 @@ class TestScriptService {
         try {
             playwright = require('playwright');
         } catch (error) {
-            return null;
+            return {
+                html: null,
+                error: 'Dependencia "playwright" no instalada en el servidor. Ejecuta: npm i playwright && npx playwright install chromium'
+            };
         }
 
         let browser;
         try {
-            browser = await playwright.chromium.launch({ headless: true });
+            browser = await playwright.chromium.launch({
+                headless: true,
+                args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
+            });
             const context = await browser.newContext({
                 userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
             });
@@ -195,7 +202,10 @@ class TestScriptService {
             }
 
             if (!inputSelector) {
-                return null;
+                return {
+                    html: null,
+                    error: 'No se encontró el input de búsqueda en la página (posible cambio de HTML o bloqueo anti-bot).'
+                };
             }
 
             await page.fill(inputSelector, documentNumber);
@@ -225,9 +235,15 @@ class TestScriptService {
             }
 
             await page.waitForTimeout(1500);
-            return await page.content();
+            return {
+                html: await page.content(),
+                error: null
+            };
         } catch (error) {
-            return null;
+            return {
+                html: null,
+                error: error && error.message ? error.message : 'Error desconocido al ejecutar Playwright'
+            };
         } finally {
             if (browser) {
                 await browser.close();
