@@ -27,15 +27,23 @@ class TestScriptService {
                 validateStatus: () => true
             });
 
+            let htmlText = response.data;
+
             if (response.status === 403) {
-                throw new Error('Sunbiz bloqueó la solicitud (HTTP 403). El sitio permite el acceso en navegador, pero bloquea tráfico automatizado desde backend.');
+                htmlText = await this.fetchByDocumentNumberWithPlaywright(documentNumber);
+                if (!htmlText) {
+                    throw new Error('Sunbiz bloqueó la solicitud (HTTP 403). Activa el fallback con navegador instalando Playwright: npm i playwright ; npx playwright install chromium.');
+                }
             }
 
             if (response.status < 200 || response.status >= 300) {
+                if (response.status === 403 && htmlText) {
+                    // Respuesta obtenida por fallback de navegador.
+                } else {
                 throw new Error(`Sunbiz respondió con estado HTTP ${response.status}.`);
+                }
             }
 
-            const htmlText = response.data;
             const $ = cheerio.load(htmlText);
 
             // Tipo de entidad y nombre
@@ -148,6 +156,82 @@ class TestScriptService {
             };
         } catch (error) {
             throw new Error(`No se pudo obtener la información desde Sunbiz. ${error.message}`);
+        }
+    }
+
+    async fetchByDocumentNumberWithPlaywright(documentNumber) {
+        let playwright;
+        try {
+            playwright = require('playwright');
+        } catch (error) {
+            return null;
+        }
+
+        let browser;
+        try {
+            browser = await playwright.chromium.launch({ headless: true });
+            const context = await browser.newContext({
+                userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+            });
+            const page = await context.newPage();
+            await page.goto('https://search.sunbiz.org/Inquiry/CorporationSearch/ByDocumentNumber', {
+                waitUntil: 'domcontentloaded',
+                timeout: 30000
+            });
+
+            const searchSelectors = [
+                'input[name="SearchTerm"]',
+                'input#SearchTerm',
+                'input[name="searchTerm"]'
+            ];
+
+            let inputSelector = null;
+            for (const selector of searchSelectors) {
+                const count = await page.locator(selector).count();
+                if (count > 0) {
+                    inputSelector = selector;
+                    break;
+                }
+            }
+
+            if (!inputSelector) {
+                return null;
+            }
+
+            await page.fill(inputSelector, documentNumber);
+
+            const submitSelectors = [
+                'button[type="submit"]',
+                'input[type="submit"]',
+                'button#search-btn'
+            ];
+
+            let submitted = false;
+            for (const selector of submitSelectors) {
+                const count = await page.locator(selector).count();
+                if (count > 0) {
+                    await Promise.all([
+                        page.waitForLoadState('domcontentloaded', { timeout: 30000 }),
+                        page.click(selector)
+                    ]);
+                    submitted = true;
+                    break;
+                }
+            }
+
+            if (!submitted) {
+                await page.keyboard.press('Enter');
+                await page.waitForLoadState('domcontentloaded', { timeout: 30000 });
+            }
+
+            await page.waitForTimeout(1500);
+            return await page.content();
+        } catch (error) {
+            return null;
+        } finally {
+            if (browser) {
+                await browser.close();
+            }
         }
     }
 }

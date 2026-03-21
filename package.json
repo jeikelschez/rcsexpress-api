@@ -46,6 +46,7 @@
     "pdfkit": "^0.13.0",
     "pg": "^8.11.2",
     "pg-hstore": "^2.3.4",
+    "playwright": "^1.58.2",
     "sequelize": "^6.32.1",
     "swagger-ui-express": "^4.6.3",
     "winston": "^3.11.0"
