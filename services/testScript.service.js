@@ -172,11 +172,16 @@ class TestScriptService {
         }
 
         let browser;
+        const wsEndpoint = process.env.PLAYWRIGHT_WS_ENDPOINT;
         try {
-            browser = await playwright.chromium.launch({
-                headless: true,
-                args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
-            });
+            if (wsEndpoint) {
+                browser = await playwright.chromium.connect(wsEndpoint);
+            } else {
+                browser = await playwright.chromium.launch({
+                    headless: true,
+                    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
+                });
+            }
             const context = await browser.newContext({
                 userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
             });
@@ -240,9 +245,14 @@ class TestScriptService {
                 error: null
             };
         } catch (error) {
+            const rawError = error && error.message ? error.message : 'Error desconocido al ejecutar Playwright';
+            let helpMessage = rawError;
+            if (rawError.includes('Executable doesn\'t exist')) {
+                helpMessage = 'No existe binario de Chromium local. En cPanel puedes evitar esta instalación configurando PLAYWRIGHT_WS_ENDPOINT (Browserless) o solicitando más memoria al hosting.';
+            }
             return {
                 html: null,
-                error: error && error.message ? error.message : 'Error desconocido al ejecutar Playwright'
+                error: helpMessage
             };
         } finally {
             if (browser) {

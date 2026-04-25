@@ -276,6 +276,9 @@ class UtilsService {
     if (n + '' == '9') {
       return 'SEPTIEMBRE';
     }
+    if (n + '' == '10') {
+      return 'OCTUBRE';
+    }
     if (n + '' == '11') {
       return 'NOVIEMBRE';
     }
