@@ -87,8 +87,6 @@ class ReporteVentasService {
     let where = {};
     let order = '';
 
-    console.log(data);
-
     switch (tipo) {
       case 'VG':
         where = {
@@ -1068,6 +1066,7 @@ class ReporteVentasService {
         raw: true,
       });
       if (agencia) data.agencia_desc = agencia.nb_agencia;
+      console.log('Agencia: ' + data.agencia_desc);
     }
 
     await this.generateHeader(doc, tipo, data);
@@ -1179,8 +1178,7 @@ class ReporteVentasService {
         doc.y = 110;
         doc.x = 30;
         doc.text(
-          'Origen: ' +
-            (data.agencia_desc || data.ventas[0]['agencias.nb_agencia']),
+          'Origen: ' + (data.agencia_desc || ''),
           {
             align: 'left',
             columns: 1,
@@ -1271,7 +1269,7 @@ class ReporteVentasService {
         if (tipo == 'VCM' || tipo == 'VCD') {
           doc.y = 110;
           doc.x = 30;
-          doc.text('Origen: ' + data.ventas.agencia, {
+          doc.text('Origen: ' + (data.agencia_desc || ''), {
             align: 'left',
             columns: 1,
             width: 300,
@@ -1289,7 +1287,7 @@ class ReporteVentasService {
           if (data.agencia) {
             doc.y = 110;
             doc.x = 30;
-            doc.text('Origen: ' + data.ventas.agencia, {
+            doc.text('Origen: ' + (data.agencia_desc || ''), {
               align: 'left',
               columns: 1,
               width: 300,
@@ -1393,8 +1391,7 @@ class ReporteVentasService {
           doc.y = 145;
           doc.x = 140;
           doc.text(
-            'Agencia: ' +
-              (data.agencia_desc || data.ventas[0]['agencias.nb_agencia']),
+            'Agencia: ' + (data.agencia_desc || ''),
             {
               align: 'center',
               columns: 1,
@@ -1492,8 +1489,7 @@ class ReporteVentasService {
           doc.y = 145;
           doc.x = 140;
           doc.text(
-            'Agencia: ' +
-              (data.agencia_desc || data.ventas[0]['agencias.nb_agencia']),
+            'Agencia: ' + (data.agencia_desc || ''),
             {
               align: 'center',
               columns: 1,
@@ -1559,8 +1555,7 @@ class ReporteVentasService {
           doc.y = 145;
           doc.x = 140;
           doc.text(
-            'Agencia: ' +
-              (data.agencia_desc || data.ventas[0]['agencias.nb_agencia']),
+            'Agencia: ' + (data.agencia_desc || ''),
             {
               align: 'center',
               columns: 1,
@@ -1619,8 +1614,7 @@ class ReporteVentasService {
           doc.y = 145;
           doc.x = 140;
           doc.text(
-            'Agencia: ' +
-              (data.agencia_desc || data.ventas[0]['agencias.nb_agencia']),
+            'Agencia: ' + (data.agencia_desc || ''),
             {
               align: 'center',
               columns: 1,
@@ -1678,8 +1672,7 @@ class ReporteVentasService {
           doc.y = 145;
           doc.x = 140;
           doc.text(
-            'Agencia: ' +
-              (data.agencia_desc || data.ventas[0]['agencias.nb_agencia']),
+            'Agencia: ' + (data.agencia_desc || ''),
             {
               align: 'center',
               columns: 1,
