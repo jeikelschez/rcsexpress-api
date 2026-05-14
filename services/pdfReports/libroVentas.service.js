@@ -682,11 +682,11 @@ class LibroVentasService {
       width: 40,
     });
     doc.y = y + 8;
-    doc.x = 940;
+    doc.x = 935;
     doc.text(utils.formatNumber(total_fpo), {
       align: 'right',
       columns: 1,
-      width: 40,
+      width: 45,
     });
 
     if (!detalles.cliente) {

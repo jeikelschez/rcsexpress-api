@@ -803,7 +803,7 @@ class RetencionesIvaService {
         } else {
           ymin = 230;
           for (var item = 0; item < detalles.length; item++) {
-            doc.fontSize(8);
+            doc.fontSize(6);
             doc.font('Helvetica');
             doc.fillColor('#444444');
 
@@ -958,7 +958,7 @@ class RetencionesIvaService {
           doc.lineJoin('miter').rect(552, ymin + i - 4, 40, 14).stroke();
           
           doc.font('Helvetica-Bold');
-          doc.fontSize(7);
+          doc.fontSize(6);
           doc.y = ymin + i;
           doc.x = 320;
           doc.text('Totales:', {
