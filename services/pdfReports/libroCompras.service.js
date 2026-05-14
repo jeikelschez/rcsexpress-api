@@ -645,117 +645,117 @@ class LibroComprasService {
       );
 
       doc.y = y + 13;
-      doc.x = 687;
+      doc.x = 682;
       doc.text(0, {
         align: 'center',
         columns: 1,
-        width: 40,
+        width: 45,
       });
       doc.y = y + 28;
-      doc.x = 687;
+      doc.x = 682;
       doc.text(total_imp_imp, {
         align: 'center',
         columns: 1,
-        width: 40,
+        width: 45,
       });
       doc.y = y + 43;
-      doc.x = 687;
+      doc.x = 682;
       doc.text(0, {
         align: 'center',
         columns: 1,
-        width: 40,
+        width: 45,
       });
       doc.y = y + 58;
-      doc.x = 687;
+      doc.x = 682;
       doc.text(0, {
         align: 'center',
         columns: 1,
-        width: 40,
+        width: 45,
       });
       doc.y = y + 73;
-      doc.x = 687;
+      doc.x = 682;
       doc.text(utils.formatNumber(total_imp_nac), {
         align: 'center',
         columns: 1,
-        width: 40,
+        width: 45,
       });
       doc.y = y + 88;
-      doc.x = 687;
+      doc.x = 682;
       doc.text(0, {
         align: 'center',
         columns: 1,
-        width: 40,
+        width: 45,
       });
       doc.y = y + 103;
-      doc.x = 687;
+      doc.x = 682;
       doc.text(0, {
         align: 'center',
         columns: 1,
-        width: 40,
+        width: 45,
       });
       doc.y = y + 118;
-      doc.x = 687;
+      doc.x = 682;
       doc.text(utils.formatNumber(total_imp_imp + total_imp_nac), {
         align: 'center',
         columns: 1,
-        width: 40,
+        width: 45,
       });
 
       doc.y = y + 13;
-      doc.x = 775;
+      doc.x = 770;
       doc.text(0, {
         align: 'center',
         columns: 1,
-        width: 40,
+        width: 45,
       });
       doc.y = y + 28;
-      doc.x = 775;
+      doc.x = 770;
       doc.text(0, {
         align: 'center',
         columns: 1,
-        width: 40,
+        width: 45,
       });
       doc.y = y + 43;
-      doc.x = 775;
+      doc.x = 770;
       doc.text(0, {
         align: 'center',
         columns: 1,
-        width: 40,
+        width: 45,
       });
       doc.y = y + 58;
-      doc.x = 775;
+      doc.x = 770;
       doc.text(0, {
         align: 'center',
         columns: 1,
-        width: 40,
+        width: 45,
       });
       doc.y = y + 73;
-      doc.x = 775;
+      doc.x = 770;
       doc.text(utils.formatNumber(total_retenido), {
         align: 'center',
         columns: 1,
-        width: 40,
+        width: 45,
       });
       doc.y = y + 88;
-      doc.x = 775;
+      doc.x = 770;
       doc.text(0, {
         align: 'center',
         columns: 1,
-        width: 40,
+        width: 45,
       });
       doc.y = y + 103;
-      doc.x = 775;
+      doc.x = 770;
       doc.text(0, {
         align: 'center',
         columns: 1,
-        width: 40,
+        width: 45,
       });
       doc.y = y + 118;
-      doc.x = 775;
+      doc.x = 770;
       doc.text(utils.formatNumber(total_retenido), {
         align: 'center',
         columns: 1,
-        width: 40,
+        width: 45,
       });
 
       doc.lineWidth(0.5);
