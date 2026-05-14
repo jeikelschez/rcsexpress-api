@@ -382,7 +382,7 @@ class LibroComprasService {
       total_imp_nac += utils.parseFloatN(imp_nac);
 
       doc.y = ymin + i;
-      doc.x = 718;
+      doc.x = 710;
       doc.text(utils.formatNumber(base_nac), {
         align: 'right',
         columns: 1,
@@ -390,7 +390,7 @@ class LibroComprasService {
       });
       if (detalles[item].monto_base_nacional > 0) {
         doc.y = ymin + i;
-        doc.x = 762;
+        doc.x = 753;
         doc.text(
           (
             (detalles[item].monto_imp_nacional * 100) /
@@ -430,7 +430,7 @@ class LibroComprasService {
         width: 60,
       });
       doc.y = ymin + i;
-      doc.x = 905;
+      doc.x = 910;
       doc.text(utils.formatNumber(detalles[item].saldo_retenido), {
         align: 'right',
         columns: 1,
@@ -482,11 +482,11 @@ class LibroComprasService {
       width: 50,
     });
     doc.y = y + 8;
-    doc.x = 610;
+    doc.x = 605;
     doc.text(utils.formatNumber(total_exento), {
       align: 'right',
       columns: 1,
-      width: 40,
+      width: 45,
     });
 
     if (total_base_imp > 0) {
@@ -507,7 +507,7 @@ class LibroComprasService {
     }
 
     doc.y = y + 8;
-    doc.x = 718;
+    doc.x = 710;
     doc.text(utils.formatNumber(total_base_nac), {
       align: 'right',
       columns: 1,
@@ -525,7 +525,7 @@ class LibroComprasService {
     doc.text(utils.formatNumber(total_retenido), {
       align: 'right',
       columns: 1,
-      width: 40,
+      width: 45,
     });
     doc.y = y + 8;
     doc.x = 943;
