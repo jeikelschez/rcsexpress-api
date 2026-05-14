@@ -87,6 +87,8 @@ class ReporteVentasService {
     let where = {};
     let order = '';
 
+    console.log(data);
+
     switch (tipo) {
       case 'VG':
         where = {
@@ -1059,6 +1061,15 @@ class ReporteVentasService {
     }
 
     data.ventas = ventas;
+
+    if (data.agencia) {
+      const agencia = await models.Agencias.findByPk(data.agencia, {
+        attributes: ['nb_agencia'],
+        raw: true,
+      });
+      if (agencia) data.agencia_desc = agencia.nb_agencia;
+    }
+
     await this.generateHeader(doc, tipo, data);
     await this.generateCustomerInformation(doc, tipo, data);
     return true;
@@ -1167,11 +1178,15 @@ class ReporteVentasService {
         doc.fontSize(9);
         doc.y = 110;
         doc.x = 30;
-        doc.text('Origen: ' + data.ventas[0]['agencias.nb_agencia'], {
-          align: 'left',
-          columns: 1,
-          width: 300,
-        });
+        doc.text(
+          'Origen: ' +
+            (data.agencia_desc || data.ventas[0]['agencias.nb_agencia']),
+          {
+            align: 'left',
+            columns: 1,
+            width: 300,
+          }
+        );
         doc.y = 120;
         doc.x = 30;
         doc.text('Cliente: ' + data.ventas.cliente_desc, {
@@ -1377,11 +1392,15 @@ class ReporteVentasService {
         if (data.agencia) {
           doc.y = 145;
           doc.x = 140;
-          doc.text('Agencia: ' + data.ventas[0]['agencias.nb_agencia'], {
-            align: 'center',
-            columns: 1,
-            width: 400,
-          });
+          doc.text(
+            'Agencia: ' +
+              (data.agencia_desc || data.ventas[0]['agencias.nb_agencia']),
+            {
+              align: 'center',
+              columns: 1,
+              width: 400,
+            }
+          );
         }
         if (data.cliente) {
           doc.y = 160;
@@ -1472,11 +1491,15 @@ class ReporteVentasService {
         if (data.agencia) {
           doc.y = 145;
           doc.x = 140;
-          doc.text('Agencia: ' + data.ventas[0]['agencias.nb_agencia'], {
-            align: 'center',
-            columns: 1,
-            width: 400,
-          });
+          doc.text(
+            'Agencia: ' +
+              (data.agencia_desc || data.ventas[0]['agencias.nb_agencia']),
+            {
+              align: 'center',
+              columns: 1,
+              width: 400,
+            }
+          );
         }
 
         doc.fontSize(9);
@@ -1535,11 +1558,15 @@ class ReporteVentasService {
         if (data.agencia) {
           doc.y = 145;
           doc.x = 140;
-          doc.text('Agencia: ' + data.ventas[0]['agencias.nb_agencia'], {
-            align: 'center',
-            columns: 1,
-            width: 400,
-          });
+          doc.text(
+            'Agencia: ' +
+              (data.agencia_desc || data.ventas[0]['agencias.nb_agencia']),
+            {
+              align: 'center',
+              columns: 1,
+              width: 400,
+            }
+          );
         }
 
         doc.fontSize(9);
@@ -1591,11 +1618,15 @@ class ReporteVentasService {
         if (data.agencia) {
           doc.y = 145;
           doc.x = 140;
-          doc.text('Agencia: ' + data.ventas[0]['agencias.nb_agencia'], {
-            align: 'center',
-            columns: 1,
-            width: 400,
-          });
+          doc.text(
+            'Agencia: ' +
+              (data.agencia_desc || data.ventas[0]['agencias.nb_agencia']),
+            {
+              align: 'center',
+              columns: 1,
+              width: 400,
+            }
+          );
         }
 
         doc.fontSize(9);
@@ -1646,11 +1677,15 @@ class ReporteVentasService {
         if (data.agencia) {
           doc.y = 145;
           doc.x = 140;
-          doc.text('Agencia: ' + data.ventas[0]['agencias.nb_agencia'], {
-            align: 'center',
-            columns: 1,
-            width: 400,
-          });
+          doc.text(
+            'Agencia: ' +
+              (data.agencia_desc || data.ventas[0]['agencias.nb_agencia']),
+            {
+              align: 'center',
+              columns: 1,
+              width: 400,
+            }
+          );
         }
 
         doc.fontSize(9);
