@@ -2403,11 +2403,11 @@ class ReporteCostosService {
           }
 
           doc.y = ymin + i;
-          doc.x = 645;
+          doc.x = 635;
           doc.text(utils.formatNumber(utilidadBs), {
             align: 'right',
             columns: 1,
-            width: 40,
+            width: 50,
           });
           doc.y = ymin + i;
           doc.x = 687;
@@ -2485,11 +2485,11 @@ class ReporteCostosService {
         }
 
         doc.y = ymin + i + 15;
-        doc.x = 645;
+        doc.x = 635;
         doc.text(utils.formatNumber(totalUtilidadBs), {
           align: 'right',
           columns: 1,
-          width: 40,
+          width: 50,
         });
         doc.y = ymin + i + 15;
         doc.x = 687;

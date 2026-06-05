@@ -207,6 +207,19 @@ class ReporteVentasService {
             [Sequelize.Op.lte]: 550000000,
           };
 
+        const guiasExcluidas = Array.isArray(data.guias_excluidas)
+          ? data.guias_excluidas
+              .map((guia) => parseInt(guia, 10))
+              .filter((guia) => Number.isFinite(guia))
+          : [];
+
+        if (guiasExcluidas.length > 0) {
+          where.nro_documento = {
+            ...(where.nro_documento || {}),
+            [Sequelize.Op.notIn]: guiasExcluidas,
+          };
+        }
+
         ventas = await models.Mmovimientos.findAll({
           where: where,
           attributes: [
@@ -1066,7 +1079,6 @@ class ReporteVentasService {
         raw: true,
       });
       if (agencia) data.agencia_desc = agencia.nb_agencia;
-      console.log('Agencia: ' + data.agencia_desc);
     }
 
     await this.generateHeader(doc, tipo, data);
