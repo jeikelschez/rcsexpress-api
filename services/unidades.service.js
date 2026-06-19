@@ -2,7 +2,7 @@ const boom = require('@hapi/boom');
 
 const { models, Sequelize } = require('./../libs/sequelize');
 
-const unidadDesc = "CONCAT(placas, ' - Vehículo: ', descripcion, ' - ', chofer)";
+const unidadDesc = "CONCAT(placas, ' - Vehículo: ', descripcion)";
 
 class UnidadesService {
 
