@@ -3,6 +3,7 @@ const logger = require('./../config/logger');
 const moment = require('moment');
 
 const { models, Sequelize } = require('./../libs/sequelize');
+const sequelize = require('./../libs/sequelize');
 const UtilsService = require('./utils.service');
 const utils = new UtilsService();
 
@@ -434,6 +435,59 @@ class MmovimientosService {
       { where }
     );
     return updatedRows;
+  }
+
+  async guardarTarifeo(id, { maestro, detalle, comisionVenta, comisionSeguro }) {
+    return sequelize.transaction(async (t) => {
+      const mMovimiento = await models.Mmovimientos.findByPk(id, { transaction: t });
+      if (!mMovimiento) {
+        throw boom.notFound('Maestro de Movimientos no existe');
+      }
+
+      if (mMovimiento.t_de_documento === 'GC' && detalle.length !== 6) {
+        throw boom.badRequest(
+          'Una guía de carga (GC) debe tener exactamente 6 renglones de detalle'
+        );
+      }
+
+      await mMovimiento.update(maestro, { transaction: t });
+
+      await models.Dmovimientos.destroy({
+        where: { cod_movimiento: id },
+        transaction: t,
+      });
+      const nuevosRenglones = await models.Dmovimientos.bulkCreate(
+        detalle.map((item) => ({ ...item, id: undefined, cod_movimiento: id })),
+        { transaction: t }
+      );
+
+      const guardarComision = async (comision) => {
+        if (!comision) return null;
+        const existente = await models.Ccomisiones.findOne({
+          where: { cod_movimiento: id, tipo_comision: comision.tipo_comision },
+          transaction: t,
+        });
+        if (existente) {
+          return existente.update(comision, { transaction: t });
+        }
+        return models.Ccomisiones.create(
+          { ...comision, cod_movimiento: id },
+          { transaction: t }
+        );
+      };
+
+      const [ccVenta, ccSeguro] = await Promise.all([
+        guardarComision(comisionVenta),
+        guardarComision(comisionSeguro),
+      ]);
+
+      return {
+        maestro: mMovimiento,
+        detalle: nuevosRenglones,
+        comisionVenta: ccVenta,
+        comisionSeguro: ccSeguro,
+      };
+    });
   }
 }
 

@@ -343,4 +343,33 @@ const getMmovimientosSchema = Joi.object({
   id: id.required(),
 });
 
-module.exports = { createMmovimientosSchema, updateMmovimientosSchema, getMmovimientosSchema }
+const detalleItemSchema = Joi.object({
+  id: Joi.number().integer().allow(null, ''),
+  nro_item: Joi.number().precision(0).required(),
+  cod_concepto: Joi.number().integer().allow(null, ''),
+  precio_unitario: Joi.number().precision(2).required(),
+  cantidad: Joi.number().precision(2).allow(null, ''),
+  importe_renglon: Joi.number().precision(2).allow(null, ''),
+  descripcion: Joi.string().min(2).max(1000).allow(null, ''),
+  porc_descuento: Joi.number().precision(2).allow(null, ''),
+  monto_descuento: Joi.number().precision(2).allow(null, ''),
+  cod_concepto_oper: Joi.number().integer().allow(null, ''),
+});
+
+const comisionItemSchema = Joi.object({
+  cod_agencia: Joi.number().integer().required(),
+  cod_agente: Joi.number().integer().allow(null, ''),
+  fecha_emision: Joi.date().required(),
+  tipo_comision: Joi.string().max(1).required(),
+  monto_comision: Joi.number().precision(2).required(),
+  estatus: Joi.number().integer().required(),
+});
+
+const guardarTarifeoSchema = Joi.object({
+  maestro: updateMmovimientosSchema.required(),
+  detalle: Joi.array().items(detalleItemSchema).min(1).max(6).required(),
+  comisionVenta: comisionItemSchema.allow(null),
+  comisionSeguro: comisionItemSchema.allow(null),
+});
+
+module.exports = { createMmovimientosSchema, updateMmovimientosSchema, getMmovimientosSchema, guardarTarifeoSchema }

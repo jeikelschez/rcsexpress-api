@@ -6,6 +6,7 @@ const {
   createMmovimientosSchema,
   updateMmovimientosSchema,
   getMmovimientosSchema,
+  guardarTarifeoSchema,
 } = require('./../schemas/maestroMovimientos.schema');
 const authenticateJWT = require('./../middlewares/authenticate.handler');
 
@@ -104,6 +105,22 @@ router.put(
         cliente
       );
       res.json({ message: 'Actualización masiva completada', cantidad: result });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.put(
+  '/:id/tarifeo',
+  authenticateJWT,
+  validatorHandler(getMmovimientosSchema, 'params'),
+  validatorHandler(guardarTarifeoSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const resultado = await service.guardarTarifeo(id, req.body);
+      res.json(resultado);
     } catch (error) {
       next(error);
     }
