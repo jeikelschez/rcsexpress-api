@@ -427,6 +427,19 @@ router.get('/guiasLote', authenticateJWT, async (req, res, next) => {
   }
 });
 
+router.get('/etiquetasLote', authenticateJWT, async (req, res, next) => {
+  try {
+    const { data } = req.headers;
+    const response = await service.etiquetasLote(data);
+    res.status(200).json({
+      message: 'Etiquetas Generadas',
+      zpl: response.zpl,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get('/reportePago', authenticateJWT, async (req, res, next) => {
   try {
     const { id, beneficiario } = req.headers;

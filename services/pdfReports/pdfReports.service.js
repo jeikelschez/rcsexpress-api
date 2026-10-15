@@ -53,6 +53,8 @@ const GuiasEmpresaService = require('./guiasEmpresa.service');
 const guiasEmpresaService = new GuiasEmpresaService();
 const GuiasLoteService = require('./guiasLote.service');
 const guiasLoteService = new GuiasLoteService();
+const EtiquetasLoteService = require('./etiquetasLote.service');
+const etiquetasLoteService = new EtiquetasLoteService();
 const ReportePagoService = require('./reportePago.service');
 const reportePagoService = new ReportePagoService();
 const RetencionesCompradorService = require('./retencionesComprador.service');
@@ -567,6 +569,12 @@ class PdfReportsService {
     await guiasLoteService.mainReport(doc, tipo, data);
     doc.end();
     return { validDoc: true, resPath: resPath };
+  }
+
+  // ETIQUETAS DE BULTOS (ZPL para impresora Zebra)
+  async etiquetasLote(data) {
+    const zpl = await etiquetasLoteService.generar(data);
+    return { zpl };
   }
 
   // REPORTE COMPROBANTE PAGO
