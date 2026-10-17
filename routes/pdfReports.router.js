@@ -429,8 +429,8 @@ router.get('/guiasLote', authenticateJWT, async (req, res, next) => {
 
 router.get('/etiquetasLote', authenticateJWT, async (req, res, next) => {
   try {
-    const { data } = req.headers;
-    const response = await service.etiquetasLote(data);
+    const { data, tipo } = req.headers;
+    const response = await service.etiquetasLote(data, tipo);
     res.status(200).json({
       message: 'Etiquetas Generadas',
       zpl: response.zpl,

@@ -572,8 +572,8 @@ class PdfReportsService {
   }
 
   // ETIQUETAS DE BULTOS (ZPL para impresora Zebra)
-  async etiquetasLote(data) {
-    const zpl = await etiquetasLoteService.generar(data);
+  async etiquetasLote(data, tipo) {
+    const zpl = await etiquetasLoteService.generar(data, tipo);
     return { zpl };
   }
 
