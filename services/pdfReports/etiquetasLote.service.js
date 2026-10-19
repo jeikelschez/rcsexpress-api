@@ -134,10 +134,11 @@ class EtiquetasLoteService {
     const nf = nameW ? 32 : 38;
     nl.forEach((ln) => { out.push(L(y, nf, ln, W)); y += nf + 8; });
     y += 6;
-    out.push(L(y, 38, `Zona: ${zona}`)); y += 50;
+    out.push(L(y, 38, `Zona: ${zona}`)); y += contW ? 44 : 50;
     const cl = contW ? this.wrap(contFull, 50, 2) : [contFull];
     const cf = contW ? 24 : 32;
-    cl.forEach((ln) => { out.push(L(y, cf, ln, W)); y += cf + 8; });
+    const clg = contW ? 4 : 8;
+    cl.forEach((ln) => { out.push(L(y, cf, ln, W)); y += cf + clg; });
     return out.join('\n');
   }
 
@@ -274,12 +275,12 @@ ${pie}
     const zonaFull = `Zona: ${zona}`;
     let zonaZpl;
     if (zonaFull.length <= 22) {
-      zonaZpl = `^FO20,728^A0N,64,64^FD${zonaFull}^FS`;
+      zonaZpl = `^FO20,684^A0N,64,64^FD${zonaFull}^FS`;
     } else {
       const zl = this.wrap(zonaFull, 30, 2);
       zonaZpl =
-        `^FO20,692^A0N,46,46^FB772,1,0,L^FD${zl[0]}^FS\n` +
-        `^FO20,744^A0N,46,46^FB772,1,0,L^FD${zl[1] || ''}^FS`;
+        `^FO20,676^A0N,46,46^FB772,1,0,L^FD${zl[0]}^FS\n` +
+        `^FO20,728^A0N,46,46^FB772,1,0,L^FD${zl[1] || ''}^FS`;
     }
 
     return `^XA
