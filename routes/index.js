@@ -55,6 +55,7 @@ const ClientesUsuariosRouter = require('./clientesUsuarios.router');
 const DgastosRouter = require('./distribucionGastos.router');
 const ChequerasRouter = require('./chequeras.router');
 const testScriptRouter = require('./testScript.router');
+const ControlCargaRouter = require('./controlCarga.router');
 
 function routerApi(app) {
   const router = express.Router();
@@ -113,6 +114,7 @@ function routerApi(app) {
   router.use('/dgastos', DgastosRouter);
   router.use('/chequeras', ChequerasRouter);
   router.use('/sunbiz', testScriptRouter);
+  router.use('/controlcarga', ControlCargaRouter);
   router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 
