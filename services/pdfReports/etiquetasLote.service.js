@@ -159,8 +159,8 @@ class EtiquetasLoteService {
     const pie = this.pieCompleto(deNombre, destNombre, zona, contenido);
 
     return `^XA
-^PW812
-^LL812
+^PW800
+^LL800
 ^CI28
 ^MD18
 ^LH0,0
@@ -170,8 +170,8 @@ class EtiquetasLoteService {
 ^FO124,58^A0N,20,20^FDRif J31028463-6^FS
 ^FO124,82^A0N,20,20^FDCP IP 20-22-15-40^FS
 
-^FO556,8^GB250,96,96^FS
-^FO556,28^A0N,58,58^FR^FB250,1,0,C^FD${dst}^FS
+^FO548,8^GB250,96,96^FS
+^FO548,28^A0N,58,58^FR^FB250,1,0,C^FD${dst}^FS
 
 ^FO52,146^BQN,2,16^FDMA,${codigo}^FS
 ^FO4,514^A0N,22,22^FB440,1,0,C^FD${codigo}^FS
@@ -180,17 +180,17 @@ class EtiquetasLoteService {
 
 ^FO466,151^A0N,17,17^FDGUIA^FS
 ^FO466,171^A0N,62,62^FD${nroGuia}^FS
-^FO458,243^GB352,2,2^FS
+^FO458,243^GB342,2,2^FS
 ^FO466,261^A0N,17,17^FDBULTO^FS
 ^FO466,281^A0N,46,46^FD${bulto} / ${total}^FS
-^FO458,341^GB352,2,2^FS
+^FO458,341^GB342,2,2^FS
 ^FO466,359^A0N,17,17^FDPESO GUIA^FS
 ^FO466,379^A0N,46,46^FD${peso}^FS
-^FO458,439^GB352,2,2^FS
+^FO458,439^GB342,2,2^FS
 ^FO466,457^A0N,17,17^FDFECHA ENVIO^FS
 ^FO466,477^A0N,46,46^FD${fecha}^FS
 
-^FO0,540^GB812,3,3^FS
+^FO0,540^GB800,3,3^FS
 
 ${pie}
 
@@ -228,7 +228,7 @@ ${pie}
     const HSEP = Math.max(492, CODY + 26);
     const COLX = SEPX + 22;
     const GBX = SEPX + 12;
-    const GBW = 806 - GBX;
+    const GBW = 800 - GBX;
     const CELLTOP = 116;
 
     // Columna derecha: 4 bandas repartidas parejas en [CELLTOP, HSEP]
@@ -284,8 +284,8 @@ ${pie}
     }
 
     return `^XA
-^PW812
-^LL812
+^PW800
+^LL800
 ^CI28
 ^MD18
 ^LH0,0
@@ -293,8 +293,8 @@ ${pie}
 ^FO${QX},${QY}^BQN,2,${MAG}^FDMA,${qrPayload}^FS
 ^FO0,${CODY}^A0N,24,24^FB${SEPX},1,0,C^FD${codigoVisible}^FS
 
-^FO556,16^GB250,92,92^FS
-^FO556,36^A0N,56,56^FR^FB250,1,0,C^FD${dst}^FS
+^FO548,16^GB250,92,92^FS
+^FO548,36^A0N,56,56^FR^FB250,1,0,C^FD${dst}^FS
 
 ^FO${SEPX},${CELLTOP}^GB3,${HSEP - CELLTOP + 3},3^FS
 
