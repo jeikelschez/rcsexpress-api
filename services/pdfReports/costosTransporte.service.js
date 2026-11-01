@@ -46,9 +46,12 @@ const totalDolarDesc =
   ' THEN 0 ELSE ROUND(movimientos.monto_subtotal /' +
   ' (SELECT valor FROM historico_dolar' +
   ' WHERE historico_dolar.fecha = movimientos.fecha_emision), 2) END)';
+// Comision de entrega real: porcentaje del agente de entrega de cada guia,
+// redondeada por guia (igual que el reporte de Comisiones por Generar).
 const totalComisionDesc =
-  'ROUND(SUM(COALESCE(`detallesg->movimientos`.base_comision_vta_rcl * ' +
-  '`agentes`.porc_comision_entrega / 100 , 0)),2)';
+  'SUM(ROUND(COALESCE(`detallesg->movimientos`.base_comision_vta_rcl * ' +
+  '(SELECT ae.porc_comision_entrega FROM agentes ae ' +
+  ' WHERE ae.id = `detallesg->movimientos`.cod_agente_entrega) / 100, 0), 2))';
 const totalDolarDesc2 =
   'SUM(CASE WHEN ((SELECT valor FROM historico_dolar' +
   ' WHERE historico_dolar.fecha = `detallesg->movimientos`.fecha_emision) = 0)' +
@@ -807,7 +810,7 @@ class CostosTransporteService {
         doc.text('Guías', 500, 170);
         doc.y = 165;
         doc.x = 530;
-        doc.text('Monto Comisión', {
+        doc.text('Comisión Entrega', {
           align: 'center',
           columns: 1,
           width: 50,
