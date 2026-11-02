@@ -3,6 +3,8 @@ const boom = require('@hapi/boom');
 const { models, Sequelize } = require('../libs/sequelize');
 const UtilsService = require('./utils.service');
 const utils = new UtilsService();
+const ControlCargaService = require('./controlCarga.service');
+const controlCarga = new ControlCargaService();
 
 class DcostosgService {
   constructor() {}
@@ -96,8 +98,14 @@ class DcostosgService {
     if (!dCostog) {
       throw boom.notFound('Detalle de Costos Guias no existe');
     }
+    const { cod_costo, cod_movimiento } = dCostog;
     await dCostog.destroy();
-    return { id };
+    // La guía también sale del control de carga de ese costo
+    const control_carga = await controlCarga.alQuitarGuiaDeCosto(
+      cod_costo,
+      cod_movimiento
+    );
+    return { id, control_carga };
   }
 }
 

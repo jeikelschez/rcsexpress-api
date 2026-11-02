@@ -21,6 +21,8 @@ const RetencionesIslrService = require('./retencionesIslr.service');
 const retencionesIslrService = new RetencionesIslrService();
 const RetencionesIvaService = require('./retencionesIva.service');
 const retencionesIvaService = new RetencionesIvaService();
+const ControlCargaService = require('./controlCarga.service');
+const controlCargaService = new ControlCargaService();
 
 class ExcelReportsService {
   constructor() {}
@@ -142,6 +144,18 @@ class ExcelReportsService {
       dolar
     );
     workbook.xlsx.writeFile(reportsPath + resPath);
+
+    return { validDoc: validDoc, resPath: resPath };
+  }
+
+  // MANIFIESTO CONTROL DE CARGA
+  async controlCarga(id) {
+    let resPath = 'controlCarga' + id + '.xlsx';
+    const workbook = new ExcelDocument.Workbook();
+    const worksheet = workbook.addWorksheet('control_carga');
+
+    let validDoc = await controlCargaService.mainReport(worksheet, id);
+    if (validDoc) await workbook.xlsx.writeFile(reportsPath + resPath);
 
     return { validDoc: validDoc, resPath: resPath };
   }

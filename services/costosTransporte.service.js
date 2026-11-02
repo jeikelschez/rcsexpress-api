@@ -3,6 +3,8 @@ const boom = require('@hapi/boom');
 const { models, Sequelize } = require('../libs/sequelize');
 const UtilsService = require('./utils.service');
 const utils = new UtilsService();
+const ControlCargaService = require('./controlCarga.service');
+const controlCarga = new ControlCargaService();
 
 class CostosTransporteService {
   constructor() {}
@@ -156,7 +158,9 @@ class CostosTransporteService {
       throw boom.notFound('Costo no existe');
     }
     await costo.destroy();
-    return { id };
+    // El control de carga de este costo se elimina o pierde el vínculo
+    const control_carga = await controlCarga.alEliminarCosto(id);
+    return { id, control_carga };
   }
 }
 

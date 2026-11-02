@@ -50,6 +50,7 @@ const { Dgastos, DgastosSchema } = require('./distribucionGastos.model');
 const { Chequeras, ChequerasSchema } = require('./chequeras.model');
 const { Ccarga, CcargaSchema } = require('./controlCarga.model');
 const { Ccargab, CcargabSchema } = require('./controlCargaBultos.model');
+const { Ccargag, CcargagSchema } = require('./controlCargaGuias.model');
 
 function setupModels(sequelize) {
   Bancos.init(BancosSchema, Bancos.config(sequelize));
@@ -104,6 +105,7 @@ function setupModels(sequelize) {
   Chequeras.init(ChequerasSchema, Chequeras.config(sequelize));
   Ccarga.init(CcargaSchema, Ccarga.config(sequelize));
   Ccargab.init(CcargabSchema, Ccargab.config(sequelize));
+  Ccargag.init(CcargagSchema, Ccargag.config(sequelize));
 
   Paises.associate(sequelize.models);
   Estados.associate(sequelize.models);
@@ -150,6 +152,7 @@ function setupModels(sequelize) {
   Chequeras.associate(sequelize.models);
   Ccarga.associate(sequelize.models);
   Ccargab.associate(sequelize.models);
+  Ccargag.associate(sequelize.models);
 
   Usuarios.hooks(sequelize.models);
 }

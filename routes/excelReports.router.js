@@ -32,6 +32,20 @@ router.get('/reporteVentas', authenticateJWT, async (req, res, next) => {
   }
 });
 
+router.get('/controlCarga', authenticateJWT, async (req, res, next) => {
+  try {
+    const { id } = req.headers;
+    const response = await service.controlCarga(parseInt(id, 10));
+    res.status(200).json({
+      message: 'Excel Generado',
+      excelPath: response.resPath,
+      validDoc: response.validDoc,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.post('/comisiones', authenticateJWT, async (req, res, next) => {
   try {
     const { data, desde, hasta, dolar } = req.body;

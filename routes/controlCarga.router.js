@@ -16,8 +16,28 @@ const getUsuario = (req) => {
 
 router.get('/', authenticateJWT, async (req, res, next) => {
   try {
-    const { agencia, estado } = req.headers;
-    const cargas = await service.find(agencia, estado);
+    const {
+      agencia,
+      destino,
+      estado,
+      agente,
+      unidad,
+      desde,
+      hasta,
+      activas,
+      cerradas,
+    } = req.headers;
+    const cargas = await service.find({
+      agencia,
+      destino,
+      cerradas,
+      estado,
+      agente,
+      unidad,
+      desde,
+      hasta,
+      activas,
+    });
     res.json(cargas);
   } catch (error) {
     next(error);
@@ -49,6 +69,37 @@ router.post('/', authenticateJWT, async (req, res, next) => {
     const body = { ...req.body, usuario: req.body.usuario || getUsuario(req) };
     const nueva = await service.create(body);
     res.status(201).json(nueva);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Genera (o completa) un control de carga desde la relación de despacho
+router.post('/generar', authenticateJWT, async (req, res, next) => {
+  try {
+    const body = { ...req.body, usuario: getUsuario(req) };
+    const data = await service.generar(body);
+    res.status(201).json(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post('/:id/esperados', authenticateJWT, async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const data = await service.addEsperados(id, req.body);
+    res.status(201).json(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete('/:id/guia/:movId', authenticateJWT, async (req, res, next) => {
+  try {
+    const { id, movId } = req.params;
+    const data = await service.deleteGuia(id, movId, getUsuario(req));
+    res.json(data);
   } catch (error) {
     next(error);
   }
