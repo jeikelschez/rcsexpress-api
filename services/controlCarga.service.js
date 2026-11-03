@@ -37,11 +37,19 @@ class ControlCargaService {
   constructor() {}
 
   // RCS-[guia]-[NN] o [guia]-[NN]  ->  { nroGuia, nroBulto }
+  // También acepta la etiqueta Code128 de Hidroca (46 dígitos):
+  // [nro Hidroca 10][9][guia RCS 9][total 5][bulto 5][fecha AAAAMMDD]
+  // -> { nroGuia, nroBulto, totalEtiqueta }
   parseCodigo(codigo) {
-    const m = String(codigo || '')
-      .trim()
-      .toUpperCase()
-      .match(/^(?:RCS-)?(\d+)-(\d+)$/);
+    const c = String(codigo || '').trim().toUpperCase();
+    const h = c.match(/^\d{19}(\d{9})(\d{5})(\d{5})\d{8}$/);
+    if (h) {
+      const total = parseInt(h[2], 10);
+      const bulto = parseInt(h[3], 10);
+      if (!bulto || bulto > total) return null;
+      return { nroGuia: h[1], nroBulto: bulto, totalEtiqueta: total };
+    }
+    const m = c.match(/^(?:RCS-)?(\d+)-(\d+)$/);
     if (!m) return null;
     return { nroGuia: m[1], nroBulto: parseInt(m[2], 10) };
   }
@@ -310,8 +318,21 @@ class ControlCargaService {
 
     const parsed = this.parseCodigo(codigo);
     if (!parsed) throw boom.badRequest('Codigo invalido');
-    const { nroGuia, nroBulto } = parsed;
+    const { nroGuia, nroBulto, totalEtiqueta } = parsed;
     const codNorm = `RCS-${nroGuia}-${String(nroBulto).padStart(2, '0')}`;
+
+    // Etiqueta de Hidroca: si su total de bultos no cuadra con las piezas de
+    // la guía, no se registra (formato cambiado o guía mal cargada)
+    if (totalEtiqueta) {
+      const movh = await this.buscarGuia(nroGuia);
+      const piezas = movh ? this.datosGuia(movh).total_piezas : null;
+      if (piezas && piezas !== totalEtiqueta) {
+        return {
+          status: 'RECHAZADO',
+          motivo: `La etiqueta de Hidroca indica ${totalEtiqueta} bulto(s) y la guía ${nroGuia} tiene ${piezas} pieza(s)`,
+        };
+      }
+    }
 
     // Regla de negocio: un bulto físico no puede estar cargado (escaneado) en
     // dos cargas a la vez. Si el mismo código ya está escaneado en OTRA carga
