@@ -34,7 +34,7 @@ const totalComSeguroDolarDesc =
   comisionSeguroGuia + ' / ' + valorDolarGuia + ', 2) END)';
 
 class CostosTransporteService {
-  async mainReport(worksheet, desde, hasta, neta, dolar) {
+  async mainReport(worksheet, desde, hasta, neta, dolar, agente) {
     let data = [];
     let costos = await models.Costos.findAll({
       where: {
@@ -44,6 +44,7 @@ class CostosTransporteService {
             moment(hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
           ],
         },
+        ...(agente ? { cod_agente: agente } : {}),
       },
       include: [
         {

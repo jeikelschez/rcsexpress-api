@@ -142,7 +142,8 @@ router.post('/relacionDespacho', authenticateJWT, async (req, res, next) => {
 
 router.get('/costosTransporte', authenticateJWT, async (req, res, next) => {
   try {
-    const { id, tipo, agencia, desde, hasta, neta, dolar } = req.headers;
+    const { id, tipo, agencia, desde, hasta, neta, dolar, agente } =
+      req.headers;
     const response = await service.costosTransporte(
       id,
       tipo,
@@ -150,7 +151,8 @@ router.get('/costosTransporte', authenticateJWT, async (req, res, next) => {
       desde,
       hasta,
       neta,
-      dolar
+      dolar,
+      agente
     );
     res.status(200).json({
       message: 'PDF Generado',

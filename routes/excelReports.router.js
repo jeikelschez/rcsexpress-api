@@ -139,12 +139,13 @@ router.get('/relacionFpo', authenticateJWT, async (req, res, next) => {
 
 router.get('/costosTransporte', authenticateJWT, async (req, res, next) => {
   try {
-    const { desde, hasta, neta, dolar } = req.headers;
+    const { desde, hasta, neta, dolar, agente } = req.headers;
     const response = await service.costosTransporte(
       desde,
       hasta,
       neta,
-      dolar
+      dolar,
+      agente
     );
     res.status(200).json({
       message: 'Excel Generado',

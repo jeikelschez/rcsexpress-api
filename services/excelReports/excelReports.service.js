@@ -131,7 +131,7 @@ class ExcelReportsService {
   }
 
   // COSTOS TRANSPORTE
-  async costosTransporte(desde, hasta, neta, dolar) {
+  async costosTransporte(desde, hasta, neta, dolar, agente) {
     let resPath = 'comisionesCostos.xlsx';
     const workbook = new ExcelDocument.Workbook();
     const worksheet = workbook.addWorksheet('comisiones');
@@ -141,7 +141,8 @@ class ExcelReportsService {
       desde,
       hasta,
       neta,
-      dolar
+      dolar,
+      agente
     );
     workbook.xlsx.writeFile(reportsPath + resPath);
 

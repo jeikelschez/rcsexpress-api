@@ -168,7 +168,16 @@ class PdfReportsService {
   }
 
   // REPORTE COSTOS TRANSPORTE
-  async costosTransporte(id, tipo, agencia, desde, hasta, neta, dolar) {
+  async costosTransporte(
+    id,
+    tipo,
+    agencia,
+    desde,
+    hasta,
+    neta,
+    dolar,
+    agente
+  ) {
     let resPath = 'costosTransporte' + tipo + '.pdf';
     let doc = new PDFDocument({ margin: 50, bufferPages: true });
     if (tipo == 'DI' || tipo == 'CO') {
@@ -188,7 +197,8 @@ class PdfReportsService {
       desde,
       hasta,
       neta,
-      dolar
+      dolar,
+      agente
     );
     resPath = validDoc ? resPath : 'reporteBase.pdf';
     doc.end();

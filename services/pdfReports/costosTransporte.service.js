@@ -60,7 +60,9 @@ const totalDolarDesc2 =
   ' WHERE historico_dolar.fecha = `detallesg->movimientos`.fecha_emision), 2) END)';
 
 class CostosTransporteService {
-  async mainReport(doc, id, tipo, agencia, desde, hasta, neta, dolar) {
+  async mainReport(doc, id, tipo, agencia, desde, hasta, neta, dolar, agente) {
+    // Filtro opcional por agente (reportes por rango de fechas)
+    const filtroAgente = agente ? { cod_agente: agente } : {};
     let costos = [];
     let data = [];
     let detallesg = [];
@@ -211,6 +213,7 @@ class CostosTransporteService {
                 moment(hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
               ],
             },
+            ...filtroAgente,
           },
           include: [
             {
@@ -269,6 +272,7 @@ class CostosTransporteService {
                 moment(hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
               ],
             },
+            ...filtroAgente,
           },
           include: [
             {
@@ -309,6 +313,7 @@ class CostosTransporteService {
         costos = await models.Costos.findAll({
           where: {
             fecha_envio: moment(desde, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+            ...filtroAgente,
           },
           attributes: [
             'id',
@@ -378,6 +383,7 @@ class CostosTransporteService {
                 moment(hasta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
               ],
             },
+            ...filtroAgente,
           },
           include: [
             {
