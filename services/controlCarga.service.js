@@ -204,11 +204,84 @@ class ControlCargaService {
       ],
     });
     if (!carga) throw boom.notFound('Control de carga no existe');
+    // Piezas de cada guía, para mostrar "2/3" por guía en el escaneo (vía
+    // almacén solo existen los bultos ya escaneados)
+    const movIds = [
+      ...new Set((carga.bultos || []).map((b) => b.cod_movimiento).filter(Boolean)),
+    ];
+    const piezas = {};
+    if (movIds.length) {
+      const movs = await models.Mmovimientos.findAll({
+        where: { id: movIds },
+        attributes: ['id', 'nro_piezas'],
+      });
+      movs.forEach((m) => {
+        piezas[m.id] = m.nro_piezas != null ? Number(m.nro_piezas) : null;
+      });
+    }
+    carga.setDataValue('piezas', piezas);
     return carga;
   }
 
+  // Deshace el escaneo de un bulto. Si la carga tiene set esperado (vía
+  // oficina o nacida de un costo) el bulto vuelve a PENDIENTE; vía almacén
+  // el bulto solo existe si se escaneó, así que se quita de la carga.
+  async desmarcarBulto(cargaId, bultoId, usuario) {
+    const carga = await models.Ccarga.findByPk(cargaId);
+    if (!carga) throw boom.notFound('Control de carga no existe');
+    if (!ESTADOS_ACTIVA.includes(carga.estado)) {
+      throw boom.conflict('La carga ya esta cerrada');
+    }
+    const bulto = await models.Ccargab.findOne({
+      where: { id: bultoId, cod_control_carga: cargaId },
+    });
+    if (!bulto) throw boom.notFound('Bulto no existe en esta carga');
+    if (carga.via !== 'OFICINA' && !carga.cod_costo) {
+      const r = await this.deleteBulto(cargaId, bultoId, usuario);
+      return { ...r, eliminado: true };
+    }
+    if (bulto.escaneado) {
+      await bulto.update({
+        escaneado: false,
+        estado_bulto: 'PENDIENTE',
+        fecha_hora: null,
+        usuario: null,
+      });
+      const nEsc = await models.Ccargab.count({
+        where: { cod_control_carga: cargaId, escaneado: true },
+      });
+      if (nEsc === 0 && carga.estado === 'EN PROCESO') {
+        await carga.update({ estado: 'ABIERTA' });
+      }
+    }
+    return { id: Number(bultoId), desmarcado: true, bulto };
+  }
+
+  // Desmarca todos los bultos escaneados de una guía en la carga
+  async desmarcarGuia(cargaId, nroGuia, usuario) {
+    const bultos = await models.Ccargab.findAll({
+      where: {
+        cod_control_carga: cargaId,
+        nro_documento: String(nroGuia),
+        escaneado: true,
+      },
+    });
+    const res = [];
+    for (const b of bultos) {
+      res.push(await this.desmarcarBulto(cargaId, b.id, usuario));
+    }
+    return { nroGuia: String(nroGuia), resultados: res };
+  }
+
   async resolver(codigo) {
-    const parsed = this.parseCodigo(codigo);
+    // Número de guía solo (entrada manual de guía completa): sin bulto
+    const solo = String(codigo || '')
+      .trim()
+      .toUpperCase()
+      .match(/^(?:RCS-)?(\d{1,12})$/);
+    const parsed = solo
+      ? { nroGuia: solo[1], nroBulto: null }
+      : this.parseCodigo(codigo);
     if (!parsed) throw boom.badRequest('Codigo invalido');
     const mov = await this.buscarGuia(parsed.nroGuia);
     return {
@@ -438,6 +511,49 @@ class ControlCargaService {
       await t.rollback();
       throw e;
     }
+  }
+
+  // Registra de una vez todos los bultos de una guía (01..nro_piezas), para
+  // la carga manual cuando ya se verificó el lote completo. Cada bulto pasa por
+  // addBulto, así que aplican las mismas validaciones del escaneo.
+  async addGuiaCompleta(id, nroGuia, usuario) {
+    const nro = String(nroGuia || '')
+      .trim()
+      .toUpperCase()
+      .replace(/^RCS-/, '');
+    if (!/^\d{1,12}$/.test(nro)) throw boom.badRequest('Número de guía inválido');
+    const mov = await this.buscarGuia(nro);
+    if (!mov) {
+      return {
+        nroGuia: nro,
+        guia: null,
+        ok: [],
+        duplicados: 0,
+        rechazados: [
+          { status: 'RECHAZADO', motivo: `La guía ${nro} no existe en el sistema` },
+        ],
+      };
+    }
+    const guia = this.datosGuia(mov);
+    if (!guia.total_piezas) {
+      throw boom.badRequest(`La guía ${nro} no tiene número de piezas cargado`);
+    }
+    const ok = [];
+    const rechazados = [];
+    let duplicados = 0;
+    for (let i = 1; i <= guia.total_piezas; i += 1) {
+      const codigo = `RCS-${nro}-${String(i).padStart(2, '0')}`;
+      const r = await this.addBulto(id, codigo, usuario);
+      if (r.status === 'OK') ok.push(r.bulto);
+      else if (r.status === 'DUPLICADO') duplicados += 1;
+      else {
+        rechazados.push({ codigo, status: r.status, motivo: r.motivo });
+        // Si la guía entera no se puede cargar (anulada, entregada, en otra
+        // carga), los demás bultos darán lo mismo: no seguir intentando
+        if (ok.length === 0 && duplicados === 0 && r.status !== 'SOBRANTE') break;
+      }
+    }
+    return { nroGuia: nro, guia, ok, duplicados, rechazados };
   }
 
   // Precarga el set esperado de varias guías (vía oficina): crea un bulto

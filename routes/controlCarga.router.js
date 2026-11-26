@@ -116,6 +116,41 @@ router.post('/:id/bulto', authenticateJWT, async (req, res, next) => {
   }
 });
 
+// Marca todos los bultos de una guía como verificados (entrada manual)
+router.post('/:id/guia-completa', authenticateJWT, async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { nroGuia } = req.body;
+    const data = await service.addGuiaCompleta(id, nroGuia, getUsuario(req));
+    res.status(201).json(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Deshace el escaneo de un bulto (vuelve a pendiente, o se quita vía almacén)
+router.put('/:id/bulto/:bultoId/desmarcar', authenticateJWT, async (req, res, next) => {
+  try {
+    const { id, bultoId } = req.params;
+    const data = await service.desmarcarBulto(id, bultoId, getUsuario(req));
+    res.json(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Deshace el escaneo de todos los bultos de una guía
+router.put('/:id/guia-desmarcar', authenticateJWT, async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { nroGuia } = req.body;
+    const data = await service.desmarcarGuia(id, nroGuia, getUsuario(req));
+    res.json(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.post('/:id/esperado', authenticateJWT, async (req, res, next) => {
   try {
     const { id } = req.params;
